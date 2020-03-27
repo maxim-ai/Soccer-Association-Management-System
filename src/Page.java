@@ -57,7 +57,7 @@ public class Page
     {
       throw new RuntimeException("Unable to create page due to system. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    team = new Team(aNameForTeam, aSystemForTeam, this, aLeagueForTeam, aStadiumForTeam);
+    team = new Team(aNameForTeam, this, aLeagueForTeam, aStadiumForTeam);
     player = new Player(aNameForPlayer, aBirthdayForPlayer, aPositionForPlayer, aTeamForPlayer, this);
     coach = new Coach(aNameForCoach, aTrainingForCoach, aTeamRoleForCoach, this);
     fans = new ArrayList<Fan>();
@@ -95,7 +95,7 @@ public class Page
   public Coach getCoach_OneCoach()
   {
     return (Coach)coach;
-  } 
+  }
   /* Code from template association_GetMany */
   public Fan getFan(int index)
   {
@@ -197,7 +197,7 @@ public class Page
   }
   /* Code from template association_AddIndexControlFunctions */
   public boolean addFanAt(Fan aFan, int index)
-  {  
+  {
     boolean wasAdded = false;
     if(addFan(aFan))
     {
@@ -220,8 +220,8 @@ public class Page
       fans.remove(aFan);
       fans.add(index, aFan);
       wasAdded = true;
-    } 
-    else 
+    }
+    else
     {
       wasAdded = addFanAt(aFan, index);
     }

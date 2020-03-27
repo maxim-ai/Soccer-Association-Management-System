@@ -468,6 +468,8 @@ public class Match
     boolean wasSet = false;
     if (aStadium == null)
     {
+      stadium=null;
+      wasSet=true;
       return wasSet;
     }
 

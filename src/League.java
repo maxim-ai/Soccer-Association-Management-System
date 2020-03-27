@@ -1,22 +1,10 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4811.445d1d99b modeling language!*/
-
 
 import java.util.*;
 
-// line 90 "model.ump"
-// line 249 "model.ump"
 public class League
 {
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-  //League Attributes
   private String name;
-
-  //League Associations
   private List<Team> teams;
   private List<Season> seasons;
   private List<Referee> referees;

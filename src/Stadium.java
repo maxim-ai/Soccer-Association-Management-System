@@ -1,30 +1,14 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4811.445d1d99b modeling language!*/
-
 
 import java.util.*;
 import java.sql.Date;
 import java.sql.Time;
 
-// line 132 "model.ump"
-// line 286 "model.ump"
 public class Stadium
 {
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-  //Stadium Attributes
   private String name;
-
-  //Stadium Associations
   private List<Team> teams;
   private List<Match> matchs;
-
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
 
   public Stadium(String aName)
   {
@@ -32,10 +16,6 @@ public class Stadium
     teams = new ArrayList<Team>();
     matchs = new ArrayList<Match>();
   }
-
-  //------------------------
-  // INTERFACE
-  //------------------------
 
   public boolean setName(String aName)
   {
@@ -49,7 +29,7 @@ public class Stadium
   {
     return name;
   }
-  /* Code from template association_GetMany */
+
   public Team getTeam(int index)
   {
     Team aTeam = teams.get(index);
@@ -79,7 +59,7 @@ public class Stadium
     int index = teams.indexOf(aTeam);
     return index;
   }
-  /* Code from template association_GetMany */
+
   public Match getMatch(int index)
   {
     Match aMatch = matchs.get(index);
@@ -109,53 +89,15 @@ public class Stadium
     int index = matchs.indexOf(aMatch);
     return index;
   }
-  /* Code from template association_IsNumberOfValidMethod */
-  public boolean isNumberOfTeamsValid()
-  {
-    boolean isValid = numberOfTeams() >= minimumNumberOfTeams() && numberOfTeams() <= maximumNumberOfTeams();
-    return isValid;
-  }
-  /* Code from template association_RequiredNumberOfMethod */
-  public static int requiredNumberOfTeams()
-  {
-    return 2;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfTeams()
-  {
-    return 2;
-  }
-  /* Code from template association_MaximumNumberOfMethod */
-  public static int maximumNumberOfTeams()
-  {
-    return 2;
-  }
-  /* Code from template association_AddMNToOnlyOne */
-  public Team addTeam(String aName, System aSystem, Page aPage, League aLeague)
-  {
-    if (numberOfTeams() >= maximumNumberOfTeams())
-    {
-      return null;
-    }
-    else
-    {
-      return new Team(aName, aSystem, aPage, aLeague, this);
-    }
-  }
 
   public boolean addTeam(Team aTeam)
   {
     boolean wasAdded = false;
     if (teams.contains(aTeam)) { return false; }
-    if (numberOfTeams() >= maximumNumberOfTeams())
-    {
-      return wasAdded;
-    }
 
     Stadium existingStadium = aTeam.getStadium();
     boolean isNewStadium = existingStadium != null && !this.equals(existingStadium);
-
-    if (isNewStadium && existingStadium.numberOfTeams() <= minimumNumberOfTeams())
+    if (isNewStadium)
     {
       return wasAdded;
     }
@@ -175,30 +117,18 @@ public class Stadium
   public boolean removeTeam(Team aTeam)
   {
     boolean wasRemoved = false;
-    //Unable to remove aTeam, as it must always have a stadium
     if (this.equals(aTeam.getStadium()))
     {
       return wasRemoved;
     }
 
-    //stadium already at minimum (2)
-    if (numberOfTeams() <= minimumNumberOfTeams())
-    {
-      return wasRemoved;
-    }
     teams.remove(aTeam);
     wasRemoved = true;
     return wasRemoved;
   }
-  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfMatchs()
   {
     return 0;
-  }
-  /* Code from template association_AddManyToOne */
-  public Match addMatch(Date aDate, Time aTime, int aAwayScore, int aHomeScore, Season aSeason, EventCalender aEventCalender, Team[] allTeams, Referee[] allReferees)
-  {
-    return new Match(aDate, aTime, aAwayScore, aHomeScore, this, aSeason, aEventCalender, allTeams, allReferees);
   }
 
   public boolean addMatch(Match aMatch)
@@ -222,45 +152,13 @@ public class Stadium
   public boolean removeMatch(Match aMatch)
   {
     boolean wasRemoved = false;
-    //Unable to remove aMatch, as it must always have a stadium
     if (!this.equals(aMatch.getStadium()))
     {
       matchs.remove(aMatch);
+      aMatch.setStadium(null);
       wasRemoved = true;
     }
     return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addMatchAt(Match aMatch, int index)
-  {  
-    boolean wasAdded = false;
-    if(addMatch(aMatch))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfMatchs()) { index = numberOfMatchs() - 1; }
-      matchs.remove(aMatch);
-      matchs.add(index, aMatch);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveMatchAt(Match aMatch, int index)
-  {
-    boolean wasAdded = false;
-    if(matchs.contains(aMatch))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfMatchs()) { index = numberOfMatchs() - 1; }
-      matchs.remove(aMatch);
-      matchs.add(index, aMatch);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addMatchAt(aMatch, index);
-    }
-    return wasAdded;
   }
 
   public void delete()
@@ -268,15 +166,14 @@ public class Stadium
     for(int i=teams.size(); i > 0; i--)
     {
       Team aTeam = teams.get(i - 1);
-      aTeam.delete();
+      aTeam.setStadium(null);
     }
     for(int i=matchs.size(); i > 0; i--)
     {
       Match aMatch = matchs.get(i - 1);
-      aMatch.delete();
+      aMatch.setStadium(null);
     }
   }
-
 
   public String toString()
   {
