@@ -1,100 +1,44 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4811.445d1d99b modeling language!*/
-
 
 import java.util.*;
-import java.sql.Date;
 
-// line 84 "model.ump"
-// line 243 "model.ump"
-public class Team
+
+public class Team implements Pageable
 {
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-  //Team Attributes
   private String name;
-
-  //Team Associations
   private List<TeamManager> teamManagers;
-  private System system;
   private Page page;
   private List<Coach> coachs;
   private List<Owner> owners;
-  private List<Player> players;
+  private List<Player> players;//11 players
   private League league;
   private List<Match> matchs;
   private Stadium stadium;
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
 
-  public Team(String aName, System aSystem, Page aPage, League aLeague, Stadium aStadium)
+  public Team(String aName,Page aPage,League aLeague,Stadium aStadium)
   {
+    if (aPage != null) {
+      page = aPage;
+    }
+    if(aLeague != null) {
+      setLeague(aLeague);
+    }
+    if(aStadium != null){
+      setStadium(aStadium);
+    }
     name = aName;
     teamManagers = new ArrayList<TeamManager>();
-    boolean didAddSystem = setSystem(aSystem);
-    if (!didAddSystem)
-    {
-      throw new RuntimeException("Unable to create team due to system. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (aPage == null || aPage.getTeam() != null)
-    {
-      throw new RuntimeException("Unable to create Team due to aPage. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    page = aPage;
     coachs = new ArrayList<Coach>();
     owners = new ArrayList<Owner>();
     players = new ArrayList<Player>();
-    boolean didAddLeague = setLeague(aLeague);
-    if (!didAddLeague)
-    {
-      throw new RuntimeException("Unable to create team due to league. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
     matchs = new ArrayList<Match>();
-    boolean didAddStadium = setStadium(aStadium);
-    if (!didAddStadium)
-    {
-      throw new RuntimeException("Unable to create team due to stadium. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-  }
 
-  public Team(String aName, System aSystem, System aSystemForPage, Player aPlayerForPage, Coach aCoachForPage, League aLeague, Stadium aStadium)
-  {
-    name = aName;
-    teamManagers = new ArrayList<TeamManager>();
-    boolean didAddSystem = setSystem(aSystem);
-    if (!didAddSystem)
-    {
-      throw new RuntimeException("Unable to create team due to system. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    page = new Page(aSystemForPage, this, aPlayerForPage, aCoachForPage);
-    coachs = new ArrayList<Coach>();
-    owners = new ArrayList<Owner>();
-    players = new ArrayList<Player>();
-    boolean didAddLeague = setLeague(aLeague);
-    if (!didAddLeague)
-    {
-      throw new RuntimeException("Unable to create team due to league. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    matchs = new ArrayList<Match>();
-    boolean didAddStadium = setStadium(aStadium);
-    if (!didAddStadium)
-    {
-      throw new RuntimeException("Unable to create team due to stadium. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
   }
-
-  //------------------------
-  // INTERFACE
-  //------------------------
 
   public boolean setName(String aName)
   {
-    boolean wasSet = false;
+    boolean wasSet = true;
     name = aName;
     wasSet = true;
     return wasSet;
@@ -104,7 +48,7 @@ public class Team
   {
     return name;
   }
-  /* Code from template association_GetMany */
+
   public TeamManager getTeamManager(int index)
   {
     TeamManager aTeamManager = teamManagers.get(index);
@@ -134,17 +78,12 @@ public class Team
     int index = teamManagers.indexOf(aTeamManager);
     return index;
   }
-  /* Code from template association_GetOne */
-  public System getSystem()
-  {
-    return system;
-  }
-  /* Code from template association_GetOne */
+
   public Page getPage()
   {
     return page;
   }
-  /* Code from template association_GetMany */
+
   public Coach getCoach(int index)
   {
     Coach aCoach = coachs.get(index);
@@ -174,7 +113,7 @@ public class Team
     int index = coachs.indexOf(aCoach);
     return index;
   }
-  /* Code from template association_GetMany */
+
   public Owner getOwner(int index)
   {
     Owner aOwner = owners.get(index);
@@ -204,7 +143,7 @@ public class Team
     int index = owners.indexOf(aOwner);
     return index;
   }
-  /* Code from template association_GetMany */
+
   public Player getPlayer(int index)
   {
     Player aPlayer = players.get(index);
@@ -234,12 +173,12 @@ public class Team
     int index = players.indexOf(aPlayer);
     return index;
   }
-  /* Code from template association_GetOne */
+
   public League getLeague()
   {
     return league;
   }
-  /* Code from template association_GetMany */
+
   public Match getMatch(int index)
   {
     Match aMatch = matchs.get(index);
@@ -269,21 +208,21 @@ public class Team
     int index = matchs.indexOf(aMatch);
     return index;
   }
-  /* Code from template association_GetOne */
+
   public Stadium getStadium()
   {
     return stadium;
   }
-  /* Code from template association_MinimumNumberOfMethod */
+
   public static int minimumNumberOfTeamManagers()
   {
-    return 0;
+    return 1;
   }
-  /* Code from template association_AddManyToManyMethod */
+
   public boolean addTeamManager(TeamManager aTeamManager)
   {
-    boolean wasAdded = false;
-    if (teamManagers.contains(aTeamManager)) { return false; }
+    boolean wasAdded = true;
+    if (teamManagers.contains(aTeamManager)) { return true; }
     teamManagers.add(aTeamManager);
     if (aTeamManager.indexOfTeam(this) != -1)
     {
@@ -299,10 +238,10 @@ public class Team
     }
     return wasAdded;
   }
-  /* Code from template association_RemoveMany */
+
   public boolean removeTeamManager(TeamManager aTeamManager)
   {
-    boolean wasRemoved = false;
+    boolean wasRemoved = true;
     if (!teamManagers.contains(aTeamManager))
     {
       return wasRemoved;
@@ -324,67 +263,16 @@ public class Team
     }
     return wasRemoved;
   }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addTeamManagerAt(TeamManager aTeamManager, int index)
-  {  
-    boolean wasAdded = false;
-    if(addTeamManager(aTeamManager))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfTeamManagers()) { index = numberOfTeamManagers() - 1; }
-      teamManagers.remove(aTeamManager);
-      teamManagers.add(index, aTeamManager);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
 
-  public boolean addOrMoveTeamManagerAt(TeamManager aTeamManager, int index)
-  {
-    boolean wasAdded = false;
-    if(teamManagers.contains(aTeamManager))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfTeamManagers()) { index = numberOfTeamManagers() - 1; }
-      teamManagers.remove(aTeamManager);
-      teamManagers.add(index, aTeamManager);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addTeamManagerAt(aTeamManager, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setSystem(System aSystem)
-  {
-    boolean wasSet = false;
-    if (aSystem == null)
-    {
-      return wasSet;
-    }
-
-    System existingSystem = system;
-    system = aSystem;
-    if (existingSystem != null && !existingSystem.equals(aSystem))
-    {
-      existingSystem.removeTeam(this);
-    }
-    system.addTeam(this);
-    wasSet = true;
-    return wasSet;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfCoachs()
   {
     return 0;
   }
-  /* Code from template association_AddManyToManyMethod */
+
   public boolean addCoach(Coach aCoach)
   {
-    boolean wasAdded = false;
-    if (coachs.contains(aCoach)) { return false; }
+    boolean wasAdded = true;
+    if (coachs.contains(aCoach)) { return true; }
     coachs.add(aCoach);
     if (aCoach.indexOfTeam(this) != -1)
     {
@@ -400,10 +288,9 @@ public class Team
     }
     return wasAdded;
   }
-  /* Code from template association_RemoveMany */
-  public boolean removeCoach(Coach aCoach)
+   public boolean removeCoach(Coach aCoach)
   {
-    boolean wasRemoved = false;
+    boolean wasRemoved = true;
     if (!coachs.contains(aCoach))
     {
       return wasRemoved;
@@ -425,48 +312,16 @@ public class Team
     }
     return wasRemoved;
   }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addCoachAt(Coach aCoach, int index)
-  {  
-    boolean wasAdded = false;
-    if(addCoach(aCoach))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfCoachs()) { index = numberOfCoachs() - 1; }
-      coachs.remove(aCoach);
-      coachs.add(index, aCoach);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
 
-  public boolean addOrMoveCoachAt(Coach aCoach, int index)
-  {
-    boolean wasAdded = false;
-    if(coachs.contains(aCoach))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfCoachs()) { index = numberOfCoachs() - 1; }
-      coachs.remove(aCoach);
-      coachs.add(index, aCoach);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addCoachAt(aCoach, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfOwners()
   {
-    return 0;
+    return 1;
   }
-  /* Code from template association_AddManyToManyMethod */
+
   public boolean addOwner(Owner aOwner)
   {
-    boolean wasAdded = false;
-    if (owners.contains(aOwner)) { return false; }
+    boolean wasAdded = true;
+    if (owners.contains(aOwner)) { return true; }
     owners.add(aOwner);
     if (aOwner.indexOfTeam(this) != -1)
     {
@@ -482,10 +337,10 @@ public class Team
     }
     return wasAdded;
   }
-  /* Code from template association_RemoveMany */
+
   public boolean removeOwner(Owner aOwner)
   {
-    boolean wasRemoved = false;
+    boolean wasRemoved = true;
     if (!owners.contains(aOwner))
     {
       return wasRemoved;
@@ -507,76 +362,29 @@ public class Team
     }
     return wasRemoved;
   }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addOwnerAt(Owner aOwner, int index)
-  {  
-    boolean wasAdded = false;
-    if(addOwner(aOwner))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfOwners()) { index = numberOfOwners() - 1; }
-      owners.remove(aOwner);
-      owners.add(index, aOwner);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
 
-  public boolean addOrMoveOwnerAt(Owner aOwner, int index)
-  {
-    boolean wasAdded = false;
-    if(owners.contains(aOwner))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfOwners()) { index = numberOfOwners() - 1; }
-      owners.remove(aOwner);
-      owners.add(index, aOwner);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addOwnerAt(aOwner, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_IsNumberOfValidMethod */
   public boolean isNumberOfPlayersValid()
   {
     boolean isValid = numberOfPlayers() >= minimumNumberOfPlayers() && numberOfPlayers() <= maximumNumberOfPlayers();
     return isValid;
   }
-  /* Code from template association_RequiredNumberOfMethod */
   public static int requiredNumberOfPlayers()
   {
     return 11;
   }
-  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfPlayers()
   {
     return 11;
   }
-  /* Code from template association_MaximumNumberOfMethod */
-  public static int maximumNumberOfPlayers()
-  {
-    return 11;
-  }
-  /* Code from template association_AddMNToOnlyOne */
-  public Player addPlayer(String aName, Date aBirthday, PositionEnum aPosition, Page aPage)
-  {
-    if (numberOfPlayers() >= maximumNumberOfPlayers())
-    {
-      return null;
-    }
-    else
-    {
-      return new Player(aName, aBirthday, aPosition, this, aPage);
-    }
-  }
+  public static int maximumNumberOfPlayers() { return 11; }
 
+  /**
+   * adds player to list
+   */
   public boolean addPlayer(Player aPlayer)
   {
-    boolean wasAdded = false;
-    if (players.contains(aPlayer)) { return false; }
+    boolean wasAdded = true;
+    if (players.contains(aPlayer)) { return true; }
     if (numberOfPlayers() >= maximumNumberOfPlayers())
     {
       return wasAdded;
@@ -602,9 +410,12 @@ public class Team
     return wasAdded;
   }
 
+  /**
+   * removes player from list, makes player's list null, handels null.
+   */
   public boolean removePlayer(Player aPlayer)
   {
-    boolean wasRemoved = false;
+    boolean wasRemoved = true;
     //Unable to remove aPlayer, as it must always have a team
     if (this.equals(aPlayer.getTeam()))
     {
@@ -617,126 +428,90 @@ public class Team
       return wasRemoved;
     }
     players.remove(aPlayer);
+    aPlayer.setTeam(null);
     wasRemoved = true;
     return wasRemoved;
   }
-  /* Code from template association_SetOneToMany */
+
+  /**
+   * adds league to team list, adds team to league, handels null
+   */
   public boolean setLeague(League aLeague)
   {
-    boolean wasSet = false;
+    boolean wasSet = true;
     if (aLeague == null)
     {
+      league=null;
       return wasSet;
     }
 
-    League existingLeague = league;
     league = aLeague;
-    if (existingLeague != null && !existingLeague.equals(aLeague))
-    {
-      existingLeague.removeTeam(this);
-    }
+
     league.addTeam(this);
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfMatchs()
+
+  public static int minimumNumberOfMatchs() { return 0;}
+
+  /**
+   * adds match to team list, updates the home/away field in the match
+   * @param aMatch
+   * @param homeOrAway
+   * @return
+   */
+  public boolean addMatch(Match aMatch, String homeOrAway)
   {
-    return 0;
-  }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addMatch(Match aMatch)
-  {
-    boolean wasAdded = false;
-    if (matchs.contains(aMatch)) { return false; }
+    boolean wasAdded = true;
+    if (matchs.contains(aMatch)) { return true; }
     matchs.add(aMatch);
-    if (aMatch.indexOfTeam(this) != -1)
+    if(homeOrAway.equalsIgnoreCase("home"))
     {
-      wasAdded = true;
+      if(aMatch.getHomeTeam()==null)
+        aMatch.setHomeTeam(this);
     }
-    else
+
+    else if(homeOrAway.equalsIgnoreCase("away"))
     {
-      wasAdded = aMatch.addTeam(this);
-      if (!wasAdded)
-      {
-        matchs.remove(aMatch);
-      }
+      if(aMatch.getAwayTeam()==null)
+        aMatch.setAwayTeam(this);
     }
+
     return wasAdded;
   }
-  /* Code from template association_RemoveMany */
+
+  /**
+   * removes the match from the list, and makes the corrasponding teams playing in the match null
+   */
   public boolean removeMatch(Match aMatch)
   {
-    boolean wasRemoved = false;
+    boolean wasRemoved = true;
     if (!matchs.contains(aMatch))
     {
       return wasRemoved;
     }
 
-    int oldIndex = matchs.indexOf(aMatch);
-    matchs.remove(oldIndex);
-    if (aMatch.indexOfTeam(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aMatch.removeTeam(this);
-      if (!wasRemoved)
-      {
-        matchs.add(oldIndex,aMatch);
-      }
-    }
+    matchs.remove(aMatch);
+    if(aMatch.getAwayTeam().equals(this)) aMatch.setAwayTeam(null);
+    if(aMatch.getHomeTeam().equals(this)) aMatch.setHomeTeam(null);
     return wasRemoved;
   }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addMatchAt(Match aMatch, int index)
-  {  
-    boolean wasAdded = false;
-    if(addMatch(aMatch))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfMatchs()) { index = numberOfMatchs() - 1; }
-      matchs.remove(aMatch);
-      matchs.add(index, aMatch);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
 
-  public boolean addOrMoveMatchAt(Match aMatch, int index)
-  {
-    boolean wasAdded = false;
-    if(matchs.contains(aMatch))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfMatchs()) { index = numberOfMatchs() - 1; }
-      matchs.remove(aMatch);
-      matchs.add(index, aMatch);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addMatchAt(aMatch, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_SetOneToAtMostN */
+  /**
+   * sets stadium, updates stadium with team, handels null
+   * @param aStadium
+   * @return
+   */
   public boolean setStadium(Stadium aStadium)
   {
-    boolean wasSet = false;
-    //Must provide stadium to team
+    boolean wasSet = true;
     if (aStadium == null)
     {
+      stadium=null;
+      wasSet=true;
       return wasSet;
     }
 
-    //stadium already at maximum (2)
-    if (aStadium.numberOfTeams() >= Stadium.maximumNumberOfTeams())
-    {
-      return wasSet;
-    }
-    
     Stadium existingStadium = stadium;
     stadium = aStadium;
     if (existingStadium != null && !existingStadium.equals(aStadium))
@@ -753,6 +528,9 @@ public class Team
     return wasSet;
   }
 
+  /**
+   * delete the team, make nessecery changes to the team managers, page, coaches, owners, league and matches of the team
+   */
   public void delete()
   {
     ArrayList<TeamManager> copyOfTeamManagers = new ArrayList<TeamManager>(teamManagers);
@@ -760,12 +538,6 @@ public class Team
     for(TeamManager aTeamManager : copyOfTeamManagers)
     {
       aTeamManager.removeTeam(this);
-    }
-    System placeholderSystem = system;
-    this.system = null;
-    if(placeholderSystem != null)
-    {
-      placeholderSystem.removeTeam(this);
     }
     Page existingPage = page;
     page = null;
@@ -791,7 +563,7 @@ public class Team
       aPlayer.delete();
     }
     League placeholderLeague = league;
-    this.league = null;
+    //this.league = null;
     if(placeholderLeague != null)
     {
       placeholderLeague.removeTeam(this);
@@ -800,31 +572,36 @@ public class Team
     matchs.clear();
     for(Match aMatch : copyOfMatchs)
     {
-      if (aMatch.numberOfTeams() <= Match.minimumNumberOfTeams())
-      {
-        aMatch.delete();
-      }
-      else
-      {
-        aMatch.removeTeam(this);
-      }
+      if(aMatch.getAwayTeam().equals(this)) aMatch.setAwayTeam(null);
+      if(aMatch.getHomeTeam().equals(this)) aMatch.setHomeTeam(null);
     }
     Stadium placeholderStadium = stadium;
-    this.stadium = null;
     if(placeholderStadium != null)
     {
       placeholderStadium.removeTeam(this);
     }
   }
 
-
   public String toString()
   {
     return super.toString() + "["+
-            "name" + ":" + getName()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "system = "+(getSystem()!=null?Integer.toHexString(System.identityHashCode(getSystem())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "page = "+(getPage()!=null?Integer.toHexString(System.identityHashCode(getPage())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "league = "+(getLeague()!=null?Integer.toHexString(System.identityHashCode(getLeague())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "stadium = "+(getStadium()!=null?Integer.toHexString(System.identityHashCode(getStadium())):"null");
+            "name" + ":" + getName()+ "]" +
+            "  " + "page = "+(getPage()) +
+            "  " + "league = "+(getLeague()) +
+            "  " + "stadium = "+(getStadium());
+  }
+
+  /**
+   * makes the league of the team null
+   * @param league
+   */
+  public void removeLeauge(League league) {
+    if(this.getLeague().equals(league))
+      this.league=null;
+  }
+
+  @Override
+  public void removePage() {
+    page=null;
   }
 }

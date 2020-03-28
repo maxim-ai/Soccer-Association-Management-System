@@ -1,68 +1,28 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4811.445d1d99b modeling language!*/
-
 
 import java.sql.Date;
-import java.util.*;
 
-// line 70 "model.ump"
-// line 231 "model.ump"
-public class Player extends Role
+public class Player extends Role implements Pageable
 {
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-  //Player Attributes
   private Date birthday;
   private PositionEnum position;
-
-  //Player Associations
   private Team team;
   private Page page;
-
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
 
   public Player(String aName, Date aBirthday, PositionEnum aPosition, Team aTeam, Page aPage)
   {
     super(aName);
     birthday = aBirthday;
     position = aPosition;
-    boolean didAddTeam = setTeam(aTeam);
-    if (!didAddTeam)
-    {
-      throw new RuntimeException("Unable to create player due to team. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (aPage == null || aPage.getPlayer() != null)
-    {
-      throw new RuntimeException("Unable to create Player due to aPage. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    if (aTeam != null) {
+      setTeam(aTeam);
     }
     page = aPage;
   }
 
-  public Player(String aName, Date aBirthday, PositionEnum aPosition, Team aTeam, System aSystemForPage, Team aTeamForPage, Coach aCoachForPage)
-  {
-    super(aName);
-    birthday = aBirthday;
-    position = aPosition;
-    boolean didAddTeam = setTeam(aTeam);
-    if (!didAddTeam)
-    {
-      throw new RuntimeException("Unable to create player due to team. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    page = new Page(aSystemForPage, aTeamForPage, this, aCoachForPage);
-  }
-
-  //------------------------
-  // INTERFACE
-  //------------------------
-
   public boolean setBirthday(Date aBirthday)
   {
-    boolean wasSet = false;
+    boolean wasSet = true;
     birthday = aBirthday;
     wasSet = true;
     return wasSet;
@@ -70,7 +30,7 @@ public class Player extends Role
 
   public boolean setPosition(PositionEnum aPosition)
   {
-    boolean wasSet = false;
+    boolean wasSet = true;
     position = aPosition;
     wasSet = true;
     return wasSet;
@@ -85,23 +45,24 @@ public class Player extends Role
   {
     return position;
   }
-  /* Code from template association_GetOne */
+
   public Team getTeam()
   {
     return team;
   }
-  /* Code from template association_GetOne */
+
   public Page getPage()
   {
     return page;
   }
-  /* Code from template association_SetOneToAtMostN */
+
   public boolean setTeam(Team aTeam)
   {
-    boolean wasSet = false;
+    boolean wasSet = true;
     //Must provide team to player
     if (aTeam == null)
     {
+      team=null;
       return wasSet;
     }
 
@@ -130,7 +91,6 @@ public class Player extends Role
   public void delete()
   {
     Team placeholderTeam = team;
-    this.team = null;
     if(placeholderTeam != null)
     {
       placeholderTeam.removePlayer(this);
@@ -141,16 +101,20 @@ public class Player extends Role
     {
       existingPage.delete();
     }
-    super.delete();
   }
 
 
   public String toString()
   {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "birthday" + "=" + (getBirthday() != null ? !getBirthday().equals(this)  ? getBirthday().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "position" + "=" + (getPosition() != null ? !getPosition().equals(this)  ? getPosition().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "team = "+(getTeam()!=null?Integer.toHexString(System.identityHashCode(getTeam())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "page = "+(getPage()!=null?Integer.toHexString(System.identityHashCode(getPage())):"null");
+    return super.toString() + "["+ "]" +
+            "  " + "birthday" + "=" + (getBirthday())+
+            "  " + "position" + "=" + (getPosition()) +
+            "  " + "team = "+(getTeam())+
+            "  " + "page = "+(getPage());
+  }
+
+  @Override
+  public void removePage() {
+    page=null;
   }
 }
