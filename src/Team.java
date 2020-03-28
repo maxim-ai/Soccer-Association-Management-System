@@ -1,9 +1,8 @@
 
 import java.util.*;
-import java.sql.Date;
 
 
-public class Team
+public class Team implements Pageable
 {
 
   private String name;
@@ -583,5 +582,15 @@ public class Team
             "  " + "page = "+(getPage()) +
             "  " + "league = "+(getLeague()) +
             "  " + "stadium = "+(getStadium());
+  }
+
+  public void removeLeauge(League league) {
+    if(this.getLeague().equals(league))
+      this.league=null;
+  }
+
+  @Override
+  public void removePage() {
+    page=null;
   }
 }

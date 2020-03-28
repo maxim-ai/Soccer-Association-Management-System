@@ -79,49 +79,23 @@ public class Account{
 
   public boolean addRole(Role aRole)
   {
-    boolean wasAdded = false;
+    boolean wasAdded = true;
     if (roles.contains(aRole)) { return false; }
     roles.add(aRole);
-    if (aRole.indexOfAccount(this) != -1)
-    {
-      wasAdded = true;
-    }
-    else
-    {
-      wasAdded = aRole.addAccount(this);
-      if (!wasAdded)
-      {
-        roles.remove(aRole);
-      }
-    }
     return wasAdded;
   }
 
   public boolean removeRole(Role aRole)
   {
-    boolean wasRemoved = false;
+    boolean wasRemoved = true;
     if (!roles.contains(aRole))
     {
       return wasRemoved;
     }
-
     int oldIndex = roles.indexOf(aRole);
     roles.remove(oldIndex);
-    if (aRole.indexOfAccount(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aRole.removeAccount(this);
-      if (!wasRemoved)
-      {
-        roles.add(oldIndex,aRole);
-      }
-    }
     return wasRemoved;
   }
-
 
   public void emptyRoles()
   {

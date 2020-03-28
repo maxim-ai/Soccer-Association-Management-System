@@ -1,28 +1,12 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4811.445d1d99b modeling language!*/
-
-
 import java.util.*;
 
-// line 138 "model.ump"
-// line 292 "model.ump"
+
 public class Referee
 {
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-  //Referee Attributes
   private String training;
-
-  //Referee Associations
   private List<League> leagues;
   private List<Match> matchs;
-
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
 
   public Referee(String aTraining)
   {
@@ -30,10 +14,6 @@ public class Referee
     leagues = new ArrayList<League>();
     matchs = new ArrayList<Match>();
   }
-
-  //------------------------
-  // INTERFACE
-  //------------------------
 
   public boolean setTraining(String aTraining)
   {
@@ -47,7 +27,7 @@ public class Referee
   {
     return training;
   }
-  /* Code from template association_GetMany */
+
   public League getLeague(int index)
   {
     League aLeague = leagues.get(index);
@@ -77,7 +57,7 @@ public class Referee
     int index = leagues.indexOf(aLeague);
     return index;
   }
-  /* Code from template association_GetMany */
+
   public Match getMatch(int index)
   {
     Match aMatch = matchs.get(index);
@@ -107,12 +87,12 @@ public class Referee
     int index = matchs.indexOf(aMatch);
     return index;
   }
-  /* Code from template association_MinimumNumberOfMethod */
+
   public static int minimumNumberOfLeagues()
   {
     return 0;
   }
-  /* Code from template association_AddManyToManyMethod */
+
   public boolean addLeague(League aLeague)
   {
     boolean wasAdded = false;
@@ -132,7 +112,7 @@ public class Referee
     }
     return wasAdded;
   }
-  /* Code from template association_RemoveMany */
+
   public boolean removeLeague(League aLeague)
   {
     boolean wasRemoved = false;
@@ -157,44 +137,12 @@ public class Referee
     }
     return wasRemoved;
   }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addLeagueAt(League aLeague, int index)
-  {  
-    boolean wasAdded = false;
-    if(addLeague(aLeague))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfLeagues()) { index = numberOfLeagues() - 1; }
-      leagues.remove(aLeague);
-      leagues.add(index, aLeague);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
 
-  public boolean addOrMoveLeagueAt(League aLeague, int index)
-  {
-    boolean wasAdded = false;
-    if(leagues.contains(aLeague))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfLeagues()) { index = numberOfLeagues() - 1; }
-      leagues.remove(aLeague);
-      leagues.add(index, aLeague);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addLeagueAt(aLeague, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfMatchs()
   {
     return 0;
   }
-  /* Code from template association_AddManyToManyMethod */
+
   public boolean addMatch(Match aMatch)
   {
     boolean wasAdded = false;
@@ -214,7 +162,7 @@ public class Referee
     }
     return wasAdded;
   }
-  /* Code from template association_RemoveMany */
+
   public boolean removeMatch(Match aMatch)
   {
     boolean wasRemoved = false;
@@ -239,38 +187,6 @@ public class Referee
     }
     return wasRemoved;
   }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addMatchAt(Match aMatch, int index)
-  {  
-    boolean wasAdded = false;
-    if(addMatch(aMatch))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfMatchs()) { index = numberOfMatchs() - 1; }
-      matchs.remove(aMatch);
-      matchs.add(index, aMatch);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveMatchAt(Match aMatch, int index)
-  {
-    boolean wasAdded = false;
-    if(matchs.contains(aMatch))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfMatchs()) { index = numberOfMatchs() - 1; }
-      matchs.remove(aMatch);
-      matchs.add(index, aMatch);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addMatchAt(aMatch, index);
-    }
-    return wasAdded;
-  }
 
   public void delete()
   {
@@ -284,18 +200,10 @@ public class Referee
     matchs.clear();
     for(Match aMatch : copyOfMatchs)
     {
-      if (aMatch.numberOfReferees() <= Match.minimumNumberOfReferees())
-      {
-        aMatch.delete();
-      }
-      else
-      {
-        aMatch.removeReferee(this);
-      }
+      aMatch.removeReferee(this);
     }
+
   }
-
-
   public String toString()
   {
     return super.toString() + "["+

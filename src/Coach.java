@@ -1,7 +1,7 @@
 
 import java.util.*;
 
-public class Coach extends Role
+public class Coach extends Role implements Pageable
 {
 
 
@@ -155,5 +155,10 @@ public class Coach extends Role
             "teamRole" + ":" + getTeamRole() +
             "  " + "page = "+(getPage())+
             "  " + "page = "+(getPage());
+  }
+
+  @Override
+  public void removePage() {
+    page=null;
   }
 }

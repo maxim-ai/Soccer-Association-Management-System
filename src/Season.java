@@ -1,47 +1,22 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4811.445d1d99b modeling language!*/
-
-
 import java.util.*;
 import java.sql.Date;
 import java.sql.Time;
 
-// line 99 "model.ump"
-// line 259 "model.ump"
+
 public class Season
 {
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
 
-  //Season Attributes
   private String name;
-
-  //Season Associations
-  private System system;
-  private List<League> leagues;
   private List<Match> matchs;
+  private HashMap<League,Policy> policies;
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public Season(String aName, System aSystem)
+  public Season(String aName)
   {
     name = aName;
-    boolean didAddSystem = setSystem(aSystem);
-    if (!didAddSystem)
-    {
-      throw new RuntimeException("Unable to create season due to system. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    leagues = new ArrayList<League>();
+    policies = new HashMap<>();
     matchs = new ArrayList<Match>();
   }
-
-  //------------------------
-  // INTERFACE
-  //------------------------
 
   public boolean setName(String aName)
   {
@@ -55,42 +30,13 @@ public class Season
   {
     return name;
   }
-  /* Code from template association_GetOne */
-  public System getSystem()
+
+  public Policy getPolicyByLeague(League aLeague)
   {
-    return system;
-  }
-  /* Code from template association_GetMany */
-  public League getLeague(int index)
-  {
-    League aLeague = leagues.get(index);
-    return aLeague;
+    Policy policy = policies.get(aLeague);
+    return policy;
   }
 
-  public List<League> getLeagues()
-  {
-    List<League> newLeagues = Collections.unmodifiableList(leagues);
-    return newLeagues;
-  }
-
-  public int numberOfLeagues()
-  {
-    int number = leagues.size();
-    return number;
-  }
-
-  public boolean hasLeagues()
-  {
-    boolean has = leagues.size() > 0;
-    return has;
-  }
-
-  public int indexOfLeague(League aLeague)
-  {
-    int index = leagues.indexOf(aLeague);
-    return index;
-  }
-  /* Code from template association_GetMany */
   public Match getMatch(int index)
   {
     Match aMatch = matchs.get(index);
@@ -120,116 +66,26 @@ public class Season
     int index = matchs.indexOf(aMatch);
     return index;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setSystem(System aSystem)
-  {
-    boolean wasSet = false;
-    if (aSystem == null)
-    {
-      return wasSet;
-    }
 
-    System existingSystem = system;
-    system = aSystem;
-    if (existingSystem != null && !existingSystem.equals(aSystem))
-    {
-      existingSystem.removeSeason(this);
-    }
-    system.addSeason(this);
-    wasSet = true;
-    return wasSet;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfLeagues()
+  public boolean addPolicyToLeague(League aLeague,Policy aPolicy)
   {
-    return 0;
-  }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addLeague(League aLeague)
-  {
-    boolean wasAdded = false;
-    if (leagues.contains(aLeague)) { return false; }
-    leagues.add(aLeague);
-    if (aLeague.indexOfSeason(this) != -1)
-    {
-      wasAdded = true;
+    policies.put(aLeague,aPolicy);
+    if(!aLeague.hasPolicy(this,aPolicy)){
+      aLeague.addPolicyToSeason(this, aPolicy);
     }
-    else
-    {
-      wasAdded = aLeague.addSeason(this);
-      if (!wasAdded)
-      {
-        leagues.remove(aLeague);
-      }
-    }
-    return wasAdded;
-  }
-  /* Code from template association_RemoveMany */
-  public boolean removeLeague(League aLeague)
-  {
-    boolean wasRemoved = false;
-    if (!leagues.contains(aLeague))
-    {
-      return wasRemoved;
-    }
-
-    int oldIndex = leagues.indexOf(aLeague);
-    leagues.remove(oldIndex);
-    if (aLeague.indexOfSeason(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aLeague.removeSeason(this);
-      if (!wasRemoved)
-      {
-        leagues.add(oldIndex,aLeague);
-      }
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addLeagueAt(League aLeague, int index)
-  {  
-    boolean wasAdded = false;
-    if(addLeague(aLeague))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfLeagues()) { index = numberOfLeagues() - 1; }
-      leagues.remove(aLeague);
-      leagues.add(index, aLeague);
-      wasAdded = true;
-    }
-    return wasAdded;
+    return true;
   }
 
-  public boolean addOrMoveLeagueAt(League aLeague, int index)
+  public boolean removePolicyFromLeague(League aLeague)
   {
-    boolean wasAdded = false;
-    if(leagues.contains(aLeague))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfLeagues()) { index = numberOfLeagues() - 1; }
-      leagues.remove(aLeague);
-      leagues.add(index, aLeague);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addLeagueAt(aLeague, index);
+    if (!policies.containsKey(aLeague)) {
+      return true;
     }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfMatchs()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToOne */
-  public Match addMatch(Date aDate, Time aTime, int aAwayScore, int aHomeScore, Stadium aStadium, EventCalender aEventCalender, Team[] allTeams, Referee[] allReferees)
-  {
-    return new Match(aDate, aTime, aAwayScore, aHomeScore, aStadium, this, aEventCalender, allTeams, allReferees);
+    if(aLeague.hasPolicy(this,policies.get(aLeague))){
+      aLeague.removePolicyFromSeason(this);
+    }
+    policies.remove(aLeague);
+    return true;
   }
 
   public boolean addMatch(Match aMatch)
@@ -261,65 +117,42 @@ public class Season
     }
     return wasRemoved;
   }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addMatchAt(Match aMatch, int index)
-  {  
-    boolean wasAdded = false;
-    if(addMatch(aMatch))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfMatchs()) { index = numberOfMatchs() - 1; }
-      matchs.remove(aMatch);
-      matchs.add(index, aMatch);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveMatchAt(Match aMatch, int index)
-  {
-    boolean wasAdded = false;
-    if(matchs.contains(aMatch))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfMatchs()) { index = numberOfMatchs() - 1; }
-      matchs.remove(aMatch);
-      matchs.add(index, aMatch);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addMatchAt(aMatch, index);
-    }
-    return wasAdded;
-  }
 
   public void delete()
   {
-    System placeholderSystem = system;
-    this.system = null;
-    if(placeholderSystem != null)
+    for(Map.Entry <League,Policy> leaguePolicyEntry : policies.entrySet())
     {
-      placeholderSystem.removeSeason(this);
-    }
-    ArrayList<League> copyOfLeagues = new ArrayList<League>(leagues);
-    leagues.clear();
-    for(League aLeague : copyOfLeagues)
-    {
-      aLeague.removeSeason(this);
+      leaguePolicyEntry.getKey().deleteSeason(this);
     }
     for(int i=matchs.size(); i > 0; i--)
     {
       Match aMatch = matchs.get(i - 1);
-      aMatch.delete();
+      aMatch.removeSeason();
     }
   }
-
 
   public String toString()
   {
     return super.toString() + "["+
-            "name" + ":" + getName()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "system = "+(getSystem()!=null?Integer.toHexString(System.identityHashCode(getSystem())):"null");
+            "name" + ":" + getName();
+  }
+
+  public boolean hasPolicy(League league, Policy aPolicy) {
+    if(policies.containsKey(league)){
+      if (policies.get(league).equals(aPolicy)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public void deleteLeague(League league) {
+
+    if(policies.containsKey(league)){
+      if(policies.get(league).equals(league)){
+        policies.remove(league);
+      }
+    }
+
   }
 }

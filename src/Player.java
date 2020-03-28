@@ -1,8 +1,7 @@
 
 import java.sql.Date;
-import java.util.*;
 
-public class Player extends Role
+public class Player extends Role implements Pageable
 {
 
   private Date birthday;
@@ -111,5 +110,10 @@ public class Player extends Role
             "  " + "position" + "=" + (getPosition()) +
             "  " + "team = "+(getTeam())+
             "  " + "page = "+(getPage());
+  }
+
+  @Override
+  public void removePage() {
+    page=null;
   }
 }
