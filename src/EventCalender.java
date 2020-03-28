@@ -84,9 +84,20 @@ public class EventCalender
    */
   public boolean removeGameEvent(GameEvent aGameEvent)
   {
+<<<<<<< HEAD
     gameEvents.remove(aGameEvent);
     aGameEvent.setEventCalender(null);
     return true;
+=======
+    boolean wasRemoved = false;
+    //Unable to remove aGameEvent, as it must always have a eventCalender
+    if (!this.equals(aGameEvent.getEventCalender()))
+    {
+      gameEvents.remove(aGameEvent);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   }
 
   /**

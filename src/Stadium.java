@@ -92,8 +92,13 @@ public class Stadium
 
   public boolean addTeam(Team aTeam)
   {
+<<<<<<< HEAD
     boolean wasAdded = true;
     if (teams.contains(aTeam)) { return true; }
+=======
+    boolean wasAdded = false;
+    if (teams.contains(aTeam)) { return false; }
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
 
     Stadium existingStadium = aTeam.getStadium();
     boolean isNewStadium = existingStadium != null && !this.equals(existingStadium);
@@ -116,7 +121,11 @@ public class Stadium
 
   public boolean removeTeam(Team aTeam)
   {
+<<<<<<< HEAD
     boolean wasRemoved = true;
+=======
+    boolean wasRemoved = false;
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     if (this.equals(aTeam.getStadium()))
     {
       return wasRemoved;
@@ -151,7 +160,11 @@ public class Stadium
 
   public boolean removeMatch(Match aMatch)
   {
+<<<<<<< HEAD
     boolean wasRemoved = true;
+=======
+    boolean wasRemoved = false;
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     if (!this.equals(aMatch.getStadium()))
     {
       matchs.remove(aMatch);

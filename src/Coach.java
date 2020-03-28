@@ -89,23 +89,32 @@ public class Coach extends Role implements Pageable
   {
     return page;
   }
+<<<<<<< HEAD
 
   /**
    * sets the page of the coach to null
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   protected void clear_page()
   {
     page = null;
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public static int minimumNumberOfTeams()
   {
     return 0;
   }
+<<<<<<< HEAD
 
   /**
    * adds a team to te coach's list
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public boolean addTeam(Team aTeam)
   {
     boolean wasAdded = false;
@@ -122,9 +131,12 @@ public class Coach extends Role implements Pageable
     return wasAdded;
   }
 
+<<<<<<< HEAD
   /**
    * removes a team from the coach
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public boolean removeTeam(Team aTeam)
   {
     boolean wasRemoved = true;
@@ -146,9 +158,12 @@ public class Coach extends Role implements Pageable
     return wasRemoved;
   }
 
+<<<<<<< HEAD
   /**
    * deletes the coach, removes him from all his teams, deletes his page
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public void delete()
   {
     ArrayList<Team> copyOfTeams = new ArrayList<Team>(teams);

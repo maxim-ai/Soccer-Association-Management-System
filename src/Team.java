@@ -433,9 +433,12 @@ public class Team implements Pageable
     return wasRemoved;
   }
 
+<<<<<<< HEAD
   /**
    * adds league to team list, adds team to league, handels null
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public boolean setLeague(League aLeague)
   {
     boolean wasSet = true;
@@ -451,6 +454,7 @@ public class Team implements Pageable
     wasSet = true;
     return wasSet;
   }
+<<<<<<< HEAD
 
   public static int minimumNumberOfMatchs() { return 0;}
 
@@ -461,6 +465,11 @@ public class Team implements Pageable
    * @return
    */
   public boolean addMatch(Match aMatch, String homeOrAway)
+=======
+  public static int minimumNumberOfMatchs() { return 0;}
+
+  public boolean addMatch(Match aMatch)
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   {
     boolean wasAdded = true;
     if (matchs.contains(aMatch)) { return true; }
@@ -480,9 +489,12 @@ public class Team implements Pageable
     return wasAdded;
   }
 
+<<<<<<< HEAD
   /**
    * removes the match from the list, and makes the corrasponding teams playing in the match null
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public boolean removeMatch(Match aMatch)
   {
     boolean wasRemoved = true;
@@ -497,6 +509,7 @@ public class Team implements Pageable
     return wasRemoved;
   }
 
+<<<<<<< HEAD
   /**
    * sets stadium, updates stadium with team, handels null
    * @param aStadium
@@ -505,6 +518,11 @@ public class Team implements Pageable
   public boolean setStadium(Stadium aStadium)
   {
     boolean wasSet = true;
+=======
+  public boolean setStadium(Stadium aStadium)
+  {
+    boolean wasSet = false;
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     if (aStadium == null)
     {
       stadium=null;
@@ -576,6 +594,10 @@ public class Team implements Pageable
       if(aMatch.getHomeTeam().equals(this)) aMatch.setHomeTeam(null);
     }
     Stadium placeholderStadium = stadium;
+<<<<<<< HEAD
+=======
+    //this.stadium = null;
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     if(placeholderStadium != null)
     {
       placeholderStadium.removeTeam(this);
@@ -591,10 +613,13 @@ public class Team implements Pageable
             "  " + "stadium = "+(getStadium());
   }
 
+<<<<<<< HEAD
   /**
    * makes the league of the team null
    * @param league
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public void removeLeauge(League league) {
     if(this.getLeague().equals(league))
       this.league=null;

@@ -40,6 +40,10 @@ public class Account{
   {
     return password;
   }
+<<<<<<< HEAD
+=======
+  /* Code from template association_GetOne */
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
 
   public Role getRole(int index)
   {
@@ -80,14 +84,18 @@ public class Account{
     return index;
   }
 
+<<<<<<< HEAD
   /**
    * returns the minimus number of roles that an account can have
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public static int minimumNumberOfRoles()
   {
     return 1;
   }
 
+<<<<<<< HEAD
   /**
    * adds a role to the account
    * @return
@@ -96,13 +104,22 @@ public class Account{
   {
     boolean wasAdded = true;
     if (roles.contains(aRole)) { return true; }
+=======
+  public boolean addRole(Role aRole)
+  {
+    boolean wasAdded = true;
+    if (roles.contains(aRole)) { return false; }
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     roles.add(aRole);
     return wasAdded;
   }
 
+<<<<<<< HEAD
   /**
    * remove a role from an acount
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public boolean removeRole(Role aRole)
   {
     boolean wasRemoved = true;
@@ -110,6 +127,7 @@ public class Account{
     {
       return wasRemoved;
     }
+<<<<<<< HEAD
     roles.remove(aRole);
     return wasRemoved;
   }
@@ -117,6 +135,13 @@ public class Account{
   /**
    * removes all the roles from the account
    */
+=======
+    int oldIndex = roles.indexOf(aRole);
+    roles.remove(oldIndex);
+    return wasRemoved;
+  }
+
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public void emptyRoles()
   {
     roles.clear();

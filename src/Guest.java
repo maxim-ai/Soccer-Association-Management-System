@@ -6,7 +6,10 @@ public class Guest {
   {
     id = aId;
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public boolean setId(String aId)
   {
     boolean wasSet = false;

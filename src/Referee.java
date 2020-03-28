@@ -143,6 +143,7 @@ public class Referee
     return 0;
   }
 
+<<<<<<< HEAD
   /**
    * add match to referee, is the match is full return false
    * @param aMatch
@@ -150,6 +151,9 @@ public class Referee
    * @return
    */
   public boolean addMatch(Match aMatch, String mainORline)
+=======
+  public boolean addMatch(Match aMatch)
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   {
     boolean wasAdded = false;
     if (matchs.contains(aMatch)) { return false; }
@@ -175,11 +179,14 @@ public class Referee
     return wasAdded;
   }
 
+<<<<<<< HEAD
   /**
    * remove match from referee, remove referee from match
    * @param aMatch
    * @return
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public boolean removeMatch(Match aMatch)
   {
     boolean wasRemoved = true;
@@ -190,6 +197,7 @@ public class Referee
 
     int oldIndex = matchs.indexOf(aMatch);
     matchs.remove(oldIndex);
+<<<<<<< HEAD
 
     if(aMatch.getMainReferee().equals(this))
       aMatch.setMainReferee(null);
@@ -198,6 +206,20 @@ public class Referee
     else if(aMatch.getLineRefereeTwo().equals(this))
       aMatch.setLineRefereeTwo(null);
 
+=======
+    if (aMatch.indexOfReferee(this) == -1)
+    {
+      wasRemoved = true;
+    }
+    else
+    {
+      wasRemoved = aMatch.removeReferee(this);
+      if (!wasRemoved)
+      {
+        matchs.add(oldIndex,aMatch);
+      }
+    }
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     return wasRemoved;
   }
 
@@ -213,12 +235,16 @@ public class Referee
     matchs.clear();
     for(Match aMatch : copyOfMatchs)
     {
+<<<<<<< HEAD
       if(aMatch.getMainReferee().equals(this))
         aMatch.setMainReferee(null);
       else if(aMatch.getLineRefereeOne().equals(this))
         aMatch.setLineRefereeOne(null);
       else if(aMatch.getLineRefereeTwo().equals(this))
         aMatch.setLineRefereeTwo(null);
+=======
+      aMatch.removeReferee(this);
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     }
 
   }

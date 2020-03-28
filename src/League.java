@@ -58,6 +58,7 @@ public class League
     int index = teams.indexOf(aTeam);
     return index;
   }
+<<<<<<< HEAD
 
   public Policy getPolicyBySeason(Season season)
   {
@@ -66,6 +67,16 @@ public class League
   }
 
 
+=======
+
+  public Policy getPolicyBySeason(Season season)
+  {
+    Policy policy = policies.get(season);
+    return policy;
+  }
+
+
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public Referee getReferee(int index)
   {
     Referee aReferee = referees.get(index);
@@ -141,9 +152,12 @@ public class League
     return true;
   }
 
+<<<<<<< HEAD
   /**
    * remove the policy of the season
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public boolean removePolicyFromSeason(Season aSeason)
   {
     if (!policies.containsKey(aSeason)) {
@@ -156,11 +170,14 @@ public class League
     return true;
   }
 
+<<<<<<< HEAD
   /**
    * adds referee to team, adds the team to the referee
    * @param aReferee
    * @return
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public boolean addReferee(Referee aReferee)
   {
     boolean wasAdded = false;
@@ -181,11 +198,14 @@ public class League
     return wasAdded;
   }
 
+<<<<<<< HEAD
   /**
    * removes referee from the team, removes the team from the referee
    * @param aReferee
    * @return
    */
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public boolean removeReferee(Referee aReferee)
   {
     boolean wasRemoved = false;
@@ -239,7 +259,10 @@ public class League
             "name" + ":" + getName()+ "]";
   }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   public boolean hasPolicy(Season season, Policy aPolicy) {
     if(policies.containsKey(season)){
       if (policies.get(season).equals(aPolicy)) {

@@ -92,10 +92,13 @@ public class Match
 
   public void setAwayTeam(Team awayTeam) {
     this.awayTeam = awayTeam;
+<<<<<<< HEAD
     if(homeTeam==null) return;
     if(awayTeam.indexOfMatch(this)==-1)
       awayTeam.addMatch(this,"away");
 
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   }
 
   public Team getHomeTeam() {
@@ -104,9 +107,12 @@ public class Match
 
   public void setHomeTeam(Team homeTeam) {
     this.homeTeam = homeTeam;
+<<<<<<< HEAD
     if(homeTeam==null) return;
     if(homeTeam.indexOfMatch(this)==-1)
       homeTeam.addMatch(this,"home");
+=======
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
   }
 
   public Referee getMainReferee() {

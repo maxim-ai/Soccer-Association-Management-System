@@ -241,8 +241,13 @@ public class System
 
   public boolean addTeam(Team aTeam)
   {
+<<<<<<< HEAD
     boolean wasAdded = true;
     if (teams.contains(aTeam)) { return true; }
+=======
+    boolean wasAdded = false;
+    if (teams.contains(aTeam)) { return false; }
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     teams.add(aTeam);
     wasAdded = true;
     return wasAdded;
@@ -250,7 +255,11 @@ public class System
 
   public boolean removeTeam(Team aTeam)
   {
+<<<<<<< HEAD
     boolean wasRemoved = true;
+=======
+    boolean wasRemoved = false;
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     teams.remove(aTeam);
     wasRemoved = true;
     return wasRemoved;
@@ -262,8 +271,13 @@ public class System
   }
   public boolean addGuest(Guest aGuest)
   {
+<<<<<<< HEAD
     boolean wasAdded = true;
     if (guests.contains(aGuest)) { return true; }
+=======
+    boolean wasAdded = false;
+    if (guests.contains(aGuest)) { return false; }
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     guests.add(aGuest);
     wasAdded = true;
     return wasAdded;
@@ -271,7 +285,11 @@ public class System
 
   public boolean removeGuest(Guest aGuest)
   {
+<<<<<<< HEAD
     boolean wasRemoved = true;
+=======
+    boolean wasRemoved = false;
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     guests.remove(aGuest);
     wasRemoved = true;
     return wasRemoved;
@@ -284,8 +302,13 @@ public class System
 
   public boolean addAccount(Account aAccount)
   {
+<<<<<<< HEAD
     boolean wasAdded = true;
     if (accounts.contains(aAccount)) { return true; }
+=======
+    boolean wasAdded = false;
+    if (accounts.contains(aAccount)) { return false; }
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     accounts.add(aAccount);
     wasAdded = true;
     return wasAdded;
@@ -293,7 +316,11 @@ public class System
 
   public boolean removeAccount(Account aAccount)
   {
+<<<<<<< HEAD
     boolean wasRemoved = true;
+=======
+    boolean wasRemoved = false;
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     accounts.remove(aAccount);
     wasRemoved = true;
     return wasRemoved;
@@ -306,8 +333,13 @@ public class System
 
   public boolean addAlert(Alert aAlert)
   {
+<<<<<<< HEAD
     boolean wasAdded = true;
     if (alerts.contains(aAlert)) { return true; }
+=======
+    boolean wasAdded = false;
+    if (alerts.contains(aAlert)) { return false; }
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     alerts.add(aAlert);
     wasAdded = true;
     return wasAdded;
@@ -315,7 +347,11 @@ public class System
 
   public boolean removeAlert(Alert aAlert)
   {
+<<<<<<< HEAD
     boolean wasRemoved = true;
+=======
+    boolean wasRemoved = false;
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     alerts.remove(aAlert);
     wasRemoved = true;
     return wasRemoved;
@@ -328,8 +364,13 @@ public class System
 
   public boolean addPage(Page aPage)
   {
+<<<<<<< HEAD
     boolean wasAdded = true;
     if (pages.contains(aPage)) { return true; }
+=======
+    boolean wasAdded = false;
+    if (pages.contains(aPage)) { return false; }
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     pages.add(aPage);
     wasAdded = true;
     return wasAdded;
@@ -337,7 +378,11 @@ public class System
 
   public boolean removePage(Page aPage)
   {
+<<<<<<< HEAD
     boolean wasRemoved = true;
+=======
+    boolean wasRemoved = false;
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     pages.remove(aPage);
     wasRemoved = true;
     return wasRemoved;
@@ -376,8 +421,13 @@ public class System
 
   public boolean addSeason(Season aSeason)
   {
+<<<<<<< HEAD
     boolean wasAdded = true;
     if (seasons.contains(aSeason)) { return true; }
+=======
+    boolean wasAdded = false;
+    if (seasons.contains(aSeason)) { return false; }
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     seasons.add(aSeason);
     wasAdded = true;
     return wasAdded;
@@ -385,7 +435,11 @@ public class System
 
   public boolean removeSeason(Season aSeason)
   {
+<<<<<<< HEAD
     boolean wasRemoved = true;
+=======
+    boolean wasRemoved = false;
+>>>>>>> 04739095caa25a2f8271c4460d33051ad18aa3b1
     seasons.remove(aSeason);
     wasRemoved = true;
     return wasRemoved;
