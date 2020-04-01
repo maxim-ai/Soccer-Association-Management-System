@@ -1,7 +1,7 @@
 
 import java.util.*;
 
-public class System
+public class Controller
 {
 
   private List<Team> teams;
@@ -12,7 +12,7 @@ public class System
   private List<League> leagues;
   private List<Season> seasons;
 
-  public System()
+  public Controller()
   {
     teams = new ArrayList<Team>();
     guests = new ArrayList<Guest>();

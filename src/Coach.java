@@ -178,4 +178,13 @@ public class Coach extends Role implements Pageable
   public void removePage() {
     page=null;
   }
+  /*
+  UC-5.1 update coach details
+   */
+  public void updateDetails(String training,String teamRole)
+  {
+    this.training=training;
+    this.teamRole=teamRole;
+  }
+
 }

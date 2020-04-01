@@ -117,4 +117,13 @@ public class Player extends Role implements Pageable
   public void removePage() {
     page=null;
   }
+  /*
+  UC-5.1 update player details
+   */
+  public void updateDetails(Date birthday, PositionEnum position,Team team)
+  {
+    this.birthday=birthday;
+    this.position=position;
+    this.team=team;
+  }
 }
