@@ -121,7 +121,7 @@ public class Account{
   }
 
   /**
-   * remove a role from an acount
+   * remove a role from an account
    */
   public boolean removeRole(Role aRole)
   {
