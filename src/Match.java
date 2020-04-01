@@ -36,7 +36,6 @@ public class Match
     Fan.notifyFansAboutMatch(this);
   }
 
-  //region Umple Methods
   public boolean setDate(Date aDate)
   {
     boolean wasSet = false;
@@ -233,7 +232,11 @@ public class Match
   public void removeSeason() {
     season = null;
   }
-  //endregion
+
+  public void ShowMatch(){
+    System.out.println(this.getHomeTeam()+" against "+this.getAwayTeam());
+  }
+
 
 
 }

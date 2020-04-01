@@ -173,4 +173,16 @@ public class League
     }
   }
 
+  public void ShowLeague() {
+
+    System.out.println("Name:");
+    System.out.println(this.getName());
+    System.out.println();
+    System.out.println("Teams in league:");
+    for(Team team:this.getTeams())
+      System.out.println(team.getName());
+    System.out.println();
+  }
+
+
 }

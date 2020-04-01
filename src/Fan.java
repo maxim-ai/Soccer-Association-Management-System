@@ -160,7 +160,10 @@ public class Fan extends Role
   }
 
   //Need to be Changed//
-  public void Report(){ }
+  public void Report(String report){
+    Controller.getSM().addComplain(report);
+  }
+
 
   public void ShowSearchHistory(){
     Guest guestDummy=new Guest("1");
@@ -186,13 +189,13 @@ public class Fan extends Role
     Guest guestDummy=new Guest("1");
     System.out.println("Teams Tracked:");
     for(Team team:teams)
-      guestDummy.ShowTeam(team);
+      team.ShowTeam();
     System.out.println("Players Tracked:");
     for(Player player:players)
-      guestDummy.ShowPlayer(player);
+      player.ShowPlayer();
     System.out.println("Coaches Tracked:");
     for(Coach coach:coaches)
-      guestDummy.ShowCoach(coach);
+      coach.ShowCoach();
   }
 
   public void EditPersonalInfo(String newName){

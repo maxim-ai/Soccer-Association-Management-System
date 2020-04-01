@@ -160,4 +160,14 @@ public class Season
     }
     return false;
   }
+
+  public void ShowSeason() {
+    System.out.println("Name:");
+    System.out.println(this.getName());
+    System.out.println();
+    System.out.println("Matches:");
+    for(Match match:this.getMatchs())
+      match.ShowMatch();
+  }
+
 }

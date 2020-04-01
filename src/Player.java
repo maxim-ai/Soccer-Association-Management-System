@@ -33,6 +33,7 @@ public class Player extends Role implements Pageable
     boolean wasSet = true;
     position = aPosition;
     wasSet = true;
+    pageUpdated();
     return wasSet;
   }
 
@@ -85,6 +86,7 @@ public class Player extends Role implements Pageable
     }
     team.addPlayer(this);
     wasSet = true;
+    pageUpdated();
     return wasSet;
   }
 
@@ -126,5 +128,26 @@ public class Player extends Role implements Pageable
     this.birthday=birthday;
     this.position=position;
     this.team=team;
+    pageUpdated();
   }
+
+  public void ShowPlayer() {
+    System.out.println("Name:");
+    System.out.println(this.getName());
+    System.out.println();
+    System.out.println("Age:");
+    int age=2020-this.getBirthday().getYear();
+    System.out.println(age);
+    System.out.println();
+    System.out.println("Position:");
+    System.out.println(this.getPosition());
+    System.out.println();
+    System.out.println("Team:");
+    System.out.println(this.getTeam().getName());
+  }
+
+  public void pageUpdated(){
+    page.notifyTrackingFans(new Alert(getName()+" page updated"));
+  }
+
 }

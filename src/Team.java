@@ -43,6 +43,7 @@ public class Team implements Pageable
     boolean wasSet = true;
     name = aName;
     wasSet = true;
+    pageUpdated();
     return wasSet;
   }
 
@@ -226,6 +227,7 @@ public class Team implements Pageable
   }
 
   public void setActive(boolean active) {
+    pageUpdated();
     this.active = active;
   }
 
@@ -235,6 +237,7 @@ public class Team implements Pageable
     {
       teamManagers.add(aTeamManager);
     }
+    pageUpdated();
     return true;
   }
 
@@ -244,6 +247,7 @@ public class Team implements Pageable
     {
       teamManagers.remove(aTeamManager);
     }
+    pageUpdated();
     return true;
   }
 
@@ -269,6 +273,7 @@ public class Team implements Pageable
         coachs.remove(aCoach);
       }
     }
+    pageUpdated();
     return wasAdded;
   }
    public boolean removeCoach(Coach aCoach)
@@ -293,6 +298,7 @@ public class Team implements Pageable
         coachs.add(oldIndex,aCoach);
       }
     }
+    pageUpdated();
     return wasRemoved;
   }
 
@@ -307,6 +313,7 @@ public class Team implements Pageable
     {
       owners.add(aOwner);
     }
+    pageUpdated();
     return true;
   }
 
@@ -316,6 +323,7 @@ public class Team implements Pageable
     {
       owners.remove(aOwner);
     }
+    pageUpdated();
     return true;
   }
 
@@ -363,6 +371,7 @@ public class Team implements Pageable
       players.add(aPlayer);
     }
     wasAdded = true;
+    pageUpdated();
     return wasAdded;
   }
 
@@ -386,6 +395,7 @@ public class Team implements Pageable
     players.remove(aPlayer);
     aPlayer.setTeam(null);
     wasRemoved = true;
+    pageUpdated();
     return wasRemoved;
   }
 
@@ -405,6 +415,7 @@ public class Team implements Pageable
 
     league.addTeam(this);
     wasSet = true;
+    pageUpdated();
     return wasSet;
   }
 
@@ -432,7 +443,7 @@ public class Team implements Pageable
       if(aMatch.getAwayTeam()==null)
         aMatch.setAwayTeam(this);
     }
-
+    pageUpdated();
     return wasAdded;
   }
 
@@ -450,6 +461,7 @@ public class Team implements Pageable
     matchs.remove(aMatch);
     if(aMatch.getAwayTeam().equals(this)) aMatch.setAwayTeam(null);
     if(aMatch.getHomeTeam().equals(this)) aMatch.setHomeTeam(null);
+    pageUpdated();
     return wasRemoved;
   }
 
@@ -481,6 +493,7 @@ public class Team implements Pageable
     }
     stadium.addTeam(this);
     wasSet = true;
+    pageUpdated();
     return wasSet;
   }
 
@@ -554,6 +567,7 @@ public class Team implements Pageable
   public void removeLeauge(League league) {
     if(this.getLeague().equals(league))
       this.league=null;
+    pageUpdated();
   }
 
   @Override
@@ -564,4 +578,46 @@ public class Team implements Pageable
   public void setPage(Page page) {
     this.page = page;
   }
+
+  public void ShowTeam() {
+    System.out.println("Name:");
+    System.out.println(this.getName());
+    System.out.println();
+    System.out.println("TeamManagers:");
+    for(TeamManager teamManager:this.getTeamManagers())
+      System.out.println(teamManager.getName());
+    System.out.println();
+    System.out.println("Coaches");
+    for(Coach coach:this.getCoachs())
+      System.out.println(coach.getName());
+    System.out.println();
+    System.out.println("TeamOwners:");
+    for(Owner owner:this.getOwners())
+      System.out.println(owner.getName());
+    System.out.println();
+    System.out.println("Players:");
+    for(Player player:this.getPlayers())
+      System.out.println(player.getName());
+    System.out.println();
+    System.out.println("League:");
+    System.out.println(this.getLeague().getName());
+    System.out.println();
+    System.out.println("Matches:");
+    for(Match match:this.getMatchs()){
+      System.out.print(this.getName()+" against ");
+      if(match.getAwayTeam().getName().equals(this.getName()))
+        System.out.println(match.getHomeTeam().getName());
+      else
+        System.out.println(match.getAwayTeam().getName());
+    }
+    System.out.println();
+    System.out.println("Stadium:");
+    System.out.println(this.getStadium().getName());
+    System.out.println();
+  }
+
+  public void pageUpdated(){
+    page.notifyTrackingFans(new Alert(getName()+" page updated"));
+  }
+
 }

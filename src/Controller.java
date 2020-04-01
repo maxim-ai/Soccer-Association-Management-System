@@ -362,8 +362,11 @@ public class Controller {
 
   }
 
+  /**
+   *
+   */
   public static void displayComplaint() {
-
+    SM.getComplaintAndComments();
   }
 
   /**
@@ -458,5 +461,26 @@ public class Controller {
       }
     }
     return owners;
+  }
+
+  public static List<Referee> getRefereesFromAccounts(){
+    List<Referee> refs=new LinkedList<>();
+    for(Account account:Controller.getAccounts()){
+      for(Role role:account.getRoles()){
+        if(role instanceof Referee){
+          refs.add((Referee) role);
+          break;
+        }
+      }
+    }
+    return refs;
+  }
+
+  public static SystemManager getSM() {
+    return SM;
+  }
+
+  public static void setSM(SystemManager SM) {
+    Controller.SM = SM;
   }
 }

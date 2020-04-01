@@ -299,4 +299,12 @@ public class Owner extends Role {
         return true;
     }
 
+    public void ShowOwner(){
+        System.out.println("Name:");
+        System.out.println(this.getName());
+        System.out.println("Team owned:");
+        System.out.println(this.getTeam().getName());
+    }
+
+
 }

@@ -24,6 +24,7 @@ public class Coach extends Role implements Pageable
     boolean wasSet = false;
     training = aTraining;
     wasSet = true;
+    pageUpdated();
     return wasSet;
   }
 
@@ -32,6 +33,7 @@ public class Coach extends Role implements Pageable
     boolean wasSet = false;
     teamRole = aTeamRole;
     wasSet = true;
+    pageUpdated();
     return wasSet;
   }
 
@@ -119,6 +121,7 @@ public class Coach extends Role implements Pageable
     {
       aTeam.addCoach(this);
     }
+    pageUpdated();
     return wasAdded;
   }
 
@@ -143,6 +146,7 @@ public class Coach extends Role implements Pageable
     {
       aTeam.removeCoach(this);
     }
+    pageUpdated();
     return wasRemoved;
   }
 
@@ -187,4 +191,24 @@ public class Coach extends Role implements Pageable
     this.training=training;
     this.teamRole=teamRole;
   }
+
+  public void ShowCoach() {
+    System.out.println("Name:");
+    System.out.println(this.getName());
+    System.out.println();
+    System.out.println("Training:");
+    System.out.println(this.getTraining());
+    System.out.println();
+    System.out.println("TeamRole:");
+    System.out.println(this.getTeamRole());
+    System.out.println();
+    System.out.println("TeamsCoaching:");
+    for(Team team:this.getTeams())
+      System.out.println(team.getName());
+  }
+
+  public void pageUpdated(){
+    page.notifyTrackingFans(new Alert(getName()+" page updated"));
+  }
+
 }

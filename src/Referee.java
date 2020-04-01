@@ -10,7 +10,9 @@ public class Referee extends Role
   private List<Match> matchs;
   private SLsettings sLsettings;
 
-  public Referee(String aTraining,String aName)
+
+
+  public Referee(String aTraining, String aName)
   {
     super(aName);
     training = aTraining;
@@ -38,6 +40,14 @@ public class Referee extends Role
   public String getTraining()
   {
     return training;
+  }
+
+  public void setMatchs(List<Match> matchs) {
+    this.matchs = matchs;
+  }
+
+  public List<Match> getMatchs() {
+    return matchs;
   }
 
   public HashMap<League, Season> getLeagues() {
@@ -195,4 +205,20 @@ public class Referee extends Role
     }
     else System.out.println("The referee is not associated with the game");
   }
+
+  public void ShowReferee() {
+    System.out.println("Name");
+    System.out.println(this.getName());
+    System.out.println();
+    System.out.println("Training:");
+    System.out.println(this.getTraining());
+    System.out.println();
+    System.out.println("Matches judged:");
+    for(Match match:this.getMatchs())
+      match.ShowMatch();
+  }
+
+
+
+
 }

@@ -4,9 +4,20 @@ import java.util.*;
 public class SystemManager extends Role
 {
 
+  HashMap<String,String> complaintAndComments;
+
   public SystemManager(String aName)
   {
     super(aName);
+    complaintAndComments= new HashMap<>();
+  }
+
+  public HashMap<String, String> getComplaintAndComments() {
+    return complaintAndComments;
+  }
+
+  public void setComplaintAndComments(HashMap<String, String> complaintAndComments) {
+    this.complaintAndComments = complaintAndComments;
   }
 
   /**
@@ -78,7 +89,20 @@ public class SystemManager extends Role
   /**
    * add comment to the complaint
    */
-  public void addComment(String comment){
+  public void addComplain(String complain){
+    complaintAndComments.put(complain,null);
+  }
+
+
+  /**
+   * add comment to the complaint
+   */
+  public void addComment(String comment,String acomplain){
+    for(Map.Entry <String,String> complain : complaintAndComments.entrySet()){
+      if(complain.getKey().equals(acomplain)){
+        complaintAndComments.put(acomplain,comment);
+      }
+    }
 
   }
 

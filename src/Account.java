@@ -245,4 +245,17 @@ public class Account{
     return null;
   }
 
+  public void ShowAccount(){
+    System.out.println("Name:");
+    System.out.println(this.getName());
+    System.out.println();
+    System.out.println("Age:");
+    System.out.println(this.getAge());
+    System.out.println();
+    System.out.println("Roles:");
+    for(Role role:this.getRoles())
+      System.out.println(role.getClass().getName());
+  }
+
+
 }
