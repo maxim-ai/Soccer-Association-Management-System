@@ -1,15 +1,16 @@
 import java.util.*;
 
 
-public class Referee
+public class Referee extends Role
 {
 
   private String training;
   private List<League> leagues;
   private List<Match> matchs;
 
-  public Referee(String aTraining)
+  public Referee(String aTraining,String aName)
   {
+    super(aName);
     training = aTraining;
     leagues = new ArrayList<League>();
     matchs = new ArrayList<Match>();
@@ -226,5 +227,13 @@ public class Referee
   {
     return super.toString() + "["+
             "training" + ":" + getTraining()+ "]";
+  }
+  /*
+  UC-10.1 update Referee details
+  last name? age?
+   */
+  public void updateDetails(String aName)
+  {
+    super.setName(aName);
   }
 }
