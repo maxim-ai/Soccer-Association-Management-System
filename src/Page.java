@@ -111,4 +111,12 @@ public class Page
     type.removePage();
   }
 
+  public void notifyTrackingFans(Alert alert){
+    for(Fan fan:fans){
+      if(fan.isTrackPersonalPages()){
+        fan.addPageAlert(alert);
+      }
+    }
+  }
+
 }

@@ -6,7 +6,7 @@ public class GameEvent
 {
 
   private EventEnum type;
-  private Date date;
+  private java.util.Date date;
   private Time hour;
   private String description;
   private int gameMinute;
@@ -14,7 +14,7 @@ public class GameEvent
 
 
 
-  public GameEvent(EventEnum aType, Date aDate, Time aHour, String aDescription, int aGameMinute, EventCalender aEventCalender)
+  public GameEvent(EventEnum aType, java.util.Date aDate, Time aHour, String aDescription, int aGameMinute, EventCalender aEventCalender)
   {
     type = aType;
     date = aDate;
@@ -71,7 +71,7 @@ public class GameEvent
     return type;
   }
 
-  public Date getDate()
+  public java.util.Date getDate()
   {
     return date;
   }

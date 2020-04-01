@@ -5,16 +5,14 @@ import java.sql.Time;
 
 public class Season
 {
-
-
   private String name;
   private List<Match> matchs;
-  private HashMap<League,Policy> policies;
+  private HashMap<League,SLsettings> sLsettings;
 
   public Season(String aName)
   {
     name = aName;
-    policies = new HashMap<>();
+    sLsettings = new HashMap<>();
     matchs = new ArrayList<Match>();
   }
 
@@ -31,10 +29,10 @@ public class Season
     return name;
   }
 
-  public Policy getPolicyByLeague(League aLeague)
+  public SLsettings getSLsettingsByLeague(League aLeague)
   {
-    Policy policy = policies.get(aLeague);
-    return policy;
+    SLsettings sLsetting = sLsettings.get(aLeague);
+    return sLsetting;
   }
 
   public Match getMatch(int index)
@@ -67,24 +65,24 @@ public class Season
     return index;
   }
 
-  public boolean addPolicyToLeague(League aLeague,Policy aPolicy)
+  public boolean addSLsettingsToLeague(League aLeague,SLsettings asLsettings)
   {
-    policies.put(aLeague,aPolicy);
-    if(!aLeague.hasPolicy(this,aPolicy)){
-      aLeague.addPolicyToSeason(this, aPolicy);
+    sLsettings.put(aLeague,asLsettings);
+    if(!aLeague.hasPolicy(this,asLsettings)){
+      aLeague.addSLsettingsToSeason(this, asLsettings);
     }
     return true;
   }
 
-  public boolean removePolicyFromLeague(League aLeague)
+  public boolean removeSLsettingsFromLeague(League aLeague)
   {
-    if (!policies.containsKey(aLeague)) {
+    if (!sLsettings.containsKey(aLeague)) {
       return true;
     }
-    if(aLeague.hasPolicy(this,policies.get(aLeague))){
-      aLeague.removePolicyFromSeason(this);
+    if(aLeague.hasPolicy(this,sLsettings.get(aLeague))){
+      aLeague.removeSLsettingsFromSeason(this);
     }
-    policies.remove(aLeague);
+    sLsettings.remove(aLeague);
     return true;
   }
 
@@ -120,7 +118,7 @@ public class Season
 
   public void delete()
   {
-    for(Map.Entry <League,Policy> leaguePolicyEntry : policies.entrySet())
+    for(Map.Entry <League,SLsettings> leaguePolicyEntry : sLsettings.entrySet())
     {
       leaguePolicyEntry.getKey().deleteSeason(this);
     }
@@ -137,9 +135,9 @@ public class Season
             "name" + ":" + getName();
   }
 
-  public boolean hasPolicy(League league, Policy aPolicy) {
-    if(policies.containsKey(league)){
-      if (policies.get(league).equals(aPolicy)) {
+  public boolean hasPolicy(League league, SLsettings AslSLsettings) {
+    if(sLsettings.containsKey(league)){
+      if (sLsettings.get(league).equals(AslSLsettings)) {
         return true;
       }
     }
@@ -148,11 +146,18 @@ public class Season
 
   public void deleteLeague(League league) {
 
-    if(policies.containsKey(league)){
-      if(policies.get(league).equals(league)){
-        policies.remove(league);
+    if(sLsettings.containsKey(league)){
+      if(sLsettings.get(league).equals(league)){
+        sLsettings.remove(league);
       }
     }
 
+  }
+
+  public boolean hasLeague(League league){
+    if(sLsettings.containsKey(league)){
+      return true;
+    }
+    return false;
   }
 }

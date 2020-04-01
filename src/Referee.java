@@ -1,3 +1,4 @@
+import java.sql.Time;
 import java.util.*;
 
 
@@ -5,15 +6,25 @@ public class Referee extends Role
 {
 
   private String training;
-  private List<League> leagues;
+  private HashMap<League,Season> leagues;
   private List<Match> matchs;
+  private SLsettings sLsettings;
 
-  public Referee(String aTraining, String aName)
+  public Referee(String aTraining,String aName)
   {
     super(aName);
     training = aTraining;
-    leagues = new ArrayList<League>();
+    //leagues = new ArrayList<League>();
+    leagues = new HashMap<>();
     matchs = new ArrayList<Match>();
+  }
+
+  public SLsettings getsLsettings() {
+    return sLsettings;
+  }
+
+  public void setsLsettings(SLsettings sLsettings) {
+    this.sLsettings = sLsettings;
   }
 
   public boolean setTraining(String aTraining)
@@ -29,64 +40,12 @@ public class Referee extends Role
     return training;
   }
 
-  public League getLeague(int index)
-  {
-    League aLeague = leagues.get(index);
-    return aLeague;
+  public HashMap<League, Season> getLeagues() {
+    return leagues;
   }
 
-  public List<League> getLeagues()
-  {
-    List<League> newLeagues = Collections.unmodifiableList(leagues);
-    return newLeagues;
-  }
-
-  public int numberOfLeagues()
-  {
-    int number = leagues.size();
-    return number;
-  }
-
-  public boolean hasLeagues()
-  {
-    boolean has = leagues.size() > 0;
-    return has;
-  }
-
-  public int indexOfLeague(League aLeague)
-  {
-    int index = leagues.indexOf(aLeague);
-    return index;
-  }
-
-  public Match getMatch(int index)
-  {
-    Match aMatch = matchs.get(index);
-    return aMatch;
-  }
-
-  public List<Match> getMatchs()
-  {
-    List<Match> newMatchs = Collections.unmodifiableList(matchs);
-    return newMatchs;
-  }
-
-  public int numberOfMatchs()
-  {
-    int number = matchs.size();
-    return number;
-  }
-
-  public boolean hasMatchs()
-  {
-    boolean has = matchs.size() > 0;
-    return has;
-  }
-
-  public int indexOfMatch(Match aMatch)
-  {
-    int index = matchs.indexOf(aMatch);
-    return index;
+  public void setLeagues(HashMap<League, Season> leagues) {
+    this.leagues = leagues;
   }
 
   public static int minimumNumberOfLeagues()
@@ -94,49 +53,25 @@ public class Referee extends Role
     return 0;
   }
 
-  public boolean addLeague(League aLeague)
+  public boolean addLeague(League aLeague,Season aSeason)
   {
-    boolean wasAdded = true;
-    if (leagues.contains(aLeague)) { return true; }
-    leagues.add(aLeague);
-    if (aLeague.indexOfReferee(this) != -1)
-    {
-      wasAdded = true;
+    leagues.put(aLeague,aSeason);
+    if(!aSeason.hasLeague(aLeague)){
+      aSeason.addSLsettingsToLeague(aLeague, sLsettings);
     }
-    else
-    {
-      wasAdded = aLeague.addReferee(this);
-      if (!wasAdded)
-      {
-        leagues.remove(aLeague);
-      }
-    }
-    return wasAdded;
+    return true;
   }
 
-  public boolean removeLeague(League aLeague)
+  /**
+   * remove the policy of the season
+   */
+  public boolean removeLeague(League league, Season aSeason)
   {
-    boolean wasRemoved = true;
-    if (!leagues.contains(aLeague))
-    {
-      return wasRemoved;
+    if (!leagues.containsKey(aSeason)) {
+      return true;
     }
-
-    int oldIndex = leagues.indexOf(aLeague);
-    leagues.remove(oldIndex);
-    if (aLeague.indexOfReferee(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aLeague.removeReferee(this);
-      if (!wasRemoved)
-      {
-        leagues.add(oldIndex,aLeague);
-      }
-    }
-    return wasRemoved;
+    leagues.remove(aSeason);
+    return true;
   }
 
   public static int minimumNumberOfMatchs()
@@ -204,12 +139,14 @@ public class Referee extends Role
 
   public void delete()
   {
+    /*
     ArrayList<League> copyOfLeagues = new ArrayList<League>(leagues);
     leagues.clear();
     for(League aLeague : copyOfLeagues)
     {
       aLeague.removeReferee(this);
     }
+    */
     ArrayList<Match> copyOfMatchs = new ArrayList<Match>(matchs);
     matchs.clear();
     for(Match aMatch : copyOfMatchs)
@@ -227,5 +164,35 @@ public class Referee extends Role
   {
     return super.toString() + "["+
             "training" + ":" + getTraining()+ "]";
+  }
+
+  /*
+  UC-10.2 display all matches()
+   */
+  public void displayAllMatches() {
+    if (!matchs.isEmpty()) {
+      for (Match m:matchs
+      ) {
+        System.out.println(m.toString());
+        System.out.println();
+      }
+    } else System.out.println("No matches!");
+  }
+  /*
+  UC-10.3 update event during match
+   */
+  public void updateEventDuringMatch(Match match,EventEnum aType, String aDescription)
+  {
+    if(matchs.contains(match)){
+      Date currDate=new Date(Calendar.getInstance().getTimeInMillis());
+      if (match.getDate().before(currDate))
+      {
+        Time currTime=new Time(Calendar.getInstance().getTimeInMillis());
+        GameEvent event=new GameEvent(aType,currDate,currTime,aDescription,(int)(currTime.getTime()-match.getTime().getTime()),match.getEventCalender());
+        match.getEventCalender().addGameEvent(event);
+      }
+      System.out.println("This match already end!");
+    }
+    else System.out.println("The referee is not associated with the game");
   }
 }

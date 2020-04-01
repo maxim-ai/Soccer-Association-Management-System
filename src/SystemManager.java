@@ -1,4 +1,3 @@
-
 import java.util.*;
 
 
@@ -9,5 +8,93 @@ public class SystemManager extends Role
   {
     super(aName);
   }
+
+  /**
+   * delete team for Permanently, saving all her actions, notify owner and team manger and delete team's
+   * page from all fans.
+   * @param team
+   * @return
+   */
+  public boolean DeleteTeamPermanently(Team team){
+    boolean wasSet = false;
+    if(team == null){
+      return  wasSet;
+    }
+    wasSet = Controller.removeTeam(team);
+    Controller.saveAction(team);
+    Controller.notifyOnDelete(team);
+    Controller.deleteFromAllFollowers(team);
+    team.delete();
+    return wasSet;
+  }
+
+  /**
+   * remove account from system
+   * @param account
+   * @return
+   */
+  public boolean deleteAccount(Account account){
+    boolean wasSet = false;
+    if (account == null){
+      return  wasSet;
+    }
+    List <Role> roles = account.getRoles();
+    boolean isOwner= false;
+    boolean isSystemManger = false;
+    for(Role role : roles){
+      if(role instanceof Owner){
+        isOwner = true;
+      }
+      if(role instanceof SystemManager){
+        isSystemManger = true;
+      }
+    }
+    if(isOwner){
+      return false;// to find someone else who will be next owner before remove this one
+    }
+    if(isSystemManger){
+      List<Account> accounts = Controller.getAccounts();
+      for(Account account1 : accounts){
+        for(Role role : account1.getRoles()){
+          if(role instanceof SystemManager && !account.equals(account1)){
+            wasSet = Controller.removeAccount(account);
+            return  wasSet;
+          }
+        }
+      }
+    }
+
+    wasSet = Controller.removeAccount(account);
+    return wasSet;
+  }
+
+  /**
+   * show all the complaints of the accounts in the system
+   */
+  public void showComplaints(){
+    Controller.displayComplaint();
+  }
+
+  /**
+   * add comment to the complaint
+   */
+  public void addComment(String comment){
+
+  }
+
+  /**
+   * show system logger
+   */
+  public void showSystemLog(){
+
+  }
+
+  /**
+   * build recommendation system
+   */
+  public void buildRecommendationSystem(){
+
+  }
+
 
 }

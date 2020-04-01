@@ -560,4 +560,8 @@ public class Team implements Pageable
   public void removePage() {
     page=null;
   }
+
+  public void setPage(Page page) {
+    this.page = page;
+  }
 }

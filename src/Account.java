@@ -6,13 +6,33 @@ public class Account{
   private String userName;
   private String password;
   private List<Role> roles;
+  private String name;
+  private int age;
 
 
-  public Account(String aUserName, String aPassword)
+  public Account(String aName, int aAge,String aUserName, String aPassword)
   {
     userName = aUserName;
     password = aPassword;
+    name=aName;
+    age=aAge;
     roles = new ArrayList<Role>();
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public int getAge() {
+    return age;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setAge(int age) {
+    this.age = age;
   }
 
   public boolean setUserName(String aUserName)

@@ -1,19 +1,27 @@
-
 import java.util.*;
 
 public class League
 {
+
   private String name;
   private List<Team> teams;
-  private List<Referee> referees;
-  private HashMap<Season,Policy> policies;
+  private HashMap<Season,SLsettings> sLsetting;
 
   public League(String aName) {
     name = aName;
     teams = new ArrayList<Team>();
-    referees = new ArrayList<Referee>();
-    policies = new HashMap<>();
+    sLsetting = new HashMap<>();
   }
+
+
+  public HashMap<Season, SLsettings> getsLsetting() {
+    return sLsetting;
+  }
+
+  public void setsLsetting(HashMap<Season, SLsettings> sLsetting) {
+    this.sLsetting = sLsetting;
+  }
+
 
   public boolean setName(String aName)
   {
@@ -58,41 +66,10 @@ public class League
     return index;
   }
 
-  public Policy getPolicyBySeason(Season season)
+  public SLsettings getSLsettingsBySeason(Season season)
   {
-    Policy policy = policies.get(season);
-    return policy;
-  }
-
-
-  public Referee getReferee(int index)
-  {
-    Referee aReferee = referees.get(index);
-    return aReferee;
-  }
-
-  public List<Referee> getReferees()
-  {
-    List<Referee> newReferees = Collections.unmodifiableList(referees);
-    return newReferees;
-  }
-
-  public int numberOfReferees()
-  {
-    int number = referees.size();
-    return number;
-  }
-
-  public boolean hasReferees()
-  {
-    boolean has = referees.size() > 0;
-    return has;
-  }
-
-  public int indexOfReferee(Referee aReferee)
-  {
-    int index = referees.indexOf(aReferee);
-    return index;
+    SLsettings asLsettings = sLsetting.get(season);
+    return asLsettings;
   }
 
   public static int minimumNumberOfTeams() { return 2;}
@@ -131,11 +108,11 @@ public class League
     return wasRemoved;
   }
 
-  public boolean addPolicyToSeason(Season aSeason,Policy aPolicy)
+  public boolean addSLsettingsToSeason(Season aSeason,SLsettings aSlSLsettings)
   {
-    policies.put(aSeason,aPolicy);
-    if(!aSeason.hasPolicy(this,aPolicy)){
-      aSeason.addPolicyToLeague(this, aPolicy);
+    sLsetting.put(aSeason,aSlSLsettings);
+    if(!aSeason.hasPolicy(this,aSlSLsettings)){
+      aSeason.addSLsettingsToLeague(this,aSlSLsettings);
     }
     return true;
   }
@@ -143,72 +120,18 @@ public class League
   /**
    * remove the policy of the season
    */
-  public boolean removePolicyFromSeason(Season aSeason)
+  public boolean removeSLsettingsFromSeason(Season aSeason)
   {
-    if (!policies.containsKey(aSeason)) {
+    if (!sLsetting.containsKey(aSeason)) {
       return true;
     }
-    if(aSeason.hasPolicy(this,policies.get(aSeason))){
-      aSeason.removePolicyFromLeague(this);
+    if(aSeason.hasPolicy(this,sLsetting.get(aSeason))){
+      aSeason.removeSLsettingsFromLeague(this);
     }
-    policies.remove(aSeason);
+    sLsetting.remove(aSeason);
     return true;
   }
 
-  /**
-   * adds referee to team, adds the team to the referee
-   * @param aReferee
-   * @return
-   */
-  public boolean addReferee(Referee aReferee)
-  {
-    boolean wasAdded = false;
-    if (referees.contains(aReferee)) { return false; }
-    referees.add(aReferee);
-    if (aReferee.indexOfLeague(this) != -1)
-    {
-      wasAdded = true;
-    }
-    else
-    {
-      wasAdded = aReferee.addLeague(this);
-      if (!wasAdded)
-      {
-        referees.remove(aReferee);
-      }
-    }
-    return wasAdded;
-  }
-
-  /**
-   * removes referee from the team, removes the team from the referee
-   * @param aReferee
-   * @return
-   */
-  public boolean removeReferee(Referee aReferee)
-  {
-    boolean wasRemoved = false;
-    if (!referees.contains(aReferee))
-    {
-      return wasRemoved;
-    }
-
-    int oldIndex = referees.indexOf(aReferee);
-    referees.remove(oldIndex);
-    if (aReferee.indexOfLeague(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aReferee.removeLeague(this);
-      if (!wasRemoved)
-      {
-        referees.add(oldIndex,aReferee);
-      }
-    }
-    return wasRemoved;
-  }
 
   public void delete()
   {
@@ -218,16 +141,9 @@ public class League
       aTeam.removeLeauge(this);
     }
 
-    for(Map.Entry <Season,Policy> seasonPolicyEntry : policies.entrySet())
+    for(Map.Entry <Season,SLsettings> seasonPolicyEntry : sLsetting.entrySet())
     {
       seasonPolicyEntry.getKey().deleteLeague(this);
-    }
-
-    ArrayList<Referee> copyOfReferees = new ArrayList<Referee>(referees);
-    referees.clear();
-    for(Referee aReferee : copyOfReferees)
-    {
-      aReferee.removeLeague(this);
     }
 
   }
@@ -239,9 +155,9 @@ public class League
   }
 
 
-  public boolean hasPolicy(Season season, Policy aPolicy) {
-    if(policies.containsKey(season)){
-      if (policies.get(season).equals(aPolicy)) {
+  public boolean hasPolicy(Season season, SLsettings AslSLsettings) {
+    if(sLsetting.containsKey(season)){
+      if (sLsetting.get(season).equals(AslSLsettings)) {
         return true;
       }
     }
@@ -250,9 +166,9 @@ public class League
 
 
   public void deleteSeason(Season season) {
-    if(policies.containsKey(season)){
-      if(policies.get(season).equals(season)){
-        policies.remove(season);
+    if(sLsetting.containsKey(season)){
+      if(sLsetting.get(season).equals(season)){
+        sLsetting.remove(season);
       }
     }
   }

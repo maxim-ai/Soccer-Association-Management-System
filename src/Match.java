@@ -32,8 +32,11 @@ public class Match
     this.stadium = aStadium;
     this.season = aSeason;
     eventCalender = new EventCalender(this);
+
+    Fan.notifyFansAboutMatch(this);
   }
 
+  //region Umple Methods
   public boolean setDate(Date aDate)
   {
     boolean wasSet = false;
@@ -227,7 +230,10 @@ public class Match
             "  " + "eventCalender = "+(getEventCalender());
   }
 
-    public void removeSeason() {
-      season = null;
-    }
+  public void removeSeason() {
+    season = null;
+  }
+  //endregion
+
+
 }

@@ -3,11 +3,24 @@ import java.util.*;
 public class Fan extends Role
 {
   private List<Page> pages;
+  private List<Alert> pageAlerts;
+  private List<Alert> matchAlerts;
+  private boolean trackPersonalPages;
+  private boolean getMatchNotifications;
+  private List<String[]> searchHistory;
+
+  private static List<Fan> allFans=new LinkedList<>();
 
   public Fan(String aName)
   {
     super(aName);
     pages = new ArrayList<Page>();
+    pageAlerts=new LinkedList<>();
+    matchAlerts=new LinkedList<>();
+    trackPersonalPages=false;
+    getMatchNotifications=false;
+    searchHistory=new LinkedList<>();
+    allFans.add(this);
   }
 
   public Page getPage(int index)
@@ -95,6 +108,95 @@ public class Fan extends Role
     {
       aPage.removeFan(this);
     }
+  }
+
+  public boolean isTrackPersonalPages() {
+    return trackPersonalPages;
+  }
+  public void setTrackPersonalPages(boolean trackPersonalPages) {
+    this.trackPersonalPages = trackPersonalPages;
+  }
+  public void addPageAlert(Alert alert){
+    pageAlerts.add(alert);
+  }
+
+  public boolean isGetMatchNotifications() {
+    return getMatchNotifications;
+  }
+
+  public void setGetGameNotifications(boolean getGameNotifications) {
+    this.getMatchNotifications = getGameNotifications;
+  }
+
+  public void addGameAlert(Alert alert){
+    matchAlerts.add(alert);
+  }
+  //endregion
+
+  //region My Methods
+  public void ShowInfo(String InfoAbout){ new Guest("1").ShowInfo(InfoAbout); }
+
+  public void Search(String criterion, String query){
+    new Guest("1").Search(criterion,query);
+    String[] savedSearch={criterion,query};
+    searchHistory.add(savedSearch);
+  }
+
+  public void Filter(String category,String roleFilter){
+    new Guest("1").Filter(category,roleFilter);
+  }
+
+  public void Logout(){
+    System.out.println("Logged out");
+  }
+
+  public void SubscribeTrackPersonalPages(){ trackPersonalPages=true; }
+
+  public static void notifyFansAboutMatch(Match match){
+    for(Fan fan:allFans){
+      if(fan.isGetMatchNotifications())
+        fan.addGameAlert(new Alert(match.getAwayTeam().getName()+" against "+match.getHomeTeam().getName()));
+    }
+  }
+
+  //Need to be Changed//
+  public void Report(){ }
+
+  public void ShowSearchHistory(){
+    Guest guestDummy=new Guest("1");
+    for(String[] savedSearch:searchHistory){
+      guestDummy.Search(savedSearch[0],savedSearch[1]);
+    }
+  }
+
+  public void ShowPersonalInfo(){
+    System.out.println("Name:");
+    System.out.println(getName());
+    List<Team> teams=new LinkedList<>();
+    List<Player> players=new LinkedList<>();
+    List<Coach> coaches=new LinkedList<>();
+    for(Page page:pages){
+      if(page.getType() instanceof Team)
+        teams.add((Team)page.getType());
+      if(page.getType() instanceof Player)
+        players.add((Player)page.getType());
+      if(page.getType() instanceof Coach)
+        coaches.add((Coach)page.getType());
+    }
+    Guest guestDummy=new Guest("1");
+    System.out.println("Teams Tracked:");
+    for(Team team:teams)
+      guestDummy.ShowTeam(team);
+    System.out.println("Players Tracked:");
+    for(Player player:players)
+      guestDummy.ShowPlayer(player);
+    System.out.println("Coaches Tracked:");
+    for(Coach coach:coaches)
+      guestDummy.ShowCoach(coach);
+  }
+
+  public void EditPersonalInfo(String newName){
+    setName(newName);
   }
 
 }
