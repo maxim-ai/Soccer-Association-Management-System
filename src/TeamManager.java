@@ -3,101 +3,173 @@ import java.util.*;
 
 public class TeamManager extends Role
 {
+  enum PermissionEnum{
+    manageName,
+    manageManagers,
+    managePage,
+    manageCoaches,
+    managePlayers,
+    manageLeague,
+    manageMatches,
+    manageStadium
+  }
 
-  private List<Team> teams;
+  private Team team;
+  private Owner appointedBy;
 
-  public TeamManager(String aName)
-  {
+  public TeamManager(String aName, Team team, Owner appointer) {
     super(aName);
-    teams = new ArrayList<Team>();
+    this.team = team;
+    appointedBy = appointer;
   }
 
-  public Team getTeam(int index)
-  {
-    Team aTeam = teams.get(index);
-    return aTeam;
+  public Team getTeam() {
+    return team;
   }
 
-  public List<Team> getTeams()
-  {
-    List<Team> newTeams = Collections.unmodifiableList(teams);
-    return newTeams;
+  public void setTeam(Team team) {
+    this.team = team;
   }
 
-  public int numberOfTeams()
-  {
-    int number = teams.size();
-    return number;
+  public Owner getAppointer() {
+    return appointedBy;
   }
 
-  public boolean hasTeams()
-  {
-    boolean has = teams.size() > 0;
-    return has;
+  public void setAppointer(Owner appointedBy) {
+    this.appointedBy = appointedBy;
   }
 
-  public int indexOfTeam(Team aTeam)
+  /**
+   * allows the team manager to change the name of the team
+   */
+  public boolean changeTeamName(String name)
   {
-    int index = teams.indexOf(aTeam);
-    return index;
-  }
-  public static int minimumNumberOfTeams()
-  {
-    return 1;
-  }
-  public boolean addTeam(Team aTeam)
-  {
-    boolean wasAdded = true;
-    if (teams.contains(aTeam)) { return true; }
-    teams.add(aTeam);
-    if (aTeam.indexOfTeamManager(this) != -1)
-    {
-      wasAdded = true;
-    }
-    else
-    {
-      wasAdded = aTeam.addTeamManager(this);
-      if (!wasAdded)
-      {
-        teams.remove(aTeam);
-      }
-    }
-    return wasAdded;
+    if(team==null || name==null)
+      return false;
+    if(appointedBy.hasPermission(this,PermissionEnum.manageName))
+      return false;
+    return team.setName(name);
   }
 
-  public boolean removeTeam(Team aTeam)
+  /**
+   * allows the team manager to add a team manager
+   */
+  public boolean addTeamManager(TeamManager aTeamManager)
   {
-    boolean wasRemoved = true;
-    if (!teams.contains(aTeam))
-    {
-      return wasRemoved;
-    }
-
-    int oldIndex = teams.indexOf(aTeam);
-    teams.remove(oldIndex);
-    if (aTeam.indexOfTeamManager(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aTeam.removeTeamManager(this);
-      if (!wasRemoved)
-      {
-        teams.add(oldIndex,aTeam);
-      }
-    }
-    return wasRemoved;
+    if(team==null || aTeamManager==null)
+      return false;
+    if(appointedBy.hasPermission(this,PermissionEnum.manageManagers))
+      return false;
+    return team.addTeamManager(aTeamManager);
   }
 
-  public void delete()
+  /**
+   * allows the team manager to remove a team manager
+   */
+  public boolean removeTeamManager(TeamManager aTeamManager)
   {
-    ArrayList<Team> copyOfTeams = new ArrayList<Team>(teams);
-    teams.clear();
-    for(Team aTeam : copyOfTeams)
-    {
-      aTeam.removeTeamManager(this);
-    }
+    if(team==null || aTeamManager==null)
+      return false;
+    if(appointedBy.hasPermission(this,PermissionEnum.manageManagers))
+      return false;
+    return team.removeTeamManager(aTeamManager);
+  }
+
+  /**
+   * allows the team manager to add a coach
+   */
+  public boolean addCoach(Coach aCoach)
+  {
+    if(team==null || aCoach==null)
+      return false;
+    if(appointedBy.hasPermission(this,PermissionEnum.manageCoaches))
+      return false;
+    return team.addCoach(aCoach);
+  }
+
+  /**
+   * allows the team manager to remove a coach
+   */
+  public boolean removeCoach(Coach aCoach)
+  {
+    if(team==null || aCoach==null)
+      return false;
+    if(appointedBy.hasPermission(this,PermissionEnum.manageCoaches))
+      return false;
+    return team.removeCoach(aCoach);
+  }
+
+  /**
+   * allows the team manager to add a player
+   */
+  public boolean addPlayer(Player aPlayer)
+  {
+    if(team==null || aPlayer==null)
+      return false;
+    if(appointedBy.hasPermission(this,PermissionEnum.managePlayers))
+      return false;
+    return team.addPlayer(aPlayer);
+  }
+
+  /**
+   * allows the team manager to remove a player
+   */
+  public boolean removePlayer(Player aPlayer)
+  {
+    if(team==null || aPlayer==null)
+      return false;
+    if(appointedBy.hasPermission(this,PermissionEnum.managePlayers))
+      return false;
+    return team.removePlayer(aPlayer);
+  }
+
+  /**
+   * allows the team manager to change the league
+   */
+  public boolean setLeague(League aLeague)
+  {
+    if(team==null || aLeague==null)
+      return false;
+    if(appointedBy.hasPermission(this,PermissionEnum.manageLeague))
+      return false;
+    return team.setLeague(aLeague);
+  }
+
+  /**
+   * allows the team manager to add a match
+   */
+  public boolean addMatch(Match aMatch, String homeOrAway)
+  {
+    if(team == null || !team.isActive() || aMatch==null || homeOrAway==null)
+      return false;
+    if(appointedBy.hasPermission(this,PermissionEnum.manageMatches))
+      return false;
+    return team.addMatch(aMatch,homeOrAway);
+  }
+
+  /**
+   * allows the team manager to remove a match
+   */
+  public boolean removeMatch(Match aMatch)
+  {
+    if(team == null || !team.isActive() || aMatch==null)
+    return false;
+    if(appointedBy.hasPermission(this,PermissionEnum.manageMatches))
+      return false;
+    return team.removeMatch(aMatch);
+  }
+
+
+  /**
+   * allows the team manager to change the stadium
+   */
+  public boolean setStadium(Stadium aStadium)
+  {
+    if(team == null || !team.isActive() || aStadium==null)
+      return false;
+    if(appointedBy.hasPermission(this,PermissionEnum.manageStadium))
+      return false;
+    return team.setStadium(aStadium);
   }
 
 }

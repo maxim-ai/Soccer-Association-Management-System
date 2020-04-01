@@ -3,7 +3,6 @@ import java.util.*;
 
 public class League
 {
-
   private String name;
   private List<Team> teams;
   private List<Referee> referees;

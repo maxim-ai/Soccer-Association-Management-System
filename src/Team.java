@@ -14,6 +14,7 @@ public class Team implements Pageable
   private League league;
   private List<Match> matchs;
   private Stadium stadium;
+  private boolean active;
 
 
   public Team(String aName,Page aPage,League aLeague,Stadium aStadium)
@@ -35,6 +36,7 @@ public class Team implements Pageable
     matchs = new ArrayList<Match>();
 
   }
+
 
   public boolean setName(String aName)
   {
@@ -219,49 +221,30 @@ public class Team implements Pageable
     return 1;
   }
 
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
   public boolean addTeamManager(TeamManager aTeamManager)
   {
-    boolean wasAdded = true;
-    if (teamManagers.contains(aTeamManager)) { return true; }
-    teamManagers.add(aTeamManager);
-    if (aTeamManager.indexOfTeam(this) != -1)
+    if (!teamManagers.contains(aTeamManager))
     {
-      wasAdded = true;
+      teamManagers.add(aTeamManager);
     }
-    else
-    {
-      wasAdded = aTeamManager.addTeam(this);
-      if (!wasAdded)
-      {
-        teamManagers.remove(aTeamManager);
-      }
-    }
-    return wasAdded;
+    return true;
   }
 
   public boolean removeTeamManager(TeamManager aTeamManager)
   {
-    boolean wasRemoved = true;
-    if (!teamManagers.contains(aTeamManager))
+    if (teamManagers.contains(aTeamManager))
     {
-      return wasRemoved;
+      teamManagers.remove(aTeamManager);
     }
-
-    int oldIndex = teamManagers.indexOf(aTeamManager);
-    teamManagers.remove(oldIndex);
-    if (aTeamManager.indexOfTeam(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aTeamManager.removeTeam(this);
-      if (!wasRemoved)
-      {
-        teamManagers.add(oldIndex,aTeamManager);
-      }
-    }
-    return wasRemoved;
+    return true;
   }
 
   public static int minimumNumberOfCoachs()
@@ -320,47 +303,20 @@ public class Team implements Pageable
 
   public boolean addOwner(Owner aOwner)
   {
-    boolean wasAdded = true;
-    if (owners.contains(aOwner)) { return true; }
-    owners.add(aOwner);
-    if (aOwner.indexOfTeam(this) != -1)
+    if (!owners.contains(aOwner))
     {
-      wasAdded = true;
+      owners.add(aOwner);
     }
-    else
-    {
-      wasAdded = aOwner.addTeam(this);
-      if (!wasAdded)
-      {
-        owners.remove(aOwner);
-      }
-    }
-    return wasAdded;
+    return true;
   }
 
   public boolean removeOwner(Owner aOwner)
   {
-    boolean wasRemoved = true;
-    if (!owners.contains(aOwner))
+    if (owners.contains(aOwner))
     {
-      return wasRemoved;
+      owners.remove(aOwner);
     }
-
-    int oldIndex = owners.indexOf(aOwner);
-    owners.remove(oldIndex);
-    if (aOwner.indexOfTeam(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aOwner.removeTeam(this);
-      if (!wasRemoved)
-      {
-        owners.add(oldIndex,aOwner);
-      }
-    }
-    return wasRemoved;
+    return true;
   }
 
   public boolean isNumberOfPlayersValid()
@@ -537,7 +493,7 @@ public class Team implements Pageable
     teamManagers.clear();
     for(TeamManager aTeamManager : copyOfTeamManagers)
     {
-      aTeamManager.removeTeam(this);
+//      aTeamManager.exitTeam(this);
     }
     Page existingPage = page;
     page = null;
@@ -555,7 +511,7 @@ public class Team implements Pageable
     owners.clear();
     for(Owner aOwner : copyOfOwners)
     {
-      aOwner.removeTeam(this);
+      aOwner.removeOwnerFromTeam(aOwner);
     }
     for(int i=players.size(); i > 0; i--)
     {

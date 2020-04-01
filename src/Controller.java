@@ -1,18 +1,18 @@
 
 import java.util.*;
 
-public class System
+public class Controller
 {
 
-  private List<Team> teams;
-  private List<Guest> guests;
-  private List<Account> accounts;
-  private List<Alert> alerts;
-  private List<Page> pages;
-  private List<League> leagues;
-  private List<Season> seasons;
+  private static List<Team> teams;
+  private static List<Guest> guests;
+  private static List<Account> accounts;
+  private static List<Alert> alerts;
+  private static List<Page> pages;
+  private static List<League> leagues;
+  private static List<Season> seasons;
 
-  public System()
+  public Controller()
   {
     teams = new ArrayList<Team>();
     guests = new ArrayList<Guest>();
@@ -24,211 +24,211 @@ public class System
   }
 
 
-  public Team getTeam(int index)
+  public static Team getTeam(int index)
   {
     Team aTeam = teams.get(index);
     return aTeam;
   }
 
-  public List<Team> getTeams()
+  public static List<Team> getTeams()
   {
     List<Team> newTeams = Collections.unmodifiableList(teams);
     return newTeams;
   }
 
-  public int numberOfTeams()
+  public static int numberOfTeams()
   {
     int number = teams.size();
     return number;
   }
 
-  public boolean hasTeams()
+  public static boolean hasTeams()
   {
     boolean has = teams.size() > 0;
     return has;
   }
 
-  public int indexOfTeam(Team aTeam)
+  public static int indexOfTeam(Team aTeam)
   {
     int index = teams.indexOf(aTeam);
     return index;
   }
 
-  public Guest getGuest(int index)
+  public static Guest getGuest(int index)
   {
     Guest aGuest = guests.get(index);
     return aGuest;
   }
 
-  public List<Guest> getGuests()
+  public static List<Guest> getGuests()
   {
     List<Guest> newGuests = Collections.unmodifiableList(guests);
     return newGuests;
   }
 
-  public int numberOfGuests()
+  public static int numberOfGuests()
   {
     int number = guests.size();
     return number;
   }
 
-  public boolean hasGuests()
+  public static boolean hasGuests()
   {
     boolean has = guests.size() > 0;
     return has;
   }
 
-  public int indexOfGuest(Guest aGuest)
+  public static int indexOfGuest(Guest aGuest)
   {
     int index = guests.indexOf(aGuest);
     return index;
   }
 
-  public Account getAccount(int index)
+  public static Account getAccount(int index)
   {
     Account aAccount = accounts.get(index);
     return aAccount;
   }
 
-  public List<Account> getAccounts()
+  public static List<Account> getAccounts()
   {
     List<Account> newAccounts = Collections.unmodifiableList(accounts);
     return newAccounts;
   }
 
-  public int numberOfAccounts()
+  public static int numberOfAccounts()
   {
     int number = accounts.size();
     return number;
   }
 
-  public boolean hasAccounts()
+  public static boolean hasAccounts()
   {
     boolean has = accounts.size() > 0;
     return has;
   }
 
-  public int indexOfAccount(Account aAccount)
+  public static int indexOfAccount(Account aAccount)
   {
     int index = accounts.indexOf(aAccount);
     return index;
   }
 
-  public Alert getAlert(int index)
+  public static Alert getAlert(int index)
   {
     Alert aAlert = alerts.get(index);
     return aAlert;
   }
 
-  public List<Alert> getAlerts()
+  public static List<Alert> getAlerts()
   {
     List<Alert> newAlerts = Collections.unmodifiableList(alerts);
     return newAlerts;
   }
 
-  public int numberOfAlerts()
+  public static int numberOfAlerts()
   {
     int number = alerts.size();
     return number;
   }
 
-  public boolean hasAlerts()
+  public static boolean hasAlerts()
   {
     boolean has = alerts.size() > 0;
     return has;
   }
 
-  public int indexOfAlert(Alert aAlert)
+  public static int indexOfAlert(Alert aAlert)
   {
     int index = alerts.indexOf(aAlert);
     return index;
   }
 
-  public Page getPage(int index)
+  public static Page getPage(int index)
   {
     Page aPage = pages.get(index);
     return aPage;
   }
 
-  public List<Page> getPages()
+  public static List<Page> getPages()
   {
     List<Page> newPages = Collections.unmodifiableList(pages);
     return newPages;
   }
 
-  public int numberOfPages()
+  public static int numberOfPages()
   {
     int number = pages.size();
     return number;
   }
 
-  public boolean hasPages()
+  public static boolean hasPages()
   {
     boolean has = pages.size() > 0;
     return has;
   }
 
-  public int indexOfPage(Page aPage)
+  public static int indexOfPage(Page aPage)
   {
     int index = pages.indexOf(aPage);
     return index;
   }
 
-  public League getLeague(int index)
+  public static League getLeague(int index)
   {
     League aLeague = leagues.get(index);
     return aLeague;
   }
 
-  public List<League> getLeagues()
+  public static List<League> getLeagues()
   {
     List<League> newLeagues = Collections.unmodifiableList(leagues);
     return newLeagues;
   }
 
-  public int numberOfLeagues()
+  public static int numberOfLeagues()
   {
     int number = leagues.size();
     return number;
   }
 
-  public boolean hasLeagues()
+  public static boolean hasLeagues()
   {
     boolean has = leagues.size() > 0;
     return has;
   }
 
-  public int indexOfLeague(League aLeague)
+  public static int indexOfLeague(League aLeague)
   {
     int index = leagues.indexOf(aLeague);
     return index;
   }
 
-  public Season getSeason(int index)
+  public static Season getSeason(int index)
   {
     Season aSeason = seasons.get(index);
     return aSeason;
   }
 
-  public List<Season> getSeasons()
+  public static List<Season> getSeasons()
   {
     List<Season> newSeasons = Collections.unmodifiableList(seasons);
     return newSeasons;
   }
 
-  public int numberOfSeasons()
+  public static int numberOfSeasons()
   {
     int number = seasons.size();
     return number;
   }
 
-  public boolean hasSeasons()
+  public static boolean hasSeasons()
   {
     boolean has = seasons.size() > 0;
     return has;
   }
 
-  public int indexOfSeason(Season aSeason)
+  public static int indexOfSeason(Season aSeason)
   {
     int index = seasons.indexOf(aSeason);
     return index;
@@ -239,7 +239,7 @@ public class System
     return 0;
   }
 
-  public boolean addTeam(Team aTeam)
+  public static boolean addTeam(Team aTeam)
   {
     boolean wasAdded = true;
     if (teams.contains(aTeam)) { return true; }
@@ -248,7 +248,7 @@ public class System
     return wasAdded;
   }
 
-  public boolean removeTeam(Team aTeam)
+  public static boolean removeTeam(Team aTeam)
   {
     boolean wasRemoved = true;
     teams.remove(aTeam);
@@ -260,7 +260,7 @@ public class System
   {
     return 0;
   }
-  public boolean addGuest(Guest aGuest)
+  public static boolean addGuest(Guest aGuest)
   {
     boolean wasAdded = true;
     if (guests.contains(aGuest)) { return true; }
@@ -269,7 +269,7 @@ public class System
     return wasAdded;
   }
 
-  public boolean removeGuest(Guest aGuest)
+  public static boolean removeGuest(Guest aGuest)
   {
     boolean wasRemoved = true;
     guests.remove(aGuest);
@@ -282,7 +282,7 @@ public class System
     return 0;
   }
 
-  public boolean addAccount(Account aAccount)
+  public static boolean addAccount(Account aAccount)
   {
     boolean wasAdded = true;
     if (accounts.contains(aAccount)) { return true; }
@@ -291,7 +291,7 @@ public class System
     return wasAdded;
   }
 
-  public boolean removeAccount(Account aAccount)
+  public static boolean removeAccount(Account aAccount)
   {
     boolean wasRemoved = true;
     accounts.remove(aAccount);
@@ -304,7 +304,7 @@ public class System
     return 0;
   }
 
-  public boolean addAlert(Alert aAlert)
+  public static boolean addAlert(Alert aAlert)
   {
     boolean wasAdded = true;
     if (alerts.contains(aAlert)) { return true; }
@@ -313,7 +313,7 @@ public class System
     return wasAdded;
   }
 
-  public boolean removeAlert(Alert aAlert)
+  public static boolean removeAlert(Alert aAlert)
   {
     boolean wasRemoved = true;
     alerts.remove(aAlert);
@@ -326,7 +326,7 @@ public class System
     return 0;
   }
 
-  public boolean addPage(Page aPage)
+  public static boolean addPage(Page aPage)
   {
     boolean wasAdded = true;
     if (pages.contains(aPage)) { return true; }
@@ -335,7 +335,7 @@ public class System
     return wasAdded;
   }
 
-  public boolean removePage(Page aPage)
+  public static boolean removePage(Page aPage)
   {
     boolean wasRemoved = true;
     pages.remove(aPage);
@@ -347,7 +347,7 @@ public class System
   {
     return 0;
   }
-  public boolean addLeague(League aLeague)
+  public static boolean addLeague(League aLeague)
   {
     boolean wasAdded = true;
     if (leagues.contains(aLeague)) { return true; }
@@ -356,7 +356,7 @@ public class System
     return wasAdded;
   }
 
-  public boolean removeLeague(League aLeague)
+  public static boolean removeLeague(League aLeague)
   {
     boolean wasRemoved = true;
     if (!leagues.contains(aLeague))

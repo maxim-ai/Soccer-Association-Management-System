@@ -129,4 +129,100 @@ public class Account{
             "password" + ":" + getPassword()+ "]";
   }
 
+  /**
+   * checks is the account is a coach
+   */
+  public Coach checkIfCoach()
+  {
+    for(Role role: roles)
+    {
+      if(role instanceof Coach) return (Coach) role;
+    }
+    return null;
+  }
+
+  /**
+   * checks is the account is a team manager
+   */
+  public TeamManager checkIfTeamManagr()
+  {
+    for(Role role: roles)
+    {
+      if(role instanceof TeamManager) return (TeamManager) role;
+    }
+    return null;
+  }
+
+  /**
+   * checks is the account is a owner
+   */
+  public Owner checkIfOwner()
+  {
+    for(Role role: roles)
+    {
+      if(role instanceof Owner) return (Owner) role;
+    }
+    return null;
+  }
+
+  /**
+   * checks is the account is a player
+   */
+  public Player checkIfPlayer()
+  {
+    for(Role role: roles)
+    {
+      if(role instanceof Player) return (Player) role;
+    }
+    return null;
+  }
+
+  /**
+   * checks is the account is a fan
+   */
+  public Fan checkIfFan()
+  {
+    for(Role role: roles)
+    {
+      if(role instanceof Fan) return (Fan) role;
+    }
+    return null;
+  }
+
+  /**
+   * checks is the account is a system manager
+   */
+  public SystemManager checkIfSystemManager()
+  {
+    for(Role role: roles)
+    {
+      if(role instanceof SystemManager) return (SystemManager) role;
+    }
+    return null;
+  }
+
+  /**
+   * checks is the account is a Assiciation Representive
+   */
+  public AssiciationRepresentive checkIfAssiciationRepresentive()
+  {
+    for(Role role: roles)
+    {
+      if(role instanceof AssiciationRepresentive) return (AssiciationRepresentive) role;
+    }
+    return null;
+  }
+
+  /**
+   * checks is the account is a referee
+   */
+  public Referee checkIfReferee()
+  {
+    for(Role role: roles)
+    {
+      if(role instanceof Referee) return (Referee) role;
+    }
+    return null;
+  }
+
 }
