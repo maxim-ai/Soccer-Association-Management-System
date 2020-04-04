@@ -9,7 +9,6 @@ public class Fan extends Role
   private boolean getMatchNotifications;
   private List<String[]> searchHistory;
 
-  private static List<Fan> allFans=new LinkedList<>();
 
   public Fan(String aName)
   {
@@ -20,7 +19,6 @@ public class Fan extends Role
     trackPersonalPages=false;
     getMatchNotifications=false;
     searchHistory=new LinkedList<>();
-    allFans.add(this);
   }
 
   public Page getPage(int index)
@@ -153,7 +151,8 @@ public class Fan extends Role
   public void SubscribeTrackPersonalPages(){ trackPersonalPages=true; }
 
   public static void notifyFansAboutMatch(Match match){
-    for(Fan fan:allFans){
+    List<Fan> fans=Controller.getFansFromAccounts();
+    for(Fan fan:fans){
       if(fan.isGetMatchNotifications())
         fan.addGameAlert(new Alert(match.getAwayTeam().getName()+" against "+match.getHomeTeam().getName()));
     }

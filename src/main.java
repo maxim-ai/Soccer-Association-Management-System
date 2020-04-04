@@ -1,13 +1,11 @@
+import java.io.IOException;
 import java.util.*;
 
 public class main{
 
 
-    public static void main(String[] args){
-        String abs="hi";
-        bla(abs);
-
-        java.lang.System.out.println(bla(abs));
+    public static void main(String[] args) throws IOException {
+        
     }
     public static boolean bla(Object o)
     {

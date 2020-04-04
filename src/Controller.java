@@ -476,6 +476,19 @@ public class Controller {
     return refs;
   }
 
+  public static List<Fan> getFansFromAccounts(){
+    List<Fan> fans=new LinkedList<>();
+    for(Account account:Controller.getAccounts()){
+      for(Role role:account.getRoles()){
+        if(role instanceof Fan){
+          fans.add((Fan) role);
+          break;
+        }
+      }
+    }
+    return fans;
+  }
+
   public static SystemManager getSM() {
     return SM;
   }
