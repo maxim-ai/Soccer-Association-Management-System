@@ -216,7 +216,7 @@ public class Owner extends Role {
 
         owner.team.removeOwner(owner);
 
-        for (Account account : Controller.getAccounts())
+        for (Account account : DataManager.getAccounts())
             for (Role role : account.getRoles())
                 if (role instanceof Owner && role.equals(owner)) {
                     for (Role del : account.getRoles())
@@ -257,7 +257,7 @@ public class Owner extends Role {
 
         teamManager.getTeam().removeTeamManager(teamManager);
 
-        for (Account account : Controller.getAccounts())
+        for (Account account : DataManager.getAccounts())
             for (Role role : account.getRoles())
                 if (role instanceof Owner && role.equals(teamManager))
                     account.removeRole(role);

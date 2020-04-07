@@ -114,7 +114,7 @@ public class Page
   public void notifyTrackingFans(Alert alert){
     for(Fan fan:fans){
       if(fan.isTrackPersonalPages()){
-        fan.addPageAlert(alert);
+        fan.addAlert(alert);
       }
     }
   }

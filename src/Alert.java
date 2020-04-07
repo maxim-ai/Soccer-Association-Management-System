@@ -27,4 +27,9 @@ public class Alert
     return super.toString() + "["+
             "description" + ":" + getDescription()+ "]";
   }
+
+  public static void notifyOtherRole(String notification,Role role){
+    Alert alert=new Alert(notification);
+    role.addAlert(alert);
+  }
 }

@@ -31,10 +31,10 @@ public class SystemManager extends Role
     if(team == null){
       return  wasSet;
     }
-    wasSet = Controller.removeTeam(team);
-    Controller.saveAction(team);
-    Controller.notifyOnDelete(team);
-    Controller.deleteFromAllFollowers(team);
+    wasSet = DataManager.removeTeam(team);
+    DataManager.saveAction(team);
+    DataManager.notifyOnDelete(team);
+    DataManager.deleteFromAllFollowers(team);
     team.delete();
     return wasSet;
   }
@@ -64,18 +64,18 @@ public class SystemManager extends Role
       return false;// to find someone else who will be next owner before remove this one
     }
     if(isSystemManger){
-      List<Account> accounts = Controller.getAccounts();
+      List<Account> accounts = DataManager.getAccounts();
       for(Account account1 : accounts){
         for(Role role : account1.getRoles()){
           if(role instanceof SystemManager && !account.equals(account1)){
-            wasSet = Controller.removeAccount(account);
+            wasSet = DataManager.removeAccount(account);
             return  wasSet;
           }
         }
       }
     }
 
-    wasSet = Controller.removeAccount(account);
+    wasSet = DataManager.removeAccount(account);
     return wasSet;
   }
 
@@ -83,7 +83,7 @@ public class SystemManager extends Role
    * show all the complaints of the accounts in the system
    */
   public void showComplaints(){
-    Controller.displayComplaint();
+    DataManager.displayComplaint();
   }
 
   /**

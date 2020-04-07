@@ -1,7 +1,7 @@
 
 import java.util.*;
 
-public class Controller {
+public class DataManager {
 
   private static List<Team> teams;
   private static List<Guest> guests;
@@ -10,9 +10,8 @@ public class Controller {
   private static List<Page> pages;
   private static List<League> leagues;
   private static List<Season> seasons;
-  private static SystemManager SM;
 
-  public Controller() {
+  public DataManager() {
     teams = new ArrayList<Team>();
     guests = new ArrayList<Guest>();
     accounts = new ArrayList<Account>();
@@ -349,11 +348,7 @@ public class Controller {
     return wasRemoved;
   }
 
-  public static void Initialize() {
-    System.out.println("Established connection to Accounty System");
-    System.out.println("Established connection to Federal Tax System");
-    SM = new SystemManager("Maxim");
-  }
+
 
   public static void saveAction(Team team) {
   }
@@ -365,9 +360,6 @@ public class Controller {
   /**
    *
    */
-  public static void displayComplaint() {
-    SM.getComplaintAndComments();
-  }
 
   /**
    * create new referee
@@ -413,7 +405,7 @@ public class Controller {
 
   public static List<Player> getPlayersFromAccounts(){
     List<Player> players=new LinkedList<>();
-    for(Account account:Controller.getAccounts()){
+    for(Account account: DataManager.getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof Player){
           players.add((Player)role);
@@ -426,7 +418,7 @@ public class Controller {
 
   public static List<Coach> getCoachesFromAccounts(){
     List<Coach> coaches=new LinkedList<>();
-    for(Account account:Controller.getAccounts()){
+    for(Account account: DataManager.getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof Coach){
           coaches.add((Coach)role);
@@ -439,7 +431,7 @@ public class Controller {
 
   public static List<TeamManager> getTeamManagersFromAccounts(){
     List<TeamManager> tms=new LinkedList<>();
-    for(Account account:Controller.getAccounts()){
+    for(Account account: DataManager.getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof TeamManager){
           tms.add((TeamManager) role);
@@ -452,7 +444,7 @@ public class Controller {
 
   public static List<Owner> getOwnersFromAccounts(){
     List<Owner> owners=new LinkedList<>();
-    for(Account account:Controller.getAccounts()){
+    for(Account account: DataManager.getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof Owner){
           owners.add((Owner) role);
@@ -465,7 +457,7 @@ public class Controller {
 
   public static List<Referee> getRefereesFromAccounts(){
     List<Referee> refs=new LinkedList<>();
-    for(Account account:Controller.getAccounts()){
+    for(Account account: DataManager.getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof Referee){
           refs.add((Referee) role);
@@ -478,7 +470,7 @@ public class Controller {
 
   public static List<Fan> getFansFromAccounts(){
     List<Fan> fans=new LinkedList<>();
-    for(Account account:Controller.getAccounts()){
+    for(Account account: DataManager.getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof Fan){
           fans.add((Fan) role);
@@ -489,11 +481,5 @@ public class Controller {
     return fans;
   }
 
-  public static SystemManager getSM() {
-    return SM;
-  }
 
-  public static void setSM(SystemManager SM) {
-    Controller.SM = SM;
-  }
 }

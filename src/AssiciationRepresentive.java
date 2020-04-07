@@ -20,7 +20,7 @@ public class AssiciationRepresentive extends Role
       return  null;
     }
     League league = new League(name);
-    Controller.addLeague(league);
+    DataManager.addLeague(league);
     for(Team team : teams){
       league.addTeam(team);
     }
@@ -39,7 +39,7 @@ public class AssiciationRepresentive extends Role
       return  wasSet;
     }
     Season season = new Season(year);
-    Controller.addSeason(season);
+    DataManager.addSeason(season);
     wasSet = league.addSLsettingsToSeason(season,null);
     return wasSet;
   }
@@ -67,7 +67,7 @@ public class AssiciationRepresentive extends Role
    */
   public Referee addNewReferee(String training, String name){
     if(training != null && name != null) {
-      return  Controller.CreateNewReferee(training,name);
+      return  DataManager.CreateNewReferee(training,name);
     }
     return null;
   }

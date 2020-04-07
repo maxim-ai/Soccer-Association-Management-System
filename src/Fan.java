@@ -3,8 +3,6 @@ import java.util.*;
 public class Fan extends Role
 {
   private List<Page> pages;
-  private List<Alert> pageAlerts;
-  private List<Alert> matchAlerts;
   private boolean trackPersonalPages;
   private boolean getMatchNotifications;
   private List<String[]> searchHistory;
@@ -14,8 +12,6 @@ public class Fan extends Role
   {
     super(aName);
     pages = new ArrayList<Page>();
-    pageAlerts=new LinkedList<>();
-    matchAlerts=new LinkedList<>();
     trackPersonalPages=false;
     getMatchNotifications=false;
     searchHistory=new LinkedList<>();
@@ -114,9 +110,6 @@ public class Fan extends Role
   public void setTrackPersonalPages(boolean trackPersonalPages) {
     this.trackPersonalPages = trackPersonalPages;
   }
-  public void addPageAlert(Alert alert){
-    pageAlerts.add(alert);
-  }
 
   public boolean isGetMatchNotifications() {
     return getMatchNotifications;
@@ -126,9 +119,6 @@ public class Fan extends Role
     this.getMatchNotifications = getGameNotifications;
   }
 
-  public void addGameAlert(Alert alert){
-    matchAlerts.add(alert);
-  }
   //endregion
 
   //region My Methods
@@ -151,16 +141,16 @@ public class Fan extends Role
   public void SubscribeTrackPersonalPages(){ trackPersonalPages=true; }
 
   public static void notifyFansAboutMatch(Match match){
-    List<Fan> fans=Controller.getFansFromAccounts();
+    List<Fan> fans= DataManager.getFansFromAccounts();
     for(Fan fan:fans){
       if(fan.isGetMatchNotifications())
-        fan.addGameAlert(new Alert(match.getAwayTeam().getName()+" against "+match.getHomeTeam().getName()));
+        fan.addAlert(new Alert(match.getAwayTeam().getName()+" against "+match.getHomeTeam().getName()));
     }
   }
 
   //Need to be Changed//
   public void Report(String report){
-    Controller.getSM().addComplain(report);
+    OurSystem.getSM().addComplain(report);
   }
 
 
