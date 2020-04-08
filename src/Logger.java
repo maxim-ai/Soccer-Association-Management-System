@@ -1,6 +1,4 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -25,6 +23,20 @@ public class Logger {
         FW.write(formatter.format(date)+" - "+line+"\n");
         FW.flush();
         FW.close();
+    }
+    public String readLoggerFile(){
+        String string="";
+        try {
+            File loggerFile=new File("Logger");
+            BufferedReader BR=new BufferedReader(new FileReader(loggerFile));
+            String line="";
+            while((line=BR.readLine())!=null){
+                string+=line;
+                string+="\n";
+            }
+            BR.close();
+        } catch (IOException e) { }
+        return string;
     }
 
 }

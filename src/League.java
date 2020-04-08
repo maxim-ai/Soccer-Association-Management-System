@@ -13,7 +13,6 @@ public class League
     sLsetting = new HashMap<>();
   }
 
-
   public HashMap<Season, SLsettings> getsLsetting() {
     return sLsetting;
   }
@@ -21,7 +20,6 @@ public class League
   public void setsLsetting(HashMap<Season, SLsettings> sLsetting) {
     this.sLsetting = sLsetting;
   }
-
 
   public boolean setName(String aName)
   {

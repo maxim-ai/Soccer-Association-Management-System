@@ -1,8 +1,7 @@
 import java.util.*;
 
 
-public class AssiciationRepresentive extends Role
-{
+public class AssiciationRepresentive extends Role {
 
   public AssiciationRepresentive(String aName)
   {
@@ -67,9 +66,28 @@ public class AssiciationRepresentive extends Role
    */
   public Referee addNewReferee(String training, String name){
     if(training != null && name != null) {
-      return  DataManager.CreateNewReferee(training,name);
+      return  CreateNewReferee(training,name);
     }
     return null;
+  }
+
+  /**
+   * create new referee
+   * @param training
+   * @param name
+   */
+  public Referee CreateNewReferee(String training, String name) {
+    Referee referee = new Referee(training, name);
+    sendInvitation(referee);
+    return referee;
+  }
+
+  /**
+   * send invitation to the referee
+   * @param referee
+   */
+  private void sendInvitation(Referee referee) {
+    referee.addAlert(new Alert("Invitation"));
   }
 
   /**
@@ -125,6 +143,15 @@ public class AssiciationRepresentive extends Role
     sLsettings.setPolicy(policy);
     return true;
   }
+
+
+  public void addAlert(Alert alert){
+    throw new UnsupportedOperationException();
+  }
+  public void clearAlerts() {
+    throw new UnsupportedOperationException();
+  }
+  public void removeAlert(String s) { throw new UnsupportedOperationException(); }
 
 
 

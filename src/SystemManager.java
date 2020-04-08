@@ -1,8 +1,7 @@
 import java.util.*;
 
 
-public class SystemManager extends Role
-{
+public class SystemManager extends Role {
 
   HashMap<String,String> complaintAndComments;
 
@@ -31,13 +30,49 @@ public class SystemManager extends Role
     if(team == null){
       return  wasSet;
     }
-    wasSet = DataManager.removeTeam(team);
-    DataManager.saveAction(team);
-    DataManager.notifyOnDelete(team);
-    DataManager.deleteFromAllFollowers(team);
+    wasSet = removeTeamFromDm(team);
+    saveAction(team);
+    notifyOnDelete(team);
+    deleteFromAllFollowers(team);
     team.delete();
     return wasSet;
   }
+
+  private boolean removeTeamFromDm(Team aTeam) {
+    boolean wasRemoved = true;
+    DataManager.removeTeam(aTeam);
+    wasRemoved = true;
+    return wasRemoved;
+  }
+
+  private void notifyOnDelete(Team team) {
+    for (Owner owner : team.getOwners()){
+      owner.addAlert(new Alert("Delete Team Permanently: " + team.getName()));
+    }
+    for(TeamManager teamManager : team.getTeamManagers()){
+      teamManager.addAlert(new Alert("Delete Team Permanently: " + team.getName()));
+    }
+  }
+
+  /**
+   * delete team's page from all fans of the team (follower)
+   * @param team
+   */
+  private void deleteFromAllFollowers(Team team) {
+    Page teamPageToDelete = team.getPage();
+    List<Fan> fans = teamPageToDelete.getFans();
+    for (Fan fan : fans) {
+      for (Page page : fan.getPages()) {
+        if (page.equals(teamPageToDelete)) {
+          page.delete();
+          break;
+        }
+      }
+    }
+
+  }
+
+  private void saveAction(Team team) { }
 
   /**
    * remove account from system
@@ -83,7 +118,9 @@ public class SystemManager extends Role
    * show all the complaints of the accounts in the system
    */
   public void showComplaints(){
-    DataManager.displayComplaint();
+    for(Map.Entry <String,String> complain : complaintAndComments.entrySet()) {
+      System.out.println(complain.getKey());
+    }
   }
 
   /**
@@ -92,7 +129,6 @@ public class SystemManager extends Role
   public void addComplain(String complain){
     complaintAndComments.put(complain,null);
   }
-
 
   /**
    * add comment to the complaint
@@ -103,22 +139,23 @@ public class SystemManager extends Role
         complaintAndComments.put(acomplain,comment);
       }
     }
-
   }
 
   /**
    * show system logger
    */
   public void showSystemLog(){
-
+    System.out.println(Logger.getInstance().readLoggerFile());
   }
 
   /**
    * build recommendation system
    */
-  public void buildRecommendationSystem(){
+  public void buildRecommendationSystem(){ }
 
-  }
+  public void addAlert(Alert alert){ throw new UnsupportedOperationException(); }
+  public void clearAlerts() { throw new UnsupportedOperationException(); }
+  public void removeAlert(String s) { throw new UnsupportedOperationException(); }
 
 
 }

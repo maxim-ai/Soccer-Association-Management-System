@@ -11,6 +11,7 @@ public class OurSystem {
         SMaccount.addRole(SM);
         DataManager.addAccount(SMaccount);
 
+
         Account ARaccount=new Account("Sean",24,"Sean","4321");
         AR=new AssiciationRepresentive(ARaccount.getName());
         ARaccount.addRole(AR);

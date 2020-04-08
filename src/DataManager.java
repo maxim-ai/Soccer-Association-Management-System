@@ -22,6 +22,8 @@ public class DataManager {
   }
 
 
+
+
   public static Team getTeam(int index) {
     Team aTeam = teams.get(index);
     return aTeam;
@@ -211,13 +213,6 @@ public class DataManager {
     return wasAdded;
   }
 
-  public static boolean removeTeam(Team aTeam) {
-    boolean wasRemoved = true;
-    teams.remove(aTeam);
-    wasRemoved = true;
-    return wasRemoved;
-  }
-
   public static int minimumNumberOfGuests() {
     return 0;
   }
@@ -256,6 +251,13 @@ public class DataManager {
   public static boolean removeAccount(Account aAccount) {
     boolean wasRemoved = true;
     accounts.remove(aAccount);
+    wasRemoved = true;
+    return wasRemoved;
+  }
+
+  public static boolean removeTeam(Team aTeam) {
+    boolean wasRemoved = true;
+    teams.remove(aTeam);
     wasRemoved = true;
     return wasRemoved;
   }
@@ -350,58 +352,16 @@ public class DataManager {
 
 
 
-  public static void saveAction(Team team) {
-  }
 
-  public static void notifyOnDelete(Team team) {
 
-  }
 
   /**
    *
    */
 
-  /**
-   * create new referee
-   *
-   * @param training
-   * @param name
-   */
-  public static Referee CreateNewReferee(String training, String name) {
-    Referee referee = new Referee(training, name);
-    sendInvitation(referee);
-    return referee;
-
-  }
-
-  /**
-   * send invitation to the referee
-   *
-   * @param referee
-   */
-  private static void sendInvitation(Referee referee) {
-
-  }
 
 
-  /**
-   * delete team's page from all fans of the team (follower)
-   *
-   * @param team
-   */
-  public static void deleteFromAllFollowers(Team team) {
-    Page teamPageToDelete = team.getPage();
-    List<Fan> fans = teamPageToDelete.getFans();
-    for (Fan fan : fans) {
-      for (Page page : fan.getPages()) {
-        if (page.equals(teamPageToDelete)) {
-          page.delete();
-          break;
-        }
-      }
-    }
 
-  }
 
   public static List<Player> getPlayersFromAccounts(){
     List<Player> players=new LinkedList<>();

@@ -44,9 +44,11 @@ public class Role
   public void addAlert(Alert alert){
     alertList.add(alert);
   }
+
   public void clearAlerts(){
     alertList=new ArrayList<>();
   }
+
   public void removeAlert(String s){
     for(int i=0;i<alertList.size();i++){
       if(alertList.get(i).equals(s))
