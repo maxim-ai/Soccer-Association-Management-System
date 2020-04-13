@@ -18,7 +18,7 @@ public class PlayerTest {
     Stadium stadium2=new Stadium("Ofakim");
     Season season=new Season("winter");
     League league=new League("super league");
-    Player player=new Player("Yosi",date,PositionEnum.AttackingMidfielder,null);
+
     Page page1=new Page(new Pageable() {
         @Override
         public void removePage() {
@@ -35,6 +35,7 @@ public class PlayerTest {
     Team homeTeam=new Team("Ofakim",page2,league,stadium2);
     Referee lineRefereeOne=new Referee("Football Association","zviali bar");
     Referee lineRefereeTwo=new Referee("Football Association","karapti roy");
+    Player player=new Player("Yosi",date,PositionEnum.AttackingMidfielder,null);
     Fan fan=new Fan("tzlil");
 
     @Before
