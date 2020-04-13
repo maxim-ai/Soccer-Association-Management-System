@@ -129,12 +129,12 @@ public class Player extends Role implements Pageable
      */
   public void updateDetails(Date birthday, PositionEnum position,Team team)
   {
-    this.birthday=birthday;
-    this.position=position;
-    this.team=team;
+    setBirthday(birthday);
+    setPosition(position);
+    setTeam(team);
     pageUpdated();
     try {
-      Logger.getInstance().writeNewLine("Player "+super.getName()+"update details to "+birthday.toString()+","+position.name()+","+team.getName());
+      Logger.getInstance().writeNewLine("Player "+super.getName()+" update details to "+birthday.toString()+", "+position.name()+", "+team.getName());
     } catch (IOException e) {
       e.printStackTrace();
     }
