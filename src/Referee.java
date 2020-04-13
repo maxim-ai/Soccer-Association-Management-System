@@ -1,5 +1,7 @@
+import java.io.IOException;
 import java.sql.Time;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class Referee extends Role
@@ -90,7 +92,7 @@ public class Referee extends Role
   }
 
   /**
-   * add match to referee, is the match is full return false
+   * add match to referee, if the match is full return false
    * @param aMatch
    * @param mainORline
    * @return
@@ -102,18 +104,24 @@ public class Referee extends Role
 
     if(mainORline.equalsIgnoreCase("main"))
     {
-      if(aMatch.getMainReferee()==null)
+      if(aMatch.getMainReferee()==null) {
         aMatch.setMainReferee(this);
+        wasAdded=true;
+      }
       else
         return false;
     }
     else if(mainORline.equalsIgnoreCase("line"))
     {
 
-      if(aMatch.getLineRefereeOne()==null)
+      if(aMatch.getLineRefereeOne()==null) {
         aMatch.setLineRefereeOne(this);
-      else if(aMatch.getLineRefereeTwo()==null)
+        wasAdded=true;
+      }
+      else if(aMatch.getLineRefereeTwo()==null) {
         aMatch.setLineRefereeTwo(this);
+        wasAdded=true;
+      }
       else
         return false;
     }
@@ -175,7 +183,18 @@ public class Referee extends Role
     return super.toString() + "["+
             "training" + ":" + getTraining()+ "]";
   }
-
+  /*
+  `UC-10.1 update details
+   */
+  public void updateDetails(String name){
+    String before=super.getName();
+    super.setName(name);
+    try {
+      Logger.getInstance().writeNewLine("Referee "+before+" update name to: "+super.getName());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
   /*
   UC-10.2 display all matches()
    */
@@ -183,8 +202,13 @@ public class Referee extends Role
     if (!matchs.isEmpty()) {
       for (Match m:matchs
       ) {
-        System.out.println(m.toString());
+        m.ShowMatch();
         System.out.println();
+      }
+      try {
+        Logger.getInstance().writeNewLine("Referee "+super.getName()+" watch all his Matches");
+      } catch (IOException e) {
+        e.printStackTrace();
       }
     } else System.out.println("No matches!");
   }
@@ -193,13 +217,20 @@ public class Referee extends Role
    */
   public void updateEventDuringMatch(Match match,EventEnum aType, String aDescription)
   {
+
     if(matchs.contains(match)){
-      Date currDate=new Date(Calendar.getInstance().getTimeInMillis());
-      if (match.getDate().before(currDate))
+      Date currDate=new Date(System.currentTimeMillis());
+      long diff=getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES);
+      if (getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES)<90)
       {
         Time currTime=new Time(Calendar.getInstance().getTimeInMillis());
         GameEvent event=new GameEvent(aType,currDate,currTime,aDescription,(int)(currTime.getTime()-match.getTime().getTime()),match.getEventCalender());
         match.getEventCalender().addGameEvent(event);
+        try {
+          Logger.getInstance().writeNewLine("Referee "+super.getName()+" update event during the match between: "+match.getHomeTeam().getName()+","+match.getAwayTeam().getName()+" to "+event.getType());
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
       }
       System.out.println("This match already end!");
     }
@@ -207,7 +238,7 @@ public class Referee extends Role
   }
 
   public void ShowReferee() {
-    System.out.println("Name");
+    System.out.println("Name:");
     System.out.println(this.getName());
     System.out.println();
     System.out.println("Training:");
@@ -219,6 +250,9 @@ public class Referee extends Role
   }
 
 
-
+  public long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+    long diffInMillies = date2.getTime() - date1.getTime();
+    return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+  }
 
 }

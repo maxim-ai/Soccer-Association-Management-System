@@ -1,6 +1,8 @@
-import java.sql.Date;
+import java.awt.*;
+import java.util.Date;
 import java.sql.Time;
 import java.util.*;
+import java.util.List;
 
 public class Match
 {
@@ -229,12 +231,36 @@ public class Match
             "  " + "eventCalender = "+(getEventCalender());
   }
 
+
   public void removeSeason() {
     season = null;
   }
 
   public void ShowMatch(){
-    System.out.println(this.getHomeTeam()+" against "+this.getAwayTeam());
+    System.out.println("Date:");
+    System.out.println(this.getDate());
+    System.out.println();
+    System.out.println("Time:");
+    System.out.println(this.getTime());
+    System.out.println();
+    System.out.println("Score:");
+    System.out.println(this.getHomeTeam().getName()+": "+this.getHomeScore()+", "+this.getAwayTeam().getName()+": "+this.getAwayScore());
+    System.out.println();
+    System.out.println("Referees:");
+    System.out.println("Main: "+this.getMainReferee().getName()+", Line1: "+this.getLineRefereeOne().getName()+", Line2: "+this.getLineRefereeTwo().getName());
+    System.out.println();
+    System.out.println("Stadium:");
+    System.out.println(this.getStadium().getName());
+    System.out.println();
+    System.out.println("Season:");
+    System.out.println(season.getName());
+    System.out.println();
+    List<GameEvent> gameEvent=eventCalender.getGameEvents();
+    System.out.println("Game Events:");
+    for (GameEvent event: gameEvent){
+      event.getType().name();
+      System.out.println(", ");
+    }
   }
 
 

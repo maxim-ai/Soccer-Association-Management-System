@@ -1,4 +1,5 @@
 
+import java.io.IOException;
 import java.util.*;
 
 public class Coach extends Role implements Pageable
@@ -10,13 +11,16 @@ public class Coach extends Role implements Pageable
   private List<Team> teams;
   private Page page;
 
-  public Coach(String aName, String aTraining, String aTeamRole, Page aPage)
+  public Coach(String aName, String aTraining, String aTeamRole)
   {
     super(aName);
     training = aTraining;
     teamRole = aTeamRole;
     teams = new ArrayList<Team>();
-    page = aPage;
+  }
+
+  public void setPage(Page page) {
+    this.page = page;
   }
 
   public boolean setTraining(String aTraining)
@@ -190,6 +194,11 @@ public class Coach extends Role implements Pageable
   {
     this.training=training;
     this.teamRole=teamRole;
+    try {
+      Logger.getInstance().writeNewLine("Coach "+super.getName()+" update details to : "+training+","+teamRole);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public void ShowCoach() {

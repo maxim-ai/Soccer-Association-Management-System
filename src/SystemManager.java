@@ -82,9 +82,9 @@ public class SystemManager extends Role
   /**
    * show all the complaints of the accounts in the system
    */
-  public void showComplaints(){
-    DataManager.displayComplaint();
-  }
+//  public void showComplaints(){
+//    DataManager.displayComplaint();
+//  }
 
   /**
    * add comment to the complaint

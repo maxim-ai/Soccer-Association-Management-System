@@ -1,5 +1,6 @@
 
-import java.sql.Date;
+import java.io.IOException;
+import java.util.Date;
 
 public class Player extends Role implements Pageable
 {
@@ -9,7 +10,7 @@ public class Player extends Role implements Pageable
   private Team team;
   private Page page;
 
-  public Player(String aName, Date aBirthday, PositionEnum aPosition, Team aTeam, Page aPage)
+  public Player(String aName, Date aBirthday, PositionEnum aPosition, Team aTeam)
   {
     super(aName);
     birthday = aBirthday;
@@ -17,7 +18,6 @@ public class Player extends Role implements Pageable
     if (aTeam != null) {
       setTeam(aTeam);
     }
-    page = aPage;
   }
 
   public boolean setBirthday(Date aBirthday)
@@ -120,15 +120,24 @@ public class Player extends Role implements Pageable
     page=null;
   }
 
+  public void setPage(Page page) {
+    this.page = page;
+  }
+
   /*
-  UC-5.1 update player details
-   */
+    UC-5.1 update player details
+     */
   public void updateDetails(Date birthday, PositionEnum position,Team team)
   {
     this.birthday=birthday;
     this.position=position;
     this.team=team;
     pageUpdated();
+    try {
+      Logger.getInstance().writeNewLine("Player "+super.getName()+"update details to "+birthday.toString()+","+position.name()+","+team.getName());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public void ShowPlayer() {
@@ -136,7 +145,13 @@ public class Player extends Role implements Pageable
     System.out.println(this.getName());
     System.out.println();
     System.out.println("Age:");
-    int age=2020-this.getBirthday().getYear();
+    int age=0;
+    for(Account account:DataManager.getAccounts()){
+      for(Role role:account.getRoles()){
+        if(role.equals(this))
+          age=account.getAge();
+      }
+    }
     System.out.println(age);
     System.out.println();
     System.out.println("Position:");
