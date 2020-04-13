@@ -35,7 +35,7 @@ public class PlayerTest {
     Team homeTeam=new Team("Ofakim",page2,league,stadium2);
     Referee lineRefereeOne=new Referee("Football Association","zviali bar");
     Referee lineRefereeTwo=new Referee("Football Association","karapti roy");
-    Player player=new Player("Yosi",date,PositionEnum.AttackingMidfielder,null);
+    Player player=new Player("Yosi",date,PositionEnum.AttackingMidfielder,null,null);
     Fan fan=new Fan("tzlil");
 
     @Before

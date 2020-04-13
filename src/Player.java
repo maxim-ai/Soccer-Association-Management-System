@@ -10,7 +10,7 @@ public class Player extends Role implements Pageable
   private Team team;
   private Page page;
 
-  public Player(String aName, Date aBirthday, PositionEnum aPosition, Team aTeam)
+  public Player(String aName, Date aBirthday, PositionEnum aPosition, Team aTeam,Page aPage)
   {
     super(aName);
     birthday = aBirthday;

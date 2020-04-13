@@ -11,7 +11,7 @@ public class Coach extends Role implements Pageable
   private List<Team> teams;
   private Page page;
 
-  public Coach(String aName, String aTraining, String aTeamRole)
+  public Coach(String aName, String aTraining, String aTeamRole,Page aPage)
   {
     super(aName);
     training = aTraining;

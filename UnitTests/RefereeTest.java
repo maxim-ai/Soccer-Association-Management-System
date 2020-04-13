@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 
 public class RefereeTest {
 
-    public Referee referee=new Referee("Football Association","adi lioz");
+    Referee referee=new Referee("Football Association","adi lioz");
     private final ByteArrayOutputStream OS=new ByteArrayOutputStream();
     private final PrintStream PS=System.out;
     Date date=new Date();

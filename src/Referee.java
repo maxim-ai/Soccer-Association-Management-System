@@ -157,14 +157,6 @@ public class Referee extends Role
 
   public void delete()
   {
-    /*
-    ArrayList<League> copyOfLeagues = new ArrayList<League>(leagues);
-    leagues.clear();
-    for(League aLeague : copyOfLeagues)
-    {
-      aLeague.removeReferee(this);
-    }
-    */
     ArrayList<Match> copyOfMatchs = new ArrayList<Match>(matchs);
     matchs.clear();
     for(Match aMatch : copyOfMatchs)
@@ -250,7 +242,7 @@ public class Referee extends Role
   }
 
 
-  public long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+  public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
     long diffInMillies = date2.getTime() - date1.getTime();
     return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
   }

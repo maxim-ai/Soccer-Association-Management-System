@@ -10,7 +10,7 @@ import java.util.Date;
 import static org.junit.Assert.*;
 
 public class CoachTest {
-    Coach coach=new Coach("Yossi Abukasis","Football Association","Coach");
+    Coach coach=new Coach("Yossi Abukasis","Football Association","Coach",null);
     public Referee referee=new Referee("Football Association","adi lioz");
     private final ByteArrayOutputStream OS=new ByteArrayOutputStream();
     private final PrintStream PS=System.out;
