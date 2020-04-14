@@ -18,21 +18,10 @@ public class PlayerTest {
     Stadium stadium2=new Stadium("Ofakim");
     Season season=new Season("winter");
     League league=new League("super league");
-
-    Page page1=new Page(new Pageable() {
-        @Override
-        public void removePage() {
-
-        }
-    });
-    Page page2=new Page(new Pageable() {
-        @Override
-        public void removePage() {
-
-        }
-    });
-    Team awayTeam=new Team("B7",page1,league,stadium1);
-    Team homeTeam=new Team("Ofakim",page2,league,stadium2);
+    Team awayTeam=new Team("B7",league,stadium1);
+    Page page1=new Page(awayTeam);
+    Team homeTeam=new Team("Ofakim",league,stadium2);
+    Page page2=new Page(homeTeam);
     Referee lineRefereeOne=new Referee("Football Association","zviali bar");
     Referee lineRefereeTwo=new Referee("Football Association","karapti roy");
     Player player=new Player("Yosi",date,PositionEnum.AttackingMidfielder,null,null);

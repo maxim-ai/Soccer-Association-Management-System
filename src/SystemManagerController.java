@@ -67,15 +67,5 @@ public class SystemManagerController {
         systemManager.buildRecommendationSystem();
     }
 
-    public void addAlert(Alert alert){
-        systemManager.addAlert(alert);
-    }
-    public void clearAlerts() {
-        systemManager.clearAlerts();
-    }
-    public void removeAlert(String s)
-    {
-        systemManager.removeAlert(s);
-    }
 
 }

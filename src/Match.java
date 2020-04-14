@@ -175,10 +175,11 @@ public class Match implements Serializable
     }
     stadium = aStadium;
     stadium.addMatch(this);
-
-    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to Stadium: "+stadium.getName(),mainReferee);
-    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to Stadium: "+stadium.getName(),lineRefereeOne);
-    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to Stadium: "+stadium.getName(),lineRefereeTwo);
+    if(mainReferee!=null&&lineRefereeOne!=null&lineRefereeTwo!=null) {
+      Alert.notifyOtherRole("Game between " + awayTeam.getName() + " and " + homeTeam.getName() + " update to Stadium: " + stadium.getName(), mainReferee);
+      Alert.notifyOtherRole("Game between " + awayTeam.getName() + " and " + homeTeam.getName() + " update to Stadium: " + stadium.getName(), lineRefereeOne);
+      Alert.notifyOtherRole("Game between " + awayTeam.getName() + " and " + homeTeam.getName() + " update to Stadium: " + stadium.getName(), lineRefereeTwo);
+    }
     wasSet = true;
     return wasSet;
   }

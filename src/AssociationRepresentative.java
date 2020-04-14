@@ -47,7 +47,7 @@ public class AssociationRepresentative extends Role {
     SLsettings sLsettings = league.getSLsettingsBySeason(season);
     if (sLsettings==null)
     {
-      sLsettings = new SLsettings(null);
+      sLsettings = new SLsettings(new Policy(null,null));
     }
     wasSet = league.addSLsettingsToSeason(season,sLsettings);
     return wasSet;
@@ -123,7 +123,7 @@ public class AssociationRepresentative extends Role {
     SLsettings sLsettings = league.getSLsettingsBySeason(season);
     if (sLsettings==null)
     {
-      sLsettings = new SLsettings(null);
+      sLsettings = new SLsettings(new Policy(null,null));
     }
     referee.setsLsettings(sLsettings);
     sLsettings.addReferee(referee);
@@ -189,15 +189,6 @@ public class AssociationRepresentative extends Role {
   public void subtractAmountFromAssociationBudget(double amount){
 
   }
-
-
-  public void addAlert(Alert alert){
-    throw new UnsupportedOperationException();
-  }
-  public void clearAlerts() {
-    throw new UnsupportedOperationException();
-  }
-  public void removeAlert(String s) { throw new UnsupportedOperationException(); }
 
   /**
    * approve the opening of a team

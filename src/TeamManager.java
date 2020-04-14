@@ -200,6 +200,7 @@ public class TeamManager extends Role implements Serializable
   public void ShowTeamManager(){
     System.out.println("Name:");
     System.out.println(this.getName());
+    System.out.println();
     System.out.println("Team managed:");
     System.out.println(this.getTeam().getName());
   }

@@ -1,6 +1,6 @@
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Time;
 import java.util.Objects;
 

@@ -249,6 +249,6 @@ public class TeamManagerTest {
     public void showTeamManager()
     {
         tm1.checkIfTeamManagr().ShowTeamManager();
-        assertEquals("Name:\r\ntm1\r\nTeam managed:\r\nt1\r\n",OS.toString());
+        assertEquals("Name:\r\ntm1\r\n\r\nTeam managed:\r\nt1\r\n",OS.toString());
     }
 }

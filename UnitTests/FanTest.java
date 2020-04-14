@@ -27,7 +27,7 @@ public class FanTest {
         league=new League("International");
         stadium=new Stadium("Teddy");
         season=new Season("Winter");
-        team=new Team("Barcelona",null,league,stadium);
+        team=new Team("Barcelona",league,stadium);
         ((Player)account1.getRole(0)).setTeam(team);
         ((Coach)account2.getRole(0)).addTeam(team);
         playerPage=new Page((Player)account1.getRole(0));
@@ -92,7 +92,7 @@ public class FanTest {
     public void addPage() {
         Stadium checkStadium=new Stadium("Terner");
         League checkLeague=new League("Haal");
-        Team checkTeam=new Team("Spartak",null,checkLeague,checkStadium);
+        Team checkTeam=new Team("Spartak",checkLeague,checkStadium);
         Page checkPage=new Page(checkTeam);
         checkTeam.setPage(checkPage);
         fan.addPage(checkPage);
@@ -309,11 +309,13 @@ public class FanTest {
         Stadium checkStadium=new Stadium("Blumfield");
         League checkLeague=new League("Haal");
         Season checkSeason=new Season("Summer");
-        Referee ref=new Referee("aaa","Eitan");
-        Team checkTeam=new Team("Rome",null,checkLeague,checkStadium);
+        Referee ref1=new Referee("aaa","Eitan");
+        Referee ref2=new Referee("bbb","Tzlil");
+        Referee ref3=new Referee("bbb","Ziv");
+        Team checkTeam=new Team("Rome",checkLeague,checkStadium);
         fan.SubscribeGetMatchNotifications();
         Match checkMatch=new Match(new Date(),new Time(22,0,0),0,0,checkStadium,
-                checkSeason,team,checkTeam,ref,null,null);
+                checkSeason,team,checkTeam,ref1,ref2,ref3);
         assertEquals("Barcelona against Rome",fan.getAlertList().get(0).getDescription());
     }
     @Test

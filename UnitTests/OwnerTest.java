@@ -5,7 +5,7 @@ import org.junit.Test;
 import javax.xml.crypto.Data;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 

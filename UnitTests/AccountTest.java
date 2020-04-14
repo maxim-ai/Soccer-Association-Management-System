@@ -4,7 +4,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class AccountTests {
+public class AccountTest {
     Account account = new Account("Account",10,"Account","Password");// for setters
     Account constAccount = new Account("Account",10,"Account10","Password"); //for getters
 
@@ -99,7 +99,7 @@ public class AccountTests {
 
     @Test
     public void addRole() {
-        Role testRole= new Role("Test");
+        Role testRole= new AssociationRepresentative("Test");
         List<Role> roleList = account.getRoles();
         int numberOfRolesBeforeAdding = account.numberOfRoles();
         if(!roleList.contains(testRole)) {
@@ -120,7 +120,7 @@ public class AccountTests {
             account.removeRole(account.getRole(0));
         }
         else{
-            Role testRole= new Role("Test");
+            Role testRole= new AssociationRepresentative("Test");
             int numberOfRolesBeforeAdding=account.numberOfRoles();
             if(!account.getRoles().contains(testRole)) {
                 account.addRole(testRole);

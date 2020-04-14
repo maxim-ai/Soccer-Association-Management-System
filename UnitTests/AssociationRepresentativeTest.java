@@ -5,7 +5,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class AssociationRepresentativeTests {
+public class AssociationRepresentativeTest {
     AssociationRepresentative associationRepresentative=new AssociationRepresentative("Test");
 
     @Test

@@ -6,7 +6,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.Time;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -17,21 +16,11 @@ public class GameEventTest {
     Stadium stadium2=new Stadium("Ofakim");
     Season season=new Season("winter");
     League league=new League("super league");
-    Page page1=new Page(new Pageable() {
-        @Override
-        public void removePage() {
-
-        }
-    });
-    Page page2=new Page(new Pageable() {
-        @Override
-        public void removePage() {
-
-        }
-    });
+    Team awayTeam=new Team("B7",league,stadium1);
+    Page page1=new Page(awayTeam);
+    Team homeTeam=new Team("Ofakim",league,stadium2);
+    Page page2=new Page(homeTeam);
     Referee referee=new Referee("Football Association","adi lioz");
-    Team awayTeam=new Team("B7",page1,league,stadium1);
-    Team homeTeam=new Team("Ofakim",page2,league,stadium2);
     Referee lineRefereeOne=new Referee("Football Association","zviali bar");
     Referee lineRefereeTwo=new Referee("Football Association","karapti roy");
     Fan fan=new Fan("tzlil");
@@ -58,7 +47,7 @@ public class GameEventTest {
 
     @Test
     public void setDate() {
-        Date newDate=new Date();
+        Date newDate = new java.util.Date();
         gameEvent.setDate(newDate);
         assertTrue(newDate.compareTo(gameEvent.getDate())==0);
 

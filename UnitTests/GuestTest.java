@@ -26,7 +26,7 @@ public class GuestTest {
         league=new League("International");
         stadium=new Stadium("Teddy");
         season=new Season("Winter");
-        team=new Team("Barcelona",null,league,stadium);
+        team=new Team("Barcelona",league,stadium);
         ((Player)account1.getRole(0)).setTeam(team);
         ((Coach)account2.getRole(0)).addTeam(team);
         DataManager.cleatDataBase();

@@ -49,6 +49,9 @@ public class LoggerTest {
 
     @Test
     public void readLoggerFile() {
+        File loggerFile=new File("Logger");
+        if(loggerFile.exists())
+            loggerFile.delete();
         logger=Logger.getInstance();
         logger.writeNewLine("aaa");
         String s=logger.readLoggerFile();

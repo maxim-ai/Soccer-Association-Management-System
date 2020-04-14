@@ -383,22 +383,8 @@ public class TeamTest {
     public void showTeam()
     {
         t1.ShowTeam();
-        assertEquals("Name:\r\n" +
-                "t1\r\n" +
-                "TeamManagers:\r\n" +
-                "tm1\r\n" +
-                "Coaches\r\n" +
-                "c1\r\n" +
-                "TeamOwners:\r\n" +
-                "o1\r\n" +
-                "Players:\r\n" +
-                "pl1\r\n" +
-                "League:\r\n" +
-                "l1\r\n" +
-                "Matches:\r\n" +
-                "t1 against t2\r\n" +
-                "Stadium:\r\n" +
-                "s1\r\n",OS.toString());
+        assertEquals("Name:\r\nt1\r\n\r\nTeamManagers:\r\ntm1\r\n\r\nCoaches:\r\nc1\r\n\r\nTeamOwners:\r\no1\r\n\r\nPlayers:\r\npl1\r\n\r\n" +
+                "League:\r\nl1\r\n\r\nMatches:\r\nt1 against t2\r\n\r\nStadium:\r\ns1\r\n\r\n",OS.toString());
     }
 
 }

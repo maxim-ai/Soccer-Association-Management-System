@@ -309,10 +309,10 @@ public class OurSystemTest {
         DataManager.addStadium(Vasermil);
         checkListStadiums.add(Vasermil);
 
-        Team barcelona=new Team("Barcelona",null,checkLeague,CampNo);
+        Team barcelona=new Team("Barcelona",checkLeague,CampNo);
         DataManager.addTeam(barcelona);
         checkListTeams.add(barcelona);
-        Team rome=new Team("Rome",null,checkLeague,Vasermil);
+        Team rome=new Team("Rome",checkLeague,Vasermil);
         DataManager.addTeam(rome);
         checkListTeams.add(rome);
 
@@ -354,7 +354,7 @@ public class OurSystemTest {
         checkListAccounts.add(teamManagerAccount2);
         teamManagerAccount2.addRole(new TeamManager("Maxim",rome,(Owner)ownerAccount2.getRole(0)));
 
-        Match checkMatch=new Match(new Date(),new Time(1,1,1),5,3,CampNo,checkSeason,rome,barcelona,(Referee) refAccount1.getRole(0),(Referee) refAccount2.getRole(0),(Referee) refAccount3.getRole(0));
+        Match checkMatch=new Match(new Date(),new Time(1),5,3,CampNo,checkSeason,rome,barcelona,(Referee) refAccount1.getRole(0),(Referee) refAccount2.getRole(0),(Referee) refAccount3.getRole(0));
 
         barcelona.setLeague(checkLeague);
         barcelona.setStadium(CampNo);

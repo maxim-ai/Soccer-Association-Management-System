@@ -74,19 +74,6 @@ public class AssociationRepresentativeController {
         return associationRepresentative.setNewSeason(year);
     }
 
-
-    public void addAlert(Alert alert) {
-        associationRepresentative.addAlert(alert);
-    }
-
-    public void clearAlerts() {
-        associationRepresentative.clearAlerts();
-    }
-
-    public void removeAlert(String s) {
-        associationRepresentative.removeAlert(s);
-    }
-
     public void addAmountToAssociationBudget(double amount) {
         associationRepresentative.addAmountToAssociationBudget(amount);
     }

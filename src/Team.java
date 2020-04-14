@@ -524,23 +524,30 @@ public class Team implements Pageable, Serializable
       page.setType(this);
   }
 
-  public void ShowTeam() {
+  public void ShowTeam()
+  {
     System.out.println("Name:");
     System.out.println(this.getName());
+    System.out.println();
     System.out.println("TeamManagers:");
     for(TeamManager teamManager:this.getTeamManagers())
       System.out.println(teamManager.getName());
-    System.out.println("Coaches");
+    System.out.println();
+    System.out.println("Coaches:");
     for(Coach coach:this.getCoachs())
       System.out.println(coach.getName());
+    System.out.println();
     System.out.println("TeamOwners:");
     for(Owner owner:this.getOwners())
       System.out.println(owner.getName());
+    System.out.println();
     System.out.println("Players:");
     for(Player player:this.getPlayers())
       System.out.println(player.getName());
+    System.out.println();
     System.out.println("League:");
     System.out.println(this.getLeague().getName());
+    System.out.println();
     System.out.println("Matches:");
     for(Match match:this.getMatchs()){
       System.out.print(this.getName()+" against ");
@@ -549,8 +556,10 @@ public class Team implements Pageable, Serializable
       else
         System.out.println(match.getAwayTeam().getName());
     }
+    System.out.println();
     System.out.println("Stadium:");
     System.out.println(this.getStadium().getName());
+    System.out.println();
   }
 
   public void pageUpdated(){

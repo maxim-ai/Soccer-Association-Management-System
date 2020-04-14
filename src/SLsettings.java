@@ -17,7 +17,10 @@ public class SLsettings  implements Serializable {
         this.referees = refereeList;
     }
 
-    public Policy getPolicy() {
+    public Policy getPolicy()
+    {
+        if(policy.getGameSchedual()==null && policy.getPointCalc()==null)
+            return null;
         return policy;
     }
 

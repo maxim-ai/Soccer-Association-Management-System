@@ -154,11 +154,6 @@ public class SystemManager extends Role implements Serializable
    * build recommendation system
    */
   public void buildRecommendationSystem(){ }
-
-  public void addAlert(Alert alert){ throw new UnsupportedOperationException(); }
-  public void clearAlerts() { throw new UnsupportedOperationException(); }
-  public void removeAlert(String s) { throw new UnsupportedOperationException(); }
-
   public static boolean createAccount(Account accountToAdd){
     DataManager.addAccount(accountToAdd);
     return true;

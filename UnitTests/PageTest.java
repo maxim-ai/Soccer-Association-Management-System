@@ -32,8 +32,7 @@ public class PageTest {
 
     @Test
     public void setType() {
-        page.setType(null);
-        Coach checkCoach=new Coach("Sean","vvv","www",page);
+        Coach checkCoach=new Coach("Sean","vvv","www",null);
         page.setType(checkCoach);
         assertEquals(page.getType(),checkCoach);
     }
