@@ -9,7 +9,7 @@ public class Page
 
   public Page(Pageable pageable)
   {
-    type = pageable;
+    setType(pageable);
     fans = new ArrayList<Fan>();
   }
 
@@ -17,8 +17,12 @@ public class Page
     return type;
   }
 
-  public void setType(Pageable type) {
+  public void setType(Pageable type)
+  {
     this.type = type;
+    if(type==null) return;
+    if(type.getPage()==null || !type.getPage().equals(this))
+      type.setPage(this);
   }
 
   public Fan getFan(int index)

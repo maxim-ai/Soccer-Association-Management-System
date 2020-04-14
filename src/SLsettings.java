@@ -5,9 +5,11 @@ public class SLsettings {
     private List<Referee> referees;
     private Policy policy;
 
-    public SLsettings(Policy policy) {
+    public SLsettings(Policy policy)
+    {
         this.policy = policy;
         referees = new ArrayList<>();
+        policy.setsLsettings(this);
     }
 
     public void setRefereeList(List<Referee> refereeList) {

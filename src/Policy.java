@@ -46,8 +46,6 @@ public class Policy
     return gameSchedual;
   }
 
-  public void delete()
-  {}
 
 
   public String toString()

@@ -17,7 +17,7 @@ public class Player extends Role implements Pageable
     if (aTeam != null) {
       setTeam(aTeam);
     }
-    page = aPage;
+    setPage(aPage);
   }
 
   public boolean setBirthday(Date aBirthday)
@@ -67,23 +67,19 @@ public class Player extends Role implements Pageable
       return wasSet;
     }
 
-    //team already at maximum (11)
-    if (aTeam.numberOfPlayers() >= Team.maximumNumberOfPlayers())
-    {
-      return wasSet;
-    }
     
     Team existingTeam = team;
-    team = aTeam;
     if (existingTeam != null && !existingTeam.equals(aTeam))
     {
       boolean didRemove = existingTeam.removePlayer(this);
       if (!didRemove)
       {
-        team = existingTeam;
         return wasSet;
       }
     }
+
+      team = aTeam;
+
     team.addPlayer(this);
     wasSet = true;
     pageUpdated();
@@ -146,8 +142,18 @@ public class Player extends Role implements Pageable
     System.out.println(this.getTeam().getName());
   }
 
-  public void pageUpdated(){
-    page.notifyTrackingFans(new Alert(getName()+" page updated"));
+  public void pageUpdated()
+  {
+    if(page!=null)
+      page.notifyTrackingFans(new Alert(getName()+" page updated"));
   }
 
+  @Override
+  public void setPage(Page page)
+  {
+    this.page = page;
+    if(page==null) return;
+    if(!page.getType().equals(this))
+      page.setType(this);
+  }
 }

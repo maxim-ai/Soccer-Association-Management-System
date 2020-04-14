@@ -1,8 +1,12 @@
+import javafx.util.Pair;
+
+import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.util.*;
 
 
 public class AssiciationRepresentive extends Role
 {
+  private static HashMap<Pair<Owner,String>,Boolean> approvedTeams=new HashMap<>();
 
   public AssiciationRepresentive(String aName)
   {
@@ -125,6 +129,86 @@ public class AssiciationRepresentive extends Role
     sLsettings.setPolicy(policy);
     return true;
   }
+
+  /**
+   * approve the opening of a team
+   */
+  public boolean approveTeam(String teamName,Owner owner)
+  {
+    if(teamName==null || owner==null)
+      return false;
+
+    Pair request=new Pair(owner,teamName);
+
+    if(!approvedTeams.containsKey(request))
+      return false;
+    else
+    {
+      approvedTeams.put(request,true);
+      Alert.notifyOtherRole("You are approved to open team: "+teamName,owner);
+      Logger.getInstance().writeNewLine(getName()+" approved "+owner.getName()+" to open the team: "+teamName);
+      return true;
+    }
+  }
+
+  /**
+   * add a request for opening a team
+   */
+  public static boolean addOpenTeamRequest(Owner owner,String teamName)
+  {
+    if(teamName==null || owner==null)
+      return false;
+
+    Pair request=new Pair(owner,teamName);
+    if(approvedTeams.containsKey(request))
+      return false;
+    else
+      approvedTeams.put(request,false);
+    return true;
+  }
+
+  /**
+   * remove a request for opening a team
+   */
+  public static boolean removeOpenTeamRequest(Owner owner,String teamName)
+  {
+    if(teamName==null || owner==null)
+      return false;
+
+    Pair request=new Pair(owner,teamName);
+    if(!approvedTeams.containsKey(request))
+      return false;
+    else
+      approvedTeams.remove(request);
+    return true;
+  }
+
+  /**
+   * check if a certain request for opening a team exists
+   */
+  public static boolean checkIfRequestExists(Owner owner,String teamName)
+  {
+    if(teamName==null || owner==null)
+      return false;
+
+    Pair request=new Pair(owner,teamName);
+    return approvedTeams.containsKey(request);
+  }
+
+  /**
+   * get the status of a pending request
+   */
+  public static boolean getRequestStatus(Owner owner,String teamName)
+  {
+    if(teamName==null || owner==null)
+      return false;
+
+    Pair request=new Pair(owner,teamName);
+    return approvedTeams.get(request);
+  }
+
+
+
 
 
 

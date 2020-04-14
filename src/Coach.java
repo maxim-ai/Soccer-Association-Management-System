@@ -16,7 +16,7 @@ public class Coach extends Role implements Pageable
     training = aTraining;
     teamRole = aTeamRole;
     teams = new ArrayList<Team>();
-    page = aPage;
+    setPage(aPage);
   }
 
   public boolean setTraining(String aTraining)
@@ -207,8 +207,19 @@ public class Coach extends Role implements Pageable
       System.out.println(team.getName());
   }
 
-  public void pageUpdated(){
-    page.notifyTrackingFans(new Alert(getName()+" page updated"));
+  public void pageUpdated()
+  {
+    if(page!=null)
+      page.notifyTrackingFans(new Alert(getName()+" page updated"));
+  }
+
+  @Override
+  public void setPage(Page page)
+  {
+    this.page = page;
+    if(page==null) return;
+    if(!page.getType().equals(this))
+      page.setType(this);
   }
 
 }

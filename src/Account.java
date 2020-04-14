@@ -125,6 +125,8 @@ public class Account{
    */
   public boolean removeRole(Role aRole)
   {
+    if(aRole==null)
+      return false;
     boolean wasRemoved = true;
     if (!roles.contains(aRole))
     {

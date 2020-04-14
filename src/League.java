@@ -98,8 +98,7 @@ public class League
   public boolean removeTeam(Team aTeam)
   {
     boolean wasRemoved = false;
-    //Unable to remove aTeam, as it must always have a league
-    if (!this.equals(aTeam.getLeague()))
+    if (this.equals(aTeam.getLeague()))
     {
       teams.remove(aTeam);
       aTeam.setLeague(null);

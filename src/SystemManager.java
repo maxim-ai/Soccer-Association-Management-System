@@ -67,7 +67,8 @@ public class SystemManager extends Role
       List<Account> accounts = DataManager.getAccounts();
       for(Account account1 : accounts){
         for(Role role : account1.getRoles()){
-          if(role instanceof SystemManager && !account.equals(account1)){
+          if(role instanceof SystemManager && !account.equals(account1))
+          {
             wasSet = DataManager.removeAccount(account);
             return  wasSet;
           }
@@ -83,7 +84,7 @@ public class SystemManager extends Role
    * show all the complaints of the accounts in the system
    */
   public void showComplaints(){
-    DataManager.displayComplaint();
+//    DataManager.displayComplaint();
   }
 
   /**
@@ -118,6 +119,16 @@ public class SystemManager extends Role
    */
   public void buildRecommendationSystem(){
 
+  }
+
+  /**
+   * creates and account in the database
+   */
+  public static boolean createAccount(Account account)
+  {
+    if(account==null)
+      return false;
+    return DataManager.addAccount(account);
   }
 
 
