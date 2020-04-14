@@ -1,6 +1,8 @@
+import java.awt.*;
 import java.io.IOException;
 import java.sql.Time;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -227,6 +229,29 @@ public class Referee extends Role
       System.out.println("This match already end!");
     }
     else System.out.println("The referee is not associated with the game");
+  }
+  /*
+  UC - 10.4 edit game after the game end
+   */
+  public boolean editEventAfterGame(Match match, GameEvent gameEvent, EventEnum aType, String aDescription){
+    boolean wasEdit=false;
+    Date currDate=new Date(System.currentTimeMillis());
+    if (getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES)>390){
+      if (match.getEventCalender().getGameEvents().contains(gameEvent))
+      {
+        match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setType(aType);
+        match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setDescription(aDescription);
+        wasEdit=true;
+        try {
+          Logger.getInstance().writeNewLine("Referee "+super.getName()+" edit event after the match between: "+match.getHomeTeam().getName()+","+match.getAwayTeam().getName()+" to "+aType);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+
+      }
+      else  return false;
+    }
+    return wasEdit;
   }
 
   public void ShowReferee() {

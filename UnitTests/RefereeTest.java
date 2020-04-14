@@ -219,6 +219,17 @@ public class RefereeTest {
         }
         assertFalse(ans);
     }
+    @Test
+    public void editEventAfterGame() {
+        Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,null,lineRefereeOne,lineRefereeTwo);
+        referee.addMatch(match,"main");
+        match.getDate().setTime(1000);
+        EventCalender eventCalender=new EventCalender(match);
+        GameEvent gameEvent=new GameEvent(EventEnum.goal,date,time,"Goal!!!",15,match.getEventCalender());
+        referee.editEventAfterGame(match,gameEvent,EventEnum.redCard,"check edit");
+        assertTrue(gameEvent.getType().equals(EventEnum.redCard));
+        assertTrue(gameEvent.getDescription().equals("check edit"));
+    }
 
     @Test
     public void showReferee() {

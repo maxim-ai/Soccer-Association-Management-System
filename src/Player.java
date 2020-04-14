@@ -125,7 +125,7 @@ public class Player extends Role implements Pageable
   }
 
   /*
-    UC-5.1 update player details
+    UC-4.1 update player details
      */
   public void updateDetails(Date birthday, PositionEnum position,Team team)
   {

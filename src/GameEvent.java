@@ -1,5 +1,5 @@
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Time;
 
 public class GameEvent
@@ -122,6 +122,7 @@ public class GameEvent
     if(placeholderEventCalender != null)
     {
       placeholderEventCalender.removeGameEvent(this);
+      eventCalender=null;
     }
   }
 
@@ -135,5 +136,22 @@ public class GameEvent
             "  " + "date" + "=" + (getDate())+
             "  " + "hour" + "=" + (getHour())+
             "  " + "eventCalender = "+(getEventCalender());
+  }
+  public void ShowGameEvent() {
+    System.out.println("Type:");
+    System.out.println(this.getType());
+    System.out.println();
+    System.out.println("Date:");
+    System.out.println(this.getDate());
+    System.out.println();
+    System.out.println("Hour:");
+    System.out.println(this.getHour());
+    System.out.println();
+    System.out.println("Description:");
+    System.out.println(getDescription());
+    System.out.println();
+    System.out.println("Game Minute");
+    System.out.println(getGameMinute());
+    System.out.println();
   }
 }

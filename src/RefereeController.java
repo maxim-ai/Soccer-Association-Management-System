@@ -100,6 +100,17 @@ public class RefereeController {
     }
 
     /**
+     *
+     * @param match match that the event accrue
+     * @param gameEvent the event to edit
+     * @param aType the new Enum type
+     * @param aDescription the new description
+     * @return
+     */
+    public boolean editEventAfterGame(Match match, GameEvent gameEvent, EventEnum aType, String aDescription){
+        return referee.editEventAfterGame(match,gameEvent,aType,aDescription);
+    }
+    /**
      * show all referee details
      */
     public void ShowReferee() {

@@ -85,7 +85,7 @@ public class EventCalender
   public boolean removeGameEvent(GameEvent aGameEvent)
   {
     gameEvents.remove(aGameEvent);
-    aGameEvent.setEventCalender(null);
+//    aGameEvent.setEventCalender(null);
     return true;
   }
 

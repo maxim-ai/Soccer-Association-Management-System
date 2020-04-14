@@ -192,8 +192,8 @@ public class Coach extends Role implements Pageable
    */
   public void updateDetails(String training,String teamRole)
   {
-    this.training=training;
-    this.teamRole=teamRole;
+    setTraining(training);
+    setTeamRole(teamRole);
     try {
       Logger.getInstance().writeNewLine("Coach "+super.getName()+" update details to : "+training+","+teamRole);
     } catch (IOException e) {
