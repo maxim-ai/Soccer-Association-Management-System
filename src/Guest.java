@@ -3,7 +3,6 @@ import java.util.List;
 
 public class Guest {
 
-
   private String id;
 
   public Guest(String aId)
@@ -181,17 +180,5 @@ public class Guest {
         season.ShowSeason();
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

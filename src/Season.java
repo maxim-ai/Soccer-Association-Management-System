@@ -1,6 +1,7 @@
 import java.util.*;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.function.BooleanSupplier;
 
 
 public class Season
@@ -16,12 +17,20 @@ public class Season
     matchs = new ArrayList<Match>();
   }
 
+  public HashMap<League, SLsettings> getsLsettings() {
+    return sLsettings;
+  }
+
   public boolean setName(String aName)
   {
     boolean wasSet = false;
     name = aName;
     wasSet = true;
     return wasSet;
+  }
+
+  public void setMatchs(List<Match> matchs) {
+    this.matchs = matchs;
   }
 
   public String getName()
@@ -59,12 +68,6 @@ public class Season
     return has;
   }
 
-  public int indexOfMatch(Match aMatch)
-  {
-    int index = matchs.indexOf(aMatch);
-    return index;
-  }
-
   public boolean addSLsettingsToLeague(League aLeague,SLsettings asLsettings)
   {
     sLsettings.put(aLeague,asLsettings);
@@ -74,13 +77,13 @@ public class Season
     return true;
   }
 
-  public boolean removeSLsettingsFromLeague(League aLeague)
+  public boolean removeSLsettingsFromLeague(League aLeague,Boolean bool)
   {
     if (!sLsettings.containsKey(aLeague)) {
       return true;
     }
-    if(aLeague.hasPolicy(this,sLsettings.get(aLeague))){
-      aLeague.removeSLsettingsFromSeason(this);
+    if(aLeague.hasPolicy(this,sLsettings.get(aLeague)) && bool){
+      aLeague.removeSLsettingsFromSeason(this,false);
     }
     sLsettings.remove(aLeague);
     return true;
@@ -107,27 +110,10 @@ public class Season
   public boolean removeMatch(Match aMatch)
   {
     boolean wasRemoved = true;
-    //Unable to remove aMatch, as it must always have a season
-    if (!this.equals(aMatch.getSeason()))
-    {
       matchs.remove(aMatch);
-      wasRemoved = true;
-    }
     return wasRemoved;
   }
 
-  public void delete()
-  {
-    for(Map.Entry <League,SLsettings> leaguePolicyEntry : sLsettings.entrySet())
-    {
-      leaguePolicyEntry.getKey().deleteSeason(this);
-    }
-    for(int i=matchs.size(); i > 0; i--)
-    {
-      Match aMatch = matchs.get(i - 1);
-      aMatch.removeSeason();
-    }
-  }
 
   public String toString()
   {
@@ -144,10 +130,10 @@ public class Season
     return false;
   }
 
-  public void deleteLeague(League league) {
+  public void deleteLeague(League league,SLsettings asLsettings) {
 
     if(sLsettings.containsKey(league)){
-      if(sLsettings.get(league).equals(league)){
+      if(sLsettings.get(league).equals(asLsettings)){
         sLsettings.remove(league);
       }
     }

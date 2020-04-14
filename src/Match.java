@@ -1,4 +1,4 @@
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Time;
 import java.util.*;
 
@@ -18,7 +18,7 @@ public class Match
   private Season season;
   private EventCalender eventCalender;
 
-  public Match(Date aDate, Time aTime, int aAwayScore, int aHomeScore, Stadium aStadium, Season aSeason, Team awayTeam,Team homeTeam, Referee mainReferee,Referee lineRefereeOne,Referee lineRefereeTwo)
+  public Match(java.util.Date aDate, Time aTime, int aAwayScore, int aHomeScore, Stadium aStadium, Season aSeason, Team awayTeam, Team homeTeam, Referee mainReferee, Referee lineRefereeOne, Referee lineRefereeTwo)
   {
     date = aDate;
     time = aTime;

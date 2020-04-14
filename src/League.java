@@ -13,6 +13,10 @@ public class League
     sLsetting = new HashMap<>();
   }
 
+  public void setTeams(List<Team> teams) {
+    this.teams = teams;
+  }
+
   public HashMap<Season, SLsettings> getsLsetting() {
     return sLsetting;
   }
@@ -34,16 +38,15 @@ public class League
     return name;
   }
 
-  public Team getTeam(int index)
-  {
-    Team aTeam = teams.get(index);
-    return aTeam;
-  }
-
   public List<Team> getTeams()
   {
     List<Team> newTeams = Collections.unmodifiableList(teams);
     return newTeams;
+  }
+
+  public Team getTeam(int index){
+    Team team = teams.get(index);
+    return team;
   }
 
   public int numberOfTeams()
@@ -57,13 +60,6 @@ public class League
     boolean has = teams.size() > 0;
     return has;
   }
-
-  public int indexOfTeam(Team aTeam)
-  {
-    int index = teams.indexOf(aTeam);
-    return index;
-  }
-
   public SLsettings getSLsettingsBySeason(Season season)
   {
     SLsettings asLsettings = sLsetting.get(season);
@@ -95,15 +91,9 @@ public class League
    */
   public boolean removeTeam(Team aTeam)
   {
-    boolean wasRemoved = false;
-    //Unable to remove aTeam, as it must always have a league
-    if (!this.equals(aTeam.getLeague()))
-    {
-      teams.remove(aTeam);
-      aTeam.setLeague(null);
-      wasRemoved = true;
-    }
-    return wasRemoved;
+    teams.remove(aTeam);
+    aTeam.setLeague(null);
+    return true;
   }
 
   public boolean addSLsettingsToSeason(Season aSeason,SLsettings aSlSLsettings)
@@ -118,32 +108,16 @@ public class League
   /**
    * remove the policy of the season
    */
-  public boolean removeSLsettingsFromSeason(Season aSeason)
+  public boolean removeSLsettingsFromSeason(Season aSeason,boolean bool)
   {
     if (!sLsetting.containsKey(aSeason)) {
       return true;
     }
-    if(aSeason.hasPolicy(this,sLsetting.get(aSeason))){
-      aSeason.removeSLsettingsFromLeague(this);
+    if(aSeason.hasPolicy(this,sLsetting.get(aSeason)) && bool){
+      aSeason.removeSLsettingsFromLeague(this,false);
     }
     sLsetting.remove(aSeason);
     return true;
-  }
-
-
-  public void delete()
-  {
-    for(int i=teams.size(); i > 0; i--)
-    {
-      Team aTeam = teams.get(i - 1);
-      aTeam.removeLeauge(this);
-    }
-
-    for(Map.Entry <Season,SLsettings> seasonPolicyEntry : sLsetting.entrySet())
-    {
-      seasonPolicyEntry.getKey().deleteLeague(this);
-    }
-
   }
 
   public String toString()
@@ -151,7 +125,6 @@ public class League
     return super.toString() + "["+
             "name" + ":" + getName()+ "]";
   }
-
 
   public boolean hasPolicy(Season season, SLsettings AslSLsettings) {
     if(sLsetting.containsKey(season)){
@@ -162,10 +135,9 @@ public class League
     return false;
   }
 
-
-  public void deleteSeason(Season season) {
+  public void deleteSeason(Season season,SLsettings sLsettings) {
     if(sLsetting.containsKey(season)){
-      if(sLsetting.get(season).equals(season)){
+      if(sLsetting.get(season).equals(sLsettings)){
         sLsetting.remove(season);
       }
     }

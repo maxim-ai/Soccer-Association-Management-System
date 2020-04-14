@@ -5,7 +5,6 @@ public class Policy
   private String gameSchedual;
   private SLsettings sLsettings;
 
-
   public Policy(String aPointCalc, String aGameSchedual)
   {
     pointCalc = aPointCalc;

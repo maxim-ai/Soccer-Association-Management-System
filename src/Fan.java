@@ -142,6 +142,7 @@ public class Fan extends Role
 
   public static void notifyFansAboutMatch(Match match){
     List<Fan> fans= DataManager.getFansFromAccounts();
+    if(fans==null)return;
     for(Fan fan:fans){
       if(fan.isGetMatchNotifications())
         fan.addAlert(new Alert(match.getAwayTeam().getName()+" against "+match.getHomeTeam().getName()));

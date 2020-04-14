@@ -31,7 +31,7 @@ public class SystemManager extends Role {
       return  wasSet;
     }
     wasSet = removeTeamFromDm(team);
-    saveAction(team);
+    //saveAction(team);
     notifyOnDelete(team);
     deleteFromAllFollowers(team);
     team.delete();
@@ -72,7 +72,7 @@ public class SystemManager extends Role {
 
   }
 
-  private void saveAction(Team team) { }
+//  private void saveAction(Team team) { }
 
   /**
    * remove account from system
@@ -119,7 +119,7 @@ public class SystemManager extends Role {
    */
   public void showComplaints(){
     for(Map.Entry <String,String> complain : complaintAndComments.entrySet()) {
-      System.out.println(complain.getKey());
+      System.out.println(complain.getKey().toString());
     }
   }
 

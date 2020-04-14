@@ -17,11 +17,8 @@ public class Team implements Pageable
   private boolean active;
 
 
-  public Team(String aName,Page aPage,League aLeague,Stadium aStadium)
+  public Team(String aName,League aLeague,Stadium aStadium)
   {
-    if (aPage != null) {
-      page = aPage;
-    }
     if(aLeague != null) {
       setLeague(aLeague);
     }
@@ -415,7 +412,7 @@ public class Team implements Pageable
 
     league.addTeam(this);
     wasSet = true;
-    pageUpdated();
+    //pageUpdated();
     return wasSet;
   }
 
@@ -493,7 +490,7 @@ public class Team implements Pageable
     }
     stadium.addTeam(this);
     wasSet = true;
-    pageUpdated();
+    //pageUpdated();
     return wasSet;
   }
 
