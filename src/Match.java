@@ -42,6 +42,9 @@ public class Match
   {
     boolean wasSet = false;
     date = aDate;
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),mainReferee);
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),lineRefereeOne);
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),lineRefereeTwo);
     wasSet = true;
     return wasSet;
   }
@@ -50,6 +53,9 @@ public class Match
   {
     boolean wasSet = false;
     time = aTime;
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to time: "+time.toString(),mainReferee);
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to time: "+time.toString(),lineRefereeOne);
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to time: "+time.toString(),lineRefereeTwo);
     wasSet = true;
     return wasSet;
   }
@@ -169,6 +175,10 @@ public class Match
       existingStadium.removeMatch(this);
     }
     stadium.addMatch(this);
+
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to Stadium: "+stadium.getName(),mainReferee);
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to Stadium: "+stadium.getName(),lineRefereeOne);
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to Stadium: "+stadium.getName(),lineRefereeTwo);
     wasSet = true;
     return wasSet;
   }
