@@ -180,7 +180,7 @@ public class Referee extends Role
   /*
   `UC-10.1 update details
    */
-  public void updateDetails(String name){
+  public boolean updateDetails(String name){
     String before=super.getName();
     super.setName(name);
     try {
@@ -188,6 +188,7 @@ public class Referee extends Role
     } catch (IOException e) {
       e.printStackTrace();
     }
+    return true;
   }
   /*
   UC-10.2 display all matches()
@@ -209,9 +210,9 @@ public class Referee extends Role
   /*
   UC-10.3 update event during match
    */
-  public void updateEventDuringMatch(Match match,EventEnum aType, String aDescription)
+  public boolean updateEventDuringMatch(Match match,EventEnum aType, String aDescription)
   {
-
+    boolean wasUpdate=false;
     if(matchs.contains(match)){
       Date currDate=new Date(System.currentTimeMillis());
       long diff=getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES);
@@ -220,36 +221,37 @@ public class Referee extends Role
         Time currTime=new Time(Calendar.getInstance().getTimeInMillis());
         GameEvent event=new GameEvent(aType,currDate,currTime,aDescription,(int)(currTime.getTime()-match.getTime().getTime()),match.getEventCalender());
         match.getEventCalender().addGameEvent(event);
+        wasUpdate=true;
         try {
           Logger.getInstance().writeNewLine("Referee "+super.getName()+" update event during the match between: "+match.getHomeTeam().getName()+","+match.getAwayTeam().getName()+" to "+event.getType());
         } catch (IOException e) {
           e.printStackTrace();
         }
       }
-      System.out.println("This match already end!");
+      return false;
     }
-    else System.out.println("The referee is not associated with the game");
+    return wasUpdate;
   }
   /*
   UC - 10.4 edit game after the game end
    */
   public boolean editEventAfterGame(Match match, GameEvent gameEvent, EventEnum aType, String aDescription){
     boolean wasEdit=false;
-    Date currDate=new Date(System.currentTimeMillis());
-    if (getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES)>390){
-      if (match.getEventCalender().getGameEvents().contains(gameEvent))
-      {
-        match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setType(aType);
-        match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setDescription(aDescription);
-        wasEdit=true;
-        try {
-          Logger.getInstance().writeNewLine("Referee "+super.getName()+" edit event after the match between: "+match.getHomeTeam().getName()+","+match.getAwayTeam().getName()+" to "+aType);
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+    if(matchs.contains(match)) {
+      Date currDate = new Date(System.currentTimeMillis());
+      if (getDateDiff(match.getDate(), currDate, TimeUnit.MINUTES) > 390) {
+        if (match.getEventCalender().getGameEvents().contains(gameEvent)) {
+          match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setType(aType);
+          match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setDescription(aDescription);
+          wasEdit = true;
+          try {
+            Logger.getInstance().writeNewLine("Referee " + super.getName() + " edit event after the match between: " + match.getHomeTeam().getName() + "," + match.getAwayTeam().getName() + " to " + aType);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
 
+        } else return false;
       }
-      else  return false;
     }
     return wasEdit;
   }

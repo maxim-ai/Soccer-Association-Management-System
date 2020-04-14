@@ -172,6 +172,7 @@ public class CoachTest {
 
     @Test
     public void updateDetails() {
+        coach.setPage(page1);
         coach.updateDetails("IL Football Association","Player");
         assertTrue(coach.getTraining().equals("IL Football Association"));
         assertTrue(coach.getTeamRole().equals("Player"));
