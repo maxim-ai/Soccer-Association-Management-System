@@ -19,6 +19,7 @@ public class OurSystemTest {
 
     @Before
     public void setUp() throws Exception {
+        DataManager.cleatDataBase();
         ourSystem=new OurSystem();
         System.setOut(new PrintStream(OS));
         File loggerFile=new File("Logger");

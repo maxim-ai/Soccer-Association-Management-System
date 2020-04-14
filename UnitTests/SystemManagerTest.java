@@ -15,6 +15,10 @@ import static org.junit.Assert.*;
 public class SystemManagerTest {
     SystemManager systemManager = new SystemManager("nadav");
 
+    @Before
+    public void setUp() throws Exception {
+        DataManager.cleatDataBase();
+    }
 
     @Test
     public void getComplaintAndComments() {
