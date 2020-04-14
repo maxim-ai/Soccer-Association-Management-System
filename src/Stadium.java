@@ -1,9 +1,10 @@
 
+import java.io.Serializable;
 import java.util.*;
 import java.sql.Date;
 import java.sql.Time;
 
-public class Stadium
+public class Stadium implements Serializable
 {
 
   private String name;
@@ -180,4 +181,8 @@ public class Stadium
     return super.toString() + "["+
             "name" + ":" + getName()+ "]";
   }
+
+
+
+
 }

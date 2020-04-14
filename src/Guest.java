@@ -1,46 +1,65 @@
+import sun.rmi.runtime.Log;
+
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
-public class Guest {
+public class Guest implements Serializable {
 
-  private String id;
 
-  public Guest(String aId)
+  private int id;
+  private static int guestIDCounter=0;
+
+  public Guest()
   {
-    id = aId;
+    id=(++guestIDCounter);
   }
 
-  public boolean setId(String aId)
-  {
-    boolean wasSet = false;
-    id = aId;
-    wasSet = true;
-    return wasSet;
+  //region Umple Methods
+  public static int getGuestIDCounter() {
+    return guestIDCounter;
   }
 
-  public String getId()
+  public static void resetGuestIDCounter(){
+    guestIDCounter=0;
+  }
+
+
+
+  public int getId()
   {
     return id;
   }
 
   public String toString()
   {
-    return super.toString() + "["+ "id" + ":" + getId()+ "]";
+    return "Guest ID: "+id;
   }
+  //endregion
 
+  //region My Methods
   public Account LogIn(String UserName, String Password){
     List<Account> accountList= DataManager.getAccounts();
     for(Account a:accountList){
-      if(a.getUserName().equals(UserName)&&a.getPassword().equals(Password))
+      if(a.getUserName().equals(UserName)&&a.getPassword().equals(Password)){
+        (Logger.getInstance()).writeNewLine("Account "+UserName+" logged in");
         return a;
+      }
     }
     return null;
   }
 
-  public void SignIn(String Name, int Age, String UserName, String Password){
+  public boolean SignIn(String Name, int Age, String UserName, String Password){
+    for(Account account:DataManager.getAccounts()){
+      if(account.getUserName().equals(UserName))
+        return false;
+    }
     Account newAccount=new Account(Name,Age,UserName,Password);
     newAccount.addRole(new Fan(newAccount.getName()));
     DataManager.addAccount(newAccount);
+    (Logger.getInstance()).writeNewLine("New account "+UserName+" created");
+    return true;
   }
 
   public void ShowInfo(String InfoAbout){
@@ -74,7 +93,6 @@ public class Guest {
 
   }
 
-  //Need to be Changed//
   public void Search(String criterion, String query){
     if(criterion.equals("Name")){
       List<Team> teams=new LinkedList<>();
@@ -98,18 +116,26 @@ public class Guest {
           seasons.add(season);
       }
 
-      System.out.println("Teams with the name: "+query);
-      for(Team team:teams)
-        team.ShowTeam();
-      System.out.println("Accounts with the name:"+query);
-      for(Account account:accounts)
-        account.ShowAccount();
-      System.out.println("Leagues with the name: "+query);
-      for(League league:leagues)
-        league.ShowLeague();
-      System.out.println("Seasons with the name: "+query);
-      for(Season season:seasons)
-        season.ShowSeason();
+      if (!accounts.isEmpty()) {
+        System.out.println("Accounts with the name "+query);
+        for(Account account:accounts)
+          account.ShowAccount();
+      }
+      if (!teams.isEmpty()) {
+        System.out.println("Teams with the name "+query);
+        for(Team team:teams)
+          team.ShowTeam();
+      }
+      if (!leagues.isEmpty()) {
+        System.out.println("Leagues with the name "+query);
+        for(League league:leagues)
+          league.ShowLeague();
+      }
+      if (!seasons.isEmpty()) {
+        System.out.println("Seasons with the name "+query);
+        for(Season season:seasons)
+          season.ShowSeason();
+      }
 
     }
     if(criterion.equals("Category")){
@@ -133,7 +159,6 @@ public class Guest {
 //    if(criterion.equals("Keyword")){ } //***********************************************************
   }
 
-  //Need to be Changed//
   public void Filter(String category,String roleFilter){
     if(category.equals("Role")){
       if(roleFilter.equals("Players")){
@@ -160,7 +185,7 @@ public class Guest {
           owner.ShowOwner();
       }
 
-      if(roleFilter.equals("Referee")){//************************************
+      if(roleFilter.equals("Referees")){//************************************
         List<Referee> refs= DataManager.getRefereesFromAccounts();
         for(Referee ref:refs)
           ref.ShowReferee();
@@ -180,5 +205,10 @@ public class Guest {
         season.ShowSeason();
     }
   }
+  //endregion
+
+
+
+
 
 }

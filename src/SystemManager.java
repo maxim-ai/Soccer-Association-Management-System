@@ -1,7 +1,9 @@
+import java.io.Serializable;
 import java.util.*;
 
 
-public class SystemManager extends Role {
+public class SystemManager extends Role implements Serializable
+{
 
   HashMap<String,String> complaintAndComments;
 
@@ -157,5 +159,9 @@ public class SystemManager extends Role {
   public void clearAlerts() { throw new UnsupportedOperationException(); }
   public void removeAlert(String s) { throw new UnsupportedOperationException(); }
 
+  public static boolean createAccount(Account accountToAdd){
+    DataManager.addAccount(accountToAdd);
+    return true;
+  }
 
 }

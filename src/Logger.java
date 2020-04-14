@@ -13,17 +13,20 @@ public class Logger {
         return logger;
     }
 
-    public void writeNewLine(String line) throws IOException {
-        File loggerFile=new File("Logger");
-        if(!loggerFile.exists())
-            loggerFile.createNewFile();
-        FileWriter FW=new FileWriter(loggerFile,true);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
-        FW.write(formatter.format(date)+" - "+line+"\n");
-        FW.flush();
-        FW.close();
+    public void writeNewLine(String line)  {
+        try {
+            File loggerFile=new File("Logger");
+            if(!loggerFile.exists())
+                loggerFile.createNewFile();
+            FileWriter FW=new FileWriter(loggerFile,true);
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = new Date();
+            FW.write(formatter.format(date)+" - "+line+"\n");
+            FW.flush();
+            FW.close();
+        } catch (IOException e) { }
     }
+
     public String readLoggerFile(){
         String string="";
         try {
@@ -38,5 +41,7 @@ public class Logger {
         } catch (IOException e) { }
         return string;
     }
+
+
 
 }

@@ -1,10 +1,11 @@
+import java.io.Serializable;
 import java.util.*;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.function.BooleanSupplier;
 
 
-public class Season
+public class Season implements Serializable
 {
   private String name;
   private List<Match> matchs;
@@ -147,6 +148,10 @@ public class Season
     return false;
   }
 
+  public void setsLsettings(HashMap<League, SLsettings> sLsettings) {
+    this.sLsettings = sLsettings;
+  }
+
   public void ShowSeason() {
     System.out.println("Name:");
     System.out.println(this.getName());
@@ -155,5 +160,18 @@ public class Season
     for(Match match:this.getMatchs())
       match.ShowMatch();
   }
+
+
+
+
+  private boolean compareTwoMatchLists(List<Match> a, List<Match> b){
+    if(a.size()!=b.size()) return false;
+    for(int i=0;i<a.size();i++){
+      if(!a.get(i).equals(b.get(i)))
+        return false;
+    }
+    return true;
+  }
+
 
 }

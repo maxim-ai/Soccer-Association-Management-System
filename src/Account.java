@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.*;
 
 
-public class Account{
+public class Account implements Serializable {
 
   private String userName;
   private String password;
@@ -114,6 +115,8 @@ public class Account{
    */
   public boolean addRole(Role aRole)
   {
+    //instanceOf...
+
     boolean wasAdded = true;
     if (roles.contains(aRole)) { return true; }
     roles.add(aRole);
@@ -125,6 +128,8 @@ public class Account{
    */
   public boolean removeRole(Role aRole)
   {
+    if(aRole==null)
+      return false;
     boolean wasRemoved = true;
     if (!roles.contains(aRole))
     {
@@ -224,11 +229,11 @@ public class Account{
   /**
    * checks is the account is a Assiciation Representive
    */
-  public AssiciationRepresentive checkIfAssiciationRepresentive()
+  public AssociationRepresentative checkIfAssiciationRepresentive()
   {
     for(Role role: roles)
     {
-      if(role instanceof AssiciationRepresentive) return (AssiciationRepresentive) role;
+      if(role instanceof AssociationRepresentative) return (AssociationRepresentative) role;
     }
     return null;
   }
@@ -255,7 +260,10 @@ public class Account{
     System.out.println("Roles:");
     for(Role role:this.getRoles())
       System.out.println(role.getClass().getName());
+    System.out.println();
   }
+
+
 
 
 }

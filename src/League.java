@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class League
+public class League implements Serializable
 {
 
   private String name;
@@ -38,6 +39,7 @@ public class League
     return name;
   }
 
+
   public List<Team> getTeams()
   {
     List<Team> newTeams = Collections.unmodifiableList(teams);
@@ -60,6 +62,13 @@ public class League
     boolean has = teams.size() > 0;
     return has;
   }
+
+  public int indexOfTeam(Team aTeam)
+  {
+    int index = teams.indexOf(aTeam);
+    return index;
+  }
+
   public SLsettings getSLsettingsBySeason(Season season)
   {
     SLsettings asLsettings = sLsetting.get(season);
@@ -91,9 +100,14 @@ public class League
    */
   public boolean removeTeam(Team aTeam)
   {
-    teams.remove(aTeam);
-    aTeam.setLeague(null);
-    return true;
+    boolean wasRemoved = false;
+    if (this.equals(aTeam.getLeague()))
+    {
+      teams.remove(aTeam);
+      aTeam.setLeague(null);
+      wasRemoved = true;
+    }
+    return wasRemoved;
   }
 
   public boolean addSLsettingsToSeason(Season aSeason,SLsettings aSlSLsettings)
@@ -144,7 +158,6 @@ public class League
   }
 
   public void ShowLeague() {
-
     System.out.println("Name:");
     System.out.println(this.getName());
     System.out.println();
@@ -153,6 +166,8 @@ public class League
       System.out.println(team.getName());
     System.out.println();
   }
+
+
 
 
 }

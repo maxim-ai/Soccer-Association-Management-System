@@ -1,8 +1,13 @@
+import java.io.Serializable;
+import java.awt.*;
+import java.io.IOException;
 import java.sql.Time;
 import java.util.*;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
-public class Referee extends Role
+public class Referee extends Role implements Serializable
 {
 
   private String training;
@@ -90,7 +95,7 @@ public class Referee extends Role
   }
 
   /**
-   * add match to referee, is the match is full return false
+   * add match to referee, if the match is full return false
    * @param aMatch
    * @param mainORline
    * @return
@@ -102,18 +107,24 @@ public class Referee extends Role
 
     if(mainORline.equalsIgnoreCase("main"))
     {
-      if(aMatch.getMainReferee()==null)
+      if(aMatch.getMainReferee()==null) {
         aMatch.setMainReferee(this);
+        wasAdded=true;
+      }
       else
         return false;
     }
     else if(mainORline.equalsIgnoreCase("line"))
     {
 
-      if(aMatch.getLineRefereeOne()==null)
+      if(aMatch.getLineRefereeOne()==null) {
         aMatch.setLineRefereeOne(this);
-      else if(aMatch.getLineRefereeTwo()==null)
+        wasAdded=true;
+      }
+      else if(aMatch.getLineRefereeTwo()==null) {
         aMatch.setLineRefereeTwo(this);
+        wasAdded=true;
+      }
       else
         return false;
     }
@@ -149,14 +160,6 @@ public class Referee extends Role
 
   public void delete()
   {
-    /*
-    ArrayList<League> copyOfLeagues = new ArrayList<League>(leagues);
-    leagues.clear();
-    for(League aLeague : copyOfLeagues)
-    {
-      aLeague.removeReferee(this);
-    }
-    */
     ArrayList<Match> copyOfMatchs = new ArrayList<Match>(matchs);
     matchs.clear();
     for(Match aMatch : copyOfMatchs)
@@ -175,7 +178,15 @@ public class Referee extends Role
     return super.toString() + "["+
             "training" + ":" + getTraining()+ "]";
   }
-
+  /*
+  `UC-10.1 update details
+   */
+  public boolean updateDetails(String name){
+    String before=super.getName();
+    super.setName(name);
+    Logger.getInstance().writeNewLine("Referee "+before+" update name to: "+super.getName());
+    return true;
+  }
   /*
   UC-10.2 display all matches()
    */
@@ -183,31 +194,55 @@ public class Referee extends Role
     if (!matchs.isEmpty()) {
       for (Match m:matchs
       ) {
-        System.out.println(m.toString());
+        m.ShowMatch();
         System.out.println();
       }
+      Logger.getInstance().writeNewLine("Referee "+super.getName()+" watch all his Matches");
     } else System.out.println("No matches!");
   }
   /*
   UC-10.3 update event during match
    */
-  public void updateEventDuringMatch(Match match,EventEnum aType, String aDescription)
+  public boolean updateEventDuringMatch(Match match,EventEnum aType, String aDescription)
   {
+    boolean wasUpdate=false;
     if(matchs.contains(match)){
-      Date currDate=new Date(Calendar.getInstance().getTimeInMillis());
-      if (match.getDate().before(currDate))
+      Date currDate=new Date(System.currentTimeMillis());
+      long diff=getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES);
+      if (getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES)<90)
       {
         Time currTime=new Time(Calendar.getInstance().getTimeInMillis());
         GameEvent event=new GameEvent(aType,currDate,currTime,aDescription,(int)(currTime.getTime()-match.getTime().getTime()),match.getEventCalender());
         match.getEventCalender().addGameEvent(event);
+        wasUpdate=true;
+        Logger.getInstance().writeNewLine("Referee "+super.getName()+" update event during the match between: "+match.getHomeTeam().getName()+","+match.getAwayTeam().getName()+" to "+event.getType());
       }
-      System.out.println("This match already end!");
+      return false;
     }
-    else System.out.println("The referee is not associated with the game");
+    return wasUpdate;
+  }
+  /*
+  UC - 10.4 edit game after the game end
+   */
+  public boolean editEventAfterGame(Match match, GameEvent gameEvent, EventEnum aType, String aDescription){
+    boolean wasEdit=false;
+    if(matchs.contains(match)) {
+      Date currDate = new Date(System.currentTimeMillis());
+      if (getDateDiff(match.getDate(), currDate, TimeUnit.MINUTES) > 390) {
+        if (match.getEventCalender().getGameEvents().contains(gameEvent)) {
+          match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setType(aType);
+          match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setDescription(aDescription);
+          wasEdit = true;
+          Logger.getInstance().writeNewLine("Referee " + super.getName() + " edit event after the match between: " + match.getHomeTeam().getName() + "," + match.getAwayTeam().getName() + " to " + aType);
+
+        } else return false;
+      }
+    }
+    return wasEdit;
   }
 
   public void ShowReferee() {
-    System.out.println("Name");
+    System.out.println("Name:");
     System.out.println(this.getName());
     System.out.println();
     System.out.println("Training:");
@@ -219,6 +254,9 @@ public class Referee extends Role
   }
 
 
-
+  public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+    long diffInMillies = date2.getTime() - date1.getTime();
+    return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+  }
 
 }

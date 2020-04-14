@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.util.Date;
 import java.sql.Time;
 import java.util.*;
 
-public class Match
+public class Match implements Serializable
 {
 
   private Date date;
@@ -18,18 +19,19 @@ public class Match
   private Season season;
   private EventCalender eventCalender;
 
-  public Match(java.util.Date aDate, Time aTime, int aAwayScore, int aHomeScore, Stadium aStadium, Season aSeason, Team awayTeam, Team homeTeam, Referee mainReferee, Referee lineRefereeOne, Referee lineRefereeTwo)
+  public Match(Date aDate, Time aTime, int aAwayScore, int aHomeScore, Stadium aStadium, Season aSeason, Team awayTeam,Team homeTeam, Referee mainReferee,Referee lineRefereeOne,Referee lineRefereeTwo)
   {
     date = aDate;
     time = aTime;
     awayScore = aAwayScore;
     homeScore = aHomeScore;
-    this.awayTeam = awayTeam;
+    setAwayTeam(awayTeam);
+    setHomeTeam(homeTeam);
     this.homeTeam = homeTeam;
     this.mainReferee= mainReferee;
     this.lineRefereeOne = lineRefereeOne;
     this.lineRefereeTwo = lineRefereeTwo;
-    this.stadium = aStadium;
+    setStadium(aStadium);
     this.season = aSeason;
     eventCalender = new EventCalender(this);
 
@@ -40,6 +42,9 @@ public class Match
   {
     boolean wasSet = false;
     date = aDate;
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),mainReferee);
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),lineRefereeOne);
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),lineRefereeTwo);
     wasSet = true;
     return wasSet;
   }
@@ -48,6 +53,9 @@ public class Match
   {
     boolean wasSet = false;
     time = aTime;
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to time: "+time.toString(),mainReferee);
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to time: "+time.toString(),lineRefereeOne);
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to time: "+time.toString(),lineRefereeTwo);
     wasSet = true;
     return wasSet;
   }
@@ -161,12 +169,16 @@ public class Match
     }
 
     Stadium existingStadium = stadium;
-    stadium = aStadium;
     if (existingStadium != null && !existingStadium.equals(aStadium))
     {
       existingStadium.removeMatch(this);
     }
+    stadium = aStadium;
     stadium.addMatch(this);
+
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to Stadium: "+stadium.getName(),mainReferee);
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to Stadium: "+stadium.getName(),lineRefereeOne);
+    Alert.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to Stadium: "+stadium.getName(),lineRefereeTwo);
     wasSet = true;
     return wasSet;
   }
@@ -194,9 +206,9 @@ public class Match
   {
     homeTeam.removeMatch(this);
     awayTeam.removeMatch(this);
-    lineRefereeTwo.removeMatch(this);
-    lineRefereeOne.removeMatch(this);
-    mainReferee.removeMatch(this);
+    if(lineRefereeTwo!=null) lineRefereeTwo.removeMatch(this);
+    if(lineRefereeOne!=null) lineRefereeOne.removeMatch(this);
+    if(mainReferee!=null) mainReferee.removeMatch(this);
     Stadium placeholderStadium = stadium;
     this.stadium = null;
     if(placeholderStadium != null)
@@ -229,12 +241,36 @@ public class Match
             "  " + "eventCalender = "+(getEventCalender());
   }
 
+
   public void removeSeason() {
     season = null;
   }
 
   public void ShowMatch(){
-    System.out.println(this.getHomeTeam()+" against "+this.getAwayTeam());
+    System.out.println("Date:");
+    System.out.println(this.getDate());
+    System.out.println();
+    System.out.println("Time:");
+    System.out.println(this.getTime());
+    System.out.println();
+    System.out.println("Score:");
+    System.out.println(this.getHomeTeam().getName()+": "+this.getHomeScore()+", "+this.getAwayTeam().getName()+": "+this.getAwayScore());
+    System.out.println();
+    System.out.println("Referees:");
+    System.out.println("Main: "+this.getMainReferee().getName()+", Line1: "+this.getLineRefereeOne().getName()+", Line2: "+this.getLineRefereeTwo().getName());
+    System.out.println();
+    System.out.println("Stadium:");
+    System.out.println(this.getStadium().getName());
+    System.out.println();
+    System.out.println("Season:");
+    System.out.println(season.getName());
+    System.out.println();
+    List<GameEvent> gameEvent=eventCalender.getGameEvents();
+    System.out.println("Game Events:");
+    for (GameEvent event: gameEvent){
+      event.getType().name();
+      System.out.println(", ");
+    }
   }
 
 

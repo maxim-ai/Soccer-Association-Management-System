@@ -1,7 +1,9 @@
 
+import java.io.Serializable;
+import java.io.IOException;
 import java.util.*;
 
-public class Coach extends Role implements Pageable
+public class Coach extends Role implements Pageable, Serializable
 {
 
 
@@ -10,13 +12,13 @@ public class Coach extends Role implements Pageable
   private List<Team> teams;
   private Page page;
 
-  public Coach(String aName, String aTraining, String aTeamRole, Page aPage)
+  public Coach(String aName, String aTraining, String aTeamRole,Page aPage)
   {
     super(aName);
     training = aTraining;
     teamRole = aTeamRole;
     teams = new ArrayList<Team>();
-    page = aPage;
+    setPage(aPage);
   }
 
   public boolean setTraining(String aTraining)
@@ -188,8 +190,9 @@ public class Coach extends Role implements Pageable
    */
   public void updateDetails(String training,String teamRole)
   {
-    this.training=training;
-    this.teamRole=teamRole;
+    setTraining(training);
+    setTeamRole(teamRole);
+    Logger.getInstance().writeNewLine("Coach "+super.getName()+" update details to : "+training+","+teamRole);
   }
 
   public void ShowCoach() {
@@ -207,8 +210,19 @@ public class Coach extends Role implements Pageable
       System.out.println(team.getName());
   }
 
-  public void pageUpdated(){
-    page.notifyTrackingFans(new Alert(getName()+" page updated"));
+  public void pageUpdated()
+  {
+    if(page!=null)
+      page.notifyTrackingFans(new Alert(getName()+" page updated"));
+  }
+
+  @Override
+  public void setPage(Page page)
+  {
+    this.page = page;
+    if(page==null) return;
+    if(!page.getType().equals(this))
+      page.setType(this);
   }
 
 }

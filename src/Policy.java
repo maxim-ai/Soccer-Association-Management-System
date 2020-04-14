@@ -1,4 +1,7 @@
-public class Policy
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Policy implements Serializable
 {
   
   private String pointCalc;
@@ -45,8 +48,6 @@ public class Policy
     return gameSchedual;
   }
 
-  public void delete()
-  {}
 
 
   public String toString()
@@ -55,4 +56,8 @@ public class Policy
             "pointCalc" + ":" + getPointCalc()+ "," +
             "gameSchedual" + ":" + getGameSchedual()+ "]";
   }
+
+
+
+
 }

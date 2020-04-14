@@ -1,8 +1,9 @@
 
+import java.io.Serializable;
 import java.util.*;
 
 
-public class Team implements Pageable
+public class Team implements Pageable, Serializable
 {
 
   private String name;
@@ -14,15 +15,16 @@ public class Team implements Pageable
   private League league;
   private List<Match> matchs;
   private Stadium stadium;
-  private boolean active;
 
 
   public Team(String aName,League aLeague,Stadium aStadium)
   {
-    if(aLeague != null) {
+    if(aLeague != null)
+    {
       setLeague(aLeague);
     }
-    if(aStadium != null){
+    if(aStadium != null)
+    {
       setStadium(aStadium);
     }
     name = aName;
@@ -31,7 +33,6 @@ public class Team implements Pageable
     owners = new ArrayList<Owner>();
     players = new ArrayList<Player>();
     matchs = new ArrayList<Match>();
-
   }
 
 
@@ -214,26 +215,16 @@ public class Team implements Pageable
     return stadium;
   }
 
-  public static int minimumNumberOfTeamManagers()
-  {
-    return 1;
-  }
-
-  public boolean isActive() {
-    return active;
-  }
-
-  public void setActive(boolean active) {
-    pageUpdated();
-    this.active = active;
-  }
-
   public boolean addTeamManager(TeamManager aTeamManager)
   {
+    if(aTeamManager==null)
+      return false;
     if (!teamManagers.contains(aTeamManager))
     {
       teamManagers.add(aTeamManager);
     }
+    if(aTeamManager.getTeam()==null || !aTeamManager.getTeam().equals(this))
+      aTeamManager.setTeam(this);
     pageUpdated();
     return true;
   }
@@ -244,13 +235,9 @@ public class Team implements Pageable
     {
       teamManagers.remove(aTeamManager);
     }
+    aTeamManager.setTeam(null);
     pageUpdated();
     return true;
-  }
-
-  public static int minimumNumberOfCoachs()
-  {
-    return 0;
   }
 
   public boolean addCoach(Coach aCoach)
@@ -299,17 +286,14 @@ public class Team implements Pageable
     return wasRemoved;
   }
 
-  public static int minimumNumberOfOwners()
-  {
-    return 1;
-  }
-
   public boolean addOwner(Owner aOwner)
   {
     if (!owners.contains(aOwner))
     {
       owners.add(aOwner);
     }
+    if(aOwner.getTeam()==null || !aOwner.getTeam().equals(this))
+      aOwner.setTeam(this);
     pageUpdated();
     return true;
   }
@@ -324,20 +308,6 @@ public class Team implements Pageable
     return true;
   }
 
-  public boolean isNumberOfPlayersValid()
-  {
-    boolean isValid = numberOfPlayers() >= minimumNumberOfPlayers() && numberOfPlayers() <= maximumNumberOfPlayers();
-    return isValid;
-  }
-  public static int requiredNumberOfPlayers()
-  {
-    return 11;
-  }
-  public static int minimumNumberOfPlayers()
-  {
-    return 11;
-  }
-  public static int maximumNumberOfPlayers() { return 11; }
 
   /**
    * adds player to list
@@ -346,18 +316,9 @@ public class Team implements Pageable
   {
     boolean wasAdded = true;
     if (players.contains(aPlayer)) { return true; }
-    if (numberOfPlayers() >= maximumNumberOfPlayers())
-    {
-      return wasAdded;
-    }
 
     Team existingTeam = aPlayer.getTeam();
     boolean isNewTeam = existingTeam != null && !this.equals(existingTeam);
-
-    if (isNewTeam && existingTeam.numberOfPlayers() <= minimumNumberOfPlayers())
-    {
-      return wasAdded;
-    }
 
     if (isNewTeam)
     {
@@ -379,16 +340,11 @@ public class Team implements Pageable
   {
     boolean wasRemoved = true;
     //Unable to remove aPlayer, as it must always have a team
-    if (this.equals(aPlayer.getTeam()))
+    if (!this.equals(aPlayer.getTeam()))
     {
-      return wasRemoved;
+      return false;
     }
 
-    //team already at minimum (11)
-    if (numberOfPlayers() <= minimumNumberOfPlayers())
-    {
-      return wasRemoved;
-    }
     players.remove(aPlayer);
     aPlayer.setTeam(null);
     wasRemoved = true;
@@ -412,17 +368,14 @@ public class Team implements Pageable
 
     league.addTeam(this);
     wasSet = true;
-    //pageUpdated();
+    pageUpdated();
     return wasSet;
   }
 
-  public static int minimumNumberOfMatchs() { return 0;}
 
   /**
    * adds match to team list, updates the home/away field in the match
-   * @param aMatch
-   * @param homeOrAway
-   * @return
+
    */
   public boolean addMatch(Match aMatch, String homeOrAway)
   {
@@ -490,7 +443,7 @@ public class Team implements Pageable
     }
     stadium.addTeam(this);
     wasSet = true;
-    //pageUpdated();
+    pageUpdated();
     return wasSet;
   }
 
@@ -499,11 +452,11 @@ public class Team implements Pageable
    */
   public void delete()
   {
-    ArrayList<TeamManager> copyOfTeamManagers = new ArrayList<TeamManager>(teamManagers);
+    ArrayList<TeamManager> copyOfTeamManagers = new ArrayList<>(teamManagers);
     teamManagers.clear();
     for(TeamManager aTeamManager : copyOfTeamManagers)
     {
-//      aTeamManager.exitTeam(this);
+      aTeamManager.setTeam(null);
     }
     Page existingPage = page;
     page = null;
@@ -521,15 +474,17 @@ public class Team implements Pageable
     owners.clear();
     for(Owner aOwner : copyOfOwners)
     {
-      aOwner.removeOwnerFromTeam(aOwner);
+      aOwner.setTeam(null);
     }
-    for(int i=players.size(); i > 0; i--)
+    ArrayList<Player> copyOfPlayers = new ArrayList<>(players);
+    players.clear();
+    for(int i=copyOfPlayers.size(); i > 0; i--)
     {
-      Player aPlayer = players.get(i - 1);
-      aPlayer.delete();
+      Player aPlayer = copyOfPlayers.get(i - 1);
+      aPlayer.setTeam(null);
     }
     League placeholderLeague = league;
-    //this.league = null;
+    this.league = null;
     if(placeholderLeague != null)
     {
       placeholderLeague.removeTeam(this);
@@ -538,32 +493,21 @@ public class Team implements Pageable
     matchs.clear();
     for(Match aMatch : copyOfMatchs)
     {
-      if(aMatch.getAwayTeam().equals(this)) aMatch.setAwayTeam(null);
-      if(aMatch.getHomeTeam().equals(this)) aMatch.setHomeTeam(null);
+      aMatch.delete();
     }
     Stadium placeholderStadium = stadium;
+    this.stadium=null;
     if(placeholderStadium != null)
     {
       placeholderStadium.removeTeam(this);
     }
   }
 
-  public String toString()
-  {
-    return super.toString() + "["+
-            "name" + ":" + getName()+ "]" +
-            "  " + "page = "+(getPage()) +
-            "  " + "league = "+(getLeague()) +
-            "  " + "stadium = "+(getStadium());
-  }
-
   /**
-   * makes the league of the team null
-   * @param league
+   * removes team from list, makes league field in that team null
    */
   public void removeLeauge(League league) {
-    if(this.getLeague().equals(league))
-      this.league=null;
+    league.removeTeam(this);
     pageUpdated();
   }
 
@@ -572,33 +516,31 @@ public class Team implements Pageable
     page=null;
   }
 
-  public void setPage(Page page) {
+  public void setPage(Page page)
+  {
     this.page = page;
+    if(page==null) return;
+    if(!page.getType().equals(this))
+      page.setType(this);
   }
 
   public void ShowTeam() {
     System.out.println("Name:");
     System.out.println(this.getName());
-    System.out.println();
     System.out.println("TeamManagers:");
     for(TeamManager teamManager:this.getTeamManagers())
       System.out.println(teamManager.getName());
-    System.out.println();
     System.out.println("Coaches");
     for(Coach coach:this.getCoachs())
       System.out.println(coach.getName());
-    System.out.println();
     System.out.println("TeamOwners:");
     for(Owner owner:this.getOwners())
       System.out.println(owner.getName());
-    System.out.println();
     System.out.println("Players:");
     for(Player player:this.getPlayers())
       System.out.println(player.getName());
-    System.out.println();
     System.out.println("League:");
     System.out.println(this.getLeague().getName());
-    System.out.println();
     System.out.println("Matches:");
     for(Match match:this.getMatchs()){
       System.out.print(this.getName()+" against ");
@@ -607,14 +549,13 @@ public class Team implements Pageable
       else
         System.out.println(match.getAwayTeam().getName());
     }
-    System.out.println();
     System.out.println("Stadium:");
     System.out.println(this.getStadium().getName());
-    System.out.println();
   }
 
   public void pageUpdated(){
-    page.notifyTrackingFans(new Alert(getName()+" page updated"));
+    if(page!=null)
+      page.notifyTrackingFans(new Alert(getName()+" page updated"));
   }
 
 }

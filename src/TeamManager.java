@@ -1,8 +1,11 @@
 
+import java.io.Serializable;
 import java.util.*;
 
-public class TeamManager extends Role
+public class TeamManager extends Role implements Serializable
 {
+
+
   enum PermissionEnum{
     manageName,
     manageManagers,
@@ -29,14 +32,13 @@ public class TeamManager extends Role
 
   public void setTeam(Team team) {
     this.team = team;
+    if(team==null) return;
+    if(!team.getTeamManagers().contains(this))
+      team.addTeamManager(this);
   }
 
   public Owner getAppointer() {
     return appointedBy;
-  }
-
-  public void setAppointer(Owner appointedBy) {
-    this.appointedBy = appointedBy;
   }
 
   /**
@@ -44,10 +46,13 @@ public class TeamManager extends Role
    */
   public boolean changeTeamName(String name)
   {
-    if(team==null || name==null)
+    if(team==null)
       return false;
-    if(appointedBy.hasPermission(this,PermissionEnum.manageName))
+    if(!appointedBy.hasPermission(this,PermissionEnum.manageName))
       return false;
+
+    Logger.getInstance().writeNewLine(this.getName()+" changed the name of the team "+team.getName() +" to be:" + name);
+
     return team.setName(name);
   }
 
@@ -56,10 +61,13 @@ public class TeamManager extends Role
    */
   public boolean addTeamManager(TeamManager aTeamManager)
   {
-    if(team==null || aTeamManager==null)
+    if(team==null)
       return false;
-    if(appointedBy.hasPermission(this,PermissionEnum.manageManagers))
+    if(!appointedBy.hasPermission(this,PermissionEnum.manageManagers))
       return false;
+
+    Logger.getInstance().writeNewLine(this.getName()+" set "+aTeamManager.getName() +" as a team manager for the team:" + team.getName());
+
     return team.addTeamManager(aTeamManager);
   }
 
@@ -68,10 +76,13 @@ public class TeamManager extends Role
    */
   public boolean removeTeamManager(TeamManager aTeamManager)
   {
-    if(team==null || aTeamManager==null)
+    if(team==null)
       return false;
-    if(appointedBy.hasPermission(this,PermissionEnum.manageManagers))
+    if(!appointedBy.hasPermission(this,PermissionEnum.manageManagers))
       return false;
+
+    Logger.getInstance().writeNewLine(this.getName()+" removed the team manager"+(aTeamManager.getName() +" from the team:" + team.getName()));
+
     return team.removeTeamManager(aTeamManager);
   }
 
@@ -80,10 +91,13 @@ public class TeamManager extends Role
    */
   public boolean addCoach(Coach aCoach)
   {
-    if(team==null || aCoach==null)
+    if(team==null)
       return false;
-    if(appointedBy.hasPermission(this,PermissionEnum.manageCoaches))
+    if(!appointedBy.hasPermission(this,PermissionEnum.manageCoaches))
       return false;
+
+    Logger.getInstance().writeNewLine(this.getName()+" set "+(aCoach.getName() +" as a coach for the team:" + team.getName()));
+
     return team.addCoach(aCoach);
   }
 
@@ -92,10 +106,13 @@ public class TeamManager extends Role
    */
   public boolean removeCoach(Coach aCoach)
   {
-    if(team==null || aCoach==null)
+    if(team==null)
       return false;
-    if(appointedBy.hasPermission(this,PermissionEnum.manageCoaches))
+    if(!appointedBy.hasPermission(this,PermissionEnum.manageCoaches))
       return false;
+
+    Logger.getInstance().writeNewLine(this.getName()+" removed the Coach"+(aCoach.getName() +" from the team:" + team.getName()));
+
     return team.removeCoach(aCoach);
   }
 
@@ -104,10 +121,13 @@ public class TeamManager extends Role
    */
   public boolean addPlayer(Player aPlayer)
   {
-    if(team==null || aPlayer==null)
+    if(team==null)
       return false;
-    if(appointedBy.hasPermission(this,PermissionEnum.managePlayers))
+    if(!appointedBy.hasPermission(this,PermissionEnum.managePlayers))
       return false;
+
+    Logger.getInstance().writeNewLine(this.getName()+" set "+aPlayer.getName() +" as a player for the team:" + team.getName());
+
     return team.addPlayer(aPlayer);
   }
 
@@ -116,10 +136,13 @@ public class TeamManager extends Role
    */
   public boolean removePlayer(Player aPlayer)
   {
-    if(team==null || aPlayer==null)
+    if(team==null)
       return false;
-    if(appointedBy.hasPermission(this,PermissionEnum.managePlayers))
+    if(!appointedBy.hasPermission(this,PermissionEnum.managePlayers))
       return false;
+
+    Logger.getInstance().writeNewLine(this.getName()+" removed the Player"+(aPlayer.getName() +" from the team:" + team.getName()));
+
     return team.removePlayer(aPlayer);
   }
 
@@ -128,23 +151,13 @@ public class TeamManager extends Role
    */
   public boolean setLeague(League aLeague)
   {
-    if(team==null || aLeague==null)
+    if(team==null)
       return false;
-    if(appointedBy.hasPermission(this,PermissionEnum.manageLeague))
+    if(!appointedBy.hasPermission(this,PermissionEnum.manageLeague))
       return false;
-    return team.setLeague(aLeague);
-  }
+    Logger.getInstance().writeNewLine(this.getName()+" set the League of the team "+team.getName()+" to be "+aLeague.getName());
 
-  /**
-   * allows the team manager to add a match
-   */
-  public boolean addMatch(Match aMatch, String homeOrAway)
-  {
-    if(team == null || !team.isActive() || aMatch==null || homeOrAway==null)
-      return false;
-    if(appointedBy.hasPermission(this,PermissionEnum.manageMatches))
-      return false;
-    return team.addMatch(aMatch,homeOrAway);
+    return team.setLeague(aLeague);
   }
 
   /**
@@ -152,10 +165,13 @@ public class TeamManager extends Role
    */
   public boolean removeMatch(Match aMatch)
   {
-    if(team == null || !team.isActive() || aMatch==null)
+    if(team==null)
     return false;
-    if(appointedBy.hasPermission(this,PermissionEnum.manageMatches))
+    if(!appointedBy.hasPermission(this,PermissionEnum.manageMatches))
       return false;
+
+    Logger.getInstance().writeNewLine(this.getName()+"removed a match on "+aMatch.getDate()+" for the team "+team.getName());
+
     return team.removeMatch(aMatch);
   }
 
@@ -165,20 +181,30 @@ public class TeamManager extends Role
    */
   public boolean setStadium(Stadium aStadium)
   {
-    if(team == null || !team.isActive() || aStadium==null)
+    if(team==null)
       return false;
-    if(appointedBy.hasPermission(this,PermissionEnum.manageStadium))
+    if(!appointedBy.hasPermission(this,PermissionEnum.manageStadium))
       return false;
+
+    Logger.getInstance().writeNewLine(this.getName()+" set "+(aStadium.getName() +" as the stadium for the team:" + team.getName()));
+
     return team.setStadium(aStadium);
+  }
+
+  public void delete()
+  {
+      team.removeTeamManager(this);
+      setTeam(null);
   }
 
   public void ShowTeamManager(){
     System.out.println("Name:");
     System.out.println(this.getName());
-    System.out.println();
     System.out.println("Team managed:");
     System.out.println(this.getTeam().getName());
-
   }
+
+
+
 
 }

@@ -1,8 +1,9 @@
 
+import java.io.Serializable;
 import java.util.*;
 
 
-public class Role
+public abstract class Role implements Serializable
 {
 
   private String name;
@@ -29,8 +30,7 @@ public class Role
 
   public String toString()
   {
-    return super.toString() + "["+
-            "name" + ":" + getName()+ "]";
+    return "name: "+this.name;
   }
 
   public List<Alert> getAlertList() {
@@ -44,16 +44,19 @@ public class Role
   public void addAlert(Alert alert){
     alertList.add(alert);
   }
-
   public void clearAlerts(){
     alertList=new ArrayList<>();
   }
 
-  public void removeAlert(String s){
+
+  public void removeAlert(Alert alert){
     for(int i=0;i<alertList.size();i++){
-      if(alertList.get(i).equals(s))
+      if(alertList.get(i).equals(alert))
         alertList.remove(i);
     }
   }
+
+
+
 
 }

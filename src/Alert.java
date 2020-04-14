@@ -1,4 +1,7 @@
-public class Alert
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Alert implements Serializable
 {
 
   private String description;
@@ -24,12 +27,15 @@ public class Alert
 
   public String toString()
   {
-    return super.toString() + "["+
-            "description" + ":" + getDescription()+ "]";
+    return "description" + ": " + getDescription();
   }
 
   public static void notifyOtherRole(String notification,Role role){
     Alert alert=new Alert(notification);
     role.addAlert(alert);
   }
+
+
+
+
 }

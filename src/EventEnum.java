@@ -1,4 +1,6 @@
-public enum EventEnum {
+import java.io.Serializable;
+
+public enum EventEnum implements Serializable {
 
     foul,
     yellowCard,
@@ -7,5 +9,7 @@ public enum EventEnum {
     offside,
     substitutionPlayer,
     injury
+
+
 
 }

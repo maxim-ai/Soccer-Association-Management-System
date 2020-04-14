@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.util.*;
 import java.sql.Date;
 import java.sql.Time;
 
-public class EventCalender
+public class EventCalender implements Serializable
 {
 
   private Match match;
@@ -85,7 +86,7 @@ public class EventCalender
   public boolean removeGameEvent(GameEvent aGameEvent)
   {
     gameEvents.remove(aGameEvent);
-    aGameEvent.setEventCalender(null);
+//    aGameEvent.setEventCalender(null);
     return true;
   }
 
@@ -100,5 +101,7 @@ public class EventCalender
       aGameEvent.delete();
     }
   }
+
+
 
 }

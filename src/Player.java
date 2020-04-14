@@ -1,7 +1,10 @@
 
-import java.sql.Date;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Objects;
+import java.io.IOException;
 
-public class Player extends Role implements Pageable
+public class Player extends Role implements Pageable, Serializable
 {
 
   private Date birthday;
@@ -9,7 +12,7 @@ public class Player extends Role implements Pageable
   private Team team;
   private Page page;
 
-  public Player(String aName, Date aBirthday, PositionEnum aPosition, Team aTeam, Page aPage)
+  public Player(String aName, Date aBirthday, PositionEnum aPosition, Team aTeam,Page aPage)
   {
     super(aName);
     birthday = aBirthday;
@@ -17,7 +20,7 @@ public class Player extends Role implements Pageable
     if (aTeam != null) {
       setTeam(aTeam);
     }
-    page = aPage;
+    setPage(aPage);
   }
 
   public boolean setBirthday(Date aBirthday)
@@ -67,23 +70,19 @@ public class Player extends Role implements Pageable
       return wasSet;
     }
 
-    //team already at maximum (11)
-    if (aTeam.numberOfPlayers() >= Team.maximumNumberOfPlayers())
-    {
-      return wasSet;
-    }
     
     Team existingTeam = team;
-    team = aTeam;
     if (existingTeam != null && !existingTeam.equals(aTeam))
     {
       boolean didRemove = existingTeam.removePlayer(this);
       if (!didRemove)
       {
-        team = existingTeam;
         return wasSet;
       }
     }
+
+      team = aTeam;
+
     team.addPlayer(this);
     wasSet = true;
     pageUpdated();
@@ -121,14 +120,15 @@ public class Player extends Role implements Pageable
   }
 
   /*
-  UC-5.1 update player details
-   */
+    UC-4.1 update player details
+     */
   public void updateDetails(Date birthday, PositionEnum position,Team team)
   {
-    this.birthday=birthday;
-    this.position=position;
-    this.team=team;
+    setBirthday(birthday);
+    setPosition(position);
+    setTeam(team);
     pageUpdated();
+    Logger.getInstance().writeNewLine("Player "+super.getName()+" update details to "+birthday.toString()+", "+position.name()+", "+team.getName());
   }
 
   public void ShowPlayer() {
@@ -136,7 +136,13 @@ public class Player extends Role implements Pageable
     System.out.println(this.getName());
     System.out.println();
     System.out.println("Age:");
-    int age=2020-this.getBirthday().getYear();
+    int age=0;
+    for(Account account:DataManager.getAccounts()){
+      for(Role role:account.getRoles()){
+        if(role.equals(this))
+          age=account.getAge();
+      }
+    }
     System.out.println(age);
     System.out.println();
     System.out.println("Position:");
@@ -146,8 +152,18 @@ public class Player extends Role implements Pageable
     System.out.println(this.getTeam().getName());
   }
 
-  public void pageUpdated(){
-    page.notifyTrackingFans(new Alert(getName()+" page updated"));
+  public void pageUpdated()
+  {
+    if(page!=null)
+      page.notifyTrackingFans(new Alert(getName()+" page updated"));
   }
 
+  @Override
+  public void setPage(Page page)
+  {
+    this.page = page;
+    if(page==null) return;
+    if(!page.getType().equals(this))
+      page.setType(this);
+  }
 }

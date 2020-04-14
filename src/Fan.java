@@ -1,11 +1,12 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class Fan extends Role
+public class Fan extends Role implements Serializable
 {
   private List<Page> pages;
   private boolean trackPersonalPages;
   private boolean getMatchNotifications;
-  private List<String[]> searchHistory;
+  private List<String[]> searchHistory; //String[0]: criterion, String[1]: query
 
 
   public Fan(String aName)
@@ -17,6 +18,12 @@ public class Fan extends Role
     searchHistory=new LinkedList<>();
   }
 
+  //region Umple Methods
+
+  public List<String[]> getSearchHistory() {
+    return searchHistory;
+  }
+
   public Page getPage(int index)
   {
     Page aPage = pages.get(index);
@@ -25,8 +32,7 @@ public class Fan extends Role
 
   public List<Page> getPages()
   {
-    List<Page> newPages = Collections.unmodifiableList(pages);
-    return newPages;
+    return pages;
   }
 
   public int numberOfPages()
@@ -45,10 +51,6 @@ public class Fan extends Role
   {
     int index = pages.indexOf(aPage);
     return index;
-  }
-  public static int minimumNumberOfPages()
-  {
-    return 0;
   }
   public boolean addPage(Page aPage)
   {
@@ -94,7 +96,7 @@ public class Fan extends Role
     return wasRemoved;
   }
 
-  public void delete()
+  public void deleteAllPages()
   {
     ArrayList<Page> copyOfPages = new ArrayList<Page>(pages);
     pages.clear();
@@ -118,27 +120,36 @@ public class Fan extends Role
   public void setGetGameNotifications(boolean getGameNotifications) {
     this.getMatchNotifications = getGameNotifications;
   }
-
   //endregion
 
   //region My Methods
-  public void ShowInfo(String InfoAbout){ new Guest("1").ShowInfo(InfoAbout); }
+
+  public void ShowInfo(String InfoAbout){
+    new Guest().ShowInfo(InfoAbout);
+  }
 
   public void Search(String criterion, String query){
-    new Guest("1").Search(criterion,query);
+    new Guest().Search(criterion,query);
     String[] savedSearch={criterion,query};
     searchHistory.add(savedSearch);
   }
 
   public void Filter(String category,String roleFilter){
-    new Guest("1").Filter(category,roleFilter);
+    new Guest().Filter(category,roleFilter);
   }
 
   public void Logout(){
     System.out.println("Logged out");
+    (Logger.getInstance()).writeNewLine("Fan "+this.getName()+" logged out");
   }
 
-  public void SubscribeTrackPersonalPages(){ trackPersonalPages=true; }
+  public void SubscribeTrackPersonalPages(){
+    trackPersonalPages=true;
+  }
+
+  public void SubscribeGetMatchNotifications(){
+    getMatchNotifications=true;
+  }
 
   public static void notifyFansAboutMatch(Match match){
     List<Fan> fans= DataManager.getFansFromAccounts();
@@ -149,14 +160,14 @@ public class Fan extends Role
     }
   }
 
-  //Need to be Changed//
   public void Report(String report){
     OurSystem.getSM().addComplain(report);
+    (Logger.getInstance()).writeNewLine("Fan "+this.getName()+" sent report to the system manager");
   }
 
 
   public void ShowSearchHistory(){
-    Guest guestDummy=new Guest("1");
+    Guest guestDummy=new Guest();
     for(String[] savedSearch:searchHistory){
       guestDummy.Search(savedSearch[0],savedSearch[1]);
     }
@@ -176,20 +187,31 @@ public class Fan extends Role
       if(page.getType() instanceof Coach)
         coaches.add((Coach)page.getType());
     }
-    Guest guestDummy=new Guest("1");
+    Guest guestDummy=new Guest();
+    System.out.println();
     System.out.println("Teams Tracked:");
     for(Team team:teams)
       team.ShowTeam();
     System.out.println("Players Tracked:");
     for(Player player:players)
       player.ShowPlayer();
+    System.out.println();
     System.out.println("Coaches Tracked:");
     for(Coach coach:coaches)
       coach.ShowCoach();
   }
 
-  public void EditPersonalInfo(String newName){
-    setName(newName);
+  public void EditPersonalInfo(String newName, String newUserName, String newPassword){
+    Account account=DataManager.getAccountByRole(this);
+    if(!(newName.length()==0)) account.setName(newName);
+    if(!(newUserName.length()==0)) account.setUserName(newUserName);
+    if(!(newPassword.length()==0)) account.setPassword((newPassword));
+    (Logger.getInstance()).writeNewLine("Fan "+this.getName()+" eddited his personal infomation");
   }
+  //endregion
+
+
+
+
 
 }

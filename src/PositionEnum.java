@@ -1,4 +1,6 @@
-public enum PositionEnum {
+import java.io.Serializable;
+
+public enum PositionEnum implements Serializable {
     Goalkeeper,
     RightFullback,
     LeftFullback,
