@@ -1,3 +1,4 @@
+import javafx.util.Pair;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -11,22 +12,56 @@ public class AssociationRepresentativeTest {
     @Test
     public void createNewLeague() {
         List<Team> teamsList = new LinkedList<>();
-        League league = associationRepresentative.createNewLeague("TestLeague",teamsList);
-        assertTrue(DataManager.getLeagues().contains(league));
+        assertNotNull(createNewLeagueTest("TestLeague",teamsList));
+    }
+
+    private League createNewLeagueTest(String name,List<Team> teams){
+        if(teams == null || name == null){
+            return  null;
+        }
+        League league = new League(name);
+        DataManager.addLeague(league);
+        for(Team team : teams){
+            addTeamStub(team);
+        }
+        return league;
+    }
+
+    private void addTeamStub(Team team){
+
     }
 
     @Test
     public void setYearToLeague() {
         League testLeague = new League("Test");
-        if(associationRepresentative.setYearToLeague(testLeague,"0000") && DataManager.getLeagues().contains(testLeague)) {
-            List<Season> seasonsList = DataManager.getSeasons();
-            for (Season season : seasonsList) {
-                if (season.getName().equals("0000")) {
-                    assertNotNull(season.getSLsettingsByLeague(testLeague));
-                }
-            }
-        }
+        assertTrue(setYearToLeagueTest(testLeague,"0000"));
+    }
 
+
+    private boolean setYearToLeagueTest(League league,String year){
+        boolean wasSet = false;
+        if(league == null || year == null){
+            return  wasSet;
+        }
+        Season season=new Season(year);
+        DataManager.addSeason(season);
+        DataManager.addLeague(league);
+        SLsettings sLsettings = getSLsettingsBySeasonStub(league,season);
+        if (sLsettings==null)
+        {
+            sLsettings = new SLsettings(new Policy(null,null));
+        }
+        wasSet = addSLsettingsToSeasonStub(league,season,sLsettings);
+        return wasSet;
+    }
+
+    private SLsettings getSLsettingsBySeasonStub(League league,Season season)
+    {
+        return null;
+    }
+
+    private boolean addSLsettingsToSeasonStub(League league,Season season,SLsettings sLsettings){
+        return true;
     }
 
     @Test
@@ -36,9 +71,19 @@ public class AssociationRepresentativeTest {
 
     @Test
     public void addNewReferee() {
-        Referee referee=associationRepresentative.addNewReferee("Test","Test",0,"Test","Test");
-        assertNotNull(DataManager.getAccountByRole(referee));
+        assertNotNull(addNewRefereeTest("Test","Test",0,"Test","Test"));
     }
+
+    private Referee addNewRefereeTest(String training, String name, int age, String userName, String password){
+        Account account = new Account(name,age,userName,password);
+        DataManager.addAccount(account);
+        if(training != null && name != null) {
+            return createNewRefereeStub(account,training,name);
+        }
+        return null;
+    }
+
+    private Referee createNewRefereeStub(Account account,String training,String name){ return new Referee(training,name);}
 
     @Test
     public void createNewReferee() {
@@ -60,26 +105,58 @@ public class AssociationRepresentativeTest {
         Season testSeason = new Season("0000");
         Referee testReferee = new Referee("Test","Test");
         League testLeague = new League("Test");
-        boolean actual = (associationRepresentative.addRefereeToLeague(testReferee,testLeague,testSeason));
-
-        if(DataManager.getLeagues().contains(testLeague)&&DataManager.getSeasons().contains(testSeason))
-            for(League league:DataManager.getLeagues()){
-                SLsettings sLsettings = league.getSLsettingsBySeason(testSeason);
-                if(sLsettings!=null){
-                    if(testReferee.getsLsettings().equals(sLsettings))
-                        assertTrue(actual);                }
-            }
-
+        assertTrue (addRefereeToLeagueTest(testReferee,testLeague,testSeason));
     }
+
+    private boolean addRefereeToLeagueTest(Referee referee,League league,Season season){ // to fix uc
+        boolean wasAdded = false;
+        if(league == null || referee == null || season == null){
+            return  wasAdded;
+        }
+        SLsettings sLsettings = getSLsettingsBySeasonStub(league,season);
+        if (sLsettings==null)
+        {
+            sLsettings = new SLsettings(new Policy(null,null));
+        }
+        referee.setsLsettings(sLsettings);
+        addRefereeStub(sLsettings, referee);
+        wasAdded= addLeagueStub(referee,league,season);
+        return  wasAdded;
+    }
+
+    private boolean addLeagueStub(Referee referee, League league, Season season) {
+        return true;
+    }
+
+    private void addRefereeStub(SLsettings sLsettings, Referee referee){}
+
 
     @Test
     public void setLeaguePointCalcPolicy() {
         Season testSeason = new Season("0000");
         League testLeague = new League("Test");
         Policy testPolicy = new Policy("Test","Test");
-        if(associationRepresentative.setLeaguePointCalcPolicy(testLeague,testPolicy,testSeason,"Test"))
-            assertEquals(testPolicy,testLeague.getSLsettingsBySeason(testSeason).getPolicy());
-        else fail();
+        assertTrue(setLeaguePointCalcPolicyTest(testLeague,testPolicy,testSeason,"Test"));
+    }
+
+    private boolean setLeaguePointCalcPolicyTest(League league, Policy policy,Season season,String pointCalc){
+        boolean wasAdded = false;
+        if(league == null || policy == null || season == null){
+            return  wasAdded;
+        }
+        policy.setPointCalc(pointCalc);
+        SLsettings sLsettings = league.getSLsettingsBySeason(season);
+        if(sLsettings!=null)
+            sLsettings.setPolicy(policy);
+        else{
+            sLsettings = new SLsettings(policy);
+            addSLsettingsToLeagueStub(season,league,sLsettings);
+        }
+        return true;
+    }
+
+    private void addSLsettingsToLeagueStub(Season season,League league, SLsettings sLsettings) {
+
     }
 
     @Test
@@ -87,9 +164,22 @@ public class AssociationRepresentativeTest {
         Season testSeason = new Season("0000");
         League testLeague = new League("Test");
         Policy testPolicy = new Policy("Test","Test");
-        if(associationRepresentative.setLeagueGameSchedualPolicy(testLeague,testPolicy,testSeason,"Test"))
-            assertEquals(testPolicy,testLeague.getSLsettingsBySeason(testSeason).getPolicy());
-        else fail();
+        assertTrue(setLeagueGameSchedualPolicyTest(testLeague,testPolicy,testSeason,"Test"));
+    }
+
+    private boolean setLeagueGameSchedualPolicyTest(League league, Policy policy,Season season,String gameSchedule){
+        boolean wasAdded = false;
+        if(league == null || policy == null || season == null){
+            return  wasAdded;
+        }
+        policy.setGameSchedual(gameSchedule);
+        SLsettings sLsettings = league.getSLsettingsBySeason(season);
+        if(sLsettings!=null)
+            sLsettings.setPolicy(policy);
+        else{
+            sLsettings = new SLsettings(policy);
+            addSLsettingsToLeagueStub(season, league,sLsettings);
+        }    return true;
     }
 
     @Test
@@ -109,34 +199,56 @@ public class AssociationRepresentativeTest {
     }
 
     @Test
-    public void addAlert() {
-    }
-
-    @Test
-    public void clearAlerts() {
-    }
-
-    @Test
-    public void removeAlert() {
-    }
-
-    @Test
     public void approveTeam() {
+        Team team = new Team("Test",new League("Test"),new Stadium("Test"));
+        Owner owner= new Owner("Test",team,null);
+        AssociationRepresentative.approvedTeams.put(new Pair<>(owner,"Test"),true);
+        assertTrue(approveTeamTest("Test",owner));
     }
+
+    private boolean approveTeamTest(String teamName,Owner owner)
+    {
+        if(teamName==null || owner==null)
+            return false;
+
+        Pair request=new Pair(owner,teamName);
+
+        if(!AssociationRepresentative.approvedTeams.containsKey(request))
+            return false;
+        else
+        {
+            AssociationRepresentative.approvedTeams.put(request,true);
+            notifyOtherRoleStub("You are approved to open team: "+teamName,owner);
+            Logger.getInstance().writeNewLine(associationRepresentative.getName()+" approved "+owner.getName()+" to open the team: "+teamName);
+            return true;
+        }
+    }
+
+    private void notifyOtherRoleStub(String message,Owner owner){}
 
     @Test
     public void addOpenTeamRequest() {
+        assertTrue(AssociationRepresentative.addOpenTeamRequest(new Owner("Test",null,null),"Test"));
     }
 
     @Test
     public void removeOpenTeamRequest() {
+        Owner owner= new Owner("Test",null,null);
+        AssociationRepresentative.approvedTeams.put(new Pair<>(owner,"Test"),false);
+        assertTrue(AssociationRepresentative.removeOpenTeamRequest(owner,"Test"));
     }
 
     @Test
     public void checkIfRequestExists() {
+        Owner owner= new Owner("Test",null,null);
+        AssociationRepresentative.approvedTeams.put(new Pair<>(owner,"Test"),false);
+        assertTrue(AssociationRepresentative.checkIfRequestExists(owner,"Test"));
     }
 
     @Test
     public void getRequestStatus() {
+        Owner owner= new Owner("Test",null,null);
+        AssociationRepresentative.approvedTeams.put(new Pair<>(owner,"Test"),true);
+        assertTrue(AssociationRepresentative.getRequestStatus(owner,"Test"));
     }
 }

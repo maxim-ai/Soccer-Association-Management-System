@@ -5,7 +5,7 @@ import java.util.*;
 
 public class AssociationRepresentative extends Role {
 
-  private static HashMap<Pair<Owner,String>,Boolean> approvedTeams=new HashMap<>();
+  public static HashMap<Pair<Owner,String>,Boolean> approvedTeams=new HashMap<>();
 
   public AssociationRepresentative(String aName)
   {

@@ -115,7 +115,7 @@ public class Account implements Serializable {
    */
   public boolean addRole(Role aRole)
   {
-    //instanceOf...
+    //instanceOf check
 
     boolean wasAdded = true;
     if (roles.contains(aRole)) { return true; }
