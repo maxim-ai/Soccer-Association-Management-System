@@ -198,7 +198,7 @@ public class Owner extends Role implements Serializable {
     {
         ArrayList<String> options=new ArrayList();
         if (this.team == null)
-            return options;
+            return null;
 
         if (o instanceof TeamManager) {
             options.add("name");
@@ -216,6 +216,8 @@ public class Owner extends Role implements Serializable {
         else if (o instanceof Stadium) {
             options.add("name");
         }
+        else
+            return null;
         return options;
     }
 
@@ -365,7 +367,6 @@ public class Owner extends Role implements Serializable {
         managerPermissions.put(teamManager,permissions);
         return true;
     }
-
 
     /**
      * deactivates the owner's team

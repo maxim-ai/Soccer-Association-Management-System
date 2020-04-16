@@ -49,10 +49,10 @@ public class SystemManager extends Role implements Serializable
 
   private void notifyOnDelete(Team team) {
     for (Owner owner : team.getOwners()){
-      owner.addAlert(new Alert("Delete Team Permanently: " + team.getName()));
+      owner.addAlert(new Alert("Delete Team Permanently:" + team.getName()));
     }
     for(TeamManager teamManager : team.getTeamManagers()){
-      teamManager.addAlert(new Alert("Delete Team Permanently: " + team.getName()));
+      teamManager.addAlert(new Alert("Delete Team Permanently:" + team.getName()));
     }
   }
 
@@ -67,6 +67,8 @@ public class SystemManager extends Role implements Serializable
       for (Page page : fan.getPages()) {
         if (page.equals(teamPageToDelete)) {
           page.delete();
+          if(fans.size()==0)
+            return;
           break;
         }
       }
@@ -157,6 +159,46 @@ public class SystemManager extends Role implements Serializable
   public static boolean createAccount(Account accountToAdd){
     DataManager.addAccount(accountToAdd);
     return true;
+  }
+
+
+  /**
+   * creates a new Owner
+   */
+  public Account createOwner(String aName,int age,String userName, String password)
+  {
+    Owner owner=new Owner(aName,null,null);
+    Account account=new Account(aName,age,userName,password);
+    account.addRole(owner);
+    createAccount(account);
+    Logger.getInstance().writeNewLine(getName()+" just created a new owner: "+aName);
+    return account;
+  }
+
+  /**
+   * creates a new System Manager
+   */
+  public Account createSystemManager(String aName,int age,String userName, String password)
+  {
+    SystemManager systemManager=new SystemManager(aName);
+    Account account=new Account(aName,age,userName,password);
+    account.addRole(systemManager);
+    createAccount(account);
+    Logger.getInstance().writeNewLine(getName()+" just created a new System Manager: "+aName);
+    return account;
+  }
+
+  /**
+   * creates a new Association Representative
+   */
+  public Account createAssociationRepresentative(String aName,int age,String userName, String password)
+  {
+    AssociationRepresentative associationRepresentative=new AssociationRepresentative(aName);
+    Account account=new Account(aName,age,userName,password);
+    account.addRole(associationRepresentative);
+    createAccount(account);
+    Logger.getInstance().writeNewLine(getName()+" just created a new Association Representative: "+aName);
+    return account;
   }
 
 }

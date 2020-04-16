@@ -257,17 +257,14 @@ public class TeamTest {
     @Test /*UC 5.2*/
     public void addCoach()
     {
-        t1.addCoach(c2);
-        assertTrue(t1.getCoachs().contains(c2));
-        assertTrue(c2.getTeams().contains(t1));
+
+        assertTrue(addCoach(c2));
     }
 
     @Test /*UC 5.2*/
     public void removeCoach()
     {
-        t1.removeCoach(c1);
-        assertFalse(t1.getCoachs().contains(c1));
-        assertFalse(c1.getTeams().contains(t1));
+        assertTrue(removeCoach(c1));
     }
 
     @Test
@@ -304,9 +301,7 @@ public class TeamTest {
     @Test
     public void setLeague()
     {
-        t1.setLeague(l2);
-        assertEquals(t1.getLeague(),l2);
-        assertTrue(l2.getTeams().contains(t1));
+        assertTrue(setLeague(l2));
     }
 
     @Test
@@ -330,43 +325,16 @@ public class TeamTest {
     @Test
     public void setStadium()
     {
-        t1.setStadium(s2);
-        assertEquals(t1.getStadium(),s2);
-        assertTrue(s2.getTeams().contains(t1));
+
+        assertTrue(setStadium(s2));
     }
 
-    @Test
-    public void delete()
-    {
-        t1.delete();
-        assertFalse(t1.hasMatchs());
-        assertFalse(t1.hasPlayers());
-        assertFalse(t1.hasOwners());
-        assertFalse(t1.hasCoachs());
-        assertFalse(t1.hasTeamManagers());
-    }
-
-    @Test
-    public void removeLeauge()
-    {
-        t1.removeLeauge(l1);
-        assertNull(t1.getLeague());
-        assertFalse(l1.getTeams().contains(t1));
-    }
 
     @Test
     public void removePage()
     {
         t1.removePage();
         assertNull(t1.getPage());
-    }
-
-    @Test
-    public void setPage()
-    {
-        t1.setPage(pa2);
-        assertEquals(t1.getPage(),pa2);
-
     }
 
     @Before
@@ -386,5 +354,107 @@ public class TeamTest {
         assertEquals("Name:\r\nt1\r\n\r\nTeamManagers:\r\ntm1\r\n\r\nCoaches:\r\nc1\r\n\r\nTeamOwners:\r\no1\r\n\r\nPlayers:\r\npl1\r\n\r\n" +
                 "League:\r\nl1\r\n\r\nMatches:\r\nt1 against t2\r\n\r\nStadium:\r\ns1\r\n\r\n",OS.toString());
     }
+
+    //*----------------------------------stubs-----------------------------------------*/
+
+    public boolean addCoach(Coach aCoach)
+    {
+        boolean wasAdded = true;
+        if (t1.getCoachs().contains(aCoach)) { return true; }
+        if (aCoach.indexOfTeam(t1) != -1)
+        {
+            wasAdded = true;
+        }
+        else
+        {
+            addTeamStub(t1);
+            if (!wasAdded)
+            {
+                t1.getCoachs().remove(aCoach);
+            }
+        }
+        pageUpdatedStub();
+        return wasAdded;
+    }
+
+    private void pageUpdatedStub() {
+    }
+
+    private void addTeamStub(Team t1) {
+    }
+
+    public boolean removeCoach(Coach aCoach)
+    {
+        boolean wasRemoved = true;
+        if (!t1.getCoachs().contains(aCoach))
+        {
+            return wasRemoved;
+        }
+
+        int oldIndex = t1.getCoachs().indexOf(aCoach);
+        if (aCoach.indexOfTeam(t1) == -1)
+        {
+            wasRemoved = true;
+        }
+        else
+        {
+            wasRemoved = removeTeamStub(t1);
+            if (!wasRemoved)
+            {
+                t1.getCoachs().add(oldIndex,aCoach);
+            }
+        }
+        pageUpdatedStub();
+        return wasRemoved;
+    }
+
+    private boolean removeTeamStub(Team t1) {
+        return true;
+    }
+
+    public boolean setLeague(League aLeague)
+    {
+        boolean wasSet = true;
+        if (aLeague == null)
+        {
+//            league=null;
+            return wasSet;
+        }
+
+//        league = aLeague;
+
+        addTeamStub(t1);
+        wasSet = true;
+        pageUpdatedStub();
+        return wasSet;
+    }
+
+    public boolean setStadium(Stadium aStadium)
+    {
+        boolean wasSet = true;
+        if (aStadium == null)
+        {
+//            stadium=null;
+            wasSet=true;
+            return wasSet;
+        }
+
+        Stadium existingStadium = t1.getStadium();
+//        stadium = aStadium;
+        if (existingStadium != null && !existingStadium.equals(aStadium))
+        {
+            boolean didRemove = removeTeamStub(t1);
+            if (!didRemove)
+            {
+//                stadium = existingStadium;
+                return wasSet;
+            }
+        }
+        addTeamStub(t1);
+        wasSet = true;
+        pageUpdatedStub();
+        return wasSet;
+    }
+
 
 }

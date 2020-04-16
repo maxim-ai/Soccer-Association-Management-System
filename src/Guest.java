@@ -156,7 +156,6 @@ public class Guest implements Serializable {
           season.ShowSeason();
       }
     }
-//    if(criterion.equals("Keyword")){ } //***********************************************************
   }
 
   public void Filter(String category,String roleFilter){

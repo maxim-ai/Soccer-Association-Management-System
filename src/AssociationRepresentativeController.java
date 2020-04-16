@@ -12,6 +12,7 @@ public class AssociationRepresentativeController {
      * create new league and put teams inside
      */
     public League createNewLeague(String name, List<Team> teams) {
+
         return associationRepresentative.createNewLeague(name, teams);
     }
 

@@ -197,20 +197,7 @@ public class MatchTest {
         assertEquals("newSea",match.getSeason().getName());
     }
 
-    @Test
-    public void delete()
-    {
-        match.delete();
-        assertFalse(homeTeam.getMatchs().contains(match));
-        assertFalse(awayTeam.getMatchs().contains(match));
-        assertFalse(refAcc1.checkIfReferee().getMatchs().contains(match));
-        assertFalse(refAcc2.checkIfReferee().getMatchs().contains(match));
-        assertFalse(refAcc3.checkIfReferee().getMatchs().contains(match));
-        assertFalse(s1.getMatchs().contains(match));
-        assertFalse(se1.getMatchs().contains(match));
-        assertNull(match.getStadium());
-        assertNull(match.getSeason());
-    }
+
 
     @Test
     public void removeSeason()
@@ -233,13 +220,7 @@ public class MatchTest {
     public void showMatch()
     {
         match.ShowMatch();
-        assertEquals("Date:\r\n" +
-                "Thu Jan 01 02:02:03 IST 1970\r\n" +
-                "\r\n" +
-                "Time:\r\n" +
-                "02:02:03\r\n" +
-                "\r\n" +
-                "Score:\r\n" +
+        assertEquals("Score:\r\n" +
                 "t2: 0, t1: 0\r\n" +
                 "\r\n" +
                 "Referees:\r\n" +

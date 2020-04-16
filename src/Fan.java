@@ -9,6 +9,7 @@ public class Fan extends Role implements Serializable
   private List<String[]> searchHistory; //String[0]: criterion, String[1]: query
 
 
+
   public Fan(String aName)
   {
     super(aName);
@@ -209,6 +210,7 @@ public class Fan extends Role implements Serializable
     (Logger.getInstance()).writeNewLine("Fan "+this.getName()+" eddited his personal infomation");
   }
   //endregion
+
 
 
 

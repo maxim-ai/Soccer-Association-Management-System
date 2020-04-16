@@ -166,13 +166,7 @@ public class RefereeTest {
         Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,null,lineRefereeOne,lineRefereeTwo);
         referee.addMatch(match,"main");
         referee.displayAllMatches();
-        assertEquals("Date:\r\n" +
-                date.toString()+"\r\n" +
-                "\r\n" +
-                "Time:\r\n" +
-                time.toString()+"\r\n" +
-                "\r\n" +
-                "Score:\r\n" +
+        assertEquals("Score:\r\n" +
                 "Ofakim: 0, B7: 1\r\n" +
                 "\r\n" +
                 "Referees:\r\n" +

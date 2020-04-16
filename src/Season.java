@@ -158,10 +158,8 @@ public class Season implements Serializable
     System.out.println();
     System.out.println("Matches:");
     for(Match match:this.getMatchs())
-      match.ShowMatch();
+      System.out.println(match.getAwayTeam().getName()+" against "+match.getHomeTeam().getName());
   }
-
-
 
 
   private boolean compareTwoMatchLists(List<Match> a, List<Match> b){
