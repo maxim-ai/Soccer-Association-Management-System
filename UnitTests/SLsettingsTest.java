@@ -1,7 +1,7 @@
 import org.junit.Test;
 
 public class SLsettingsTest {
-    
+
 
     @Test
     public void setRefereeList() {
