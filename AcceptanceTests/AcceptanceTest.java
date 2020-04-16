@@ -7,6 +7,7 @@ import java.security.Permission;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -56,6 +57,115 @@ public class AcceptanceTest {
         List<Object> controllerList=guestController.LogIn("Owner1X","Password");
         OwnerController ownerController=(OwnerController) controllerList.get(2);
     }
+
+
+    //Association Representative UseCases
+    @Test
+    public void UCsetNewSeason(){
+        GuestController guestController=OurSystem.makeGuestController();
+        List<Object> controllerList=guestController.LogIn("AR1X","Password");
+        AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+        Season season = associationRepresentativeController.setNewSeason("2020");
+        assertNotNull(season);
+
+
+        UCcreateNewLeague();
+        UCsetYearToLeague();
+        UCaddNewReferee();
+        UCaddRefereeToLeague();
+        UCsetLeaguePointCalcPolicy();
+        UCsetLeagueGameSchedualPolicy();
+
+    }
+
+
+    @Test
+    public void UCcreateNewLeague(){ //UC 9.1
+        GuestController guestController=OurSystem.makeGuestController();
+        List<Object> controllerList=guestController.LogIn("AR1X","Password");
+        AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+        List<Team> teamList = new LinkedList<>();
+        teamList.add(team1);
+        teamList.add(team2);
+        League league3 = associationRepresentativeController.createNewLeague("League3",teamList);
+        assertNotNull("The league was'nt created! Check if the team list contains teams",league3);
+        assertEquals("League3",league3.getName());
+        assertTrue(league3.hasTeams());
+        assertEquals(team1,league3.getTeam(0));
+        assertEquals(team2,league3.getTeam(1));
+    }
+
+    @Test
+    public void UCsetYearToLeague(){ //UC 9.2
+        GuestController guestController=OurSystem.makeGuestController();
+        List<Object> controllerList=guestController.LogIn("AR1X","Password");
+        AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+        assertTrue(associationRepresentativeController.setYearToLeague(league1,"2021"));
+        Season season2021=null;
+        for(Season season: DataManager.getSeasons()){
+            if(season.getName().equals("2021")){
+                season2021=season;
+            }
+        }
+        if(season2021!=null)
+            assertNotNull("The link between league and season wasn't created",league1.getSLsettingsBySeason(season2021));
+
+    }
+
+    @Test
+    public void UCdeleteReferee(){ //UC 9.3
+        GuestController guestController=OurSystem.makeGuestController();
+        List<Object> controllerList=guestController.LogIn("AR1X","Password");
+        AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+        associationRepresentativeController.deleteReferee(referee1);
+        //DataManager.getRefereesFromAccounts().contains(referee1);
+        assertTrue(referee1.getMatchs().isEmpty());
+    }
+
+    @Test
+    public void UCaddNewReferee(){ //UC 9.3.1
+        GuestController guestController=OurSystem.makeGuestController();
+        List<Object> controllerList=guestController.LogIn("AR1X","Password");
+        AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+        Referee referee9 = associationRepresentativeController.addNewReferee("Complete","Referee9",26,"Referee9X","Password");
+        assertNotNull(referee9);
+        assertEquals("Referee9",referee9.getName());
+        assertFalse("Invitation was'nt sent to the referee",referee9.getAlertList().isEmpty());
+
+        Referee referee10=associationRepresentativeController.createNewReferee(refAccount1,"Complete","Referee10");
+        assertNotNull(referee10);
+        assertEquals("Referee10",referee10.getName());
+    }
+
+    @Test
+    public void UCaddRefereeToLeague(){ //9.4
+        GuestController guestController=OurSystem.makeGuestController();
+        List<Object> controllerList=guestController.LogIn("AR1X","Password");
+        AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+        assertTrue(associationRepresentativeController.addRefereeToLeague(referee1,league2,season));
+        assertTrue(league2.getSLsettingsBySeason(season).getReferees().contains(referee1));
+    }
+
+    @Test
+    public void UCsetLeaguePointCalcPolicy(){ //9.5
+        GuestController guestController=OurSystem.makeGuestController();
+        List<Object> controllerList=guestController.LogIn("AR1X","Password");
+        AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+        String twoPointsPolicy = "Goal equals 2 points";
+        assertTrue(associationRepresentativeController.setLeaguePointCalcPolicy(league1,policy1,season,twoPointsPolicy));
+        assertEquals(twoPointsPolicy,league1.getSLsettingsBySeason(season).getPolicy().getPointCalc());
+    }
+
+    @Test
+    public void UCsetLeagueGameSchedualPolicy(){ //9.6
+        GuestController guestController=OurSystem.makeGuestController();
+        List<Object> controllerList=guestController.LogIn("AR1X","Password");
+        AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+        String twoTeamsEachTime = "two teams play twice against each other";
+        assertTrue(associationRepresentativeController.setLeagueGameSchedualPolicy(league1,policy1,season,twoTeamsEachTime));
+        assertEquals(twoTeamsEachTime,league1.getSLsettingsBySeason(season).getPolicy().getGameSchedual());
+    }
+
 
     private void InitDatabase() {
 
@@ -257,10 +367,10 @@ public class AcceptanceTest {
 
         //region Match creation
         match1=new Match(new Date(),new Time(22,0,0),0,0,stadium1,season
-                ,team2,team1,referee1,referee2,referee3);
+                ,team2,team1,null,null,null);
 
         match2=new Match(new Date(),new Time(19,0,0),0,0,stadium4,season
-                ,team3,team4,referee4,referee5,referee6);
+                ,team3,team4,null,null,null);
         //endregion
 
         //region Referess match setting
@@ -357,6 +467,8 @@ public class AcceptanceTest {
         //endregion
 
         //region Datamanager adding
+        DataManager.addAccount(arAccount1);
+        DataManager.addAccount(arAccount2);
         DataManager.addAccount(refAccount1);
         DataManager.addAccount(refAccount2);
         DataManager.addAccount(refAccount3);
