@@ -11,7 +11,6 @@ public class AlertTest {
         alert=new Alert("aaa");
     }
 
-    //region Getters&Setters Tests
     @Test
     public void setDescription() {
         alert.setDescription("bbb");
@@ -27,15 +26,4 @@ public class AlertTest {
     public void testToString() {
         assertEquals("description: aaa","description: "+alert.getDescription());
     }
-    //endregion
-
-    //region UC and Technical Tests
-    @Test
-    public void notifyOtherRole() {
-        Role coach=new Fan("maxim");
-        Alert.notifyOtherRole(alert.getDescription(),coach);
-        assertEquals(coach.getAlertList().size(),1);
-        assertEquals(coach.getAlertList().get(0).getDescription(),"aaa");
-    }
-    //endregion
 }

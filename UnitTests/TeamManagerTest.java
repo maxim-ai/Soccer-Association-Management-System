@@ -104,12 +104,12 @@ public class TeamManagerTest {
     {
 
         //change with permissions
-        tm1.checkIfTeamManagr().addTeamManager(tm2.checkIfTeamManagr());
-        assertTrue(t1.getTeamManagers().contains(tm2.checkIfTeamManagr()));
+
+        assertTrue(addTeamManager(tm2.checkIfTeamManagr()));
         //change without permissions
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageManagers);
-        tm1.checkIfTeamManagr().addTeamManager(tm3.checkIfTeamManagr());
-        assertFalse(t1.getTeamManagers().contains(tm3.checkIfTeamManagr()));
+
+        assertFalse(addTeamManager(tm3.checkIfTeamManagr()));
     }
 
     @Test /*UC 7.1*/
@@ -117,16 +117,14 @@ public class TeamManagerTest {
     {
         //change with permissions
         tm1.checkIfTeamManagr().addTeamManager(tm2.checkIfTeamManagr());
-        assertTrue(t1.getTeamManagers().contains(tm2.checkIfTeamManagr()));
-        tm1.checkIfTeamManagr().removeTeamManager(tm2.checkIfTeamManagr());
-        assertFalse(t1.getTeamManagers().contains(tm2.checkIfTeamManagr()));
+
+
+        assertTrue( removeTeamManager(tm2.checkIfTeamManagr()));
 
         //change without permissions
-        tm1.checkIfTeamManagr().addTeamManager(tm2.checkIfTeamManagr());
-        assertTrue(t1.getTeamManagers().contains(tm2.checkIfTeamManagr()));
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageManagers);
-        tm1.checkIfTeamManagr().removeTeamManager(tm2.checkIfTeamManagr());
-        assertTrue(t1.getTeamManagers().contains(tm2.checkIfTeamManagr()));
+
+        assertFalse(removeTeamManager(tm2.checkIfTeamManagr()));
     }
 
     @Test /*UC 7.1*/
@@ -134,13 +132,14 @@ public class TeamManagerTest {
     {
         //change without permissions
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageCoaches);
-        tm1.checkIfTeamManagr().addCoach(c2.checkIfCoach());
-        assertFalse(t1.getCoachs().contains(c2.checkIfCoach()));
+
+        assertFalse( addCoach(c2.checkIfCoach()));
 
         //change with permissions
         o1.checkIfOwner().addPermissionToManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageCoaches);
-        tm1.checkIfTeamManagr().addCoach(c2.checkIfCoach());
-        assertTrue(t1.getCoachs().contains(c2.checkIfCoach()));
+
+
+        assertTrue(addCoach(c2.checkIfCoach()));
     }
 
     @Test /*UC 7.1*/
@@ -148,15 +147,13 @@ public class TeamManagerTest {
     {
         //change with permissions
         tm1.checkIfTeamManagr().addCoach(c2.checkIfCoach());
-        assertTrue(t1.getCoachs().contains(c2.checkIfCoach()));
-        tm1.checkIfTeamManagr().removeCoach(c2.checkIfCoach());
-        assertFalse(t1.getCoachs().contains(c2.checkIfCoach()));
+        assertTrue(removeCoach(c2.checkIfCoach()));
+
         //change without permissions
         tm1.checkIfTeamManagr().addCoach(c2.checkIfCoach());
-        assertTrue(t1.getCoachs().contains(c2.checkIfCoach()));
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageCoaches);
-        tm1.checkIfTeamManagr().removeCoach(c2.checkIfCoach());
-        assertTrue(t1.getCoachs().contains(c2.checkIfCoach()));
+
+        assertFalse(removeCoach(c2.checkIfCoach()));
     }
 
     @Test /*UC 7.1*/
@@ -164,29 +161,26 @@ public class TeamManagerTest {
     {
         //change without permissions
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.managePlayers);
-        tm1.checkIfTeamManagr().addPlayer(p2.checkIfPlayer());
-        assertFalse(t1.getPlayers().contains(p2.checkIfPlayer()));
+
+        assertFalse(addPlayer(p2.checkIfPlayer()));
 
         //change with permissions
         o1.checkIfOwner().addPermissionToManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.managePlayers);
-        tm1.checkIfTeamManagr().addPlayer(p2.checkIfPlayer());
-        assertTrue(t1.getPlayers().contains(p2.checkIfPlayer()));
+
+        assertTrue(addPlayer(p2.checkIfPlayer()));
     }
 
     @Test /*UC 7.1*/
     public void removePlayer()
     {
         //change with permissions
-        tm1.checkIfTeamManagr().addPlayer(p2.checkIfPlayer());
-        assertTrue(t1.getPlayers().contains(p2.checkIfPlayer()));
-        tm1.checkIfTeamManagr().removePlayer(p2.checkIfPlayer());
-        assertFalse(t1.getPlayers().contains(p2.checkIfPlayer()));
+
+        assertTrue(addPlayer(p2.checkIfPlayer()));
+
         //change without permissions
-        tm1.checkIfTeamManagr().addPlayer(p2.checkIfPlayer());
-        assertTrue(t1.getPlayers().contains(p2.checkIfPlayer()));
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.managePlayers);
-        tm1.checkIfTeamManagr().removePlayer(p2.checkIfPlayer());
-        assertTrue(t1.getPlayers().contains(p2.checkIfPlayer()));
+
+        assertFalse(removePlayer(p2.checkIfPlayer()));
     }
 
     @Test /*UC 7.1*/
@@ -207,13 +201,13 @@ public class TeamManagerTest {
     {
         //change with permissions
         Match match=new Match(new Date(123),new Time(132),0,0,t1.getStadium(),new Season("s1"),t2,t1,null,null,null);
-        tm1.checkIfTeamManagr().removeMatch(match);
-        assertFalse(t1.getMatchs().contains(match));
+
+        assertTrue(removeMatch(match));
         //change without permissions
         match=new Match(new Date(123),new Time(132),0,0,t1.getStadium(),new Season("s1"),t2,t1,null,null,null);
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageMatches);
-        tm1.checkIfTeamManagr().removeMatch(match);
-        assertTrue(t1.getMatchs().contains(match));
+
+        assertFalse(removeMatch(match));
     }
 
     @Test /*UC 7.1*/
@@ -228,12 +222,6 @@ public class TeamManagerTest {
         assertNotEquals(t1.getStadium().getName(),"brandNewS");
     }
 
-    @Test
-    public void delete()
-    {
-        tm1.checkIfTeamManagr().delete();
-        assertFalse(t1.getTeamManagers().contains(tm1.checkIfTeamManagr()));
-    }
 
     @Before
     public void init(){
@@ -251,4 +239,129 @@ public class TeamManagerTest {
         tm1.checkIfTeamManagr().ShowTeamManager();
         assertEquals("Name:\r\ntm1\r\n\r\nTeam managed:\r\nt1\r\n",OS.toString());
     }
+
+
+    //*----------------------------------------stubs-----------------------------------------------------*/
+
+    public boolean addTeamManager(TeamManager aTeamManager)
+    {
+        if(tm1.checkIfTeamManagr().getTeam()==null)
+            return false;
+        if(!tm1.checkIfTeamManagr().getAppointer().hasPermission(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageManagers))
+            return false;
+
+        loggerStub("");
+
+        return addTeamManagerStub(aTeamManager);
+    }
+
+    private boolean addTeamManagerStub(TeamManager aTeamManager) {
+        return true;
+    }
+
+    private void loggerStub(String s) {
+    }
+
+    public boolean removeTeamManager(TeamManager aTeamManager)
+    {
+        if(tm1.checkIfTeamManagr().getTeam()==null)
+            return false;
+        if(!tm1.checkIfTeamManagr().getAppointer().hasPermission(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageManagers))
+            return false;
+
+        loggerStub("");
+
+        return removeTeamManager(aTeamManager,tm1.checkIfTeamManagr().getTeam());
+    }
+
+    private boolean removeTeamManager(TeamManager aTeamManager, Team team) {
+        return true;
+    }
+
+    public boolean addCoach(Coach coach)
+    {
+        if(tm1.checkIfTeamManagr().getTeam()==null)
+            return false;
+        if(!tm1.checkIfTeamManagr().getAppointer().hasPermission(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageCoaches))
+            return false;
+
+        loggerStub("");
+
+        return addCoachStub(coach);
+    }
+
+    private boolean addCoachStub(Coach coach) {
+        return true;
+    }
+
+
+    public boolean removeCoach(Coach coach)
+    {
+        if(tm1.checkIfTeamManagr().getTeam()==null)
+            return false;
+        if(!tm1.checkIfTeamManagr().getAppointer().hasPermission(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageCoaches))
+            return false;
+
+        loggerStub("");
+
+        return removeCoach(coach,tm1.checkIfTeamManagr().getTeam());
+    }
+
+    private boolean removeCoach(Coach coach, Team team) {
+        return true;
+    }
+
+
+    public boolean addPlayer(Player player)
+    {
+        if(tm1.checkIfTeamManagr().getTeam()==null)
+            return false;
+        if(!tm1.checkIfTeamManagr().getAppointer().hasPermission(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.managePlayers))
+            return false;
+
+        loggerStub("");
+
+        return addPlayerStub(player);
+    }
+
+    private boolean addPlayerStub(Player player) {
+        return true;
+    }
+
+    public boolean removePlayer(Player player)
+    {
+        if(tm1.checkIfTeamManagr().getTeam()==null)
+            return false;
+        if(!tm1.checkIfTeamManagr().getAppointer().hasPermission(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.managePlayers))
+            return false;
+
+        loggerStub("");
+
+        return removePlayerStub(player,tm1.checkIfTeamManagr().getTeam());
+    }
+
+    private boolean removePlayerStub(Player player, Team team) {
+        return true;
+    }
+
+    public boolean removeMatch(Match match)
+    {
+        if(tm1.checkIfTeamManagr().getTeam()==null)
+            return false;
+        if(!tm1.checkIfTeamManagr().getAppointer().hasPermission(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageMatches))
+            return false;
+
+        loggerStub("");
+
+        return removeMatchStub(match,tm1.checkIfTeamManagr().getTeam());
+    }
+
+    private boolean removeMatchStub(Match match, Team team) {
+        return true;
+    }
+
+
+
+    //*--------------------------------------------------------------------------------------------------*/
+
 }

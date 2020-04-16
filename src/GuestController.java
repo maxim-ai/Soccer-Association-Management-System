@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class GuestController {
     private Guest guest;
 
@@ -17,14 +19,13 @@ public class GuestController {
     //endregion
 
     //region Transition Methods
-    public boolean LogIn(String UserName,String Password){
-        if(UserName.length()==0||Password.length()==0) return false;
+    public List<Object> LogIn(String UserName, String Password){
+        if(UserName.length()==0||Password.length()==0) return null;
         Account account=guest.LogIn(UserName,Password);
         if(account==null)
-            return false;
+            return null;
         OurSystem.addAccount(account);
-        OurSystem.makeControllersByRoles(account);
-        return true;
+        return OurSystem.makeControllersByRoles(account);
     }
 
     public boolean SignIn(String name, int age, String UserName, String Password){

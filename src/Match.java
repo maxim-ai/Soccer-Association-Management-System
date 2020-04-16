@@ -102,7 +102,7 @@ public class Match implements Serializable
 
   public void setAwayTeam(Team awayTeam) {
     this.awayTeam = awayTeam;
-    if(homeTeam==null) return;
+    if(awayTeam==null) return;
     if(awayTeam.indexOfMatch(this)==-1)
       awayTeam.addMatch(this,"away");
 
@@ -248,12 +248,6 @@ public class Match implements Serializable
   }
 
   public void ShowMatch(){
-    System.out.println("Date:");
-    System.out.println(this.getDate());
-    System.out.println();
-    System.out.println("Time:");
-    System.out.println(this.getTime());
-    System.out.println();
     System.out.println("Score:");
     System.out.println(this.getHomeTeam().getName()+": "+this.getHomeScore()+", "+this.getAwayTeam().getName()+": "+this.getAwayScore());
     System.out.println();

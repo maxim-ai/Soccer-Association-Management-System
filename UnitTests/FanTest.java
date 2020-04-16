@@ -6,6 +6,7 @@ import java.io.*;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -13,6 +14,7 @@ import static org.junit.Assert.*;
 public class FanTest {
     Fan fan;
     Account account1;Account account2;League league;Stadium stadium;Season season;Team team;Page playerPage;Page teamPage;
+    TeamManager teamManager; Owner owner; Match match;
     private final ByteArrayOutputStream OS=new ByteArrayOutputStream();
     private final PrintStream PS=System.out;
 
@@ -28,6 +30,12 @@ public class FanTest {
         stadium=new Stadium("Teddy");
         season=new Season("Winter");
         team=new Team("Barcelona",league,stadium);
+        teamManager=new TeamManager("Yossi", team,null);
+        owner=new Owner("Haim", team,null);
+        match=new Match(new Date(),new Time(22,0,0),3,2,stadium,season,team,new Team("Rome",league,stadium),null,null,null);
+        team.addMatch(match,"home");
+        team.addOwner(owner);
+        team.addTeamManager(teamManager);
         ((Player)account1.getRole(0)).setTeam(team);
         ((Coach)account2.getRole(0)).addTeam(team);
         playerPage=new Page((Player)account1.getRole(0));
@@ -38,7 +46,7 @@ public class FanTest {
         fan.addPage(teamPage);
         playerPage.addFan(fan);
         teamPage.addFan(fan);
-        DataManager.cleatDataBase();
+        DataManager.clearDataBase();
         DataManager.addAccount(account1);
         DataManager.addAccount(account2);
         DataManager.addLeague(league);
@@ -149,138 +157,129 @@ public class FanTest {
     //endregion
 
     //region UC and Technical Tests
+
+    //region Stub Tests
     @Test
     public void showInfoAboutTeams() {
-        fan.ShowInfo("Teams");
-        String s="Name:\r\nBarcelona\r\n\r\nTeamManagers:\r\n\r\nCoaches:\r\nTzlil\r\n\r\nTeamOwners:\r\n\r\nPlayers:\r\nMaxim\r\n\r\n" +
-                "League:\r\nInternational\r\n\r\nMatches:\r\n\r\nStadium:\r\nTeddy\r\n\r\n";
+        ShowInfo("Teams");
+        String s="Team\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutPlayers(){
-        fan.ShowInfo("Players");
-        String s="Name:\r\nMaxim\r\n\r\nAge:\r\n26\r\n\r\nPosition:\r\nGoalkeeper\r\n\r\nTeam:\r\nBarcelona\r\n";
+        ShowInfo("Players");
+        String s="Player\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutCoaches(){
-        fan.ShowInfo("Coaches");
-        String s="Name:\r\nTzlil\r\n\r\nTraining:\r\naaa\r\n\r\nTeamRole:\r\nbbb\r\n\r\nTeamsCoaching:\r\nBarcelona\r\n";
+        ShowInfo("Coaches");
+        String s="Coach\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutLeagues(){
-        fan.ShowInfo("Leagues");
-        String s="Name:\r\nInternational\r\n\r\nTeams in league:\r\nBarcelona\r\n\r\n";
+        ShowInfo("Leagues");
+        String s="League\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutSeasons(){
-        fan.ShowInfo("Seasons");
-        String s="Name:\r\nWinter\r\n\r\nMatches:\r\n";
+        ShowInfo("Seasons");
+        String s="Season\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void searchName() {
-        fan.Search("Name","Barcelona");
-        String s="Teams with the name Barcelona\r\nName:\r\nBarcelona\r\n\r\nTeamManagers:\r\n\r\nCoaches:\r\nTzlil" +
-                "\r\n\r\nTeamOwners:\r\n\r\nPlayers:\r\nMaxim\r\n\r\nLeague:\r\nInternational\r\n\r\nMatches:\r\n\r\nStadium:\r\nTeddy\r\n\r\n";
+        Search("Name","Barcelona");
+        String s="Teams with the name Barcelona\r\nTeam\r\n";
         assertEquals(OS.toString(),s);
-        List<String[]> searchHistory=fan.getSearchHistory();
-        assertTrue(searchHistory.get(0)[0].equals("Name"));
-        assertTrue(searchHistory.get(0)[1].equals("Barcelona"));
     }
     @Test
     public void searchCategoryTeams() {
-        fan.Search("Category","Teams");
-        String s="Name:\r\nBarcelona\r\n\r\nTeamManagers:\r\n\r\nCoaches:\r\nTzlil\r\n\r\nTeamOwners:\r\n\r\nPlayers:\r\nMaxim\r\n\r\n" +
-                "League:\r\nInternational\r\n\r\nMatches:\r\n\r\nStadium:\r\nTeddy\r\n\r\n";
+        Search("Category","Teams");
+        String s="Team\r\n";
         assertEquals(OS.toString(),s);
-        List<String[]> searchHistory=fan.getSearchHistory();
-        assertTrue(searchHistory.get(0)[0].equals("Category"));
-        assertTrue(searchHistory.get(0)[1].equals("Teams"));
-
     }
     @Test
     public void searchCategoryAccounts() {
-        fan.Search("Category","Accounts");
-        String s="Name:\r\nMaxim\r\n\r\nAge:\r\n26\r\n\r\nRoles:\r\nPlayer\r\n\r\nName:\r\nTzlil\r\n\r\nAge:\r\n26\r\n\r\n" +
-                "Roles:\r\nCoach\r\n\r\n";
+        Search("Category","Accounts");
+        String s="Account\r\nAccount\r\n";
         assertEquals(OS.toString(),s);
-        List<String[]> searchHistory=fan.getSearchHistory();
-        assertTrue(searchHistory.get(0)[0].equals("Category"));
-        assertTrue(searchHistory.get(0)[1].equals("Accounts"));
     }
     @Test
     public void searchCategoryLeagues() {
-        fan.Search("Category","Leagues");
-        String s="Name:\r\nInternational\r\n\r\nTeams in league:\r\nBarcelona\r\n\r\n";
+        Search("Category","Leagues");
+        String s="League\r\n";
         assertEquals(OS.toString(),s);
-        List<String[]> searchHistory=fan.getSearchHistory();
-        assertTrue(searchHistory.get(0)[0].equals("Category"));
-        assertTrue(searchHistory.get(0)[1].equals("Leagues"));
     }
     @Test
     public void searchCategorySeasons() {
-        fan.Search("Category","Seasons");
-        String s="Name:\r\nWinter\r\n\r\nMatches:\r\n";
+        Search("Category","Seasons");
+        String s="Season\r\n";
         assertEquals(OS.toString(),s);
-        List<String[]> searchHistory=fan.getSearchHistory();
-        assertTrue(searchHistory.get(0)[0].equals("Category"));
-        assertTrue(searchHistory.get(0)[1].equals("Seasons"));
     }
     @Test
     public void filterRolePlayers() {
-        fan.Filter("Role","Players");
-        String s="Name:\r\nMaxim\r\n\r\nAge:\r\n26\r\n\r\nPosition:\r\nGoalkeeper\r\n\r\nTeam:\r\nBarcelona\r\n";
+        Filter("Role","Players");
+        String s="Player\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterRoleCoaches() {
-        fan.Filter("Role","Coaches");
-        String s="Name:\r\nTzlil\r\n\r\nTraining:\r\naaa\r\n\r\nTeamRole:\r\nbbb\r\n\r\nTeamsCoaching:\r\nBarcelona\r\n";
+        Filter("Role","Coaches");
+        String s="Coach\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterRoleTeamManagers() {
-        fan.Filter("Role","TeamManagers");
-        String s="";
-        assertEquals(OS.toString(),s);
+        Account checkAccount1=new Account("Tom",30,"TomX","1234");
+        DataManager.addAccount(checkAccount1);
+        checkAccount1.addRole(new Owner("Tom", team,null));
+        Account checkAccount2=new Account("Tommy",30,"TommyX","1234");
+        DataManager.addAccount(checkAccount2);
+        checkAccount2.addRole(new TeamManager("Tommy", team,(Owner)checkAccount1.getRoles().get(0)));
+        Filter("Role","TeamManagers");
+        String s="TeamManager\r\n";
+        assertEquals(s,OS.toString());
     }
     @Test
     public void filterRoleOwners() {
-        fan.Filter("Role","Owners");
-        String s="";
-        assertEquals(OS.toString(),s);
+        Account checkAccount=new Account("Tom",30,"TomX","1234");
+        DataManager.addAccount(checkAccount);
+        checkAccount.addRole(new Owner("Tom", team,null));
+        Filter("Role","Owners");
+        String s="Owner\r\n";
+        assertEquals(s,OS.toString());
     }
     @Test
     public void filterRoleReferees() {
         Account account3=new Account("Eitan",25,"EitanX","1234");
         account3.addRole(new Referee("Abroad","Eitan"));
         DataManager.addAccount(account3);
-        fan.Filter("Role","Referees");
-        String s="Name:\r\nEitan\r\n\r\nTraining:\r\nAbroad\r\n\r\nMatches judged:\r\n";
+        Filter("Role","Referees");
+        String s="Referee\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterTeams(){
-        fan.Filter("Team","");
-        String s="Name:\r\nBarcelona\r\n\r\nTeamManagers:\r\n\r\nCoaches:\r\nTzlil\r\n\r\nTeamOwners:\r\n\r\nPlayers:\r\nMaxim\r\n\r\n" +
-                "League:\r\nInternational\r\n\r\nMatches:\r\n\r\nStadium:\r\nTeddy\r\n\r\n";
+        Filter("Team","");
+        String s="Team\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterLeagues(){
-        fan.Filter("League","");
-        String s="Name:\r\nInternational\r\n\r\nTeams in league:\r\nBarcelona\r\n\r\n";
+        Filter("League","");
+        String s="League\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterSeasons(){
-        fan.Filter("Season","");
-        String s="Name:\r\nWinter\r\n\r\nMatches:\r\n";
+        Filter("Season","");
+        String s="Season\r\n";
         assertEquals(OS.toString(),s);
     }
+    //endregion
 
     @Test
     public void logout() {
@@ -288,64 +287,24 @@ public class FanTest {
         assertEquals("Logged out\r\n",OS.toString());
         assertTrue(CheckLoggerLines("Fan Danny logged out"));
     }
-
     @Test
     public void subscribeTrackPersonalPages() {
         fan.SubscribeTrackPersonalPages();
         assertTrue(fan.isTrackPersonalPages());
     }
-
     @Test
     public void subscribeGetMatchNotifications(){
         fan.SubscribeGetMatchNotifications();
         assertTrue(fan.isGetMatchNotifications());
     }
-
-    @Test
-    public void notifyFansAboutMatch() {
-        Account checkAccount=new Account("Yossi",30,"YossiX","1234");
-        checkAccount.addRole(fan);
-        DataManager.addAccount(checkAccount);
-        Stadium checkStadium=new Stadium("Blumfield");
-        League checkLeague=new League("Haal");
-        Season checkSeason=new Season("Summer");
-        Referee ref1=new Referee("aaa","Eitan");
-        Referee ref2=new Referee("bbb","Tzlil");
-        Referee ref3=new Referee("bbb","Ziv");
-        Team checkTeam=new Team("Rome",checkLeague,checkStadium);
-        fan.SubscribeGetMatchNotifications();
-        Match checkMatch=new Match(new Date(),new Time(22,0,0),0,0,checkStadium,
-                checkSeason,team,checkTeam,ref1,ref2,ref3);
-        assertEquals("Barcelona against Rome",fan.getAlertList().get(0).getDescription());
-    }
-    @Test
-    public void report() {
-        OurSystem OS=new OurSystem();
-        OS.Initialize();
-        fan.Report("aaa");
-        CheckLoggerLines("Fan Danny sent report to the system manager");
-    }
-
-    @Test
-    public void showSearchHistory() {
-        fan.Search("Name","Barcelona");
-        fan.Search("Category","Leagues");
-        OS.reset();
-        fan.ShowSearchHistory();
-        String s="Teams with the name Barcelona\r\nName:\r\nBarcelona\r\n\r\nTeamManagers:\r\n\r\nCoaches:\r\nTzlil\r\n\r\nTeamOwners:\r\n\r\n" +
-                "Players:\r\nMaxim\r\n\r\nLeague:\r\nInternational\r\n\r\nMatches:\r\n\r\nStadium:\r\nTeddy\r\n\r\nName:\r\nInternational\r\n\r\n" +
-                "Teams in league:\r\nBarcelona\r\n\r\n";
-        assertEquals(s,OS.toString());
-    }
     @Test
     public void showPersonalInfo() {
         fan.ShowPersonalInfo();
-        String s="Name:\r\nDanny\r\n\r\nTeams Tracked:\r\nName:\r\nBarcelona\r\n\r\nTeamManagers:\r\n\r\nCoaches:\r\nTzlil\r\n\r\nTeamOwners:\r\n\r\n" +
-                "Players:\r\nMaxim\r\n\r\nLeague:\r\nInternational\r\n\r\nMatches:\r\n\r\nStadium:\r\nTeddy\r\n\r\nPlayers Tracked:\r\n" +
+        String s="Name:\r\nDanny\r\n\r\nTeams Tracked:\r\nName:\r\nBarcelona\r\n\r\nTeamManagers:\r\nYossi\r\n\r\nCoaches:\r\nTzlil\r\n\r\nTeamOwners:\r\nHaim\r\n\r\n" +
+                "Players:\r\nMaxim\r\n\r\nLeague:\r\nInternational\r\n\r\nMatches:\r\nBarcelona against Rome\r\n\r\nStadium:\r\nTeddy\r\n\r\nPlayers Tracked:\r\n" +
                 "Name:\r\nMaxim\r\n\r\nAge:\r\n26\r\n\r\nPosition:\r\nGoalkeeper\r\n\r\nTeam:\r\nBarcelona\r\n\r\nCoaches Tracked:\r\n";
         assertEquals(s,OS.toString());
     }
-
     @Test
     public void editPersonalInfo() {
         Account checkAccount=new Account("Eddie",27,"EddieX","1234");
@@ -356,13 +315,14 @@ public class FanTest {
         assertEquals("EddieX",checkAccount.getUserName());
         assertEquals("1234",checkAccount.getPassword());
     }
+
+
     //endregion
 
 
 
 
-
-
+    //region Help Methods
     private boolean CheckLoggerLines(String s) {
         String line= null;
         try {
@@ -376,4 +336,177 @@ public class FanTest {
         } catch (IOException e) { }
         return false;
     }
+    private void ShowInfo(String InfoAbout){
+        if(InfoAbout.equals("Teams")){
+            for(Team team: DataManager.getTeams())
+                ShowTeamStub();
+        }
+
+        if(InfoAbout.equals("Players")){
+            List<Player> players= DataManager.getPlayersFromAccounts();
+            for(Player player:players){
+                ShowPlayerStub();
+            }
+        }
+        if(InfoAbout.equals("Coaches")){
+            List<Coach> coaches= DataManager.getCoachesFromAccounts();
+            for(Coach coach:coaches){
+                ShowCoachStub();
+            }
+        }
+
+        if(InfoAbout.equals("Leagues")){
+            for(League league: DataManager.getLeagues())
+                ShowLeagueStub();
+        }
+
+        if(InfoAbout.equals("Seasons")){
+            for(Season season: DataManager.getSeasons())
+                ShowSeasonStub();
+        }
+
+    }
+    private void Search(String criterion, String query){
+        if(criterion.equals("Name")){
+            List<Team> teams=new LinkedList<>();
+            for(Team team: DataManager.getTeams()){
+                if(team.getName().equals(query))
+                    teams.add(team);
+            }
+            List<Account> accounts=new LinkedList<>();
+            for(Account account: DataManager.getAccounts()){
+                if(account.getName().equals(query))
+                    accounts.add(account);
+            }
+            List<League> leagues=new LinkedList<>();
+            for(League league: DataManager.getLeagues()){
+                if(league.getName().equals(query))
+                    leagues.add(league);
+            }
+            List<Season> seasons=new LinkedList<>();
+            for(Season season: DataManager.getSeasons()){
+                if(season.getName().equals(query))
+                    seasons.add(season);
+            }
+
+            if (!accounts.isEmpty()) {
+                System.out.println("Accounts with the name "+query);
+                for(Account account:accounts)
+                    ShowAccountStub();
+            }
+            if (!teams.isEmpty()) {
+                System.out.println("Teams with the name "+query);
+                for(Team team:teams)
+                    ShowTeamStub();
+            }
+            if (!leagues.isEmpty()) {
+                System.out.println("Leagues with the name "+query);
+                for(League league:leagues)
+                    ShowLeagueStub();
+            }
+            if (!seasons.isEmpty()) {
+                System.out.println("Seasons with the name "+query);
+                for(Season season:seasons)
+                    ShowSeasonStub();
+            }
+
+        }
+        if(criterion.equals("Category")){
+            if(query.equals("Teams")){
+                for(Team team: DataManager.getTeams())
+                    ShowTeamStub();
+            }
+            if(query.equals("Accounts")){
+                for(Account account: DataManager.getAccounts())
+                    ShowAccountStub();
+            }
+            if(query.equals("Leagues")){
+                for(League league: DataManager.getLeagues())
+                    ShowLeagueStub();
+            }
+            if(query.equals("Seasons")){
+                for(Season season: DataManager.getSeasons())
+                    ShowSeasonStub();
+            }
+        }
+    }
+    public void Filter(String category,String roleFilter){
+        if(category.equals("Role")){
+            if(roleFilter.equals("Players")){
+                List<Player> players= DataManager.getPlayersFromAccounts();
+                for(Player player:players)
+                    ShowPlayerStub();
+            }
+
+            if(roleFilter.equals("Coaches")){
+                List<Coach> coaches= DataManager.getCoachesFromAccounts();
+                for(Coach coach:coaches)
+                    ShowCoachStub();
+            }
+
+            if(roleFilter.equals("TeamManagers")){
+                List<TeamManager> tms= DataManager.getTeamManagersFromAccounts();
+                for(TeamManager tm:tms)
+                    ShowTeamManagerStub();
+            }
+
+            if(roleFilter.equals("Owners")){
+                List<Owner> owners= DataManager.getOwnersFromAccounts();
+                for(Owner owner:owners)
+                    ShowOwnerStub();
+            }
+
+            if(roleFilter.equals("Referees")){//************************************
+                List<Referee> refs= DataManager.getRefereesFromAccounts();
+                for(Referee ref:refs)
+                    ShowRefereeStub();
+            }
+
+        }
+        if(category.equals("Team")){
+            for(Team team: DataManager.getTeams())
+                ShowTeamStub();
+        }
+        if(category.equals("League")){
+            for(League league: DataManager.getLeagues())
+                ShowLeagueStub();
+        }
+        if(category.equals("Season")){
+            for(Season season: DataManager.getSeasons())
+                ShowSeasonStub();
+        }
+    }
+
+    //endregion
+
+    //region ShowStubs
+    private void ShowTeamStub(){
+        System.out.println("Team");
+    }
+    private void ShowLeagueStub(){
+        System.out.println("League");
+    }
+    private void ShowSeasonStub(){
+        System.out.println("Season");
+    }
+    private void ShowRefereeStub(){
+        System.out.println("Referee");
+    }
+    private void ShowAccountStub(){
+        System.out.println("Account");
+    }
+    private void ShowPlayerStub(){
+        System.out.println("Player");
+    }
+    private void ShowCoachStub(){
+        System.out.println("Coach");
+    }
+    private void ShowOwnerStub(){
+        System.out.println("Owner");
+    }
+    private void ShowTeamManagerStub(){
+        System.out.println("TeamManager");
+    }
+    //endregion
+
 }

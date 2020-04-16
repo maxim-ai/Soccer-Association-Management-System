@@ -108,9 +108,29 @@ public class LeagueTest {
         Season season = new Season("2019");
         SLsettings sLsetting = new SLsettings(new Policy("point","game"));
         HashMap<Season,SLsettings> sLsettings = league.getsLsetting();
-        league.addSLsettingsToSeason(season,sLsetting);
+        addSLsettingsToSeason(season,sLsetting);
         assertEquals(sLsetting,league.getSLsettingsBySeason(season));
+        assertEquals(sLsetting,season.getSLsettingsByLeague(league));
     }
+
+    public boolean addSLsettingsToSeason(Season aSeason,SLsettings aSlSLsettings)
+    {
+        league.getsLsetting().put(aSeason,aSlSLsettings);
+        if(!aSeason.hasPolicy(league,aSlSLsettings)){
+            addSLsettingsToLeagueStub(league,aSlSLsettings,aSeason);
+        }
+        return true;
+    }
+
+    public boolean addSLsettingsToLeagueStub(League aLeague,SLsettings asLsettings,Season season)
+    {
+        season.getsLsettings().put(aLeague,asLsettings);
+        if(!aLeague.hasPolicy(season,asLsettings)){
+            addSLsettingsToSeason(season, asLsettings);
+        }
+        return true;
+    }
+
 
     @Test
     public void removeSLsettingsFromSeason() {
@@ -118,8 +138,32 @@ public class LeagueTest {
         SLsettings sLsetting = new SLsettings(new Policy("point","game"));
         HashMap<Season,SLsettings> sLsettings = league.getsLsetting();
         league.addSLsettingsToSeason(season,sLsetting);
-        league.removeSLsettingsFromSeason(season,true);
+        removeSLsettingsFromSeason(season,true);
         assertEquals(0,league.getsLsetting().size());
+    }
+
+    public boolean removeSLsettingsFromSeason(Season aSeason,boolean bool)
+    {
+        if (!league.getsLsetting().containsKey(aSeason)) {
+            return true;
+        }
+        if(aSeason.hasPolicy(league,league.getsLsetting().get(aSeason)) && bool){
+            removeSLsettingsFromLeagueStub(league,false,aSeason);
+        }
+        league.getsLsetting().remove(aSeason);
+        return true;
+    }
+
+    public boolean removeSLsettingsFromLeagueStub(League aLeague,Boolean bool,Season season)
+    {
+        if (!season.getsLsettings().containsKey(aLeague)) {
+            return true;
+        }
+        if(aLeague.hasPolicy(season,season.getsLsettings().get(aLeague)) && bool){
+            aLeague.removeSLsettingsFromSeason(season,false);
+        }
+        season.getsLsettings().remove(aLeague);
+        return true;
     }
 
     @Test

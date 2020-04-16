@@ -21,7 +21,8 @@ public class SystemManagerController {
      * delete team for Permanently, saving all her actions, notify owner and team manger and delete team's
      * page from all fans.
      */
-    public boolean DeleteTeamPermanently(Team team){
+    public boolean DeleteTeamPermanently(Team team)
+    {
         return systemManager.DeleteTeamPermanently(team);
     }
 

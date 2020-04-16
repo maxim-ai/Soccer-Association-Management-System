@@ -437,7 +437,7 @@ public class DataManager {
     }
   }
 
-  public static void cleatDataBase(){
+  public static void clearDataBase(){
     teams= new ArrayList<Team>();
     accounts = new ArrayList<Account>();
     leagues = new ArrayList<League>();

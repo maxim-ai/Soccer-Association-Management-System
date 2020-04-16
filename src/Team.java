@@ -409,8 +409,9 @@ public class Team implements Pageable, Serializable
     }
 
     matchs.remove(aMatch);
-    if(aMatch.getAwayTeam().equals(this)) aMatch.setAwayTeam(null);
-    if(aMatch.getHomeTeam().equals(this)) aMatch.setHomeTeam(null);
+
+    if(aMatch.getAwayTeam()!=null&&aMatch.getAwayTeam().equals(this)) aMatch.setAwayTeam(null);
+    if(aMatch.getHomeTeam()!=null&&aMatch.getHomeTeam().equals(this)) aMatch.setHomeTeam(null);
     pageUpdated();
     return wasRemoved;
   }

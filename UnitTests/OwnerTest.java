@@ -87,20 +87,19 @@ public class OwnerTest {
         Coach tmpCoach=new Coach("tmpCoach","bla","bla",null);
         Stadium tmpStadium=new Stadium("tmpStadium");
         Referee tmpReferee=new Referee("bla","bla");
-        assertTrue(owner.addAssetToTeam(tmpCoach));
-        assertTrue(owner.addAssetToTeam(tmpPlayer));
-        assertTrue(owner.addAssetToTeam(tmpStadium));
 
-        assertTrue(tmpCoach.getTeams().contains(owner.getTeam()));
-        assertTrue(tmpPlayer.getTeam().equals(owner.getTeam()));
-        assertTrue(tmpStadium.getTeams().contains(owner.getTeam()));
+        //successfull assersion
+        assertTrue(addAssetToTeam(tmpCoach,owner));
+        assertTrue(addAssetToTeam(tmpPlayer,owner));
+        assertTrue(addAssetToTeam(tmpStadium,owner));
 
-        assertFalse(owner.addAssetToTeam(tmpReferee));
-        assertFalse(owner.addAssetToTeam(null));
-        owner.deactivateTeam();
-        assertFalse(owner.addAssetToTeam(tmpCoach));
+
+        //unsuccessful assersion
+        assertFalse(addAssetToTeam(tmpReferee,owner));
+        assertFalse(addAssetToTeam(null,owner));
+
         owner.setTeam(null);
-        assertFalse(owner.addAssetToTeam(tmpCoach));
+        assertFalse(addAssetToTeam(tmpCoach,owner));
     }
 
     @Test /*UC 6.1*/
@@ -110,22 +109,28 @@ public class OwnerTest {
         Coach tmpCoach=new Coach("tmpCoach","bla","bla",null);
         Stadium tmpStadium=new Stadium("tmpStadium");
         Referee tmpReferee=new Referee("bla","bla");
+
+        //unsuccessful removal
+        assertFalse(removeAssetFromTeam(tmpCoach,owner));
+        assertFalse(removeAssetFromTeam(tmpPlayer,owner));
+        assertFalse(removeAssetFromTeam(tmpStadium,owner));
+        assertFalse(removeAssetFromTeam(tmpReferee,owner));
+        assertFalse(removeAssetFromTeam(null,owner));
+
+
+
         owner.addAssetToTeam(tmpCoach);
         owner.addAssetToTeam(tmpPlayer);
         owner.addAssetToTeam(tmpStadium);
-        assertTrue(owner.removeAssetFromTeam(tmpCoach));
-        assertTrue(owner.removeAssetFromTeam(tmpPlayer));
-        assertTrue(owner.removeAssetFromTeam(tmpStadium));
 
-        assertFalse(owner.removeAssetFromTeam(tmpCoach));
-        assertFalse(owner.removeAssetFromTeam(tmpPlayer));
-        assertFalse(owner.removeAssetFromTeam(tmpStadium));
-        assertFalse(owner.removeAssetFromTeam(tmpReferee));
-        assertFalse(owner.removeAssetFromTeam(null));
-        owner.deactivateTeam();
-        assertFalse(owner.removeAssetFromTeam(tmpCoach));
+        //successful removal
+        assertTrue(removeAssetFromTeam(tmpCoach,owner));
+        assertTrue(removeAssetFromTeam(tmpPlayer,owner));
+        assertTrue(removeAssetFromTeam(tmpStadium,owner));
+
+        //unsuccessful removal
         owner.setTeam(null);
-        assertFalse(owner.removeAssetFromTeam(tmpCoach));
+        assertFalse(removeAssetFromTeam(tmpCoach,owner));
 
     }
 
@@ -139,6 +144,8 @@ public class OwnerTest {
         owner.addAssetToTeam(tmpPlayer);
         owner.addAssetToTeam(tmpStadium);
 
+        //successful editing
+
         assertTrue(owner.editTeamAsset(tmpPlayer,1,"newName"));
         assertTrue(owner.editTeamAsset(tmpPlayer,2,"01-01-1990"));
         assertTrue(owner.editTeamAsset(tmpPlayer,3,"Goalkeeper"));
@@ -147,18 +154,35 @@ public class OwnerTest {
         assertTrue(owner.editTeamAsset(tmpCoach,3,"newRole"));
         assertTrue(owner.editTeamAsset(tmpStadium,1,"newName"));
 
+        //successful editing
+
         assertFalse(owner.editTeamAsset(tmpPlayer,4,"01-01-1990"));
         assertFalse(owner.editTeamAsset(tmpCoach,4,"01-01-1990"));
         assertFalse(owner.editTeamAsset(tmpStadium,4,"01-01-1990"));
 
         assertFalse(owner.editTeamAsset(tmpPlayer,2,"01.01.1990"));
-
-
-
     }
 
     @Test /*UC 6.1*/
-    public void showEditingOptions() {
+    public void showEditingOptions()
+    {
+        Player tmpPlayer=new Player("tmpPlayer",new Date(1997,11,18),PositionEnum.CenterBack,tempTeam,null);
+        Coach tmpCoach=new Coach("tmpCoach","bla","bla",null);
+        Stadium tmpStadium=new Stadium("tmpStadium");
+        List<String> list1=new ArrayList<>();
+        List<String> list2=new ArrayList<>();
+        List<String> list3=new ArrayList<>();
+        list1.add("name");list2.add("name");list3.add("name");
+        list2.add("training"); list2.add("teamRole");
+        list3.add("birthday");list3.add("position");
+        //successful
+        assertEquals(owner.showEditingOptions(tmpStadium),list1);
+        assertEquals(owner.showEditingOptions(tmpCoach),list2);
+        assertEquals(owner.showEditingOptions(tmpPlayer),list3);
+        //unsuccessful
+        assertNull(owner.showEditingOptions("sdf"));
+        owner.setTeam(null);
+        assertNull(owner.showEditingOptions(tmpStadium));
     }
 
     @Test /*UC 6.2*/
@@ -170,13 +194,13 @@ public class OwnerTest {
 
         account.addRole(new Coach("newC","bla","bla",null));
         account.removeRole(account.checkIfReferee());
-        assertTrue(owner.appointOwnerToTeam(account));
-        assertTrue(owner.getTeam().getOwners().contains(account.checkIfOwner()));
 
-        assertNotNull(account.checkIfOwner());
-        assertNotNull(account.checkIfCoach());
+        //success
+        assertTrue(appointOwnerToTeam(account,owner));
 
-        assertFalse(owner.appointOwnerToTeam(account));
+
+        //unseccess in integration
+
     }
 
     @Test /*UC 6.3*/
@@ -190,15 +214,12 @@ public class OwnerTest {
         account.addRole(new Coach(account.getName(),"bla","bla",null));
         owner.appointOwnerToTeam(account);
 
-        assertNotNull(account.checkIfOwner());
-        assertNotNull(account.checkIfCoach());
 
-        assertTrue(owner.removeOwnerFromTeam(account.checkIfOwner()));
-        assertNull(account.checkIfOwner());
-        assertNull(account.checkIfCoach());
+        assertTrue(removeOwnerFromTeam(account.checkIfOwner(),owner));
 
         //check that owner cant be removed if theres only one
-        assertFalse(owner.removeOwnerFromTeam(owner));
+        owner.removeOwnerFromTeam(account.checkIfOwner());
+        assertFalse(removeOwnerFromTeam(owner,owner));
 
     }
 
@@ -212,10 +233,10 @@ public class OwnerTest {
 
         //not allow appointment if allready has role
         secondAccount.addRole(new Coach(secondAccount.getName(),"bla","bla",null));
-        assertFalse(owner.appointTeamManagerToTeam(secondAccount,permissionEnumList));
+        assertFalse(appointTeamManagerToTeam(secondAccount,permissionEnumList,owner));
         //check standard appointment
         secondAccount.removeRole(secondAccount.checkIfCoach());
-        assertTrue(owner.appointTeamManagerToTeam(secondAccount,permissionEnumList));
+        assertTrue(appointTeamManagerToTeam(secondAccount,permissionEnumList,owner));
 
     }
 
@@ -229,13 +250,8 @@ public class OwnerTest {
 
         owner.appointTeamManagerToTeam(secondAccount,permissionEnumList);
         //try to remove not by the appointer
-        assertFalse(tmpOwner.removeTeamManagerFromTeam(secondAccount.checkIfTeamManagr()));
-        assertNotNull(secondAccount.checkIfTeamManagr());
-        //standard removal
-        assertTrue(owner.removeTeamManagerFromTeam(secondAccount.checkIfTeamManagr()));
-        assertFalse(owner.getTeam().getTeamManagers().contains(secondAccount.checkIfTeamManagr()));
-        assertNull(secondAccount.checkIfTeamManagr());
-
+        assertFalse(removeTeamManagerFromTeam(secondAccount.checkIfTeamManagr(),tmpOwner));
+        //standard removal in integration
     }
 
     @Test
@@ -268,10 +284,7 @@ public class OwnerTest {
     @Test /*UC 6.6*/
     public void deactivateTeam()
     {
-        Team existingTeam=owner.getTeam();
-        assertNull(owner.getNonActiveTeam(existingTeam.getName()));
-        owner.deactivateTeam();
-        assertEquals(owner.getNonActiveTeam(existingTeam.getName()),existingTeam);
+        assertTrue(deactivateTeam(owner));
     }
 
     @Test /*UC 6.6*/
@@ -352,44 +365,10 @@ public class OwnerTest {
         assoAccount.addRole(new AssociationRepresentative(assoAccount.getName()));
         SystemManager.createAccount(assoAccount);
 
-        String ans=owner.createTeam("newTeam",new League("newLeague"),new Stadium("newSta"));
+        String ans=createTeam("newTeam",new League("newLeague"),new Stadium("newSta"),owner);
         assertTrue(ans.contains("Wrong input"));
-        ans=owner.createTeam("assoTeam",new League("assoLeague"),new Stadium("assoSta"));
-        assertEquals(ans,"Request sent, waiting for approval");
-        ans=owner.createTeam("assoTeam",new League("assoLeague"),new Stadium("assoSta"));
-        assertEquals(ans,"waiting for approval");
 
-        assertTrue(AssociationRepresentative.checkIfRequestExists(owner,"assoTeam"));
-        assoAccount.checkIfAssiciationRepresentive().approveTeam("assoTeam",owner);
 
-        ans=owner.createTeam("assoTeam",new League("assoLeague"),new Stadium("assoSta"));
-        assertEquals(ans,"Team successfully added");
-        assertEquals(owner.getTeam().getName(),"assoTeam");
-        assertFalse(AssociationRepresentative.checkIfRequestExists(owner,"assoTeam"));
-    }
-
-    @Test
-    public void createPlayer()
-    {
-        Account test=owner.createPlayer("testPla",20,new Date(123),PositionEnum.CenterBack,"bla11","bla");
-        assertTrue(DataManager.getAccounts().contains(test));
-        assertNotNull(test.checkIfPlayer());
-    }
-
-    @Test
-    public void createTeamManager()
-    {
-        Account test=owner.createTeamManager("testPla",20,null,"bla11","bla");
-        assertTrue(DataManager.getAccounts().contains(test));
-        assertNotNull(test.checkIfTeamManagr());
-    }
-
-    @Test
-    public void createCoach()
-    {
-        Account test=owner.createCoach("testPla",20,"bla","bla","bla11","bla");
-        assertTrue(DataManager.getAccounts().contains(test));
-        assertNotNull(test.checkIfCoach());
     }
 
     @Before
@@ -408,5 +387,292 @@ public class OwnerTest {
         owner.ShowOwner();
         assertEquals("Name:\r\nsean\r\nTeam owned:\r\nmyTeam\r\n",OS.toString());
     }
+
+
+
+    //*----------------------------------------------stubs--------------------------------------------------------------------*/
+    public boolean addAssetToTeam(Object o,Owner owner)
+    {
+        if (owner.getTeam() == null)
+            return false;
+
+        else if (o instanceof Coach)
+        {
+            loggerStub("");
+            return addCoachStub((Coach) o);
+        }
+        else if (o instanceof Player) {
+            loggerStub("");
+            return addPlayerStub((Player) o);
+        }
+        else if (o instanceof Stadium) {
+            loggerStub("");
+            return setStadiumStub((Stadium) o);
+        }
+        else
+            return false;
+    }
+
+    private void loggerStub(String s)
+    {
+        return;
+    }
+
+    private boolean setStadiumStub(Stadium o) {
+        return true;
+    }
+
+    private boolean addPlayerStub(Player o) {
+        return true;
+    }
+
+    private boolean addCoachStub(Coach o) {
+        return true;
+    }
+
+    public boolean removeAssetFromTeam(Object o,Owner owner)
+    {
+        boolean validRemoval = true;
+        if (owner.getTeam() == null)
+            return false;
+
+        else if (o instanceof Coach) {
+            if (owner.getTeam().getCoachs()==null || owner.getTeam().indexOfCoach((Coach) o) == -1)
+                return false;
+            loggerStub("");
+            return removeCoach((Coach) o);
+        }
+        else if (o instanceof Player) {
+            if (owner.getTeam().getPlayers()==null || owner.getTeam().indexOfPlayer((Player) o) == -1)
+                return false;
+            loggerStub("");
+            return removePlayer((Player) o);
+        }
+        else if (o instanceof Stadium) {
+            if (owner.getTeam().getStadium()==null || !owner.getTeam().getStadium().equals(o))
+                return false;
+            loggerStub("");
+            return setStadium(null);
+        }
+        else
+            return false;
+    }
+
+    private boolean setStadium(Object o) {
+        return true;
+    }
+
+    private boolean removePlayer(Player o) {
+        return true;
+    }
+
+    private boolean removeCoach(Coach o) {
+        return true;
+    }
+
+    public boolean appointOwnerToTeam(Account account,Owner owner)
+    {
+
+        if(account.hasRoles() && account.checkIfTeamManagr()==null && account.checkIfCoach()==null && account.checkIfPlayer()==null)
+            return false;
+        Owner checkOwner = account.checkIfOwner();
+        if (checkOwner != null) {
+            if (owner.getTeam().indexOfOwner(checkOwner) != -1)
+                return false;
+        }
+        else
+        {
+            checkOwner = new Owner(account.getRole(0).getName(), owner.getTeam(), owner);
+            addRoleStub(checkOwner);
+        }
+        loggerStub("");
+        return addOwnerStub(checkOwner);
+    }
+
+    private boolean addOwnerStub(Owner checkOwner) {
+        return true;
+    }
+
+    private void addRoleStub(Role role) {
+        return;
+    }
+
+    public boolean removeOwnerFromTeam(Owner owner,Owner currOwner) {
+        if (owner.getTeam().numberOfOwners() == 1)
+            return false;
+
+        if (!owner.getTeam().equals(currOwner.getTeam()) || !owner.getAppointer().equals(currOwner))
+            return false;
+
+        removeOwnerStub(owner);
+
+        for (Account account : DataManager.getAccounts())
+            for (Role role : account.getRoles())
+                if (role instanceof Owner && role.equals(owner))
+                {
+                    removeRoleStub(role);
+                    removeRoleStub(account.checkIfPlayer());
+                    removeRoleStub(account.checkIfCoach());
+                    removeRoleStub(account.checkIfTeamManagr());
+
+                    if(account.checkIfPlayer()!=null) account.checkIfPlayer().delete();
+                    if(account.checkIfCoach()!=null) account.checkIfCoach().delete();
+                    if(account.checkIfTeamManagr()!=null) account.checkIfTeamManagr().delete();
+                    deleteStub(((Owner) role));
+
+                    loggerStub("");
+                    return true;
+                }
+
+        return true;
+    }
+
+    private void deleteStub(Role role) {
+        return;
+    }
+
+    private void removeRoleStub(Role role) {
+        return;
+    }
+
+    private void removeOwnerStub(Owner owner) {
+        return;
+    }
+
+    public boolean appointTeamManagerToTeam(Account account,List<TeamManager.PermissionEnum> permissions,Owner owner) {
+        TeamManager tempTeamManager=account.checkIfTeamManagr();
+        if(account.hasRoles())
+            return false;
+
+        if(tempTeamManager==null)
+        {
+            tempTeamManager=new TeamManager(account.getName(),owner.getTeam(),owner);
+            addRoleStub(tempTeamManager);
+        }
+
+        loggerStub("");
+
+        return addTeamManagerStub(tempTeamManager);
+    }
+
+    private boolean addTeamManagerStub(TeamManager tempTeamManager) {
+        return true;
+    }
+
+    public boolean removeTeamManagerFromTeam(TeamManager teamManager,Owner owner)
+    {
+        if (!teamManager.getTeam().equals(owner.getTeam()) || !teamManager.getAppointer().equals(this))
+            return false;
+
+        deleteStub(teamManager);
+
+        List<Account> tamp=DataManager.getAccounts();
+
+        for (Account account : DataManager.getAccounts())
+        {
+            if(account.checkIfTeamManagr()!=null && account.checkIfTeamManagr().equals(teamManager))
+            {
+                removeRole(teamManager);
+                break;
+            }
+        }
+
+        loggerStub("");
+
+        return true;
+    }
+
+    private void removeRole(TeamManager teamManager) {
+        return;
+    }
+
+    public boolean deactivateTeam(Owner ownerc)
+    {
+        String notification=ownerc.getName()+" has deactivated team: "+ownerc.getTeam().getName();
+        for(Owner owner:ownerc.getTeam().getOwners())
+            Alert.notifyOtherRole(notification,owner);
+        for(TeamManager teamManager:ownerc.getTeam().getTeamManagers())
+            Alert.notifyOtherRole(notification,teamManager);
+        for(SystemManager systemManager:DataManager.getSystemManagersFromAccounts())
+            Alert.notifyOtherRole(notification,systemManager);
+
+        loggerStub("");
+        deleteStub(ownerc.getTeam());
+
+        return true;
+    }
+
+    private void deleteStub(Team team) {
+        return;
+    }
+
+    /**
+     * creates a new team, provided there is an authorisation from the Association
+     */
+    public String createTeam(String teamName,League league, Stadium stadium,Owner owner)
+    {
+        boolean teamExists=false;
+        for(Team t: DataManager.getTeams())
+        {
+            if(t.getName().equals(teamName))
+            {
+                teamExists=true;
+                break;
+            }
+        }
+
+        if(teamExists)
+            return "Wrong input, team already exists";
+
+        else if(!checkIfRequestExistsStub(owner,teamName))
+        {
+            for(AssociationRepresentative ar:DataManager.getAssiciationRepresentivesFromAccounts())
+            {
+                Alert.notifyOtherRole(owner.getName()+" is requesting to create a new team, teamName: "+teamName,ar);
+                addOpenTeamRequestStub(owner,teamName);
+            }
+            return "Request sent, waiting for approval";
+        }
+        else
+        {
+            if(!getRequestStatusStub(owner,teamName))
+                return "waiting for approval";
+            else
+            {
+                Team team=new Team(teamName,league,stadium);
+                addOwnerStub(owner,team);
+                DataManager.addTeam(team);
+                removeOpenTeamRequestStub(owner,teamName);
+                Logger.getInstance().writeNewLine(owner.getName()+" just opened the team: "+teamName);
+                return "Team successfully added";
+            }
+        }
+
+    }
+
+    private void removeOpenTeamRequestStub(Owner owner, String teamName) {
+        return;
+    }
+
+    private boolean getRequestStatusStub(Owner owner, String teamName) {
+        return true;
+    }
+
+    private void addOpenTeamRequestStub(Owner owner, String teamName) {
+        return;
+    }
+
+    private void addOwnerStub(Owner owner, Team team) {
+        return;
+    }
+
+    private boolean checkIfRequestExistsStub(Owner owner, String teamName) {
+        return true;
+    }
+
+
+    //*------------------------------------------------------------------------------------------------------------------------*/
+
+
 
 }

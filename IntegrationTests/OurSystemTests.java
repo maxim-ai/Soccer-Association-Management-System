@@ -1,4 +1,3 @@
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +11,8 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class OurSystemTest {
+public class OurSystemTests {
+
     private final ByteArrayOutputStream OS=new ByteArrayOutputStream();
     private final PrintStream PS=System.out;
     OurSystem ourSystem;
@@ -31,98 +31,64 @@ public class OurSystemTest {
         System.setOut(PS);
     }
 
-    //region Getters&Setters Tests
     @Test
-    public void getSM() {
-        SystemManager SM=new SystemManager("Nadav");
-        OurSystem.setSM(SM);
-        assertNotNull(OurSystem.getSM());
-        assertEquals(SM,OurSystem.getSM());
-    }
-
-    @Test
-    public void setSM() throws IOException {
-        SystemManager SM=new SystemManager("Nadav");
-        OurSystem.setSM(SM);
-        assertNotNull(OurSystem.getSM());
-        assertEquals(SM,OurSystem.getSM());
-        assertTrue(CheckLoggerLines("New system manager Nadav has been set"));
-    }
-
-    @Test
-    public void getCurrGuests(){
-        Guest guest1=new Guest();
-        Guest guest2=new Guest();
-        List<Guest> guestList=new ArrayList<>();
-        guestList.add(guest1); guestList.add(guest2);
-        OurSystem.addGuest(guest1); OurSystem.addGuest(guest2);
-        int counter=0;
-        for(Guest guest:OurSystem.getCurrGuests())
-            assertEquals(guest,guestList.get(counter++));
-    }
-
-    @Test
-    public void getCurrAccounts(){
-        Account account1=new Account("Maxim",26,"MaximX","1234");
-        Account account2=new Account("Sean",26,"SeanX","1234");
-        List<Account> accountList=new ArrayList<>();
-        accountList.add(account1); accountList.add(account2);
-        OurSystem.addAccount(account1); OurSystem.addAccount(account2);
-        int counter=0;
-        for(Account account:OurSystem.getCurrAccounts())
-            assertEquals(account,accountList.get(counter++));
-    }
-
-    @Test
-    public void addGuest(){
-        Guest guest=new Guest();
-        OurSystem.addGuest(guest);
-        assertEquals(guest,OurSystem.getCurrGuests().get(0));
-    }
-
-    @Test
-    public void addAccount(){
-        Account account=new Account("Maxim",26,"MaximX","1234");
-        OurSystem.addAccount(account);
-        assertEquals(account,OurSystem.getCurrAccounts().get(0));
-    }
-
-    @Test
-    public void removeGuest(){
-        Guest guest=new Guest();
-        OurSystem.addGuest(guest);
-        assertEquals(guest,OurSystem.getCurrGuests().get(0));
-        OurSystem.removeGuest(guest);
-        assertEquals(0,OurSystem.getCurrGuests().size());
-    }
-
-    @Test
-    public void removeAccount(){
-        Account account=new Account("Maxim",26,"MaximX","1234");
-        OurSystem.addAccount(account);
-        assertEquals(account,OurSystem.getCurrAccounts().get(0));
-        OurSystem.removeAccount(account);
-        assertEquals(0,OurSystem.getCurrAccounts().size());
-    }
-    //endregion
-
-    //region UC and Technical Tests
-    @Test
-    public void initializeFirstTime() throws IOException {
+    public void initializeNotFirstTime(){
         deleteDataFiles();
         ourSystem.Initialize();
-        assertEquals("Established connection to Accounty System"+"\r\n"+"Established connection to Federal Tax System"+"\r\n",OS.toString());
-        assertNotNull(OurSystem.getSM());
-        assertEquals("Nadav",OurSystem.getSM().getName());
-        assertTrue(CheckLoggerLines("System has been initialized"));
+
+        List<Account> checkListAccounts=new ArrayList<>();
+        List<Team> checkListTeams=new ArrayList<>();
+        List<League> checkListLeagues=new ArrayList<>();
+        List<Season> checkListSeasons=new ArrayList<>();
+        List<Stadium> checkListStadiums=new ArrayList<>();
+        SystemManager checkSM=OurSystem.getSM();
+        Account checkSMaccount=null;
+        for(Account account:DataManager.getAccounts()){
+            for(Role role:account.getRoles()){
+                if(role.equals(checkSM))
+                    checkSMaccount=account;
+            }
+        }
+        checkListAccounts.add(checkSMaccount);
+        setUpDatabase(checkListAccounts, checkListTeams, checkListLeagues, checkListSeasons, checkListStadiums);
+
+
+
+        ourSystem.logOffSystem();
+        ourSystem.Initialize();
+
+        assertTrue(CheckTwoAccountListsEqual(checkListAccounts,DataManager.getAccounts()));
+        assertTrue(CheckTwoTeamListsEqual(checkListTeams,DataManager.getTeams()));
+        assertTrue(CheckTwoLeagueListsEqual(checkListLeagues,DataManager.getLeagues()));
+        assertTrue(CheckTwoSeasonListsEqual(checkListSeasons,DataManager.getSeasons()));
+        assertTrue(CheckTwoStadiumListsEqual(checkListStadiums,DataManager.getStadiums()));
+
+        SystemManager SM=OurSystem.getSM();
+        Account SMaccount=null;
+        for(Account account:DataManager.getAccounts()){
+            for(Role role:account.getRoles()){
+                if(role.equals(SM))
+                    SMaccount=account;
+            }
+        }
+
+        assertEquals(checkSMaccount.getUserName(),SMaccount.getUserName());
+
     }
-    //endregion
-
-
-
-
-
-
+    @Test
+    public void logOffSystem(){
+        deleteDataFiles();
+        ourSystem.Initialize();
+        ourSystem.logOffSystem();
+        File[] dataFiles=new File[5];
+        dataFiles[0]=new File("AccountsData.txt");
+        dataFiles[1]=new File("TeamsData.txt");
+        dataFiles[2]=new File("LeaguesData.txt");
+        dataFiles[3]=new File("SeasonsData.txt");
+        dataFiles[4]=new File("StadiumsData.txt");
+        for(File file:dataFiles)
+            assertTrue(file.exists());
+    }
 
 
     //region Help methods
@@ -330,10 +296,5 @@ public class OurSystemTest {
 
     }
     //endregion
-
-
-
-
-
 
 }

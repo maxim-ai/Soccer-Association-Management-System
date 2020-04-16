@@ -71,7 +71,7 @@ public class OurSystem {
         saveData("Leagues");
         saveData("Seasons");
         saveData("Stadiums");
-        DataManager.cleatDataBase();
+        DataManager.clearDataBase();
         File logOnCheckFile = new File("firstInitCheck");
         try {
             if(!logOnCheckFile.exists())
@@ -150,7 +150,33 @@ public class OurSystem {
     //endregion
 
     //Need to be Changed//
-    public static void makeControllersByRoles(Account account){
+    public static List<Object> makeControllersByRoles(Account account){
 
+        List<Object> controllerList=new ArrayList<>();
+        for(Role role:account.getRoles()){
+            if(role instanceof Owner)
+                controllerList.add(new OwnerController((Owner)role));
+            else if(role instanceof TeamManager)
+                controllerList.add(new TeamManagerController((TeamManager)role));
+            else if(role instanceof AssociationRepresentative)
+                controllerList.add(new AssociationRepresentativeController((AssociationRepresentative)role));
+            else if(role instanceof SystemManager)
+                controllerList.add(new SystemManagerController((SystemManager)role));
+            else if(role instanceof Player)
+                controllerList.add(new PlayerController((Player)role));
+            else if(role instanceof Referee)
+                controllerList.add(new RefereeController((Referee)role));
+            else if(role instanceof Coach)
+                controllerList.add(new CoachController((Coach)role));
+            else if(role instanceof Fan)
+                controllerList.add(new FanContoller((Fan)role));
+        }
+
+        return controllerList;
+
+    }
+
+    public static GuestController makeGuestController(){
+        return new GuestController();
     }
 }
