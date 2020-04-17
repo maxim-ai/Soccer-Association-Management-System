@@ -1043,6 +1043,16 @@ public class AcceptanceTest {
         assertEquals("Fan1Y",fanAccount1.getUserName());
         //End test
 
+        //Test for unsuccessful edditing personal info (username already exists)
+        restore();setUp();
+        GC=OurSystem.makeGuestController();
+        FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
+        before=System.currentTimeMillis();
+        assertFalse(FC.EditPersonalInfo("","Referee1X",""));
+        after=System.currentTimeMillis();
+        assertTrue((after-before)<acceptableTime);
+        //End test
+
         //Test for unsuccessful edditing personal info (all fields empty)
         restore();setUp();
         GC=OurSystem.makeGuestController();

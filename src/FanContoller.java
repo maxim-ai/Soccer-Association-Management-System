@@ -86,8 +86,7 @@ public class FanContoller {
     public boolean EditPersonalInfo(String newName,String newUserName,String newPassword){
         if(newName.length()==0&&newUserName.length()==0&&newPassword.length()==0)
             return false;
-        fan.EditPersonalInfo(newName,newUserName,newPassword);
-        return true;
+        return fan.EditPersonalInfo(newName,newUserName,newPassword);
     }
     //endregion
 }

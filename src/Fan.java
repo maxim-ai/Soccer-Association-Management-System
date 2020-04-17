@@ -214,12 +214,17 @@ public class Fan extends Role implements Serializable
     }
   }
 
-  public void EditPersonalInfo(String newName, String newUserName, String newPassword){
+  public boolean EditPersonalInfo(String newName, String newUserName, String newPassword){
+    for(Account account:DataManager.getAccounts()){
+      if(account.getUserName().equals(newUserName))
+        return false;
+    }
     Account account=DataManager.getAccountByRole(this);
     if(!(newName.length()==0)) account.setName(newName);
     if(!(newUserName.length()==0)) account.setUserName(newUserName);
     if(!(newPassword.length()==0)) account.setPassword((newPassword));
     (Logger.getInstance()).writeNewLine("Fan "+this.getName()+" eddited his personal infomation");
+    return true;
   }
   //endregion
 

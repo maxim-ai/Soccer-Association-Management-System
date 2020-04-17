@@ -299,12 +299,22 @@ public class FanTest {
         assertEquals(s,OS.toString());
     }
     @Test
-    public void editPersonalInfo() {
+    public void editPersonalInfoUserNameNotExists() {
         Account checkAccount=new Account("Eddie",27,"EddieX","1234");
         checkAccount.addRole(fan);
         DataManager.addAccount(checkAccount);
-        fan.EditPersonalInfo("Edddie","","");
+        assertTrue(fan.EditPersonalInfo("Edddie","",""));
         assertEquals("Edddie",checkAccount.getName());
+        assertEquals("EddieX",checkAccount.getUserName());
+        assertEquals("1234",checkAccount.getPassword());
+    }
+    @Test
+    public void editPersonalInfoUserNameExists() {
+        Account checkAccount=new Account("Eddie",27,"EddieX","1234");
+        checkAccount.addRole(fan);
+        DataManager.addAccount(checkAccount);
+        assertFalse(fan.EditPersonalInfo("Edddie","MaximX",""));
+        assertEquals("Eddie",checkAccount.getName());
         assertEquals("EddieX",checkAccount.getUserName());
         assertEquals("1234",checkAccount.getPassword());
     }
