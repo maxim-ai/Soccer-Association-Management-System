@@ -13,6 +13,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class AcceptanceTest {
+    final long acceptableTime = 100;
     OurSystem ourSystem;
     Account arAccount1, arAccount2;
     AssociationRepresentative ar1, ar2;
@@ -55,7 +56,7 @@ public class AcceptanceTest {
     public void UCinitializeSystem(){
         GuestController guestController=OurSystem.makeGuestController();
         List<Object> controllerList=guestController.LogIn("Owner1X","Password");
-        OwnerController ownerController=(OwnerController) controllerList.get(2);
+        OwnerController ownerController=(OwnerController) controllerList.get(0);
     }
 
 
@@ -65,16 +66,21 @@ public class AcceptanceTest {
         GuestController guestController=OurSystem.makeGuestController();
         List<Object> controllerList=guestController.LogIn("AR1X","Password");
         AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+        long beforeTime=System.currentTimeMillis();
         Season season = associationRepresentativeController.setNewSeason("2020");
+        long afterTime=System.currentTimeMillis();
+        long runTime = afterTime-beforeTime;
+        assertTrue(runTime<acceptableTime);
+        
         assertNotNull(season);
 
+//        UCcreateNewLeague();
+//        UCsetYearToLeague();
+//        UCaddNewReferee();
+//        UCaddRefereeToLeague();
+//        UCsetLeaguePointCalcPolicy();
+//        UCsetLeagueGameSchedualPolicy();
 
-        UCcreateNewLeague();
-        UCsetYearToLeague();
-        UCaddNewReferee();
-        UCaddRefereeToLeague();
-        UCsetLeaguePointCalcPolicy();
-        UCsetLeagueGameSchedualPolicy();
 
     }
 
@@ -87,7 +93,13 @@ public class AcceptanceTest {
         List<Team> teamList = new LinkedList<>();
         teamList.add(team1);
         teamList.add(team2);
+
+        long beforeTime=System.currentTimeMillis();
         League league3 = associationRepresentativeController.createNewLeague("League3",teamList);
+        long afterTime=System.currentTimeMillis();
+        long runTime = afterTime-beforeTime;
+        assertTrue(runTime<acceptableTime);
+
         assertNotNull("The league was'nt created! Check if the team list contains teams",league3);
         assertEquals("League3",league3.getName());
         assertTrue(league3.hasTeams());
@@ -100,7 +112,13 @@ public class AcceptanceTest {
         GuestController guestController=OurSystem.makeGuestController();
         List<Object> controllerList=guestController.LogIn("AR1X","Password");
         AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+
+        long beforeTime=System.currentTimeMillis();
         assertTrue(associationRepresentativeController.setYearToLeague(league1,"2021"));
+        long afterTime=System.currentTimeMillis();
+        long runTime = afterTime-beforeTime;
+        assertTrue(runTime<acceptableTime);
+
         Season season2021=null;
         for(Season season: DataManager.getSeasons()){
             if(season.getName().equals("2021")){
@@ -117,7 +135,12 @@ public class AcceptanceTest {
         GuestController guestController=OurSystem.makeGuestController();
         List<Object> controllerList=guestController.LogIn("AR1X","Password");
         AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+
+        long beforeTime=System.currentTimeMillis();
         associationRepresentativeController.deleteReferee(referee1);
+        long afterTime=System.currentTimeMillis();
+        long runTime = afterTime-beforeTime;
+        assertTrue(runTime<acceptableTime);
         //DataManager.getRefereesFromAccounts().contains(referee1);
         assertTrue(referee1.getMatchs().isEmpty());
     }
@@ -127,7 +150,13 @@ public class AcceptanceTest {
         GuestController guestController=OurSystem.makeGuestController();
         List<Object> controllerList=guestController.LogIn("AR1X","Password");
         AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+
+        long beforeTime=System.currentTimeMillis();
         Referee referee9 = associationRepresentativeController.addNewReferee("Complete","Referee9",26,"Referee9X","Password");
+        long afterTime=System.currentTimeMillis();
+        long runTime = afterTime-beforeTime;
+        assertTrue(runTime<acceptableTime);
+
         assertNotNull(referee9);
         assertEquals("Referee9",referee9.getName());
         assertFalse("Invitation was'nt sent to the referee",referee9.getAlertList().isEmpty());
@@ -142,7 +171,13 @@ public class AcceptanceTest {
         GuestController guestController=OurSystem.makeGuestController();
         List<Object> controllerList=guestController.LogIn("AR1X","Password");
         AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
+
+        long beforeTime=System.currentTimeMillis();
         assertTrue(associationRepresentativeController.addRefereeToLeague(referee1,league2,season));
+        long afterTime=System.currentTimeMillis();
+        long runTime = afterTime-beforeTime;
+        assertTrue(runTime<acceptableTime);
+
         assertTrue(league2.getSLsettingsBySeason(season).getReferees().contains(referee1));
     }
 
@@ -152,7 +187,13 @@ public class AcceptanceTest {
         List<Object> controllerList=guestController.LogIn("AR1X","Password");
         AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
         String twoPointsPolicy = "Goal equals 2 points";
+
+        long beforeTime=System.currentTimeMillis();
         assertTrue(associationRepresentativeController.setLeaguePointCalcPolicy(league1,policy1,season,twoPointsPolicy));
+        long afterTime=System.currentTimeMillis();
+        long runTime = afterTime-beforeTime;
+        assertTrue(runTime<acceptableTime);
+
         assertEquals(twoPointsPolicy,league1.getSLsettingsBySeason(season).getPolicy().getPointCalc());
     }
 
@@ -162,7 +203,13 @@ public class AcceptanceTest {
         List<Object> controllerList=guestController.LogIn("AR1X","Password");
         AssociationRepresentativeController associationRepresentativeController=(AssociationRepresentativeController) controllerList.get(0);
         String twoTeamsEachTime = "two teams play twice against each other";
+
+        long beforeTime=System.currentTimeMillis();
         assertTrue(associationRepresentativeController.setLeagueGameSchedualPolicy(league1,policy1,season,twoTeamsEachTime));
+        long afterTime=System.currentTimeMillis();
+        long runTime = afterTime-beforeTime;
+        assertTrue(runTime<acceptableTime);
+
         assertEquals(twoTeamsEachTime,league1.getSLsettingsBySeason(season).getPolicy().getGameSchedual());
     }
 
