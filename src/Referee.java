@@ -208,11 +208,11 @@ public class Referee extends Role implements Serializable
     boolean wasUpdate=false;
     if(matchs.contains(match)){
       Date currDate=new Date(System.currentTimeMillis());
-      long diff=getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES);
+//      long diff=getDateDiff(currDate,match.getDate(),TimeUnit.SECONDS);
       if (getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES)<90)
       {
         Time currTime=new Time(Calendar.getInstance().getTimeInMillis());
-        GameEvent event=new GameEvent(aType,currDate,currTime,aDescription,(int)(currTime.getTime()-match.getTime().getTime()),match.getEventCalender());
+        GameEvent event=new GameEvent(aType,currDate,currTime,aDescription,(int)(getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES)),match.getEventCalender());
         match.getEventCalender().addGameEvent(event);
         wasUpdate=true;
         Logger.getInstance().writeNewLine("Referee "+super.getName()+" update event during the match between: "+match.getHomeTeam().getName()+","+match.getAwayTeam().getName()+" to "+event.getType());
@@ -226,9 +226,9 @@ public class Referee extends Role implements Serializable
    */
   public boolean editEventAfterGame(Match match, GameEvent gameEvent, EventEnum aType, String aDescription){
     boolean wasEdit=false;
-    if(matchs.contains(match)) {
+    if(matchs.contains(match)&&(match.getMainReferee().equals(this))) {
       Date currDate = new Date(System.currentTimeMillis());
-      if (getDateDiff(match.getDate(), currDate, TimeUnit.MINUTES) > 390) {
+      if (getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES) > 390) {
         if (match.getEventCalender().getGameEvents().contains(gameEvent)) {
           match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setType(aType);
           match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setDescription(aDescription);

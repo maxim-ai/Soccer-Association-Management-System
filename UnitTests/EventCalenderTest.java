@@ -3,6 +3,8 @@ import org.junit.Test;
 
 import java.sql.Time;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
@@ -25,6 +27,9 @@ public class EventCalenderTest {
     Fan fan=new Fan("tzlil");
     Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,lineRefereeOne,lineRefereeTwo);
     EventCalender eventCalender=new EventCalender(match);
+    EventCalender eventCalender1=new EventCalender(match);
+    GameEvent gameEvent1=new GameEvent(EventEnum.goal,date,time,"Goal!!!",15,eventCalender1);
+    List<GameEvent>gameEvents1=new LinkedList<>();
     @Test
     public void getMatch() {
         assertEquals(match,eventCalender.getMatch());
@@ -81,16 +86,6 @@ public class EventCalenderTest {
         assertEquals(eventCalender.minimumNumberOfGameEvents(),0);
     }
 
-    @Test
-    public void addGameEvent() {
-        Match match2=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,lineRefereeOne,lineRefereeTwo);
-        EventCalender eventCalender2=new EventCalender(match2);
-        GameEvent gameEvent1=new GameEvent(EventEnum.goal,date,time,"goal!!!",(int)Referee.getDateDiff(match.getDate(),date, TimeUnit.MINUTES),null);
-        GameEvent gameEvent2=new GameEvent(EventEnum.goal,date,time,"goal!!!",(int)Referee.getDateDiff(match.getDate(),date, TimeUnit.MINUTES),null);
-        assertTrue(eventCalender.addGameEvent(gameEvent1));
-        assertTrue(eventCalender2.addGameEvent(gameEvent1));
-        assertTrue(eventCalender.addGameEvent(gameEvent2));
-    }
 
     @Test
     public void removeGameEvent() {
@@ -102,13 +97,36 @@ public class EventCalenderTest {
 
     }
 
+
     @Test
-    public void delete() {
-        GameEvent gameEvent1=new GameEvent(EventEnum.goal,date,time,"goal!!!",(int)Referee.getDateDiff(match.getDate(),date, TimeUnit.MINUTES),eventCalender);
-        GameEvent gameEvent2=new GameEvent(EventEnum.goal,date,time,"goal!!!",(int)Referee.getDateDiff(match.getDate(),date, TimeUnit.MINUTES),eventCalender);
-        eventCalender.addGameEvent(gameEvent1);
-        eventCalender.addGameEvent(gameEvent2);
-        eventCalender.delete();
-        assertEquals(eventCalender.getGameEvents().size(),0);
+    public void addGameEvent() {
+            assertTrue(addGameEventTest(gameEvent1));
+    }
+    //func
+    public boolean addGameEventTest(GameEvent aGameEvent)
+    {
+        boolean wasAdded = true;
+        if (gameEvents1.contains(aGameEvent)) { return true; }
+        EventCalender existingEventCalender = getEventCalenderStub();
+        boolean isNewEventCalender = existingEventCalender != null && !this.equals(existingEventCalender);
+        if (isNewEventCalender)
+        {
+            setEventCalenderStub(eventCalender);
+        }
+        else
+        {
+            gameEvents1.add(aGameEvent);
+        }
+        wasAdded = true;
+        return wasAdded;
+    }
+    //stubs
+    public EventCalender getEventCalenderStub()
+    {
+        return eventCalender;
+    }
+    public boolean setEventCalenderStub(EventCalender aEventCalender)
+    {
+            return true;
     }
 }

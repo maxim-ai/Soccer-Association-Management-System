@@ -28,7 +28,11 @@ public class RefereeTest {
     Referee lineRefereeOne=new Referee("Football Association","zviali bar");
     Referee lineRefereeTwo=new Referee("Football Association","karapti roy");
     Fan fan=new Fan("tzlil");
-
+    Match matchTest=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,lineRefereeOne,lineRefereeTwo);
+    List<Match>matchs=new LinkedList<>();
+     HashMap<League,Season> leagues=new HashMap<>();
+     Policy policy=new Policy("Top10","month");
+     SLsettings sLsettings=new SLsettings(policy);
     @Before
     public void init(){
         System.setOut(new PrintStream(OS));
@@ -105,16 +109,6 @@ public class RefereeTest {
         assertEquals(leagueSeasonHashMap2,referee.getLeagues());
     }
 
-    @Test
-    public void addLeague() {
-        assertEquals(referee.getLeagues().size(),0);
-        Policy policy=new Policy("max points","every month");
-        SLsettings sLsettings=new SLsettings(policy);
-        league.addSLsettingsToSeason(season,sLsettings);
-        referee.addLeague(league,season);
-        assertEquals(referee.getLeagues().size(),1);
-
-    }
 
     @Test
     public void addMatch() {
@@ -160,70 +154,93 @@ public class RefereeTest {
         referee.updateDetails("zviali bar");
         assertEquals(referee.getName(),"zviali bar");
     }
-    @Test
-    public void displayAllMatches() {
 
-        Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,null,lineRefereeOne,lineRefereeTwo);
-        referee.addMatch(match,"main");
-        referee.displayAllMatches();
-        assertEquals("Score:\r\n" +
-                "Ofakim: 0, B7: 1\r\n" +
-                "\r\n" +
-                "Referees:\r\n" +
-                "Main: adi lioz, Line1: zviali bar, Line2: karapti roy\r\n" +
-                "\r\n" +
-                "Stadium:\r\n" +
-                "B7\r\n" +
-                "\r\n" +
-                "Season:\r\n" +
-                "winter\r\n" +
-                        "\r\n" +
-                "Game Events:\r\n\r\n",OS.toString());
-    }
 
-    @Test
-    public void updateEventDuringMatch() {
-        Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,null,lineRefereeOne,lineRefereeTwo);
-        referee.addMatch(match,"main");
-        referee.updateEventDuringMatch(match, EventEnum.foul,"aya aya");
-        boolean ans=false;
-        for (GameEvent gameEvent:match.getEventCalender().getGameEvents()  ){
-            if(gameEvent.getType().equals(EventEnum.foul))
-                ans=true;
-
-        }
-        assertTrue(ans);
-        match.getDate().setTime(1000);
-        referee.updateEventDuringMatch(match, EventEnum.redCard,"zavik red card");
-        ans=false;
-        for (GameEvent gameEvent:match.getEventCalender().getGameEvents()  ){
-            if(gameEvent.getType().equals(EventEnum.redCard))
-                ans=true;
-
-        }
-        assertFalse(ans);
-    }
-    @Test
-    public void editEventAfterGame() {
-        Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,null,lineRefereeOne,lineRefereeTwo);
-        referee.addMatch(match,"main");
-        match.getDate().setTime(1000);
-        EventCalender eventCalender=new EventCalender(match);
-        GameEvent gameEvent=new GameEvent(EventEnum.goal,date,time,"Goal!!!",15,match.getEventCalender());
-        referee.editEventAfterGame(match,gameEvent,EventEnum.redCard,"check edit");
-        assertTrue(gameEvent.getType().equals(EventEnum.redCard));
-        assertTrue(gameEvent.getDescription().equals("check edit"));
-    }
 
     @Test
     public void showReferee() {
-        referee.ShowReferee();
+        ShowRefereeTest();
         assertEquals("Name:\r\n" +
                 "adi lioz\r\n" +
                 "\r\n" +
                 "Training:\r\n" +
                 "Football Association\r\n" +
                 "\r\n" +
-                "Matches judged:\r\n",OS.toString());
+                "Matches judged:\r\n" +
+                "match\r\n",OS.toString());
+    }
+    //Test func
+    public void ShowRefereeTest() {
+        System.out.println("Name:");
+        System.out.println(this.getNameStub());
+        System.out.println();
+        System.out.println("Training:");
+        System.out.println(this.getTrainingStub());
+        System.out.println();
+        System.out.println("Matches judged:");
+        for(Match match:this.getMatchsStub())
+            ShowMatchStub(match);
+    }
+
+    //stubs
+
+    public String getNameStub(){
+        return "adi lioz";
+    }
+    public String getTrainingStub(){
+        return "Football Association";
+    }
+    public List<Match>  getMatchsStub(){
+        matchs.add(matchTest);
+        return  matchs;
+    }
+    public void ShowMatchStub(Match match){
+        System.out.println("match");
+
+    }
+    @Test
+    public void displayAllMatches() {
+        matchs.add(matchTest);
+        displayAllMatchesTest();
+        assertEquals("match\r\n\r\n",OS.toString());
+    }
+    //func
+    public void displayAllMatchesTest() {
+        if (!isEmptyStub(matchTest)) {
+            for (Match m:matchs
+            ) {
+                ShowMatchStub(m);
+                System.out.println();
+            }
+            Logger.getInstance().writeNewLine("Referee "+getNameStub()+" watch all his Matches");
+        } else System.out.println("No matches!");
+    }
+    //stubs
+    public boolean isEmptyStub(Match match)
+    {
+        return false;
+    }
+
+    @Test
+    public void addLeague() {
+
+        assertTrue(addLeagueTest(league,season));
+    }
+    //func
+    public boolean addLeagueTest(League aLeague,Season aSeason)
+    {
+        leagues.put(aLeague,aSeason);
+        if(!hasLeagueStub(season,aLeague)){
+            addSLsettingsToLeagueStub(season,aLeague, sLsettings);
+        }
+        return true;
+    }
+    //stubs
+    public boolean hasLeagueStub(Season season,League league){
+        return false;
+    }
+    public boolean addSLsettingsToLeagueStub(Season season,League aLeague,SLsettings asLsettings)
+    {
+        return true;
     }
 }

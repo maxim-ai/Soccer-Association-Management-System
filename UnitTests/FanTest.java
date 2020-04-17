@@ -281,12 +281,7 @@ public class FanTest {
     }
     //endregion
 
-    @Test
-    public void logout() {
-        fan.Logout();
-        assertEquals("Logged out\r\n",OS.toString());
-        assertTrue(CheckLoggerLines("Fan Danny logged out"));
-    }
+
     @Test
     public void subscribeTrackPersonalPages() {
         fan.SubscribeTrackPersonalPages();
@@ -300,9 +295,7 @@ public class FanTest {
     @Test
     public void showPersonalInfo() {
         fan.ShowPersonalInfo();
-        String s="Name:\r\nDanny\r\n\r\nTeams Tracked:\r\nName:\r\nBarcelona\r\n\r\nTeamManagers:\r\nYossi\r\n\r\nCoaches:\r\nTzlil\r\n\r\nTeamOwners:\r\nHaim\r\n\r\n" +
-                "Players:\r\nMaxim\r\n\r\nLeague:\r\nInternational\r\n\r\nMatches:\r\nBarcelona against Rome\r\n\r\nStadium:\r\nTeddy\r\n\r\nPlayers Tracked:\r\n" +
-                "Name:\r\nMaxim\r\n\r\nAge:\r\n26\r\n\r\nPosition:\r\nGoalkeeper\r\n\r\nTeam:\r\nBarcelona\r\n\r\nCoaches Tracked:\r\n";
+        String s="Name:\r\n" + "Danny\r\n" + "\r\n" + "Teams Tracked:\r\n" + "Name:\r\n" + "Barcelona\r\n" + "\r\n" + "TeamManagers:\r\n" + "Yossi\r\n" + "\r\n" + "Coaches:\r\n" + "Tzlil\r\n" + "\r\n" + "TeamOwners:\r\n" + "Haim\r\n" + "\r\n" + "Players:\r\n" + "Maxim\r\n" + "\r\n" + "League:\r\n" + "International\r\n" + "\r\n" + "Matches:\r\n" + "Barcelona against Rome\r\n" + "\r\n" + "Stadium:\r\n" + "Teddy\r\n" + "\r\n" + "Players Tracked:\r\n" + "Name:\r\n" + "Maxim\r\n" + "\r\n" + "Age:\r\n" + "26\r\n" + "\r\n" + "Position:\r\n" + "Goalkeeper\r\n" + "\r\n" + "Team:\r\n" + "Barcelona\r\n" + "\r\n";
         assertEquals(s,OS.toString());
     }
     @Test
@@ -315,7 +308,21 @@ public class FanTest {
         assertEquals("EddieX",checkAccount.getUserName());
         assertEquals("1234",checkAccount.getPassword());
     }
-
+    @Test
+    public void showSearchHistory() {
+        fan.Search("Name","Barcelona");
+        fan.Search("Category","Leagues");
+        OS.reset();
+        fan.ShowSearchHistory();
+        String s="Criterion:\r\n" + "Name\r\n" + "Query:\r\n" + "Barcelona\r\n" + "\r\n" + "Criterion:\r\n" + "Category\r\n" + "Query:\r\n" + "Leagues\r\n" + "\r\n";
+        assertEquals(s,OS.toString());
+    }
+    @Test
+    public void logout() {
+        fan.Logout();
+        assertEquals("Logged out\r\n",OS.toString());
+        assertTrue(CheckLoggerLines("Fan Danny logged out"));
+    }
 
     //endregion
 

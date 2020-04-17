@@ -91,8 +91,10 @@ public class SystemManager extends Role implements Serializable
     List <Role> roles = account.getRoles();
     boolean isOwner= false;
     boolean isSystemManger = false;
+    Owner owner=null;
     for(Role role : roles){
       if(role instanceof Owner){
+        owner= (Owner)role;
         isOwner = true;
       }
       if(role instanceof SystemManager){
@@ -100,6 +102,11 @@ public class SystemManager extends Role implements Serializable
       }
     }
     if(isOwner){
+      if(owner.getTeam().getOwners().size()>1){
+        owner=null;
+        wasSet = DataManager.removeAccount(account);
+        return  wasSet;
+      }
       return false;// to find someone else who will be next owner before remove this one
     }
     if(isSystemManger){
@@ -148,8 +155,10 @@ public class SystemManager extends Role implements Serializable
   /**
    * show system logger
    */
-  public void showSystemLog(){
-    System.out.println(Logger.getInstance().readLoggerFile());
+  public String showSystemLog(){
+    String s=Logger.getInstance().readLoggerFile();
+    System.out.println(s);
+    return s;
   }
 
   /**

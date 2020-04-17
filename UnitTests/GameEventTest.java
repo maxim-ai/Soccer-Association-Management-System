@@ -26,6 +26,7 @@ public class GameEventTest {
     Fan fan=new Fan("tzlil");
     Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,lineRefereeOne,lineRefereeTwo);
     EventCalender eventCalender=new EventCalender(match);
+
     GameEvent gameEvent=new GameEvent(EventEnum.goal,date,time,"Goal!!!",15,eventCalender);
 
     private final ByteArrayOutputStream OS=new ByteArrayOutputStream();
@@ -103,21 +104,6 @@ public class GameEventTest {
         assertEquals(eventCalender,gameEvent.getEventCalender());
     }
 
-    @Test
-    public void setEventCalender() {
-
-        Match match2=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,lineRefereeOne,lineRefereeTwo);
-        EventCalender eventCalender2=new EventCalender(match2);
-        gameEvent.setEventCalender(eventCalender2);
-        assertEquals(eventCalender2,gameEvent.getEventCalender());
-    }
-
-    @Test
-    public void delete() {
-        gameEvent.delete();
-        assertNull(gameEvent.getEventCalender());
-
-    }
 
     @Test
     public void ShowGameEvent() {
@@ -137,5 +123,39 @@ public class GameEventTest {
                 "Game Minute\r\n" +
                 "15\r\n\r\n", OS.toString());
 
+    }
+    @Test
+    public void setEventCalender() {
+        Match match2=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,lineRefereeOne,lineRefereeTwo);
+        EventCalender eventCalender2=new EventCalender(match2);
+        assertTrue(setEventCalenderTest(eventCalender2));
+    }
+    public boolean setEventCalenderTest(EventCalender aEventCalender)
+    {
+        boolean wasSet = false;
+        if (aEventCalender == null)
+        {
+            eventCalender=null;
+            return wasSet;
+        }
+
+        EventCalender existingEventCalender = eventCalender;
+        eventCalender = aEventCalender;
+        if (existingEventCalender != null && !existingEventCalender.equals(aEventCalender))
+        {
+            removeGameEventStub(gameEvent);
+        }
+        addGameEventStub(gameEvent);
+        wasSet = true;
+        return wasSet;
+    }
+    //stub
+    public boolean removeGameEventStub(GameEvent aGameEvent)
+    {
+        return true;
+    }
+    public boolean addGameEventStub(GameEvent aGameEvent)
+    {
+       return true;
     }
 }

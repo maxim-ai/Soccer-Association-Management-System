@@ -40,7 +40,7 @@ public class AssociationRepresentativeController {
     /**
      * create new referee and link it to account
      */
-    public Referee CreateNewReferee(Account account, String training, String name) {
+    public Referee createNewReferee(Account account, String training, String name) {
         return associationRepresentative.createNewReferee(account, training, name);
     }
 

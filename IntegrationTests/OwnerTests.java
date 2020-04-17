@@ -175,6 +175,12 @@ public class OwnerTests {
         assertNull(owner.getNonActiveTeam(existingTeam.getName()));
         owner.deactivateTeam();
         assertEquals(owner.getNonActiveTeam(existingTeam.getName()),existingTeam);
+
+        assertFalse(existingTeam.hasMatchs());
+        assertFalse(existingTeam.hasPlayers());
+        assertFalse(existingTeam.hasOwners());
+        assertFalse(existingTeam.hasCoachs());
+        assertFalse(existingTeam.hasTeamManagers());
     }
 
 

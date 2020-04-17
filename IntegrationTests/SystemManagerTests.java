@@ -36,9 +36,9 @@ public class SystemManagerTests {
         Fan fan = new Fan("zlil");
         fan.addPage(page);
         systemManager.DeleteTeamPermanently(team);
-        assertEquals(fan.getPages().size(),0);
-        assertEquals(owner.getAlertList().get(0).toString(), "description: Delete Team Permanently:" + team.getName());
-        assertEquals(teamManager.getAlertList().get(0).toString(),"description: Delete Team Permanently:" + team.getName());
+        assertEquals(0,fan.getPages().size());
+        assertEquals("description: Delete Team Permanently:" + team.getName(),owner.getAlertList().get(0).toString());
+        assertEquals("description: Delete Team Permanently:" + team.getName(),teamManager.getAlertList().get(0).toString());
         assertEquals(0,DataManager.getTeams().size());
     }
     @Test
@@ -49,8 +49,8 @@ public class SystemManagerTests {
         Team team = new Team("Maccabi",league,stadium);
         Owner owner = new Owner("nadav",team,null);
         Account account = systemManager.createOwner("yosi",99,"yosi","1234");
-        assertEquals(DataManager.getAccount(0),account);
-        assertEquals(DataManager.getAccount(0).getRole(0),account.getRole(0));
+        assertEquals(account,DataManager.getAccount(0));
+        assertEquals(account.getRole(0),DataManager.getAccount(0).getRole(0));
 
     }
     @Test
@@ -61,8 +61,8 @@ public class SystemManagerTests {
         Team team = new Team("Maccabi",league,stadium);
         SystemManager systemManager = new SystemManager("nadav");
         Account account = systemManager.createSystemManager("yosi",99,"yosi","1234");
-        assertEquals(DataManager.getAccount(0),account);
-        assertEquals(DataManager.getAccount(0).getRole(0),account.getRole(0));
+        assertEquals(account,DataManager.getAccount(0));
+        assertEquals(account.getRole(0),DataManager.getAccount(0).getRole(0));
 
     }
 
@@ -74,8 +74,8 @@ public class SystemManagerTests {
         Team team = new Team("Maccabi",league,stadium);
         AssociationRepresentative associationRepresentative = new AssociationRepresentative("nadav");
         Account account = systemManager.createAssociationRepresentative("yosi",99,"yosi","1234");
-        assertEquals(DataManager.getAccount(0),account);
-        assertEquals(DataManager.getAccount(0).getRole(0),account.getRole(0));
+        assertEquals(account,DataManager.getAccount(0));
+        assertEquals(account.getRole(0),DataManager.getAccount(0).getRole(0));
 
     }
 

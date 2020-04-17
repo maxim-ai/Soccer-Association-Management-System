@@ -6,6 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.Time;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -26,6 +28,9 @@ public class PlayerTest {
     Referee lineRefereeTwo=new Referee("Football Association","karapti roy");
     Player player=new Player("Yosi",date,PositionEnum.AttackingMidfielder,null,null);
     Fan fan=new Fan("tzlil");
+     Account aAccount=new Account("tzlil",26,"ud","ud");
+     List<Account> accounts=new LinkedList<>();
+     List<Role>roles=new LinkedList<>();
 
     @Before
     public void init(){
@@ -73,20 +78,6 @@ public class PlayerTest {
         assertEquals(player.getPage(),page1);
     }
 
-    @Test
-    public void setTeam() {
-        player.setPage(page1);
-        player.setTeam(awayTeam);
-        assertEquals(player.getTeam(),awayTeam);
-    }
-
-    @Test
-    public void delete() {
-        player.setPage(page1);
-        player.setTeam(awayTeam);
-        player.delete();
-        assertNull(player.getPage());
-    }
 
     @Test
     public void removePage() {
@@ -95,11 +86,6 @@ public class PlayerTest {
         assertNull(player.getPage());
     }
 
-    @Test
-    public void setPage() {
-        player.setPage(page1);
-        assertEquals(player.getPage(),page1);
-    }
 
     @Test
     public void updateDetails() {
@@ -113,14 +99,15 @@ public class PlayerTest {
 
     @Test
     public void showPlayer() {
-        player.setPage(page1);
         player.setTeam(awayTeam);
-        player.ShowPlayer();
+        accounts.add(aAccount);
+        roles.add(player);
+        showPlayerTest();
         assertEquals("Name:\r\n" +
-                "Yosi\r\n" +
+                "adi lioz\r\n" +
                 "\r\n" +
                 "Age:\r\n" +
-                "0\r\n" +
+                "26\r\n" +
                 "\r\n" +
                 "Position:\r\n" +
                 "AttackingMidfielder\r\n" +
@@ -129,8 +116,93 @@ public class PlayerTest {
                 "B7\r\n"
                 ,OS.toString());
     }
+    //func
+    public void showPlayerTest() {
+        System.out.println("Name:");
+        System.out.println(getNameStub());
+        System.out.println();
+        System.out.println("Age:");
+        int age=0;
+        for(Account account:getAccountsStub()){
+            for(Role role:getRolesStub()){
+                if(role.equals(player))
+                    age=getAgeStub();
+            }
+        }
+        System.out.println(age);
+        System.out.println();
+        System.out.println("Position:");
+        System.out.println(getPositionStub());
+        System.out.println();
+        System.out.println("Team:");
+        System.out.println(getTeamNameStub());
+    }
+    //stubs
+    public String getNameStub(){
+        return "adi lioz";
+    }
+    public String getTrainingStub(){
+        return "Football Association";
+    }
+    public List<Account> getAccountsStub() {
+        return accounts;
+    }
+    public List<Role> getRolesStub()
+    {
+        return roles;
+    }
+    public int getAgeStub() {
+        return 26;
+    }
+    public PositionEnum getPositionStub()
+    {
+        return PositionEnum.AttackingMidfielder;
+    }
+    public  String getTeamNameStub()
+    {
+        return "B7";
+    }
 
     @Test
-    public void pageUpdated() {
+    public void setTeam() {
+       assertTrue(setTeamTest(homeTeam));
     }
+    //func
+    public boolean setTeamTest(Team aTeam) {
+        boolean wasSet = true;
+        //Must provide team to player
+        if (aTeam == null) {
+            awayTeam = null;
+            return wasSet;
+        }
+
+        Team existingTeam = awayTeam;
+        if (existingTeam != null && !existingTeam.equals(aTeam)) {
+            boolean didRemove = removePlayerStub(player);
+            if (!didRemove) {
+                return wasSet;
+            }
+        }
+        awayTeam = aTeam;
+
+        addPlayerStub(player);
+        wasSet = true;
+        pageUpdatedStub();
+        return wasSet;
+    }
+    //stub
+    public boolean removePlayerStub(Player aPlayer)
+    {
+        return true;
+    }
+    public boolean addPlayerStub(Player aPlayer)
+    {
+        return true;
+    }
+    public void pageUpdatedStub()
+    {
+        return;
+    }
+
+
 }

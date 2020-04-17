@@ -167,11 +167,17 @@ public class Fan extends Role implements Serializable
   }
 
 
-  public void ShowSearchHistory(){
-    Guest guestDummy=new Guest();
+  public boolean ShowSearchHistory(){
+    if(searchHistory.size()==0)
+      return false;
     for(String[] savedSearch:searchHistory){
-      guestDummy.Search(savedSearch[0],savedSearch[1]);
+      System.out.println("Criterion:");
+      System.out.println(savedSearch[0]);
+      System.out.println("Query:");
+      System.out.println(savedSearch[1]);
+      System.out.println();
     }
+    return true;
   }
 
   public void ShowPersonalInfo(){
@@ -190,16 +196,22 @@ public class Fan extends Role implements Serializable
     }
     Guest guestDummy=new Guest();
     System.out.println();
-    System.out.println("Teams Tracked:");
-    for(Team team:teams)
-      team.ShowTeam();
-    System.out.println("Players Tracked:");
-    for(Player player:players)
-      player.ShowPlayer();
-    System.out.println();
-    System.out.println("Coaches Tracked:");
-    for(Coach coach:coaches)
-      coach.ShowCoach();
+    if (teams.size()>0) {
+      System.out.println("Teams Tracked:");
+      for(Team team:teams)
+        team.ShowTeam();
+    }
+    if (players.size()>0) {
+      System.out.println("Players Tracked:");
+      for(Player player:players)
+        player.ShowPlayer();
+      System.out.println();
+    }
+    if (coaches.size()>0) {
+      System.out.println("Coaches Tracked:");
+      for(Coach coach:coaches)
+        coach.ShowCoach();
+    }
   }
 
   public void EditPersonalInfo(String newName, String newUserName, String newPassword){

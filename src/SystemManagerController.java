@@ -57,8 +57,8 @@ public class SystemManagerController {
     /**
      * show system logger
      */
-    public void showSystemLog(){
-        systemManager.showSystemLog();
+    public String showSystemLog(){
+        return systemManager.showSystemLog();
     }
 
     /**

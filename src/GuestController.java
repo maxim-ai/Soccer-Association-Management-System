@@ -53,7 +53,7 @@ public class GuestController {
         if(!(criterion.equals("Name")||criterion.equals("Category")))
             return false;
         if(criterion.equals("Category")){
-            if(!(criterion.equals("Teams")||criterion.equals("Accounts")||criterion.equals("Leagues")||criterion.equals("Seasons")))
+            if(!(query.equals("Teams")||query.equals("Accounts")||query.equals("Leagues")||query.equals("Seasons")))
                 return false;
         }
         guest.Search(criterion,query);
@@ -61,7 +61,7 @@ public class GuestController {
     }
 
     public boolean Filter(String category, String roleFilter){
-        if(category.length()==0||roleFilter.length()==0) return false;
+        if(category.length()==0) return false;
         if(!(category.equals("Role")||category.equals("Team")||category.equals("League")||category.equals("Season")))
             return false;
         if(category.equals("Role")){

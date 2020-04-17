@@ -30,7 +30,7 @@ public class FanContoller {
         if(!(criterion.equals("Name")||criterion.equals("Category")))
             return false;
         if(criterion.equals("Category")){
-            if(!(criterion.equals("Teams")||criterion.equals("Accounts")||criterion.equals("Leagues")||criterion.equals("Seasons")))
+            if(!(query.equals("Teams")||query.equals("Accounts")||query.equals("Leagues")||query.equals("Seasons")))
                 return false;
         }
         fan.Search(criterion,query);
@@ -38,7 +38,7 @@ public class FanContoller {
     }
 
     public boolean Filter(String category, String roleFilter){
-        if(category.length()==0||roleFilter.length()==0) return false;
+        if(category.length()==0) return false;
         if(!(category.equals("Role")||category.equals("Team")||category.equals("League")||category.equals("Season")))
             return false;
         if(category.equals("Role")){
@@ -52,25 +52,31 @@ public class FanContoller {
 
     public void LogOut(){
         fan.Logout();
-        OurSystem.removeAccount(DataManager.getAccountByRole(fan));
+        for(Account account:OurSystem.getCurrAccounts()){
+            for(Role role:account.getRoles()){
+                if(role.equals(fan)){
+                    OurSystem.removeAccount(account);
+                    return;
+                }
+            }
+        }
     }
 
     public void SubscribeTrackPersonalPages(){
         fan.SubscribeTrackPersonalPages();
     }
 
+    public void SubscribeGetMatchNotifications(){fan.SubscribeGetMatchNotifications();}
+
     public boolean Report(String report){
         if(report.length()==0)
             return false;
-        for(int i=0;i<report.length();i++){
-            if(!Character.isAlphabetic(report.charAt(i)))
-                return false;
-        }
+        fan.Report("report");
         return true;
     }
 
-    public void ShowSearchHistory(){
-        fan.ShowSearchHistory();
+    public boolean ShowSearchHistory(){
+        return fan.ShowSearchHistory();
     }
 
     public void ShowPersonalInfo(){

@@ -5,7 +5,10 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -27,6 +30,7 @@ public class CoachTest {
     Referee lineRefereeOne=new Referee("Football Association","zviali bar");
     Referee lineRefereeTwo=new Referee("Football Association","karapti roy");
     Fan fan=new Fan("tzlil");
+    List<Team> teams=new LinkedList<>();
     @Before
     public void init(){
         System.setOut(new PrintStream(OS));
@@ -35,12 +39,6 @@ public class CoachTest {
     @After
     public void restore(){
         System.setOut(PS);
-    }
-    @Test
-    public void setPage() {
-        assertNull(coach.getPage());
-        coach.setPage(page1);
-        assertEquals(coach.getPage(),page1);
     }
 
     @Test
@@ -126,31 +124,6 @@ public class CoachTest {
     }
 
 
-    @Test
-    public void addTeam() {
-        coach.setPage(page1);
-        coach.addTeam(awayTeam);
-        assertEquals(coach.getTeam(0),awayTeam);
-    }
-
-    @Test
-    public void removeTeam() {
-        coach.setPage(page1);
-        coach.addTeam(awayTeam);
-        assertEquals(coach.getTeams().size(),1);
-        coach.removeTeam(awayTeam);
-        assertEquals(coach.getTeams().size(),0);
-    }
-
-    @Test
-    public void delete() {
-        coach.setPage(page1);
-        coach.addTeam(awayTeam);
-        coach.delete();
-        assertNull(coach.getPage());
-        assertEquals(coach.getTeams().size(),0);
-    }
-
 
     @Test
     public void removePage() {
@@ -171,9 +144,8 @@ public class CoachTest {
 
     @Test
     public void showCoach() {
-        coach.setPage(page1);
-        coach.addTeam(awayTeam);
-        coach.ShowCoach();
+        teams.add(awayTeam);
+        ShowCoachTest();
         assertEquals("Name:\r\n" +
                 "Yossi Abukasis\r\n" +
                 "\r\n" +
@@ -184,8 +156,102 @@ public class CoachTest {
                 "Coach\r\n" +
                 "\r\n" +
                 "TeamsCoaching:\r\n" +
-                "B7\r\n",OS.toString());
+                "team\r\n",OS.toString());
 
     }
+    //func
+    public void ShowCoachTest() {
+        System.out.println("Name:");
+        System.out.println(getNameStub());
+        System.out.println();
+        System.out.println("Training:");
+        System.out.println(getTrainingStub());
+        System.out.println();
+        System.out.println("TeamRole:");
+        System.out.println(getTeamRoleStub());
+        System.out.println();
+        System.out.println("TeamsCoaching:");
+        for(Team team:this.getTeamsStub())
+            System.out.println(getTeamNameStub(team));
+    }
+    //stub
+    public String getNameStub(){
+        return "Yossi Abukasis";
+    }
+    public String getTrainingStub(){
+        return "Football Association";
+    }
+    public String TeamRoleStub(){
+        return "Football Association";
+    }
+    public String getTeamRoleStub(){
+        return "Coach";
+    }
+
+    public List<Team> getTeamsStub()
+    {
+        return teams;
+    }
+    public String getTeamNameStub(Team team){
+        return "team";
+    }
+    @Test
+    public void addTeam() {
+        assertTrue(addTeamTest(awayTeam));
+    }
+    //func
+    public boolean addTeamTest(Team aTeam)
+    {
+        boolean wasAdded = false;
+        if (teams.contains(aTeam)) { return true; }
+        teams.add(aTeam);
+        if (indexOfCoachStub(aTeam,coach) != -1)
+        {
+            wasAdded = true;
+        }
+        else
+        {
+            aTeam.addCoach(coach);
+        }
+        pageUpdatedStube();
+        return wasAdded;
+    }
+    //stub
+    public int indexOfCoachStub(Team team,Coach aCoach)
+    {
+        return 1;
+    }
+    public void pageUpdatedStube()
+    {
+        return;
+    }
+    @Test
+    public void removeTeam() {
+        teams.add(awayTeam);
+        assertTrue(removeTeamTest(awayTeam));
+    }
+    public boolean removeTeamTest(Team aTeam)
+    {
+        boolean wasRemoved = true;
+        if (!teams.contains(aTeam))
+        {
+            return wasRemoved;
+        }
+
+        int oldIndex = teams.indexOf(aTeam);
+        teams.remove(oldIndex);
+        if (indexOfCoachStub(aTeam,coach) == -1)
+        {
+            wasRemoved = true;
+        }
+        else
+        {
+            aTeam.removeCoach(coach);
+        }
+        pageUpdatedStube();
+        return wasRemoved;
+    }
+
+
 
 }

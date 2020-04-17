@@ -62,7 +62,7 @@ public class RefereeController {
      */
     public boolean removeMatch(Match aMatch)
     {
-        return removeMatch(aMatch);
+        return referee.removeMatch(aMatch);
     }
     public void delete()
     {

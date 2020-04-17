@@ -1,6 +1,7 @@
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -10,7 +11,7 @@ public class PageTest {
     Coach coach;
     Fan fan1;
     Fan fan2;
-
+    List<Fan> fans=new LinkedList<>();
     @Before
     public void setUp() throws Exception {
         coach=new Coach("Maxim","aaa","bbb",null);
@@ -69,52 +70,76 @@ public class PageTest {
         assertEquals(0,page.minimumNumberOfFans());
     }
 
+
+
     @Test
     public void addFan() {
         Fan checkFan=new Fan("Ziv");
-        page.addFan(checkFan);
-        assertEquals(3,page.getFans().size());
-        assertEquals(checkFan,page.getFan(2));
+        assertTrue(addFanTest(checkFan));
     }
-
+    public boolean addFanTest(Fan aFan)
+    {
+        boolean wasAdded = true;
+        if (fans.contains(aFan)) { return true; }
+        fans.add(aFan);
+        if (indexOfPageStub(page) != -1)
+        {
+            wasAdded = true;
+        }
+        else
+        {
+            wasAdded = addPageStub(page);
+            if (!wasAdded)
+            {
+                fans.remove(aFan);
+            }
+        }
+        return wasAdded;
+    }
+    //stubs
+    public int indexOfPageStub(Page aPage)
+    {
+        return 0;
+    }
+    public boolean addPageStub(Page aPage)
+    {
+       return true;
+    }
+    //func
     @Test
     public void removeFan() {
-        page.removeFan(fan1);
-        assertEquals(1,page.getFans().size());
-        assertEquals(fan2,page.getFan(0));
-    }
-
-    @Test
-    public void delete() {
-        assertTrue(page.hasFans());
-        assertTrue(fan1.hasPages());
-        assertTrue(fan2.hasPages());
-        page.delete();
-        assertFalse(page.hasFans());
-        assertFalse(fan1.hasPages());
-        assertFalse(fan2.hasPages());
+        page.addFan(fan1);
+        removeFanTest(fan1);
 
     }
+    public boolean removeFanTest(Fan aFan)
+    {
+        boolean wasRemoved = true;
+        if (!fans.contains(aFan))
+        {
+            return wasRemoved;
+        }
 
-    @Test
-    public void notifyTrackingFans() {
-        Fan checkFan=new Fan("Danny");
-        page.addFan(checkFan);
-        checkFan.addPage(page);
-        fan1.setTrackPersonalPages(true);
-        fan2.setTrackPersonalPages(false);
-        checkFan.setTrackPersonalPages(true);
-
-        Alert alert=new Alert("aaa");
-        page.notifyTrackingFans(alert);
-
-        assertEquals(1,fan1.getAlertList().size());
-        assertEquals("aaa",fan1.getAlertList().get(0).getDescription());
-        assertEquals(1,checkFan.getAlertList().size());
-        assertEquals("aaa",checkFan.getAlertList().get(0).getDescription());
-
-        assertEquals(0,fan2.getAlertList().size());
-
-
+        int oldIndex = fans.indexOf(aFan);
+        fans.remove(oldIndex);
+        if (indexOfPageStub(page) == -1)
+        {
+            wasRemoved = true;
+        }
+        else
+        {
+            wasRemoved = removePageStub(page);
+            if (!wasRemoved)
+            {
+                fans.add(oldIndex,aFan);
+            }
+        }
+        return wasRemoved;
     }
+    public boolean removePageStub(Page aPage)
+    {
+        return true;
+    }
+
+
 }

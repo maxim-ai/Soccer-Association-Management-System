@@ -227,7 +227,7 @@ public class Owner extends Role implements Serializable {
     public boolean appointOwnerToTeam(Account account)
     {
 
-        if(account.hasRoles() && account.checkIfTeamManagr()==null && account.checkIfCoach()==null && account.checkIfPlayer()==null)
+        if(account.hasRoles() && account.checkIfOwner()==null &&account.checkIfTeamManagr()==null && account.checkIfCoach()==null && account.checkIfPlayer()==null)
             return false;
         Owner checkOwner = account.checkIfOwner();
         if (checkOwner != null) {
@@ -283,7 +283,12 @@ public class Owner extends Role implements Serializable {
     public boolean appointTeamManagerToTeam(Account account,List<TeamManager.PermissionEnum> permissions) {
         TeamManager tempTeamManager=account.checkIfTeamManagr();
         if(account.hasRoles())
-            return false;
+        {
+            if((account.checkIfOwner()!=null && team.getOwners().contains(account.checkIfOwner())) || ((account.checkIfTeamManagr()!=null && team.getTeamManagers().contains(account.checkIfTeamManagr()))))
+                return false;
+            if(!(account.checkIfTeamManagr()!=null || account.checkIfOwner()!=null))
+                return false;
+        }
 
         if(tempTeamManager==null)
         {

@@ -220,17 +220,7 @@ public class FanTests {
         fan.Report("aaa");
         CheckLoggerLines("Fan Danny sent report to the system manager");
     }
-    @Test
-    public void showSearchHistory() {
-        fan.Search("Name","Barcelona");
-        fan.Search("Category","Leagues");
-        OS.reset();
-        fan.ShowSearchHistory();
-        String s="Teams with the name Barcelona\r\nName:\r\nBarcelona\r\n\r\nTeamManagers:\r\nYossi\r\n\r\nCoaches:\r\nTzlil\r\n\r\nTeamOwners:\r\nHaim\r\n\r\n" +
-                "Players:\r\nMaxim\r\n\r\nLeague:\r\nInternational\r\n\r\nMatches:\r\nBarcelona against Rome\r\n\r\nStadium:\r\nTeddy\r\n\r\nName:\r\nInternational\r\n\r\n" +
-                "Teams in league:\r\nBarcelona\r\nRome\r\n\r\n";
-        assertEquals(s,OS.toString());
-    }
+
     //endregion
 
 

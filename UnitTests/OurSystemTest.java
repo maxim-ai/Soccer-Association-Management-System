@@ -121,10 +121,6 @@ public class OurSystemTest {
 
 
 
-
-
-
-
     //region Help methods
     private boolean CheckLoggerLines(String s) {
         String line= null;
