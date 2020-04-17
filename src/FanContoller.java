@@ -15,7 +15,7 @@ public class FanContoller {
     }
     //endregion
 
-    //region Transition Methods
+    //region Transition methods
     public boolean ShowInfo(String InfoAbout){
         if(InfoAbout.length()==0) return false;
         if(!(InfoAbout.equals("Teams")||InfoAbout.equals("Players")||InfoAbout.equals("Coaches")||

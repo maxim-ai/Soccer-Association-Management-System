@@ -158,7 +158,7 @@ public class FanTest {
 
     //region UC and Technical Tests
 
-    //region Stub Tests
+    //region Stub tests
     @Test
     public void showInfoAboutTeams() {
         ShowInfo("Teams");

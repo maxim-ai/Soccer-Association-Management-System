@@ -6,7 +6,7 @@ public class Fan extends Role implements Serializable
   private List<Page> pages;
   private boolean trackPersonalPages;
   private boolean getMatchNotifications;
-  private List<String[]> searchHistory; //String[0]: criterion, String[1]: query
+  private List<String[]> searchHistory; //String[0]: Criterion, String[1]: Query
 
 
 

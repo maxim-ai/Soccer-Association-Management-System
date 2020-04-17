@@ -1033,7 +1033,7 @@ public class AcceptanceTest {
         long before=0, after=0;
         String s="";
 
-        //Test for successful edditing personal info
+        //Test for successful editing personal info
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
         before=System.currentTimeMillis();
@@ -1043,7 +1043,7 @@ public class AcceptanceTest {
         assertEquals("Fan1Y",fanAccount1.getUserName());
         //End test
 
-        //Test for unsuccessful edditing personal info (username already exists)
+        //Test for unsuccessful editing personal info (username already exists)
         restore();setUp();
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
@@ -1053,7 +1053,7 @@ public class AcceptanceTest {
         assertTrue((after-before)<acceptableTime);
         //End test
 
-        //Test for unsuccessful edditing personal info (all fields empty)
+        //Test for unsuccessful editing personal info (all fields empty)
         restore();setUp();
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
