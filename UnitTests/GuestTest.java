@@ -1,3 +1,6 @@
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.RoleCrudOperations.*;
+import DataLayer.DataManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +23,7 @@ public class GuestTest {
 
     @Before
     public void setUp() throws Exception {
+        DataManager.clearDataBase();
         System.setOut(new PrintStream(OS));
         Guest.resetGuestIDCounter();
         guest = new Guest();
@@ -48,7 +52,7 @@ public class GuestTest {
         DataManager.addTeam(team);
 
 
-        File loggerFile=new File("Logger");
+        File loggerFile=new File("BusinessLayer.Logger.Logger");
         if(loggerFile.exists())
             loggerFile.delete();
     }
@@ -60,7 +64,7 @@ public class GuestTest {
     //region Getters&Setters Tests
     @Test
     public void getGuestIDCounter() {
-        assertEquals(1,Guest.getGuestIDCounter());
+        assertEquals(1, Guest.getGuestIDCounter());
     }
     @Test
     public void resetGuestIDCounter(){
@@ -75,7 +79,7 @@ public class GuestTest {
     @Test
     public void testToString() {
 
-        assertEquals("Guest ID: 1",guest.toString());
+        assertEquals("BusinessLayer.OtherCrudOperations.Guest ID: 1",guest.toString());
     }
     //endregion
 
@@ -83,7 +87,7 @@ public class GuestTest {
     @Test
     public void logInAccistingAccount() throws IOException {
         assertEquals(account1,guest.LogIn("MaximX","1234"));
-        assertTrue(CheckLoggerLines("Account MaximX logged in"));
+        assertTrue(CheckLoggerLines("BusinessLayer.OtherCrudOperations.Account MaximX logged in"));
     }
     @Test
     public void logInNotAccistingAccount() {
@@ -103,73 +107,73 @@ public class GuestTest {
     @Test
     public void showInfoAboutTeams() {
         ShowInfo("Teams");
-        String s="Team\r\n";
+        String s="BusinessLayer.OtherCrudOperations.Team\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutPlayers(){
         ShowInfo("Players");
-        String s="Player\r\n";
+        String s="BusinessLayer.RoleCrudOperations.Player\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutCoaches(){
         ShowInfo("Coaches");
-        String s="Coach\r\n";
+        String s="BusinessLayer.RoleCrudOperations.Coach\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutLeagues(){
         ShowInfo("Leagues");
-        String s="League\r\n";
+        String s="BusinessLayer.OtherCrudOperations.League\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutSeasons(){
         ShowInfo("Seasons");
-        String s="Season\r\n";
+        String s="BusinessLayer.OtherCrudOperations.Season\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void searchName() {
         Search("Name","Barcelona");
-        String s="Teams with the name Barcelona\r\nTeam\r\n";
+        String s="Teams with the name Barcelona\r\nBusinessLayer.OtherCrudOperations.Team\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void searchCategoryTeams() {
         Search("Category","Teams");
-        String s="Team\r\n";
+        String s="BusinessLayer.OtherCrudOperations.Team\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void searchCategoryAccounts() {
         Search("Category","Accounts");
-        String s="Account\r\nAccount\r\n";
+        String s="BusinessLayer.OtherCrudOperations.Account\r\nBusinessLayer.OtherCrudOperations.Account\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void searchCategoryLeagues() {
         Search("Category","Leagues");
-        String s="League\r\n";
+        String s="BusinessLayer.OtherCrudOperations.League\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void searchCategorySeasons() {
         Search("Category","Seasons");
-        String s="Season\r\n";
+        String s="BusinessLayer.OtherCrudOperations.Season\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterRolePlayers() {
-        Filter("Role","Players");
-        String s="Player\r\n";
+        Filter("BusinessLayer.RoleCrudOperations.Role","Players");
+        String s="BusinessLayer.RoleCrudOperations.Player\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterRoleCoaches() {
-        Filter("Role","Coaches");
-        String s="Coach\r\n";
+        Filter("BusinessLayer.RoleCrudOperations.Role","Coaches");
+        String s="BusinessLayer.RoleCrudOperations.Coach\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
@@ -180,8 +184,8 @@ public class GuestTest {
         Account checkAccount2=new Account("Tommy",30,"TommyX","1234");
         DataManager.addAccount(checkAccount2);
         checkAccount2.addRole(new TeamManager("Tommy", team,(Owner)checkAccount1.getRoles().get(0)));
-        Filter("Role","TeamManagers");
-        String s="TeamManager\r\n";
+        Filter("BusinessLayer.RoleCrudOperations.Role","TeamManagers");
+        String s="BusinessLayer.RoleCrudOperations.TeamManager\r\n";
         assertEquals(s,OS.toString());
     }
     @Test
@@ -189,8 +193,8 @@ public class GuestTest {
         Account checkAccount=new Account("Tom",30,"TomX","1234");
         DataManager.addAccount(checkAccount);
         checkAccount.addRole(new Owner("Tom", team,null));
-        Filter("Role","Owners");
-        String s="Owner\r\n";
+        Filter("BusinessLayer.RoleCrudOperations.Role","Owners");
+        String s="BusinessLayer.RoleCrudOperations.Owner\r\n";
         assertEquals(s,OS.toString());
     }
     @Test
@@ -198,26 +202,26 @@ public class GuestTest {
         Account account3=new Account("Eitan",25,"EitanX","1234");
         account3.addRole(new Referee("Abroad","Eitan"));
         DataManager.addAccount(account3);
-        Filter("Role","Referees");
-        String s="Referee\r\n";
+        Filter("BusinessLayer.RoleCrudOperations.Role","Referees");
+        String s="BusinessLayer.RoleCrudOperations.Referee\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterTeams(){
-        Filter("Team","");
-        String s="Team\r\n";
+        Filter("BusinessLayer.OtherCrudOperations.Team","");
+        String s="BusinessLayer.OtherCrudOperations.Team\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterLeagues(){
-        Filter("League","");
-        String s="League\r\n";
+        Filter("BusinessLayer.OtherCrudOperations.League","");
+        String s="BusinessLayer.OtherCrudOperations.League\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterSeasons(){
-        Filter("Season","");
-        String s="Season\r\n";
+        Filter("BusinessLayer.OtherCrudOperations.Season","");
+        String s="BusinessLayer.OtherCrudOperations.Season\r\n";
         assertEquals(OS.toString(),s);
     }
     //endregion
@@ -232,7 +236,7 @@ public class GuestTest {
     private boolean CheckLoggerLines(String s) {
         String line= null;
         try {
-            BufferedReader BR=new BufferedReader(new FileReader(new File("Logger")));
+            BufferedReader BR=new BufferedReader(new FileReader(new File("BusinessLayer.Logger.Logger")));
             line = BR.readLine();
             BR.close();
             if(s.equals(line.substring(line.indexOf('-')+2)))
@@ -337,7 +341,7 @@ public class GuestTest {
         }
     }
     public void Filter(String category,String roleFilter){
-        if(category.equals("Role")){
+        if(category.equals("BusinessLayer.RoleCrudOperations.Role")){
             if(roleFilter.equals("Players")){
                 List<Player> players= DataManager.getPlayersFromAccounts();
                 for(Player player:players)
@@ -369,15 +373,15 @@ public class GuestTest {
             }
 
         }
-        if(category.equals("Team")){
+        if(category.equals("BusinessLayer.OtherCrudOperations.Team")){
             for(Team team: DataManager.getTeams())
                 ShowTeamStub();
         }
-        if(category.equals("League")){
+        if(category.equals("BusinessLayer.OtherCrudOperations.League")){
             for(League league: DataManager.getLeagues())
                 ShowLeagueStub();
         }
-        if(category.equals("Season")){
+        if(category.equals("BusinessLayer.OtherCrudOperations.Season")){
             for(Season season: DataManager.getSeasons())
                 ShowSeasonStub();
         }
@@ -386,31 +390,31 @@ public class GuestTest {
 
     //region ShowStubs
     private void ShowTeamStub(){
-        System.out.println("Team");
+        System.out.println("BusinessLayer.OtherCrudOperations.Team");
     }
     private void ShowLeagueStub(){
-        System.out.println("League");
+        System.out.println("BusinessLayer.OtherCrudOperations.League");
     }
     private void ShowSeasonStub(){
-        System.out.println("Season");
+        System.out.println("BusinessLayer.OtherCrudOperations.Season");
     }
     private void ShowRefereeStub(){
-        System.out.println("Referee");
+        System.out.println("BusinessLayer.RoleCrudOperations.Referee");
     }
     private void ShowAccountStub(){
-        System.out.println("Account");
+        System.out.println("BusinessLayer.OtherCrudOperations.Account");
     }
     private void ShowPlayerStub(){
-        System.out.println("Player");
+        System.out.println("BusinessLayer.RoleCrudOperations.Player");
     }
     private void ShowCoachStub(){
-        System.out.println("Coach");
+        System.out.println("BusinessLayer.RoleCrudOperations.Coach");
     }
     private void ShowOwnerStub(){
-        System.out.println("Owner");
+        System.out.println("BusinessLayer.RoleCrudOperations.Owner");
     }
     private void ShowTeamManagerStub(){
-        System.out.println("TeamManager");
+        System.out.println("BusinessLayer.RoleCrudOperations.TeamManager");
     }
     //endregion
 }

@@ -1,3 +1,10 @@
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.Pages.Page;
+import BusinessLayer.RoleCrudOperations.Fan;
+import BusinessLayer.RoleCrudOperations.Player;
+import BusinessLayer.RoleCrudOperations.Referee;
+import BusinessLayer.RoleCrudOperations.Role;
+import DataLayer.DataManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +41,7 @@ public class PlayerTest {
 
     @Before
     public void init(){
+        DataManager.clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 
@@ -112,7 +120,7 @@ public class PlayerTest {
                 "Position:\r\n" +
                 "AttackingMidfielder\r\n" +
                 "\r\n" +
-                "Team:\r\n" +
+                "BusinessLayer.OtherCrudOperations.Team:\r\n" +
                 "B7\r\n"
                 ,OS.toString());
     }
@@ -134,7 +142,7 @@ public class PlayerTest {
         System.out.println("Position:");
         System.out.println(getPositionStub());
         System.out.println();
-        System.out.println("Team:");
+        System.out.println("BusinessLayer.OtherCrudOperations.Team:");
         System.out.println(getTeamNameStub());
     }
     //stubs

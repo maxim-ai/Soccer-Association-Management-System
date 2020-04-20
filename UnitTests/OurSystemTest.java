@@ -1,4 +1,7 @@
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.RoleCrudOperations.*;
+import DataLayer.DataManager;
+import ServiceLayer.OurSystem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +25,7 @@ public class OurSystemTest {
         DataManager.clearDataBase();
         ourSystem=new OurSystem();
         System.setOut(new PrintStream(OS));
-        File loggerFile=new File("Logger");
+        File loggerFile=new File("BusinessLayer.Logger.Logger");
         if(loggerFile.exists())
             loggerFile.delete();
     }
@@ -125,7 +128,7 @@ public class OurSystemTest {
     private boolean CheckLoggerLines(String s) {
         String line= null;
         try {
-            BufferedReader BR=new BufferedReader(new FileReader(new File("Logger")));
+            BufferedReader BR=new BufferedReader(new FileReader(new File("BusinessLayer.Logger.Logger")));
             line = BR.readLine();
             BR.close();
             if(s.equals(line.substring(line.indexOf('-')+2)))

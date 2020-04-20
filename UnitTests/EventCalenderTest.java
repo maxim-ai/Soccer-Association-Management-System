@@ -1,4 +1,9 @@
-import javafx.event.EventType;
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.Pages.Page;
+import BusinessLayer.RoleCrudOperations.Fan;
+import BusinessLayer.RoleCrudOperations.Referee;
+import DataLayer.DataManager;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Time;
@@ -30,6 +35,11 @@ public class EventCalenderTest {
     EventCalender eventCalender1=new EventCalender(match);
     GameEvent gameEvent1=new GameEvent(EventEnum.goal,date,time,"Goal!!!",15,eventCalender1);
     List<GameEvent>gameEvents1=new LinkedList<>();
+
+    @Before
+    public void setUp(){
+        DataManager.clearDataBase();
+    }
     @Test
     public void getMatch() {
         assertEquals(match,eventCalender.getMatch());

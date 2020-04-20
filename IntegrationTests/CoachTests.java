@@ -1,3 +1,12 @@
+import BusinessLayer.OtherCrudOperations.League;
+import BusinessLayer.OtherCrudOperations.Season;
+import BusinessLayer.OtherCrudOperations.Stadium;
+import BusinessLayer.OtherCrudOperations.Team;
+import BusinessLayer.Pages.Page;
+import BusinessLayer.RoleCrudOperations.Coach;
+import BusinessLayer.RoleCrudOperations.Fan;
+import BusinessLayer.RoleCrudOperations.Referee;
+import DataLayer.DataManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +19,7 @@ import java.util.Date;
 import static org.junit.Assert.*;
 
 public class CoachTests {
-    Coach coach=new Coach("Yossi Abukasis","Football Association","Coach",null);
+    Coach coach=new Coach("Yossi Abukasis","Football Association","BusinessLayer.RoleCrudOperations.Coach",null);
     public Referee referee=new Referee("Football Association","adi lioz");
     private final ByteArrayOutputStream OS=new ByteArrayOutputStream();
     private final PrintStream PS=System.out;
@@ -29,6 +38,7 @@ public class CoachTests {
     Fan fan=new Fan("tzlil");
     @Before
     public void init(){
+        DataManager.clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 
@@ -83,7 +93,7 @@ public class CoachTests {
                 "Football Association\r\n" +
                 "\r\n" +
                 "TeamRole:\r\n" +
-                "Coach\r\n" +
+                "BusinessLayer.RoleCrudOperations.Coach\r\n" +
                 "\r\n" +
                 "TeamsCoaching:\r\n" +
                 "B7\r\n",OS.toString());

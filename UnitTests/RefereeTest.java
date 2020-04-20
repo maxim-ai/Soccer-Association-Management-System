@@ -1,5 +1,10 @@
+import BusinessLayer.Logger.Logger;
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.Pages.Page;
+import BusinessLayer.RoleCrudOperations.Fan;
+import BusinessLayer.RoleCrudOperations.Referee;
+import DataLayer.DataManager;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,6 +40,7 @@ public class RefereeTest {
      SLsettings sLsettings=new SLsettings(policy);
     @Before
     public void init(){
+        DataManager.clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 
@@ -99,7 +105,7 @@ public class RefereeTest {
 
     @Test
     public void setLeagues() {
-        HashMap<League,Season> leagueSeasonHashMap1=new HashMap<>();
+        HashMap<League, Season> leagueSeasonHashMap1=new HashMap<>();
         HashMap<League,Season> leagueSeasonHashMap2=new HashMap<>();
         leagueSeasonHashMap1.put(league,season);
         leagueSeasonHashMap2.put(league,season);
@@ -212,7 +218,7 @@ public class RefereeTest {
                 ShowMatchStub(m);
                 System.out.println();
             }
-            Logger.getInstance().writeNewLine("Referee "+getNameStub()+" watch all his Matches");
+            Logger.getInstance().writeNewLine("BusinessLayer.RoleCrudOperations.Referee "+getNameStub()+" watch all his Matches");
         } else System.out.println("No matches!");
     }
     //stubs
@@ -236,10 +242,10 @@ public class RefereeTest {
         return true;
     }
     //stubs
-    public boolean hasLeagueStub(Season season,League league){
+    public boolean hasLeagueStub(Season season, League league){
         return false;
     }
-    public boolean addSLsettingsToLeagueStub(Season season,League aLeague,SLsettings asLsettings)
+    public boolean addSLsettingsToLeagueStub(Season season, League aLeague, SLsettings asLsettings)
     {
         return true;
     }

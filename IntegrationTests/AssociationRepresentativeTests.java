@@ -1,4 +1,10 @@
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.RoleCrudOperations.AssociationRepresentative;
+import BusinessLayer.RoleCrudOperations.Owner;
+import BusinessLayer.RoleCrudOperations.Referee;
+import DataLayer.DataManager;
 import javafx.util.Pair;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -7,6 +13,11 @@ import static org.junit.Assert.*;
 
 public class AssociationRepresentativeTests {
     AssociationRepresentative associationRepresentative=new AssociationRepresentative("Test");
+
+    @Before
+    public void setUp(){
+        DataManager.clearDataBase();
+    }
 
 
     @Test
@@ -18,6 +29,7 @@ public class AssociationRepresentativeTests {
 
     @Test
     public void setYearToLeague() {
+        DataManager.clearDataBase();
         League testLeague = new League("Test");
         if(associationRepresentative.setYearToLeague(testLeague,"0000") && DataManager.getLeagues().contains(testLeague)) {
             List<Season> seasonsList = DataManager.getSeasons();
@@ -43,7 +55,7 @@ public class AssociationRepresentativeTests {
         League testLeague = new League("Test");
         boolean actual = (associationRepresentative.addRefereeToLeague(testReferee,testLeague,testSeason));
 
-        if(DataManager.getLeagues().contains(testLeague)&&DataManager.getSeasons().contains(testSeason))
+        if(DataManager.getLeagues().contains(testLeague)&& DataManager.getSeasons().contains(testSeason))
             for(League league:DataManager.getLeagues()){
                 SLsettings sLsettings = league.getSLsettingsBySeason(testSeason);
                 if(sLsettings!=null){

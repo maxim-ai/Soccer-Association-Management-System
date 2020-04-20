@@ -1,3 +1,8 @@
+import BusinessLayer.Logger.Logger;
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.RoleCrudOperations.Referee;
+import DataLayer.DataManager;
+import ServiceLayer.OurSystem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +30,7 @@ public class MatchTest {
     @Before
     public void setUp()
     {
+        DataManager.clearDataBase();
         Logger logger=new Logger();
         OurSystem ourSystem=new OurSystem();
         ourSystem.Initialize();
@@ -226,10 +232,10 @@ public class MatchTest {
                 "Referees:\r\n" +
                 "Main: ref1, Line1: ref2, Line2: ref3\r\n" +
                 "\r\n" +
-                "Stadium:\r\n" +
+                "BusinessLayer.OtherCrudOperations.Stadium:\r\n" +
                 "s1\r\n" +
                 "\r\n" +
-                "Season:\r\n" +
+                "BusinessLayer.OtherCrudOperations.Season:\r\n" +
                 "se1\r\n" +
                 "\r\n" +
                 "Game Events:\r\n",OS.toString());

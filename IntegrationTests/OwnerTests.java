@@ -1,8 +1,11 @@
-import org.junit.After;
+import BusinessLayer.Logger.Logger;
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.RoleCrudOperations.*;
+import DataLayer.DataManager;
+import ServiceLayer.OurSystem;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.xml.crypto.Data;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Date;
@@ -23,6 +26,7 @@ public class OwnerTests {
 
     @Before
     public void setUp() throws Exception {
+        DataManager.clearDataBase();
         Logger logger=new Logger();
         OurSystem ourSystem=new OurSystem();
         ourSystem.Initialize();
@@ -66,7 +70,7 @@ public class OwnerTests {
     @Test /*UC 6.1*/
     public void removeAssetFromTeam()
     {
-        Player tmpPlayer=new Player("tmpPlayer",new Date(1997,11,18),PositionEnum.CenterBack,tempTeam,null);
+        Player tmpPlayer=new Player("tmpPlayer",new Date(1997,11,18), PositionEnum.CenterBack,tempTeam,null);
         Coach tmpCoach=new Coach("tmpCoach","bla","bla",null);
         Stadium tmpStadium=new Stadium("tmpStadium");
         Referee tmpReferee=new Referee("bla","bla");
@@ -203,7 +207,7 @@ public class OwnerTests {
         assoAccount.checkIfAssiciationRepresentive().approveTeam("assoTeam",owner);
 
         ans=owner.createTeam("assoTeam",new League("assoLeague"),new Stadium("assoSta"));
-        assertEquals(ans,"Team successfully added");
+        assertEquals(ans,"BusinessLayer.OtherCrudOperations.Team successfully added");
         assertEquals(owner.getTeam().getName(),"assoTeam");
         assertFalse(AssociationRepresentative.checkIfRequestExists(owner,"assoTeam"));
     }

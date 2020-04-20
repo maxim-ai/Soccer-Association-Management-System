@@ -1,3 +1,9 @@
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.Pages.Page;
+import BusinessLayer.RoleCrudOperations.Fan;
+import BusinessLayer.RoleCrudOperations.Referee;
+import DataLayer.DataManager;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Time;
@@ -25,12 +31,17 @@ public class EventCalenderTests {
     Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,lineRefereeOne,lineRefereeTwo);
     EventCalender eventCalender=new EventCalender(match);
 
+    @Before
+    public void setUp(){
+        DataManager.clearDataBase();
+    }
+
 
     @Test
     public void addGameEvent() {
         Match match2=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,lineRefereeOne,lineRefereeTwo);
         EventCalender eventCalender2=new EventCalender(match2);
-        GameEvent gameEvent1=new GameEvent(EventEnum.goal,date,time,"goal!!!",(int)Referee.getDateDiff(match.getDate(),date, TimeUnit.MINUTES),null);
+        GameEvent gameEvent1=new GameEvent(EventEnum.goal,date,time,"goal!!!",(int) Referee.getDateDiff(match.getDate(),date, TimeUnit.MINUTES),null);
         GameEvent gameEvent2=new GameEvent(EventEnum.goal,date,time,"goal!!!",(int)Referee.getDateDiff(match.getDate(),date, TimeUnit.MINUTES),null);
         assertTrue(eventCalender.addGameEvent(gameEvent1));
         assertTrue(eventCalender2.addGameEvent(gameEvent1));

@@ -1,6 +1,8 @@
 
+import BusinessLayer.OtherCrudOperations.*;
+import DataLayer.DataManager;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -13,6 +15,11 @@ import static org.junit.Assert.*;
 public class LeagueTest {
     League league = new League("first league");
 
+    @Before
+    public void setUp(){
+        DataManager.clearDataBase();
+    }
+
     @Test
     public void getsLsetting() {
         HashMap<Season,SLsettings> sLsetting = new HashMap<>();
@@ -22,7 +29,7 @@ public class LeagueTest {
 
     @Test
     public void setsLsetting() {
-        HashMap<Season,SLsettings> sLsetting = new HashMap<>();
+        HashMap<Season, SLsettings> sLsetting = new HashMap<>();
         league.setsLsetting(sLsetting);
         assertEquals(sLsetting,league.getsLsetting());
     }
@@ -122,7 +129,7 @@ public class LeagueTest {
         return true;
     }
 
-    public boolean addSLsettingsToLeagueStub(League aLeague,SLsettings asLsettings,Season season)
+    public boolean addSLsettingsToLeagueStub(League aLeague, SLsettings asLsettings, Season season)
     {
         season.getsLsettings().put(aLeague,asLsettings);
         if(!aLeague.hasPolicy(season,asLsettings)){
@@ -142,7 +149,7 @@ public class LeagueTest {
         assertEquals(0,league.getsLsetting().size());
     }
 
-    public boolean removeSLsettingsFromSeason(Season aSeason,boolean bool)
+    public boolean removeSLsettingsFromSeason(Season aSeason, boolean bool)
     {
         if (!league.getsLsetting().containsKey(aSeason)) {
             return true;

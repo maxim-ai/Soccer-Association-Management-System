@@ -1,3 +1,9 @@
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.Pages.Page;
+import BusinessLayer.RoleCrudOperations.Fan;
+import BusinessLayer.RoleCrudOperations.Player;
+import BusinessLayer.RoleCrudOperations.Referee;
+import DataLayer.DataManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,11 +30,12 @@ public class PlayerTests {
     Page page2=new Page(homeTeam);
     Referee lineRefereeOne=new Referee("Football Association","zviali bar");
     Referee lineRefereeTwo=new Referee("Football Association","karapti roy");
-    Player player=new Player("Yosi",date,PositionEnum.AttackingMidfielder,null,null);
+    Player player=new Player("Yosi",date, PositionEnum.AttackingMidfielder,null,null);
     Fan fan=new Fan("tzlil");
 
     @Before
     public void init(){
+        DataManager.clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 
@@ -75,7 +82,7 @@ public class PlayerTests {
                         "Position:\r\n" +
                         "AttackingMidfielder\r\n" +
                         "\r\n" +
-                        "Team:\r\n" +
+                        "BusinessLayer.OtherCrudOperations.Team:\r\n" +
                         "B7\r\n"
                 ,OS.toString());
     }

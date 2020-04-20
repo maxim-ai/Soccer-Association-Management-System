@@ -1,3 +1,8 @@
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.Pages.Page;
+import BusinessLayer.RoleCrudOperations.Fan;
+import BusinessLayer.RoleCrudOperations.Referee;
+import DataLayer.DataManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -6,7 +11,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.Time;
 import java.util.Date;
-import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
@@ -29,6 +33,7 @@ public class RefereeTests {
     Fan fan=new Fan("tzlil");
     @Before
     public void init(){
+        DataManager.clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 
@@ -61,10 +66,10 @@ public class RefereeTests {
                 "Referees:\r\n" +
                 "Main: adi lioz, Line1: zviali bar, Line2: karapti roy\r\n" +
                 "\r\n" +
-                "Stadium:\r\n" +
+                "BusinessLayer.OtherCrudOperations.Stadium:\r\n" +
                 "B7\r\n" +
                 "\r\n" +
-                "Season:\r\n" +
+                "BusinessLayer.OtherCrudOperations.Season:\r\n" +
                 "winter\r\n" +
                 "\r\n" +
                 "Game Events:\r\n\r\n",OS.toString());

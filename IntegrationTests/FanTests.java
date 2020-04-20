@@ -1,3 +1,8 @@
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.Pages.Page;
+import BusinessLayer.RoleCrudOperations.*;
+import DataLayer.DataManager;
+import ServiceLayer.OurSystem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,17 +16,19 @@ import static org.junit.Assert.*;
 
 public class FanTests {
     Fan fan;
-    Account account1;Account account2;League league;Stadium stadium;Season season;Team team;Page playerPage;Page teamPage;
+    Account account1;Account account2;League league;Stadium stadium;Season season;
+    Team team;Page playerPage;Page teamPage;
     TeamManager teamManager; Owner owner; Match match;
     private final ByteArrayOutputStream OS=new ByteArrayOutputStream();
     private final PrintStream PS=System.out;
 
     @Before
     public void setUp() throws Exception {
+        DataManager.clearDataBase();
         System.setOut(new PrintStream(OS));
         fan = new Fan("Danny");
         account1=new Account("Maxim",26,"MaximX","1234");
-        account1.addRole(new Player("Maxim",new Date(),PositionEnum.Goalkeeper,team,null));
+        account1.addRole(new Player("Maxim",new Date(), PositionEnum.Goalkeeper,team,null));
         account2=new Account("Tzlil",26,"TzlilX","1234");
         account2.addRole(new Coach("Tzlil","aaa","bbb",null));
         league=new League("International");
@@ -54,7 +61,7 @@ public class FanTests {
         DataManager.addTeam(team);
 
 
-        File loggerFile=new File("Logger");
+        File loggerFile=new File("BusinessLayer.Logger.Logger");
         if(loggerFile.exists())
             loggerFile.delete();
     }
@@ -68,13 +75,13 @@ public class FanTests {
     public void showInfoAboutTeams() {
         fan.ShowInfo("Teams");
         String s="Name:\r\nBarcelona\r\n\r\nTeamManagers:\r\nYossi\r\n\r\nCoaches:\r\nTzlil\r\n\r\nTeamOwners:\r\nHaim\r\n\r\nPlayers:\r\nMaxim\r\n\r\n" +
-                "League:\r\nInternational\r\n\r\nMatches:\r\nBarcelona against Rome\r\n\r\nStadium:\r\nTeddy\r\n\r\n";
+                "BusinessLayer.OtherCrudOperations.League:\r\nInternational\r\n\r\nMatches:\r\nBarcelona against Rome\r\n\r\nBusinessLayer.OtherCrudOperations.Stadium:\r\nTeddy\r\n\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutPlayers(){
         fan.ShowInfo("Players");
-        String s="Name:\r\nMaxim\r\n\r\nAge:\r\n26\r\n\r\nPosition:\r\nGoalkeeper\r\n\r\nTeam:\r\nBarcelona\r\n";
+        String s="Name:\r\nMaxim\r\n\r\nAge:\r\n26\r\n\r\nPosition:\r\nGoalkeeper\r\n\r\nBusinessLayer.OtherCrudOperations.Team:\r\nBarcelona\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
@@ -99,7 +106,7 @@ public class FanTests {
     public void searchName() {
         fan.Search("Name","Barcelona");
         String s="Teams with the name Barcelona\r\nName:\r\nBarcelona\r\n\r\nTeamManagers:\r\nYossi\r\n\r\nCoaches:\r\nTzlil\r\n\r\nTeamOwners:\r\nHaim\r\n\r\nPlayers:\r\nMaxim\r\n\r\n" +
-                "League:\r\nInternational\r\n\r\nMatches:\r\nBarcelona against Rome\r\n\r\nStadium:\r\nTeddy\r\n\r\n";
+                "BusinessLayer.OtherCrudOperations.League:\r\nInternational\r\n\r\nMatches:\r\nBarcelona against Rome\r\n\r\nBusinessLayer.OtherCrudOperations.Stadium:\r\nTeddy\r\n\r\n";
         assertEquals(OS.toString(),s);
         List<String[]> searchHistory=fan.getSearchHistory();
         assertTrue(searchHistory.get(0)[0].equals("Name"));
@@ -109,7 +116,7 @@ public class FanTests {
     public void searchCategoryTeams() {
         fan.Search("Category","Teams");
         String s="Name:\r\nBarcelona\r\n\r\nTeamManagers:\r\nYossi\r\n\r\nCoaches:\r\nTzlil\r\n\r\nTeamOwners:\r\nHaim\r\n\r\nPlayers:\r\nMaxim\r\n\r\n" +
-                "League:\r\nInternational\r\n\r\nMatches:\r\nBarcelona against Rome\r\n\r\nStadium:\r\nTeddy\r\n\r\n";
+                "BusinessLayer.OtherCrudOperations.League:\r\nInternational\r\n\r\nMatches:\r\nBarcelona against Rome\r\n\r\nBusinessLayer.OtherCrudOperations.Stadium:\r\nTeddy\r\n\r\n";
         assertEquals(OS.toString(),s);
         List<String[]> searchHistory=fan.getSearchHistory();
         assertTrue(searchHistory.get(0)[0].equals("Category"));
@@ -119,8 +126,8 @@ public class FanTests {
     @Test
     public void searchCategoryAccounts() {
         fan.Search("Category","Accounts");
-        String s="Name:\r\nMaxim\r\n\r\nAge:\r\n26\r\n\r\nRoles:\r\nPlayer\r\n\r\nName:\r\nTzlil\r\n\r\nAge:\r\n26\r\n\r\n" +
-                "Roles:\r\nCoach\r\n\r\n";
+        String s="Name:\r\nMaxim\r\n\r\nAge:\r\n26\r\n\r\nRoles:\r\nBusinessLayer.RoleCrudOperations.Player\r\n\r\nName:\r\nTzlil\r\n\r\nAge:\r\n26\r\n\r\n" +
+                "Roles:\r\nBusinessLayer.RoleCrudOperations.Coach\r\n\r\n";
         assertEquals(OS.toString(),s);
         List<String[]> searchHistory=fan.getSearchHistory();
         assertTrue(searchHistory.get(0)[0].equals("Category"));
@@ -146,25 +153,25 @@ public class FanTests {
     }
     @Test
     public void filterRolePlayers() {
-        fan.Filter("Role","Players");
-        String s="Name:\r\nMaxim\r\n\r\nAge:\r\n26\r\n\r\nPosition:\r\nGoalkeeper\r\n\r\nTeam:\r\nBarcelona\r\n";
+        fan.Filter("BusinessLayer.RoleCrudOperations.Role","Players");
+        String s="Name:\r\nMaxim\r\n\r\nAge:\r\n26\r\n\r\nPosition:\r\nGoalkeeper\r\n\r\nBusinessLayer.OtherCrudOperations.Team:\r\nBarcelona\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterRoleCoaches() {
-        fan.Filter("Role","Coaches");
+        fan.Filter("BusinessLayer.RoleCrudOperations.Role","Coaches");
         String s="Name:\r\nTzlil\r\n\r\nTraining:\r\naaa\r\n\r\nTeamRole:\r\nbbb\r\n\r\nTeamsCoaching:\r\nBarcelona\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterRoleTeamManagers() {
-        fan.Filter("Role","TeamManagers");
+        fan.Filter("BusinessLayer.RoleCrudOperations.Role","TeamManagers");
         String s="";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterRoleOwners() {
-        fan.Filter("Role","Owners");
+        fan.Filter("BusinessLayer.RoleCrudOperations.Role","Owners");
         String s="";
         assertEquals(OS.toString(),s);
     }
@@ -173,26 +180,26 @@ public class FanTests {
         Account account3=new Account("Eitan",25,"EitanX","1234");
         account3.addRole(new Referee("Abroad","Eitan"));
         DataManager.addAccount(account3);
-        fan.Filter("Role","Referees");
+        fan.Filter("BusinessLayer.RoleCrudOperations.Role","Referees");
         String s="Name:\r\nEitan\r\n\r\nTraining:\r\nAbroad\r\n\r\nMatches judged:\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterTeams(){
-        fan.Filter("Team","");
+        fan.Filter("BusinessLayer.OtherCrudOperations.Team","");
         String s="Name:\r\nBarcelona\r\n\r\nTeamManagers:\r\nYossi\r\n\r\nCoaches:\r\nTzlil\r\n\r\nTeamOwners:\r\nHaim\r\n\r\nPlayers:\r\nMaxim\r\n\r\n" +
-                "League:\r\nInternational\r\n\r\nMatches:\r\nBarcelona against Rome\r\n\r\nStadium:\r\nTeddy\r\n\r\n";
+                "BusinessLayer.OtherCrudOperations.League:\r\nInternational\r\n\r\nMatches:\r\nBarcelona against Rome\r\n\r\nBusinessLayer.OtherCrudOperations.Stadium:\r\nTeddy\r\n\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterLeagues(){
-        fan.Filter("League","");
+        fan.Filter("BusinessLayer.OtherCrudOperations.League","");
         String s="Name:\r\nInternational\r\n\r\nTeams in league:\r\nBarcelona\r\nRome\r\n\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterSeasons(){
-        fan.Filter("Season","");
+        fan.Filter("BusinessLayer.OtherCrudOperations.Season","");
         String s="Name:\r\nWinter\r\n\r\nMatches:\r\nBarcelona against Rome\r\n";
         assertEquals(OS.toString(),s);
     }
@@ -218,7 +225,7 @@ public class FanTests {
         OurSystem OS=new OurSystem();
         OS.Initialize();
         fan.Report("aaa");
-        CheckLoggerLines("Fan Danny sent report to the system manager");
+        CheckLoggerLines("BusinessLayer.RoleCrudOperations.Fan Danny sent report to the system manager");
     }
 
     //endregion
@@ -228,7 +235,7 @@ public class FanTests {
     private boolean CheckLoggerLines(String s) {
         String line= null;
         try {
-            BufferedReader BR=new BufferedReader(new FileReader(new File("Logger")));
+            BufferedReader BR=new BufferedReader(new FileReader(new File("BusinessLayer.Logger.Logger")));
             line = BR.readLine();
             BR.close();
             if(s.equals(line.substring(line.indexOf('-')+2)))

@@ -1,17 +1,23 @@
 
+import BusinessLayer.OtherCrudOperations.League;
+import BusinessLayer.OtherCrudOperations.Policy;
+import BusinessLayer.OtherCrudOperations.SLsettings;
+import BusinessLayer.OtherCrudOperations.Season;
+import DataLayer.DataManager;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class LeagueTests {
     League league = new League("first league");
+
+    @Before
+    public void setUp(){
+        DataManager.clearDataBase();
+    }
 
 
     @Test

@@ -1,3 +1,5 @@
+import BusinessLayer.Logger.Logger;
+import DataLayer.DataManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -5,13 +7,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import static org.junit.Assert.*;
 
 public class LoggerTest {
     Logger logger;
+
+    @Before
+    public void setUp(){
+        DataManager.clearDataBase();
+    }
 
 
     //region UC and Technical Test
@@ -22,14 +27,14 @@ public class LoggerTest {
     }
     @Test
     public void getInstanceTwoPointers() {
-        logger=Logger.getInstance();
+        logger= Logger.getInstance();
         Logger logger2=Logger.getInstance();
         assertEquals(logger,logger2);
     }
 
     @Test
     public void writeNewLineFileNotExists() throws IOException {
-        File loggerFile=new File("Logger");
+        File loggerFile=new File("BusinessLayer.Logger.Logger");
         if(loggerFile.exists())
             loggerFile.delete();
         logger=Logger.getInstance();
@@ -39,7 +44,7 @@ public class LoggerTest {
 
     @Test
     public void writeNewLineFileExists() throws IOException{
-        File loggerFile=new File("Logger");
+        File loggerFile=new File("BusinessLayer.Logger.Logger");
         if(!loggerFile.exists())
             loggerFile.createNewFile();
         logger=Logger.getInstance();
@@ -49,7 +54,7 @@ public class LoggerTest {
 
     @Test
     public void readLoggerFile() {
-        File loggerFile=new File("Logger");
+        File loggerFile=new File("BusinessLayer.Logger.Logger");
         if(loggerFile.exists())
             loggerFile.delete();
         logger=Logger.getInstance();
@@ -62,7 +67,7 @@ public class LoggerTest {
     private boolean CheckLoggerLines(String s) {
         String line= null;
         try {
-            BufferedReader BR=new BufferedReader(new FileReader(new File("Logger")));
+            BufferedReader BR=new BufferedReader(new FileReader(new File("BusinessLayer.Logger.Logger")));
             line = BR.readLine();
             BR.close();
             if(s.equals(line.substring(line.indexOf('-')+2)))

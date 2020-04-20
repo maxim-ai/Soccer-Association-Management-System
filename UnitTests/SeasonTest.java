@@ -1,6 +1,9 @@
 
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.RoleCrudOperations.Referee;
+import DataLayer.DataManager;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -14,6 +17,11 @@ import static org.junit.Assert.*;
 
 public class SeasonTest {
     Season season = new Season("2019");
+
+    @Before
+    public void setUp(){
+        DataManager.clearDataBase();
+    }
 
     @Test
     public void setName() {
@@ -145,7 +153,7 @@ public class SeasonTest {
         return true;
     }
 
-    public boolean removeSLsettingsFromSeasonStub(Season aSeason,boolean bool,League league)
+    public boolean removeSLsettingsFromSeasonStub(Season aSeason, boolean bool, League league)
     {
         if (!league.getsLsetting().containsKey(aSeason)) {
             return true;

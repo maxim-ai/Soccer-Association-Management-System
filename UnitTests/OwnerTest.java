@@ -1,8 +1,12 @@
+import BusinessLayer.Logger.Logger;
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.RoleCrudOperations.*;
+import DataLayer.DataManager;
+import ServiceLayer.OurSystem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.xml.crypto.Data;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Date;
@@ -23,6 +27,7 @@ public class OwnerTest {
 
     @Before
     public void setUp() throws Exception {
+        DataManager.clearDataBase();
         Logger logger=new Logger();
         OurSystem ourSystem=new OurSystem();
         ourSystem.Initialize();
@@ -105,7 +110,7 @@ public class OwnerTest {
     @Test /*UC 6.1*/
     public void removeAssetFromTeam()
     {
-        Player tmpPlayer=new Player("tmpPlayer",new Date(1997,11,18),PositionEnum.CenterBack,tempTeam,null);
+        Player tmpPlayer=new Player("tmpPlayer",new Date(1997,11,18), PositionEnum.CenterBack,tempTeam,null);
         Coach tmpCoach=new Coach("tmpCoach","bla","bla",null);
         Stadium tmpStadium=new Stadium("tmpStadium");
         Referee tmpReferee=new Referee("bla","bla");
@@ -385,7 +390,7 @@ public class OwnerTest {
     public void showOwner()
     {
         owner.ShowOwner();
-        assertEquals("Name:\r\nsean\r\nTeam owned:\r\nmyTeam\r\n",OS.toString());
+        assertEquals("Name:\r\nsean\r\nBusinessLayer.OtherCrudOperations.Team owned:\r\nmyTeam\r\n",OS.toString());
     }
 
 
@@ -566,7 +571,7 @@ public class OwnerTest {
 
         deleteStub(teamManager);
 
-        List<Account> tamp=DataManager.getAccounts();
+        List<Account> tamp= DataManager.getAccounts();
 
         for (Account account : DataManager.getAccounts())
         {
@@ -644,7 +649,7 @@ public class OwnerTest {
                 DataManager.addTeam(team);
                 removeOpenTeamRequestStub(owner,teamName);
                 Logger.getInstance().writeNewLine(owner.getName()+" just opened the team: "+teamName);
-                return "Team successfully added";
+                return "BusinessLayer.OtherCrudOperations.Team successfully added";
             }
         }
 

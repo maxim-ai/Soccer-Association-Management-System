@@ -1,4 +1,11 @@
-import org.junit.After;
+import BusinessLayer.Logger.Logger;
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.RoleCrudOperations.Coach;
+import BusinessLayer.RoleCrudOperations.Owner;
+import BusinessLayer.RoleCrudOperations.Player;
+import BusinessLayer.RoleCrudOperations.TeamManager;
+import DataLayer.DataManager;
+import ServiceLayer.OurSystem;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,6 +36,7 @@ public class TeamManagerTests {
     Team t3;
     @Before
     public void setUp() {
+        DataManager.clearDataBase();
         DataManager dataManager = new DataManager();
         Logger logger = new Logger();
         OurSystem ourSystem = new OurSystem();
@@ -58,7 +66,7 @@ public class TeamManagerTests {
         o1.addRole(new Owner(o1.getName(),t1,null));
         o2.addRole(new Owner(o2.getName(),t2,null));
         o3.addRole(new Owner(o3.getName(),t3,null));
-        p2.addRole(new Player(p2.getName(),new Date(123456),PositionEnum.CenterBack,t2,null));
+        p2.addRole(new Player(p2.getName(),new Date(123456), PositionEnum.CenterBack,t2,null));
         c2.addRole(new Coach(c2.getName(),"bla","bla",null));
 
         o1.checkIfOwner().appointTeamManagerToTeam(tm1,permissions);

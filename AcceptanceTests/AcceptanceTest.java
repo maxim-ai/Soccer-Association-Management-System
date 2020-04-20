@@ -1,3 +1,11 @@
+import BusinessLayer.Logger.Logger;
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.Pages.Page;
+import BusinessLayer.RoleCrudOperations.*;
+import DataLayer.DataManager;
+import ServiceLayer.*;
+import ServiceLayer.GuestController.GuestController;
+import ServiceLayer.RoleController.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -5,7 +13,6 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
-import java.security.Permission;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +53,7 @@ public class AcceptanceTest {
 
     @Before
     public void setUp()  {
+        DataManager.clearDataBase();
         System.setOut(new PrintStream(OS));
         InitDatabase();
         File file=new File("firstInitCheck");
@@ -53,13 +61,12 @@ public class AcceptanceTest {
             file.delete();
         ourSystem=new OurSystem();
         ourSystem.Initialize();
-        File loggerFile=new File("Logger");
+        File loggerFile=new File("BusinessLayer.Logger.Logger");
         if(loggerFile.exists())
             loggerFile.delete();
     }
     @After
     public void restore(){
-        DataManager.clearDataBase();
         System.setOut(PS);
     }
 
@@ -101,7 +108,7 @@ public class AcceptanceTest {
     }
     //endregion
 
-    //region Guest tests
+    //region BusinessLayer.OtherCrudOperations.Guest tests
     @Test
     public void UC2point1(){
         GuestController GC=null;
@@ -229,7 +236,7 @@ public class AcceptanceTest {
         assertTrue(GC.ShowInfo("Teams"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Team1\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM1\r\n" + "\r\n" + "Coaches:\r\n" + "Coach1\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner1\r\n" + "\r\n" + "Players:\r\n" + "Player1\r\n" + "Player2\r\n" + "\r\n" + "League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team1 against Team2\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Name:\r\n" + "Team2\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM2\r\n" + "\r\n" + "Coaches:\r\n" + "Coach2\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner2\r\n" + "\r\n" + "Players:\r\n" + "Player3\r\n" + "Player4\r\n" + "\r\n" + "League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium2\r\n" + "\r\n" + "Name:\r\n" + "Team3\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM3\r\n" + "\r\n" + "Coaches:\r\n" + "Coach3\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner3\r\n" + "\r\n" + "Players:\r\n" + "Player5\r\n" + "Player6\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team3 against Team4\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium3\r\n" + "\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n";
+        s="Name:\r\n" + "Team1\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM1\r\n" + "\r\n" + "Coaches:\r\n" + "Coach1\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner1\r\n" + "\r\n" + "Players:\r\n" + "Player1\r\n" + "Player2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team1 against Team2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Name:\r\n" + "Team2\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM2\r\n" + "\r\n" + "Coaches:\r\n" + "Coach2\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner2\r\n" + "\r\n" + "Players:\r\n" + "Player3\r\n" + "Player4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium2\r\n" + "\r\n" + "Name:\r\n" + "Team3\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM3\r\n" + "\r\n" + "Coaches:\r\n" + "Coach3\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner3\r\n" + "\r\n" + "Players:\r\n" + "Player5\r\n" + "Player6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team3 against Team4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium3\r\n" + "\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -241,7 +248,7 @@ public class AcceptanceTest {
         assertTrue(GC.ShowInfo("Players"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team4\r\n" + "Name:\r\n" + "Player8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team4\r\n";
+        s="Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team4\r\n" + "Name:\r\n" + "Player8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -253,7 +260,7 @@ public class AcceptanceTest {
         assertTrue(GC.ShowInfo("Seasons"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Season\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "Team3 against Team4\r\n";
+        s="Name:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "Team3 against Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -291,7 +298,7 @@ public class AcceptanceTest {
         assertTrue(GC.Search("Name","Referee1"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Accounts with the name Referee1\r\n" + "Name:\r\n" + "Referee1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n";
+        s="Accounts with the name Referee1\r\n" + "Name:\r\n" + "Referee1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -303,7 +310,7 @@ public class AcceptanceTest {
         assertTrue(GC.Search("Category","Teams"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Team1\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM1\r\n" + "\r\n" + "Coaches:\r\n" + "Coach1\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner1\r\n" + "\r\n" + "Players:\r\n" + "Player1\r\n" + "Player2\r\n" + "\r\n" + "League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team1 against Team2\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Name:\r\n" + "Team2\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM2\r\n" + "\r\n" + "Coaches:\r\n" + "Coach2\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner2\r\n" + "\r\n" + "Players:\r\n" + "Player3\r\n" + "Player4\r\n" + "\r\n" + "League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium2\r\n" + "\r\n" + "Name:\r\n" + "Team3\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM3\r\n" + "\r\n" + "Coaches:\r\n" + "Coach3\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner3\r\n" + "\r\n" + "Players:\r\n" + "Player5\r\n" + "Player6\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team3 against Team4\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium3\r\n" + "\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n";
+        s="Name:\r\n" + "Team1\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM1\r\n" + "\r\n" + "Coaches:\r\n" + "Coach1\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner1\r\n" + "\r\n" + "Players:\r\n" + "Player1\r\n" + "Player2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team1 against Team2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Name:\r\n" + "Team2\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM2\r\n" + "\r\n" + "Coaches:\r\n" + "Coach2\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner2\r\n" + "\r\n" + "Players:\r\n" + "Player3\r\n" + "Player4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium2\r\n" + "\r\n" + "Name:\r\n" + "Team3\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM3\r\n" + "\r\n" + "Coaches:\r\n" + "Coach3\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner3\r\n" + "\r\n" + "Players:\r\n" + "Player5\r\n" + "Player6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team3 against Team4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium3\r\n" + "\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -315,9 +322,9 @@ public class AcceptanceTest {
         assertTrue(GC.Search("Category","Accounts"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "AR1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "AssociationRepresentative\r\n" + "\r\n" + "Name:\r\n" + "AR2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "AssociationRepresentative\r\n" + "\r\n" + "Name:\r\n" + "Referee1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n" + "Name:\r\n" + "Owner1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Owner\r\n" + "\r\n" + "Name:\r\n" + "Owner2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Owner\r\n" + "\r\n" + "Name:\r\n" + "Owner3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Owner\r\n" + "\r\n" + "Name:\r\n" + "Owner4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Owner\r\n" + "\r\n" + "Name:\r\n" + "TM1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n"
-                + "TeamManager\r\n" + "\r\n" + "Name:\r\n" + "TM2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "TeamManager\r\n" + "\r\n" + "Name:\r\n" + "TM3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "TeamManager\r\n" + "\r\n" + "Name:\r\n" + "TM4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "TeamManager\r\n" + "\r\n" + "Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Coach1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Coach\r\n" + "\r\n" + "Name:\r\n" + "Coach2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" +
-                "Coach\r\n" + "\r\n" + "Name:\r\n" + "Coach3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Coach\r\n" + "\r\n" + "Name:\r\n" + "Coach4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Coach\r\n" + "\r\n" + "Name:\r\n" + "Fan1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Nadav\r\n" + "\r\n" + "Age:\r\n" + "26\r\n" + "\r\n" + "Roles:\r\n" + "SystemManager\r\n" + "\r\n";
+        s="Name:\r\n" + "AR1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.AssociationRepresentative\r\n" + "\r\n" + "Name:\r\n" + "AR2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.AssociationRepresentative\r\n" + "\r\n" + "Name:\r\n" + "Referee1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n" + "Name:\r\n" + "Owner1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Owner\r\n" + "\r\n" + "Name:\r\n" + "Owner2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Owner\r\n" + "\r\n" + "Name:\r\n" + "Owner3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Owner\r\n" + "\r\n" + "Name:\r\n" + "Owner4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Owner\r\n" + "\r\n" + "Name:\r\n" + "TM1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n"
+                + "BusinessLayer.RoleCrudOperations.TeamManager\r\n" + "\r\n" + "Name:\r\n" + "TM2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.TeamManager\r\n" + "\r\n" + "Name:\r\n" + "TM3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.TeamManager\r\n" + "\r\n" + "Name:\r\n" + "TM4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.TeamManager\r\n" + "\r\n" + "Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Coach1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Coach\r\n" + "\r\n" + "Name:\r\n" + "Coach2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" +
+                "BusinessLayer.RoleCrudOperations.Coach\r\n" + "\r\n" + "Name:\r\n" + "Coach3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Coach\r\n" + "\r\n" + "Name:\r\n" + "Coach4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Coach\r\n" + "\r\n" + "Name:\r\n" + "Fan1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Nadav\r\n" + "\r\n" + "Age:\r\n" + "26\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.SystemManager\r\n" + "\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -341,7 +348,7 @@ public class AcceptanceTest {
         assertTrue(GC.Search("Category","Seasons"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Season\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "Team3 against Team4\r\n";
+        s="Name:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "Team3 against Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -396,10 +403,10 @@ public class AcceptanceTest {
         OS.reset();
         GC=OurSystem.makeGuestController();
         before=System.currentTimeMillis();
-        assertTrue(GC.Filter("Role","Players"));
+        assertTrue(GC.Filter("BusinessLayer.RoleCrudOperations.Role","Players"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team4\r\n" + "Name:\r\n" + "Player8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team4\r\n";
+        s="Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team4\r\n" + "Name:\r\n" + "Player8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -408,7 +415,7 @@ public class AcceptanceTest {
         OS.reset();
         GC=OurSystem.makeGuestController();
         before=System.currentTimeMillis();
-        assertTrue(GC.Filter("Role","Coaches"));
+        assertTrue(GC.Filter("BusinessLayer.RoleCrudOperations.Role","Coaches"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
         s="Name:\r\n" + "Coach1\r\n" + "\r\n" + "Training:\r\n" + "Full\r\n" + "\r\n" + "TeamRole:\r\n" + "Main\r\n" + "\r\n" + "TeamsCoaching:\r\n" + "Team1\r\n" + "Name:\r\n" + "Coach2\r\n" + "\r\n" + "Training:\r\n" + "Full\r\n" + "\r\n" + "TeamRole:\r\n" + "Main\r\n" + "\r\n" + "TeamsCoaching:\r\n" + "Team2\r\n" + "Name:\r\n" + "Coach3\r\n" + "\r\n" + "Training:\r\n" + "Full\r\n" + "\r\n" + "TeamRole:\r\n" + "Main\r\n" + "\r\n" + "TeamsCoaching:\r\n" + "Team3\r\n" + "Name:\r\n" + "Coach4\r\n" + "\r\n" + "Training:\r\n" + "Full\r\n" + "\r\n" + "TeamRole:\r\n" + "Main\r\n" + "\r\n" + "TeamsCoaching:\r\n" + "Team4\r\n";
@@ -420,10 +427,10 @@ public class AcceptanceTest {
         OS.reset();
         GC=OurSystem.makeGuestController();
         before=System.currentTimeMillis();
-        assertTrue(GC.Filter("Role","TeamManagers"));
+        assertTrue(GC.Filter("BusinessLayer.RoleCrudOperations.Role","TeamManagers"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "TM1\r\n" + "\r\n" + "Team managed:\r\n" + "Team1\r\n" + "Name:\r\n" + "TM2\r\n" + "\r\n" + "Team managed:\r\n" + "Team2\r\n" + "Name:\r\n" + "TM3\r\n" + "\r\n" + "Team managed:\r\n" + "Team3\r\n" + "Name:\r\n" + "TM4\r\n" + "\r\n" + "Team managed:\r\n" + "Team4\r\n";
+        s="Name:\r\n" + "TM1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team managed:\r\n" + "Team1\r\n" + "Name:\r\n" + "TM2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team managed:\r\n" + "Team2\r\n" + "Name:\r\n" + "TM3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team managed:\r\n" + "Team3\r\n" + "Name:\r\n" + "TM4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team managed:\r\n" + "Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -432,10 +439,10 @@ public class AcceptanceTest {
         OS.reset();
         GC=OurSystem.makeGuestController();
         before=System.currentTimeMillis();
-        assertTrue(GC.Filter("Role","Owners"));
+        assertTrue(GC.Filter("BusinessLayer.RoleCrudOperations.Role","Owners"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Owner1\r\n" + "Team owned:\r\n" + "Team1\r\n" + "Name:\r\n" + "Owner2\r\n" + "Team owned:\r\n" + "Team2\r\n" + "Name:\r\n" + "Owner3\r\n" + "Team owned:\r\n" + "Team3\r\n" + "Name:\r\n" + "Owner4\r\n" + "Team owned:\r\n" + "Team4\r\n";
+        s="Name:\r\n" + "Owner1\r\n" + "BusinessLayer.OtherCrudOperations.Team owned:\r\n" + "Team1\r\n" + "Name:\r\n" + "Owner2\r\n" + "BusinessLayer.OtherCrudOperations.Team owned:\r\n" + "Team2\r\n" + "Name:\r\n" + "Owner3\r\n" + "BusinessLayer.OtherCrudOperations.Team owned:\r\n" + "Team3\r\n" + "Name:\r\n" + "Owner4\r\n" + "BusinessLayer.OtherCrudOperations.Team owned:\r\n" + "Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -444,10 +451,10 @@ public class AcceptanceTest {
         OS.reset();
         GC=OurSystem.makeGuestController();
         before=System.currentTimeMillis();
-        assertTrue(GC.Filter("Role","Referees"));
+        assertTrue(GC.Filter("BusinessLayer.RoleCrudOperations.Role","Referees"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Referee1\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee2\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee3\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee4\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee4, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee5\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee4, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee6\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee4, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n";
+        s="Name:\r\n" + "Referee1\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee2\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee3\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee4\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee4, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee5\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee4, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee6\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee4, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -456,10 +463,10 @@ public class AcceptanceTest {
         OS.reset();
         GC=OurSystem.makeGuestController();
         before=System.currentTimeMillis();
-        assertTrue(GC.Filter("Team",""));
+        assertTrue(GC.Filter("BusinessLayer.OtherCrudOperations.Team",""));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Team1\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM1\r\n" + "\r\n" + "Coaches:\r\n" + "Coach1\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner1\r\n" + "\r\n" + "Players:\r\n" + "Player1\r\n" + "Player2\r\n" + "\r\n" + "League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team1 against Team2\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Name:\r\n" + "Team2\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM2\r\n" + "\r\n" + "Coaches:\r\n" + "Coach2\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner2\r\n" + "\r\n" + "Players:\r\n" + "Player3\r\n" + "Player4\r\n" + "\r\n" + "League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium2\r\n" + "\r\n" + "Name:\r\n" + "Team3\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM3\r\n" + "\r\n" + "Coaches:\r\n" + "Coach3\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner3\r\n" + "\r\n" + "Players:\r\n" + "Player5\r\n" + "Player6\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team3 against Team4\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium3\r\n" + "\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n";
+        s="Name:\r\n" + "Team1\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM1\r\n" + "\r\n" + "Coaches:\r\n" + "Coach1\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner1\r\n" + "\r\n" + "Players:\r\n" + "Player1\r\n" + "Player2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team1 against Team2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Name:\r\n" + "Team2\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM2\r\n" + "\r\n" + "Coaches:\r\n" + "Coach2\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner2\r\n" + "\r\n" + "Players:\r\n" + "Player3\r\n" + "Player4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium2\r\n" + "\r\n" + "Name:\r\n" + "Team3\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM3\r\n" + "\r\n" + "Coaches:\r\n" + "Coach3\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner3\r\n" + "\r\n" + "Players:\r\n" + "Player5\r\n" + "Player6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team3 against Team4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium3\r\n" + "\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -468,7 +475,7 @@ public class AcceptanceTest {
         OS.reset();
         GC=OurSystem.makeGuestController();
         before=System.currentTimeMillis();
-        assertTrue(GC.Filter("League",""));
+        assertTrue(GC.Filter("BusinessLayer.OtherCrudOperations.League",""));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
         s="Name:\r\n" + "League1\r\n" + "\r\n" + "Teams in league:\r\n" + "Team1\r\n" + "Team2\r\n" + "\r\n" + "Name:\r\n" + "League2\r\n" + "\r\n" + "Teams in league:\r\n" + "Team3\r\n" + "Team4\r\n\r\n";
@@ -480,10 +487,10 @@ public class AcceptanceTest {
         OS.reset();
         GC=OurSystem.makeGuestController();
         before=System.currentTimeMillis();
-        assertTrue(GC.Filter("Season",""));
+        assertTrue(GC.Filter("BusinessLayer.OtherCrudOperations.Season",""));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Season\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "Team3 against Team4\r\n";
+        s="Name:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "Team3 against Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -492,7 +499,7 @@ public class AcceptanceTest {
         OS.reset();
         GC=OurSystem.makeGuestController();
         before=System.currentTimeMillis();
-        assertFalse(GC.Filter("","Owner"));
+        assertFalse(GC.Filter("","BusinessLayer.RoleCrudOperations.Owner"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
         //End test
@@ -512,7 +519,7 @@ public class AcceptanceTest {
         OS.reset();
         GC=OurSystem.makeGuestController();
         before=System.currentTimeMillis();
-        assertFalse(GC.Filter("Role","Commentator"));
+        assertFalse(GC.Filter("BusinessLayer.RoleCrudOperations.Role","Commentator"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
         //End test
@@ -522,7 +529,7 @@ public class AcceptanceTest {
 
     //endregion
 
-    //region Fan tests
+    //region BusinessLayer.RoleCrudOperations.Fan tests
     @Test
     public void UC2point3Fan(){
         GuestController GC=null;
@@ -564,7 +571,7 @@ public class AcceptanceTest {
         assertTrue(FC.ShowInfo("Teams"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Team1\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM1\r\n" + "\r\n" + "Coaches:\r\n" + "Coach1\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner1\r\n" + "\r\n" + "Players:\r\n" + "Player1\r\n" + "Player2\r\n" + "\r\n" + "League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team1 against Team2\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Name:\r\n" + "Team2\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM2\r\n" + "\r\n" + "Coaches:\r\n" + "Coach2\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner2\r\n" + "\r\n" + "Players:\r\n" + "Player3\r\n" + "Player4\r\n" + "\r\n" + "League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium2\r\n" + "\r\n" + "Name:\r\n" + "Team3\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM3\r\n" + "\r\n" + "Coaches:\r\n" + "Coach3\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner3\r\n" + "\r\n" + "Players:\r\n" + "Player5\r\n" + "Player6\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team3 against Team4\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium3\r\n" + "\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n";
+        s="Name:\r\n" + "Team1\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM1\r\n" + "\r\n" + "Coaches:\r\n" + "Coach1\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner1\r\n" + "\r\n" + "Players:\r\n" + "Player1\r\n" + "Player2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team1 against Team2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Name:\r\n" + "Team2\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM2\r\n" + "\r\n" + "Coaches:\r\n" + "Coach2\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner2\r\n" + "\r\n" + "Players:\r\n" + "Player3\r\n" + "Player4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium2\r\n" + "\r\n" + "Name:\r\n" + "Team3\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM3\r\n" + "\r\n" + "Coaches:\r\n" + "Coach3\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner3\r\n" + "\r\n" + "Players:\r\n" + "Player5\r\n" + "Player6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team3 against Team4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium3\r\n" + "\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -577,7 +584,7 @@ public class AcceptanceTest {
         assertTrue(FC.ShowInfo("Players"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team4\r\n" + "Name:\r\n" + "Player8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team4\r\n";
+        s="Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team4\r\n" + "Name:\r\n" + "Player8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -590,7 +597,7 @@ public class AcceptanceTest {
         assertTrue(FC.ShowInfo("Seasons"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Season\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "Team3 against Team4\r\n";
+        s="Name:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "Team3 against Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -632,7 +639,7 @@ public class AcceptanceTest {
         assertTrue(FC.Search("Name","Referee1"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Accounts with the name Referee1\r\n" + "Name:\r\n" + "Referee1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n";
+        s="Accounts with the name Referee1\r\n" + "Name:\r\n" + "Referee1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -645,7 +652,7 @@ public class AcceptanceTest {
         assertTrue(FC.Search("Category","Teams"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Team1\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM1\r\n" + "\r\n" + "Coaches:\r\n" + "Coach1\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner1\r\n" + "\r\n" + "Players:\r\n" + "Player1\r\n" + "Player2\r\n" + "\r\n" + "League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team1 against Team2\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Name:\r\n" + "Team2\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM2\r\n" + "\r\n" + "Coaches:\r\n" + "Coach2\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner2\r\n" + "\r\n" + "Players:\r\n" + "Player3\r\n" + "Player4\r\n" + "\r\n" + "League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium2\r\n" + "\r\n" + "Name:\r\n" + "Team3\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM3\r\n" + "\r\n" + "Coaches:\r\n" + "Coach3\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner3\r\n" + "\r\n" + "Players:\r\n" + "Player5\r\n" + "Player6\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team3 against Team4\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium3\r\n" + "\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n";
+        s="Name:\r\n" + "Team1\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM1\r\n" + "\r\n" + "Coaches:\r\n" + "Coach1\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner1\r\n" + "\r\n" + "Players:\r\n" + "Player1\r\n" + "Player2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team1 against Team2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Name:\r\n" + "Team2\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM2\r\n" + "\r\n" + "Coaches:\r\n" + "Coach2\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner2\r\n" + "\r\n" + "Players:\r\n" + "Player3\r\n" + "Player4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium2\r\n" + "\r\n" + "Name:\r\n" + "Team3\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM3\r\n" + "\r\n" + "Coaches:\r\n" + "Coach3\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner3\r\n" + "\r\n" + "Players:\r\n" + "Player5\r\n" + "Player6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team3 against Team4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium3\r\n" + "\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -658,9 +665,9 @@ public class AcceptanceTest {
         assertTrue(FC.Search("Category","Accounts"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "AR1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "AssociationRepresentative\r\n" + "\r\n" + "Name:\r\n" + "AR2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "AssociationRepresentative\r\n" + "\r\n" + "Name:\r\n" + "Referee1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Referee\r\n" + "\r\n" + "Name:\r\n" + "Owner1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Owner\r\n" + "\r\n" + "Name:\r\n" + "Owner2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Owner\r\n" + "\r\n" + "Name:\r\n" + "Owner3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Owner\r\n" + "\r\n" + "Name:\r\n" + "Owner4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Owner\r\n" +
-                "\r\n" + "Name:\r\n" + "TM1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "TeamManager\r\n" + "\r\n" + "Name:\r\n" + "TM2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "TeamManager\r\n" + "\r\n" + "Name:\r\n" + "TM3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "TeamManager\r\n" + "\r\n" + "Name:\r\n" + "TM4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "TeamManager\r\n" + "\r\n" + "Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n" + "Player8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Player\r\n" + "\r\n" + "Name:\r\n"
-                + "Coach1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Coach\r\n" + "\r\n" + "Name:\r\n" + "Coach2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Coach\r\n" + "\r\n" + "Name:\r\n" + "Coach3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Coach\r\n" + "\r\n" + "Name:\r\n" + "Coach4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Coach\r\n" + "\r\n" + "Name:\r\n" + "Fan1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "Fan\r\n" + "\r\n" + "Name:\r\n" + "Nadav\r\n" + "\r\n" + "Age:\r\n" + "26\r\n" + "\r\n" + "Roles:\r\n" + "SystemManager\r\n" + "\r\n";
+        s="Name:\r\n" + "AR1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.AssociationRepresentative\r\n" + "\r\n" + "Name:\r\n" + "AR2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.AssociationRepresentative\r\n" + "\r\n" + "Name:\r\n" + "Referee1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n" + "Name:\r\n" + "Referee6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Referee\r\n" + "\r\n" + "Name:\r\n" + "Owner1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Owner\r\n" + "\r\n" + "Name:\r\n" + "Owner2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Owner\r\n" + "\r\n" + "Name:\r\n" + "Owner3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Owner\r\n" + "\r\n" + "Name:\r\n" + "Owner4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Owner\r\n" +
+                "\r\n" + "Name:\r\n" + "TM1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.TeamManager\r\n" + "\r\n" + "Name:\r\n" + "TM2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.TeamManager\r\n" + "\r\n" + "Name:\r\n" + "TM3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.TeamManager\r\n" + "\r\n" + "Name:\r\n" + "TM4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.TeamManager\r\n" + "\r\n" + "Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n" + "Player8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Player\r\n" + "\r\n" + "Name:\r\n"
+                + "Coach1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Coach\r\n" + "\r\n" + "Name:\r\n" + "Coach2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Coach\r\n" + "\r\n" + "Name:\r\n" + "Coach3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Coach\r\n" + "\r\n" + "Name:\r\n" + "Coach4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Coach\r\n" + "\r\n" + "Name:\r\n" + "Fan1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Fan8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.Fan\r\n" + "\r\n" + "Name:\r\n" + "Nadav\r\n" + "\r\n" + "Age:\r\n" + "26\r\n" + "\r\n" + "Roles:\r\n" + "BusinessLayer.RoleCrudOperations.SystemManager\r\n" + "\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -686,7 +693,7 @@ public class AcceptanceTest {
         assertTrue(FC.Search("Category","Seasons"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Season\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "Team3 against Team4\r\n";
+        s="Name:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "Team3 against Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -747,10 +754,10 @@ public class AcceptanceTest {
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
         before=System.currentTimeMillis();
-        assertTrue(FC.Filter("Role","Players"));
+        assertTrue(FC.Filter("BusinessLayer.RoleCrudOperations.Role","Players"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team4\r\n" + "Name:\r\n" + "Player8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team4\r\n";
+        s="Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player3\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player4\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team2\r\n" + "Name:\r\n" + "Player5\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player6\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team3\r\n" + "Name:\r\n" + "Player7\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team4\r\n" + "Name:\r\n" + "Player8\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -760,7 +767,7 @@ public class AcceptanceTest {
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
         before=System.currentTimeMillis();
-        assertTrue(FC.Filter("Role","Coaches"));
+        assertTrue(FC.Filter("BusinessLayer.RoleCrudOperations.Role","Coaches"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
         s="Name:\r\n" + "Coach1\r\n" + "\r\n" + "Training:\r\n" + "Full\r\n" + "\r\n" + "TeamRole:\r\n" + "Main\r\n" + "\r\n" + "TeamsCoaching:\r\n" + "Team1\r\n" + "Name:\r\n" + "Coach2\r\n" + "\r\n" + "Training:\r\n" + "Full\r\n" + "\r\n" + "TeamRole:\r\n" + "Main\r\n" + "\r\n" + "TeamsCoaching:\r\n" + "Team2\r\n" + "Name:\r\n" + "Coach3\r\n" + "\r\n" + "Training:\r\n" + "Full\r\n" + "\r\n" + "TeamRole:\r\n" + "Main\r\n" + "\r\n" + "TeamsCoaching:\r\n" + "Team3\r\n" + "Name:\r\n" + "Coach4\r\n" + "\r\n" + "Training:\r\n" + "Full\r\n" + "\r\n" + "TeamRole:\r\n" + "Main\r\n" + "\r\n" + "TeamsCoaching:\r\n" + "Team4\r\n";
@@ -773,10 +780,10 @@ public class AcceptanceTest {
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
         before=System.currentTimeMillis();
-        assertTrue(FC.Filter("Role","TeamManagers"));
+        assertTrue(FC.Filter("BusinessLayer.RoleCrudOperations.Role","TeamManagers"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "TM1\r\n" + "\r\n" + "Team managed:\r\n" + "Team1\r\n" + "Name:\r\n" + "TM2\r\n" + "\r\n" + "Team managed:\r\n" + "Team2\r\n" + "Name:\r\n" + "TM3\r\n" + "\r\n" + "Team managed:\r\n" + "Team3\r\n" + "Name:\r\n" + "TM4\r\n" + "\r\n" + "Team managed:\r\n" + "Team4\r\n";
+        s="Name:\r\n" + "TM1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team managed:\r\n" + "Team1\r\n" + "Name:\r\n" + "TM2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team managed:\r\n" + "Team2\r\n" + "Name:\r\n" + "TM3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team managed:\r\n" + "Team3\r\n" + "Name:\r\n" + "TM4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team managed:\r\n" + "Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -786,10 +793,10 @@ public class AcceptanceTest {
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
         before=System.currentTimeMillis();
-        assertTrue(FC.Filter("Role","Owners"));
+        assertTrue(FC.Filter("BusinessLayer.RoleCrudOperations.Role","Owners"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Owner1\r\n" + "Team owned:\r\n" + "Team1\r\n" + "Name:\r\n" + "Owner2\r\n" + "Team owned:\r\n" + "Team2\r\n" + "Name:\r\n" + "Owner3\r\n" + "Team owned:\r\n" + "Team3\r\n" + "Name:\r\n" + "Owner4\r\n" + "Team owned:\r\n" + "Team4\r\n";
+        s="Name:\r\n" + "Owner1\r\n" + "BusinessLayer.OtherCrudOperations.Team owned:\r\n" + "Team1\r\n" + "Name:\r\n" + "Owner2\r\n" + "BusinessLayer.OtherCrudOperations.Team owned:\r\n" + "Team2\r\n" + "Name:\r\n" + "Owner3\r\n" + "BusinessLayer.OtherCrudOperations.Team owned:\r\n" + "Team3\r\n" + "Name:\r\n" + "Owner4\r\n" + "BusinessLayer.OtherCrudOperations.Team owned:\r\n" + "Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -799,10 +806,10 @@ public class AcceptanceTest {
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
         before=System.currentTimeMillis();
-        assertTrue(FC.Filter("Role","Referees"));
+        assertTrue(FC.Filter("BusinessLayer.RoleCrudOperations.Role","Referees"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Referee1\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee2\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee3\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee4\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee4, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee5\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee4, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee6\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee4, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n";
+        s="Name:\r\n" + "Referee1\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee2\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee3\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee4\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee4, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee5\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee4, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n" + "Name:\r\n" + "Referee6\r\n" + "\r\n" + "Training:\r\n" + "Complete\r\n" + "\r\n" + "Matches judged:\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee4, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -812,10 +819,10 @@ public class AcceptanceTest {
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
         before=System.currentTimeMillis();
-        assertTrue(FC.Filter("Team",""));
+        assertTrue(FC.Filter("BusinessLayer.OtherCrudOperations.Team",""));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Team1\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM1\r\n" + "\r\n" + "Coaches:\r\n" + "Coach1\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner1\r\n" + "\r\n" + "Players:\r\n" + "Player1\r\n" + "Player2\r\n" + "\r\n" + "League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team1 against Team2\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Name:\r\n" + "Team2\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM2\r\n" + "\r\n" + "Coaches:\r\n" + "Coach2\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner2\r\n" + "\r\n" + "Players:\r\n" + "Player3\r\n" + "Player4\r\n" + "\r\n" + "League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium2\r\n" + "\r\n" + "Name:\r\n" + "Team3\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM3\r\n" + "\r\n" + "Coaches:\r\n" + "Coach3\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner3\r\n" + "\r\n" + "Players:\r\n" + "Player5\r\n" + "Player6\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team3 against Team4\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium3\r\n" + "\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n";
+        s="Name:\r\n" + "Team1\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM1\r\n" + "\r\n" + "Coaches:\r\n" + "Coach1\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner1\r\n" + "\r\n" + "Players:\r\n" + "Player1\r\n" + "Player2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team1 against Team2\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Name:\r\n" + "Team2\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM2\r\n" + "\r\n" + "Coaches:\r\n" + "Coach2\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner2\r\n" + "\r\n" + "Players:\r\n" + "Player3\r\n" + "Player4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League1\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium2\r\n" + "\r\n" + "Name:\r\n" + "Team3\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM3\r\n" + "\r\n" + "Coaches:\r\n" + "Coach3\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner3\r\n" + "\r\n" + "Players:\r\n" + "Player5\r\n" + "Player6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team3 against Team4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium3\r\n" + "\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -825,7 +832,7 @@ public class AcceptanceTest {
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
         before=System.currentTimeMillis();
-        assertTrue(FC.Filter("League",""));
+        assertTrue(FC.Filter("BusinessLayer.OtherCrudOperations.League",""));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
         s="Name:\r\n" + "League1\r\n" + "\r\n" + "Teams in league:\r\n" + "Team1\r\n" + "Team2\r\n" + "\r\n" + "Name:\r\n" + "League2\r\n" + "\r\n" + "Teams in league:\r\n" + "Team3\r\n" + "Team4\r\n\r\n";
@@ -838,10 +845,10 @@ public class AcceptanceTest {
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
         before=System.currentTimeMillis();
-        assertTrue(FC.Filter("Season",""));
+        assertTrue(FC.Filter("BusinessLayer.OtherCrudOperations.Season",""));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Season\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "Team3 against Team4\r\n";
+        s="Name:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Matches:\r\n" + "Team2 against Team1\r\n" + "Team3 against Team4\r\n";
         assertEquals(s,OS.toString());
         //End test
 
@@ -851,7 +858,7 @@ public class AcceptanceTest {
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
         before=System.currentTimeMillis();
-        assertFalse(FC.Filter("","Owner"));
+        assertFalse(FC.Filter("","BusinessLayer.RoleCrudOperations.Owner"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
         //End test
@@ -873,7 +880,7 @@ public class AcceptanceTest {
         GC=OurSystem.makeGuestController();
         FC=(FanContoller)GC.LogIn("Fan1X","Password").get(0);
         before=System.currentTimeMillis();
-        assertFalse(FC.Filter("Role","Commentator"));
+        assertFalse(FC.Filter("BusinessLayer.RoleCrudOperations.Role","Commentator"));
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
         //End test
@@ -1021,7 +1028,7 @@ public class AcceptanceTest {
         FC.ShowPersonalInfo();
         after=System.currentTimeMillis();
         assertTrue((after-before)<acceptableTime);
-        s="Name:\r\n" + "Fan1\r\n" + "\r\n" + "Teams Tracked:\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "Players Tracked:\r\n" + "Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "Team:\r\n" + "Team1\r\n" + "\r\n";
+        s="Name:\r\n" + "Fan1\r\n" + "\r\n" + "Teams Tracked:\r\n" + "Name:\r\n" + "Team4\r\n" + "\r\n" + "TeamManagers:\r\n" + "TM4\r\n" + "\r\n" + "Coaches:\r\n" + "Coach4\r\n" + "\r\n" + "TeamOwners:\r\n" + "Owner4\r\n" + "\r\n" + "Players:\r\n" + "Player7\r\n" + "Player8\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "League2\r\n" + "\r\n" + "Matches:\r\n" + "Team4 against Team3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "Players Tracked:\r\n" + "Name:\r\n" + "Player1\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team1\r\n" + "Name:\r\n" + "Player2\r\n" + "\r\n" + "Age:\r\n" + "99\r\n" + "\r\n" + "Position:\r\n" + "Striker\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Team1\r\n" + "\r\n";
         assertEquals(s,OS.toString());
         //End test
     }
@@ -1065,7 +1072,7 @@ public class AcceptanceTest {
     }
     //endregion
 
-    //region Player tests
+    //region BusinessLayer.RoleCrudOperations.Player tests
     @Test
     public void UC4point1()
     {
@@ -1083,7 +1090,7 @@ public class AcceptanceTest {
     }
     //endregion
 
-    //region Coach tests
+    //region BusinessLayer.RoleCrudOperations.Coach tests
     @Test
     public void UC5point1()
     {
@@ -1116,8 +1123,8 @@ public class AcceptanceTest {
         assertEquals(null,team3.getLeague());
         assertEquals(null,team3.getPage());
         assertEquals(0,team3.getPlayers().size());
-        assertEquals("description: Delete Team Permanently:" + team3.getName(),owner3.getAlertList().get(0).toString());
-        assertEquals("description: Delete Team Permanently:" + team3.getName(),tm3.getAlertList().get(0).toString());
+        assertEquals("description: Delete BusinessLayer.OtherCrudOperations.Team Permanently:" + team3.getName(),owner3.getAlertList().get(0).toString());
+        assertEquals("description: Delete BusinessLayer.OtherCrudOperations.Team Permanently:" + team3.getName(),tm3.getAlertList().get(0).toString());
         long time = after-before;
         assertTrue(time<acceptableTime);
     }
@@ -1190,7 +1197,7 @@ public class AcceptanceTest {
     }
     //endregion
 
-    //region Owner tests
+    //region BusinessLayer.RoleCrudOperations.Owner tests
 
     @Test
     public void UC6point1a(){
@@ -1557,7 +1564,7 @@ public class AcceptanceTest {
         long afterTime=System.currentTimeMillis();
         long runTime = afterTime-beforeTime;
         assertTrue(runTime<acceptableTime);
-        //DataManager.getRefereesFromAccounts().contains(referee1);
+        //DataLayer.DataManager.getRefereesFromAccounts().contains(referee1);
         assertTrue(referee1.getMatchs().isEmpty());
     }
 
@@ -1631,7 +1638,7 @@ public class AcceptanceTest {
 
     //endregion
 
-    //region Referee tests
+    //region BusinessLayer.RoleCrudOperations.Referee tests
     @Test
     public void UC10point1(){
         //10.1.1
@@ -1663,7 +1670,7 @@ public class AcceptanceTest {
         before=System.currentTimeMillis();
         refereeController.addMatch(match1,"main");
         refereeController.displayAllMatches();
-        assertEquals("Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n\r\n",OS.toString());
+        assertEquals("Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n\r\n",OS.toString());
         assertTrue(System.currentTimeMillis()-before<acceptableTime);
         OS.reset();
         //--test when more two match
@@ -1671,7 +1678,7 @@ public class AcceptanceTest {
         referee4.removeMatch(match2);
         refereeController.addMatch(match2,"main");
         refereeController.displayAllMatches();
-        assertEquals("Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n" + "\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "Season:\r\n" + "Season\r\n" + "\r\n" + "Game Events:\r\n" + "\r\n",OS.toString());
+        assertEquals("Score:\r\n" + "Team1: 0, Team2: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee2, Line2: Referee3\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium1\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n" + "\r\n" + "Score:\r\n" + "Team4: 0, Team3: 0\r\n" + "\r\n" + "Referees:\r\n" + "Main: Referee1, Line1: Referee5, Line2: Referee6\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Stadium4\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Season:\r\n" + "BusinessLayer.OtherCrudOperations.Season\r\n" + "\r\n" + "Game Events:\r\n" + "\r\n",OS.toString());
         assertTrue(System.currentTimeMillis()-before<acceptableTime);
 
     }
@@ -1682,7 +1689,7 @@ public class AcceptanceTest {
         RefereeController refereeController= (RefereeController)controllerList.get(0);
         //--test when the update accrues during game 10.3.1
         long before=System.currentTimeMillis();
-        refereeController.updateEventDuringMatch(match1,EventEnum.redCard,"Player get redCard");
+        refereeController.updateEventDuringMatch(match1, EventEnum.redCard,"BusinessLayer.RoleCrudOperations.Player get redCard");
         assertTrue(referee1.getMatchs().get(0).getEventCalender().getGameEvent(0).getType().equals(EventEnum.redCard));
         assertTrue(System.currentTimeMillis()-before<acceptableTime);
 
@@ -1692,7 +1699,7 @@ public class AcceptanceTest {
         afterAddingMins.setYear(match1.getDate().getYear());
         afterAddingMins.setMonth(match1.getDate().getMonth());
         match1.setDate(afterAddingMins);
-        refereeController.updateEventDuringMatch(match1,EventEnum.redCard,"Player get redCard");
+        refereeController.updateEventDuringMatch(match1,EventEnum.redCard,"BusinessLayer.RoleCrudOperations.Player get redCard");
         assertEquals(referee1.getMatchs().get(0).getEventCalender().getGameEvents().size(),1);
         assertTrue(System.currentTimeMillis()-before<acceptableTime);
 
@@ -1710,8 +1717,8 @@ public class AcceptanceTest {
 
         //--test when do not pass 5 hours from the end of the game 10.4.2
         before=System.currentTimeMillis();
-        referee1.updateEventDuringMatch(match1,EventEnum.redCard,"Player get redCard");
-        refereeController.editEventAfterGame(match1,referee1.getMatchs().get(0).getEventCalender().getGameEvents().get(0),EventEnum.goal,"change from redcard to goal");
+        referee1.updateEventDuringMatch(match1,EventEnum.redCard,"BusinessLayer.RoleCrudOperations.Player get redCard");
+        refereeController.editEventAfterGame(match1,referee1.getMatchs().get(0).getEventCalender().getGameEvents().get(0), EventEnum.goal,"change from redcard to goal");
         assertTrue(referee1.getMatchs().get(0).getEventCalender().getGameEvents().get(0).getType().equals(EventEnum.redCard));
         assertTrue(System.currentTimeMillis()-before<acceptableTime);
 
@@ -1734,7 +1741,7 @@ public class AcceptanceTest {
         List<Object> controllerList2=guestController2.LogIn("Referee2X","Password");
         RefereeController refereeController2= (RefereeController)controllerList2.get(0);
         match1.setDate(beforeDate);
-        referee2.updateEventDuringMatch(match1,EventEnum.foul,"Player get foul");
+        referee2.updateEventDuringMatch(match1,EventEnum.foul,"BusinessLayer.RoleCrudOperations.Player get foul");
         refereeController2.editEventAfterGame(match1,match1.getEventCalender().getGameEvents().get(1),EventEnum.redCard,"change from foul to redCard");
         assertFalse(match1.getEventCalender().getGameEvents().get(1).getType().equals(EventEnum.redCard));
         assertTrue(System.currentTimeMillis()-before<acceptableTime);
@@ -1787,7 +1794,7 @@ public class AcceptanceTest {
         //region Leagues and seasons creation
         league1=new League("League1");
         league2=new League("League2");
-        season=new Season("Season");
+        season=new Season("BusinessLayer.OtherCrudOperations.Season");
         policy1=new Policy("Standart","aaa");
         policy2=new Policy("Double","bbb");
         sLsettings1=new SLsettings(policy1);
@@ -1819,7 +1826,7 @@ public class AcceptanceTest {
 
         //endregion  //
 
-        //region Stadium creation
+        //region BusinessLayer.OtherCrudOperations.Stadium creation
         stadium1=new Stadium("Stadium1");
         stadium2=new Stadium("Stadium2");
         stadium3=new Stadium("Stadium3");
@@ -1833,7 +1840,7 @@ public class AcceptanceTest {
         team4=new Team("Team4",league2,stadium4);
         //endregion
 
-        //region Owner creation
+        //region BusinessLayer.RoleCrudOperations.Owner creation
         ownerAccount1=new Account("Owner1",99,"Owner1X","Password");
         owner1=new Owner("Owner1",team1,null);
         ownerAccount1.addRole(owner1);
@@ -1888,7 +1895,7 @@ public class AcceptanceTest {
         playerAccount1.addRole(player1);
 
         playerAccount2=new Account("Player2",99,"Player2X","Password");
-        player2=new Player("Player2",new Date(),PositionEnum.Striker,team1,null);
+        player2=new Player("Player2",new Date(), PositionEnum.Striker,team1,null);
         playerAccount2.addRole(player2);
 
         playerAccount3=new Account("Player3",99,"Player3X","Password");
@@ -1916,7 +1923,7 @@ public class AcceptanceTest {
         playerAccount8.addRole(player8);
         //endregion
 
-        //region Coach creation
+        //region BusinessLayer.RoleCrudOperations.Coach creation
         coachAccount1=new Account("Coach1",99,"Coach1X","Password");
         coach1=new Coach("Coach1","Full","Main",null);
         coachAccount1.addRole(coach1);
@@ -1949,7 +1956,7 @@ public class AcceptanceTest {
         coach4.addTeam(team4);
         //endregion
 
-        //region Match creation
+        //region BusinessLayer.OtherCrudOperations.Match creation
         match1=new Match(new Date(),new Time(22,0,0),0,0,stadium1,season
                 ,team2,team1,null,null,null);
 
@@ -1982,7 +1989,7 @@ public class AcceptanceTest {
         player8.setTeam(team4);
         //endregion
 
-        //region Page creation
+        //region BusinessLayer.Pages.Page creation
         playerPage1=new Page(player1);
         playerPage2=new Page(player2);
         playerPage3=new Page(player3);
@@ -2001,7 +2008,7 @@ public class AcceptanceTest {
         teamPage4=new Page(team4);
         //endregion
 
-        //region Fan creation
+        //region BusinessLayer.RoleCrudOperations.Fan creation
         fanAccount1=new Account("Fan1",99,"Fan1X","Password");
         fan1= new Fan("Fan1");
         fanAccount1.addRole(fan1);
@@ -2035,7 +2042,7 @@ public class AcceptanceTest {
         fanAccount8.addRole(fan8);
         //endregion
 
-        //region Fan page setting
+        //region BusinessLayer.RoleCrudOperations.Fan page setting
         fan1.addPage(playerPage1);
         fan1.addPage(playerPage2);
         fan2.addPage(coachPage3);

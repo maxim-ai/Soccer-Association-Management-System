@@ -1,4 +1,12 @@
-import org.junit.After;
+import BusinessLayer.Logger.Logger;
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.Pages.Page;
+import BusinessLayer.RoleCrudOperations.Coach;
+import BusinessLayer.RoleCrudOperations.Owner;
+import BusinessLayer.RoleCrudOperations.Player;
+import BusinessLayer.RoleCrudOperations.TeamManager;
+import DataLayer.DataManager;
+import ServiceLayer.OurSystem;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,6 +34,7 @@ public class TeamTests {
     @Before
     public void setUp()
     {
+        DataManager.clearDataBase();
         DataManager dataManager = new DataManager();
         Logger logger = new Logger();
         OurSystem ourSystem = new OurSystem();
@@ -46,7 +55,7 @@ public class TeamTests {
         pa1=new Page(t1);
         pa2=new Page(t2);
         pl1=new Player("pl1",new Date(123),PositionEnum.CenterBack,t1,null);
-        pl2=new Player("pl2",new Date(123),PositionEnum.CenterBack,t2,null);
+        pl2=new Player("pl2",new Date(123), PositionEnum.CenterBack,t2,null);
         c1=new Coach("c1","bla","bla",null);
         c2=new Coach("c2","bla","bla",null);
         t1.addCoach(c1);

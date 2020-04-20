@@ -1,3 +1,12 @@
+import BusinessLayer.OtherCrudOperations.League;
+import BusinessLayer.OtherCrudOperations.Season;
+import BusinessLayer.OtherCrudOperations.Stadium;
+import BusinessLayer.OtherCrudOperations.Team;
+import BusinessLayer.Pages.Page;
+import BusinessLayer.RoleCrudOperations.Coach;
+import BusinessLayer.RoleCrudOperations.Fan;
+import BusinessLayer.RoleCrudOperations.Referee;
+import DataLayer.DataManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -5,7 +14,6 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.Time;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +21,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class CoachTest {
-    Coach coach=new Coach("Yossi Abukasis","Football Association","Coach",null);
+    Coach coach=new Coach("Yossi Abukasis","Football Association","BusinessLayer.RoleCrudOperations.Coach",null);
     public Referee referee=new Referee("Football Association","adi lioz");
     private final ByteArrayOutputStream OS=new ByteArrayOutputStream();
     private final PrintStream PS=System.out;
@@ -33,6 +41,7 @@ public class CoachTest {
     List<Team> teams=new LinkedList<>();
     @Before
     public void init(){
+        DataManager.clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 
@@ -52,9 +61,9 @@ public class CoachTest {
     @Test
     public void setTeamRole() {
         coach.setPage(page1);
-        assertTrue(coach.getTeamRole().equals("Coach"));
-        coach.setTeamRole("Main Coach");
-        assertTrue(coach.getTeamRole().equals("Main Coach"));
+        assertTrue(coach.getTeamRole().equals("BusinessLayer.RoleCrudOperations.Coach"));
+        coach.setTeamRole("Main BusinessLayer.RoleCrudOperations.Coach");
+        assertTrue(coach.getTeamRole().equals("Main BusinessLayer.RoleCrudOperations.Coach"));
     }
 
     @Test
@@ -64,7 +73,7 @@ public class CoachTest {
 
     @Test
     public void getTeamRole() {
-        assertTrue(coach.getTeamRole().equals("Coach"));
+        assertTrue(coach.getTeamRole().equals("BusinessLayer.RoleCrudOperations.Coach"));
     }
 
     @Test
@@ -136,9 +145,9 @@ public class CoachTest {
     @Test
     public void updateDetails() {
         coach.setPage(page1);
-        coach.updateDetails("IL Football Association","Player");
+        coach.updateDetails("IL Football Association","BusinessLayer.RoleCrudOperations.Player");
         assertTrue(coach.getTraining().equals("IL Football Association"));
-        assertTrue(coach.getTeamRole().equals("Player"));
+        assertTrue(coach.getTeamRole().equals("BusinessLayer.RoleCrudOperations.Player"));
 
     }
 
@@ -153,7 +162,7 @@ public class CoachTest {
                 "Football Association\r\n" +
                 "\r\n" +
                 "TeamRole:\r\n" +
-                "Coach\r\n" +
+                "BusinessLayer.RoleCrudOperations.Coach\r\n" +
                 "\r\n" +
                 "TeamsCoaching:\r\n" +
                 "team\r\n",OS.toString());
@@ -185,7 +194,7 @@ public class CoachTest {
         return "Football Association";
     }
     public String getTeamRoleStub(){
-        return "Coach";
+        return "BusinessLayer.RoleCrudOperations.Coach";
     }
 
     public List<Team> getTeamsStub()

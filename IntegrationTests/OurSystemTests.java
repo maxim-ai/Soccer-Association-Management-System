@@ -1,3 +1,7 @@
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.RoleCrudOperations.*;
+import DataLayer.DataManager;
+import ServiceLayer.OurSystem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +26,7 @@ public class OurSystemTests {
         DataManager.clearDataBase();
         ourSystem=new OurSystem();
         System.setOut(new PrintStream(OS));
-        File loggerFile=new File("Logger");
+        File loggerFile=new File("BusinessLayer.Logger.Logger");
         if(loggerFile.exists())
             loggerFile.delete();
     }
@@ -95,7 +99,7 @@ public class OurSystemTests {
     private boolean CheckLoggerLines(String s) {
         String line= null;
         try {
-            BufferedReader BR=new BufferedReader(new FileReader(new File("Logger")));
+            BufferedReader BR=new BufferedReader(new FileReader(new File("BusinessLayer.Logger.Logger")));
             line = BR.readLine();
             BR.close();
             if(s.equals(line.substring(line.indexOf('-')+2)))
@@ -200,7 +204,7 @@ public class OurSystemTests {
         Season checkSeason=new Season("Winter");
         DataManager.addSeason(checkSeason);
         checkListSeasons.add(checkSeason);
-        HashMap<Season,SLsettings> checkSeasonSLSettingsMap=new HashMap();
+        HashMap<Season, SLsettings> checkSeasonSLSettingsMap=new HashMap();
         checkSeasonSLSettingsMap.put(checkSeason,checkSLsettings);
         HashMap<League,SLsettings> checkLeagueSLSettingsMap=new HashMap<>();
         checkLeagueSLSettingsMap.put(checkLeague,checkSLsettings);
@@ -249,7 +253,7 @@ public class OurSystemTests {
         Account playerAccount2=new Account("Maxim",26,"bter","3asd");
         DataManager.addAccount(playerAccount2);
         checkListAccounts.add(playerAccount2);
-        playerAccount2.addRole(new Player("Maxim",new Date(),PositionEnum.Goalkeeper,rome,null));
+        playerAccount2.addRole(new Player("Maxim",new Date(), PositionEnum.Goalkeeper,rome,null));
 
         Account teamManagerAccount1=new Account("Maxim",26,"vcxvchgfxvx","3asd");
         DataManager.addAccount(teamManagerAccount1);

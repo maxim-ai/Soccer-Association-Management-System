@@ -1,3 +1,7 @@
+import BusinessLayer.OtherCrudOperations.Account;
+import BusinessLayer.RoleCrudOperations.*;
+import DataLayer.DataManager;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -5,12 +9,17 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class AccountTest {
-    Account account = new Account("Account",10,"Account","Password");// for setters
-    Account constAccount = new Account("Account",10,"Account10","Password"); //for getters
+    Account account = new Account("BusinessLayer.OtherCrudOperations.Account",10,"BusinessLayer.OtherCrudOperations.Account","Password");// for setters
+    Account constAccount = new Account("BusinessLayer.OtherCrudOperations.Account",10,"Account10","Password"); //for getters
+
+    @Before
+    public void setUp(){
+        DataManager.clearDataBase();
+    }
 
     @Test
     public void getName() {
-        assertEquals("Account", constAccount.getName());
+        assertEquals("BusinessLayer.OtherCrudOperations.Account", constAccount.getName());
     }
 
     @Test
@@ -94,7 +103,7 @@ public class AccountTest {
 
     @Test
     public void minimumNumberOfRoles() {
-        assertEquals(1,Account.minimumNumberOfRoles());
+        assertEquals(1, Account.minimumNumberOfRoles());
     }
 
     @Test

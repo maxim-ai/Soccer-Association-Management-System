@@ -1,3 +1,11 @@
+import BusinessLayer.Logger.Logger;
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.RoleCrudOperations.Coach;
+import BusinessLayer.RoleCrudOperations.Owner;
+import BusinessLayer.RoleCrudOperations.Player;
+import BusinessLayer.RoleCrudOperations.TeamManager;
+import DataLayer.DataManager;
+import ServiceLayer.OurSystem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +37,7 @@ public class TeamManagerTest {
     Team t3;
     @Before
     public void setUp() {
+        DataManager.clearDataBase();
         DataManager dataManager = new DataManager();
         Logger logger = new Logger();
         OurSystem ourSystem = new OurSystem();
@@ -237,7 +246,7 @@ public class TeamManagerTest {
     public void showTeamManager()
     {
         tm1.checkIfTeamManagr().ShowTeamManager();
-        assertEquals("Name:\r\ntm1\r\n\r\nTeam managed:\r\nt1\r\n",OS.toString());
+        assertEquals("Name:\r\ntm1\r\n\r\nBusinessLayer.OtherCrudOperations.Team managed:\r\nt1\r\n",OS.toString());
     }
 
 

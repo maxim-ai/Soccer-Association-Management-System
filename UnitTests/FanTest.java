@@ -1,3 +1,7 @@
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.Pages.Page;
+import BusinessLayer.RoleCrudOperations.*;
+import DataLayer.DataManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +24,7 @@ public class FanTest {
 
     @Before
     public void setUp() throws Exception {
+        DataManager.clearDataBase();
         System.setOut(new PrintStream(OS));
         fan = new Fan("Danny");
         account1=new Account("Maxim",26,"MaximX","1234");
@@ -54,7 +59,7 @@ public class FanTest {
         DataManager.addSeason(season);
         DataManager.addTeam(team);
 
-        File loggerFile=new File("Logger");
+        File loggerFile=new File("BusinessLayer.Logger.Logger");
         if(loggerFile.exists())
             loggerFile.delete();
     }
@@ -162,73 +167,73 @@ public class FanTest {
     @Test
     public void showInfoAboutTeams() {
         ShowInfo("Teams");
-        String s="Team\r\n";
+        String s="BusinessLayer.OtherCrudOperations.Team\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutPlayers(){
         ShowInfo("Players");
-        String s="Player\r\n";
+        String s="BusinessLayer.RoleCrudOperations.Player\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutCoaches(){
         ShowInfo("Coaches");
-        String s="Coach\r\n";
+        String s="BusinessLayer.RoleCrudOperations.Coach\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutLeagues(){
         ShowInfo("Leagues");
-        String s="League\r\n";
+        String s="BusinessLayer.OtherCrudOperations.League\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void showInfoAboutSeasons(){
         ShowInfo("Seasons");
-        String s="Season\r\n";
+        String s="BusinessLayer.OtherCrudOperations.Season\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void searchName() {
         Search("Name","Barcelona");
-        String s="Teams with the name Barcelona\r\nTeam\r\n";
+        String s="Teams with the name Barcelona\r\nBusinessLayer.OtherCrudOperations.Team\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void searchCategoryTeams() {
         Search("Category","Teams");
-        String s="Team\r\n";
+        String s="BusinessLayer.OtherCrudOperations.Team\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void searchCategoryAccounts() {
         Search("Category","Accounts");
-        String s="Account\r\nAccount\r\n";
+        String s="BusinessLayer.OtherCrudOperations.Account\r\nBusinessLayer.OtherCrudOperations.Account\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void searchCategoryLeagues() {
         Search("Category","Leagues");
-        String s="League\r\n";
+        String s="BusinessLayer.OtherCrudOperations.League\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void searchCategorySeasons() {
         Search("Category","Seasons");
-        String s="Season\r\n";
+        String s="BusinessLayer.OtherCrudOperations.Season\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterRolePlayers() {
-        Filter("Role","Players");
-        String s="Player\r\n";
+        Filter("BusinessLayer.RoleCrudOperations.Role","Players");
+        String s="BusinessLayer.RoleCrudOperations.Player\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterRoleCoaches() {
-        Filter("Role","Coaches");
-        String s="Coach\r\n";
+        Filter("BusinessLayer.RoleCrudOperations.Role","Coaches");
+        String s="BusinessLayer.RoleCrudOperations.Coach\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
@@ -239,8 +244,8 @@ public class FanTest {
         Account checkAccount2=new Account("Tommy",30,"TommyX","1234");
         DataManager.addAccount(checkAccount2);
         checkAccount2.addRole(new TeamManager("Tommy", team,(Owner)checkAccount1.getRoles().get(0)));
-        Filter("Role","TeamManagers");
-        String s="TeamManager\r\n";
+        Filter("BusinessLayer.RoleCrudOperations.Role","TeamManagers");
+        String s="BusinessLayer.RoleCrudOperations.TeamManager\r\n";
         assertEquals(s,OS.toString());
     }
     @Test
@@ -248,8 +253,8 @@ public class FanTest {
         Account checkAccount=new Account("Tom",30,"TomX","1234");
         DataManager.addAccount(checkAccount);
         checkAccount.addRole(new Owner("Tom", team,null));
-        Filter("Role","Owners");
-        String s="Owner\r\n";
+        Filter("BusinessLayer.RoleCrudOperations.Role","Owners");
+        String s="BusinessLayer.RoleCrudOperations.Owner\r\n";
         assertEquals(s,OS.toString());
     }
     @Test
@@ -257,26 +262,26 @@ public class FanTest {
         Account account3=new Account("Eitan",25,"EitanX","1234");
         account3.addRole(new Referee("Abroad","Eitan"));
         DataManager.addAccount(account3);
-        Filter("Role","Referees");
-        String s="Referee\r\n";
+        Filter("BusinessLayer.RoleCrudOperations.Role","Referees");
+        String s="BusinessLayer.RoleCrudOperations.Referee\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterTeams(){
-        Filter("Team","");
-        String s="Team\r\n";
+        Filter("BusinessLayer.OtherCrudOperations.Team","");
+        String s="BusinessLayer.OtherCrudOperations.Team\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterLeagues(){
-        Filter("League","");
-        String s="League\r\n";
+        Filter("BusinessLayer.OtherCrudOperations.League","");
+        String s="BusinessLayer.OtherCrudOperations.League\r\n";
         assertEquals(OS.toString(),s);
     }
     @Test
     public void filterSeasons(){
-        Filter("Season","");
-        String s="Season\r\n";
+        Filter("BusinessLayer.OtherCrudOperations.Season","");
+        String s="BusinessLayer.OtherCrudOperations.Season\r\n";
         assertEquals(OS.toString(),s);
     }
     //endregion
@@ -295,7 +300,7 @@ public class FanTest {
     @Test
     public void showPersonalInfo() {
         fan.ShowPersonalInfo();
-        String s="Name:\r\n" + "Danny\r\n" + "\r\n" + "Teams Tracked:\r\n" + "Name:\r\n" + "Barcelona\r\n" + "\r\n" + "TeamManagers:\r\n" + "Yossi\r\n" + "\r\n" + "Coaches:\r\n" + "Tzlil\r\n" + "\r\n" + "TeamOwners:\r\n" + "Haim\r\n" + "\r\n" + "Players:\r\n" + "Maxim\r\n" + "\r\n" + "League:\r\n" + "International\r\n" + "\r\n" + "Matches:\r\n" + "Barcelona against Rome\r\n" + "\r\n" + "Stadium:\r\n" + "Teddy\r\n" + "\r\n" + "Players Tracked:\r\n" + "Name:\r\n" + "Maxim\r\n" + "\r\n" + "Age:\r\n" + "26\r\n" + "\r\n" + "Position:\r\n" + "Goalkeeper\r\n" + "\r\n" + "Team:\r\n" + "Barcelona\r\n" + "\r\n";
+        String s="Name:\r\n" + "Danny\r\n" + "\r\n" + "Teams Tracked:\r\n" + "Name:\r\n" + "Barcelona\r\n" + "\r\n" + "TeamManagers:\r\n" + "Yossi\r\n" + "\r\n" + "Coaches:\r\n" + "Tzlil\r\n" + "\r\n" + "TeamOwners:\r\n" + "Haim\r\n" + "\r\n" + "Players:\r\n" + "Maxim\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.League:\r\n" + "International\r\n" + "\r\n" + "Matches:\r\n" + "Barcelona against Rome\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Stadium:\r\n" + "Teddy\r\n" + "\r\n" + "Players Tracked:\r\n" + "Name:\r\n" + "Maxim\r\n" + "\r\n" + "Age:\r\n" + "26\r\n" + "\r\n" + "Position:\r\n" + "Goalkeeper\r\n" + "\r\n" + "BusinessLayer.OtherCrudOperations.Team:\r\n" + "Barcelona\r\n" + "\r\n";
         assertEquals(s,OS.toString());
     }
     @Test
@@ -331,7 +336,7 @@ public class FanTest {
     public void logout() {
         fan.Logout();
         assertEquals("Logged out\r\n",OS.toString());
-        assertTrue(CheckLoggerLines("Fan Danny logged out"));
+        assertTrue(CheckLoggerLines("BusinessLayer.RoleCrudOperations.Fan Danny logged out"));
     }
 
     //endregion
@@ -343,7 +348,7 @@ public class FanTest {
     private boolean CheckLoggerLines(String s) {
         String line= null;
         try {
-            BufferedReader BR=new BufferedReader(new FileReader(new File("Logger")));
+            BufferedReader BR=new BufferedReader(new FileReader(new File("BusinessLayer.Logger.Logger")));
             line = BR.readLine();
             BR.close();
             if(s.equals(line.substring(line.indexOf('-')+2)))
@@ -448,7 +453,7 @@ public class FanTest {
         }
     }
     public void Filter(String category,String roleFilter){
-        if(category.equals("Role")){
+        if(category.equals("BusinessLayer.RoleCrudOperations.Role")){
             if(roleFilter.equals("Players")){
                 List<Player> players= DataManager.getPlayersFromAccounts();
                 for(Player player:players)
@@ -480,15 +485,15 @@ public class FanTest {
             }
 
         }
-        if(category.equals("Team")){
+        if(category.equals("BusinessLayer.OtherCrudOperations.Team")){
             for(Team team: DataManager.getTeams())
                 ShowTeamStub();
         }
-        if(category.equals("League")){
+        if(category.equals("BusinessLayer.OtherCrudOperations.League")){
             for(League league: DataManager.getLeagues())
                 ShowLeagueStub();
         }
-        if(category.equals("Season")){
+        if(category.equals("BusinessLayer.OtherCrudOperations.Season")){
             for(Season season: DataManager.getSeasons())
                 ShowSeasonStub();
         }
@@ -498,31 +503,31 @@ public class FanTest {
 
     //region ShowStubs
     private void ShowTeamStub(){
-        System.out.println("Team");
+        System.out.println("BusinessLayer.OtherCrudOperations.Team");
     }
     private void ShowLeagueStub(){
-        System.out.println("League");
+        System.out.println("BusinessLayer.OtherCrudOperations.League");
     }
     private void ShowSeasonStub(){
-        System.out.println("Season");
+        System.out.println("BusinessLayer.OtherCrudOperations.Season");
     }
     private void ShowRefereeStub(){
-        System.out.println("Referee");
+        System.out.println("BusinessLayer.RoleCrudOperations.Referee");
     }
     private void ShowAccountStub(){
-        System.out.println("Account");
+        System.out.println("BusinessLayer.OtherCrudOperations.Account");
     }
     private void ShowPlayerStub(){
-        System.out.println("Player");
+        System.out.println("BusinessLayer.RoleCrudOperations.Player");
     }
     private void ShowCoachStub(){
-        System.out.println("Coach");
+        System.out.println("BusinessLayer.RoleCrudOperations.Coach");
     }
     private void ShowOwnerStub(){
-        System.out.println("Owner");
+        System.out.println("BusinessLayer.RoleCrudOperations.Owner");
     }
     private void ShowTeamManagerStub(){
-        System.out.println("TeamManager");
+        System.out.println("BusinessLayer.RoleCrudOperations.TeamManager");
     }
     //endregion
 

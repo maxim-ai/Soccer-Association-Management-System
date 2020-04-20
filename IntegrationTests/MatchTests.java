@@ -1,4 +1,8 @@
-import org.junit.After;
+import BusinessLayer.Logger.Logger;
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.RoleCrudOperations.Referee;
+import DataLayer.DataManager;
+import ServiceLayer.OurSystem;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,6 +28,7 @@ public class MatchTests {
 
     @Before
     public void setUp() {
+        DataManager.clearDataBase();
         Logger logger = new Logger();
         OurSystem ourSystem = new OurSystem();
         ourSystem.Initialize();
