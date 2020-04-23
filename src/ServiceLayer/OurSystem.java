@@ -188,4 +188,9 @@ public class OurSystem {
     public static GuestController makeGuestController(){
         return new GuestController();
     }
+
+    public static void notifyOtherRole(String notification, Role role){
+        Alert alert=new Alert(notification);
+        role.addAlert(alert);
+    }
 }

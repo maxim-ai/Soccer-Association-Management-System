@@ -6,8 +6,9 @@ import java.util.Date;
 
 public class Logger {
     private static Logger logger=null;
+    private static Logger errorLogger=null;
 
-    public Logger(){}
+    private Logger(){}
 
     public static Logger getInstance(){
         if(logger==null)
@@ -15,9 +16,33 @@ public class Logger {
         return logger;
     }
 
+    public static Logger getInstanceError(){
+        if(errorLogger==null)
+            errorLogger=new Logger();
+        return errorLogger;
+    }
+
     public void writeNewLine(String line)  {
+        if(this!=logger){
+            (new Exception()).printStackTrace();
+            return;
+        }
+
+        toWrite(line,"Logger");
+    }
+
+    public void writeNewLineError(String line){
+        if(this!=errorLogger){
+            (new Exception()).printStackTrace();
+            return;
+        }
+
+        toWrite(line,"errorLogger");
+    }
+
+    private void toWrite(String line,String fileToWrite) {
         try {
-            File loggerFile=new File("BusinessLayer.Logger.Logger");
+            File loggerFile=new File(fileToWrite);
             if(!loggerFile.exists())
                 loggerFile.createNewFile();
             FileWriter FW=new FileWriter(loggerFile,true);
@@ -30,9 +55,25 @@ public class Logger {
     }
 
     public String readLoggerFile(){
+        if(this!=logger){
+            (new Exception()).printStackTrace();
+            return "";
+        }
+        return toRead("Logger");
+    }
+
+    public String readLoggerFileError(){
+        if(this!=errorLogger){
+            (new Exception()).printStackTrace();
+            return "";
+        }
+        return toRead("errorLogger");
+    }
+
+    private String toRead(String fileToRead) {
         String string="";
         try {
-            File loggerFile=new File("BusinessLayer.Logger.Logger");
+            File loggerFile=new File(fileToRead);
             BufferedReader BR=new BufferedReader(new FileReader(loggerFile));
             String line="";
             while((line=BR.readLine())!=null){
@@ -43,7 +84,6 @@ public class Logger {
         } catch (IOException e) { }
         return string;
     }
-
 
 
 }

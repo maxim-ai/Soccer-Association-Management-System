@@ -27,7 +27,7 @@ public class OwnerTests {
     @Before
     public void setUp() throws Exception {
         DataManager.clearDataBase();
-        Logger logger=new Logger();
+        Logger logger=Logger.getInstance();
         OurSystem ourSystem=new OurSystem();
         ourSystem.Initialize();
         ownerAccount=new Account("sean",20,"sean","sean");

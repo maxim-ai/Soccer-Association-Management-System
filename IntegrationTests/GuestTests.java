@@ -55,7 +55,7 @@ public class GuestTests {
         DataManager.addTeam(team);
 
 
-        File loggerFile=new File("BusinessLayer.Logger.Logger");
+        File loggerFile=new File("Logger");
         if(loggerFile.exists())
             loggerFile.delete();
     }

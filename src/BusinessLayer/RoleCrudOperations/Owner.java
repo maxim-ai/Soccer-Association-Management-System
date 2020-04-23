@@ -3,6 +3,7 @@ import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.Pages.Page;
 import DataLayer.*;
+import ServiceLayer.OurSystem;
 
 import java.io.Serializable;
 
@@ -385,11 +386,11 @@ public class Owner extends Role implements Serializable {
     {
         String notification=this.getName()+" has deactivated team: "+team.getName();
         for(Owner owner:team.getOwners())
-            Alert.notifyOtherRole(notification,owner);
+            OurSystem.notifyOtherRole(notification,owner);
         for(TeamManager teamManager:team.getTeamManagers())
-            Alert.notifyOtherRole(notification,teamManager);
+            OurSystem.notifyOtherRole(notification,teamManager);
         for(SystemManager systemManager: DataManager.getSystemManagersFromAccounts())
-            Alert.notifyOtherRole(notification,systemManager);
+            OurSystem.notifyOtherRole(notification,systemManager);
 
         nonActiveTeams.add(team);
         Logger.getInstance().writeNewLine(this.getName()+" has deactivated "+team.getName());
@@ -411,7 +412,7 @@ public class Owner extends Role implements Serializable {
         String notification=this.getName()+" has activated team: "+teamName;
 
         for(SystemManager systemManager: DataManager.getSystemManagersFromAccounts())
-            Alert.notifyOtherRole(notification,systemManager);
+            OurSystem.notifyOtherRole(notification,systemManager);
 
         Logger.getInstance().writeNewLine(this.getName()+" has activated "+teamName);
 
@@ -465,7 +466,7 @@ public class Owner extends Role implements Serializable {
         {
             for(AssociationRepresentative ar: DataManager.getAssiciationRepresentivesFromAccounts())
             {
-                Alert.notifyOtherRole(getName()+" is requesting to create a new team, teamName: "+teamName,ar);
+                OurSystem.notifyOtherRole(getName()+" is requesting to create a new team, teamName: "+teamName,ar);
                 AssociationRepresentative.addOpenTeamRequest(this,teamName);
             }
             return "Request sent, waiting for approval";

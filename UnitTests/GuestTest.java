@@ -52,7 +52,7 @@ public class GuestTest {
         DataManager.addTeam(team);
 
 
-        File loggerFile=new File("BusinessLayer.Logger.Logger");
+        File loggerFile=new File("Logger");
         if(loggerFile.exists())
             loggerFile.delete();
     }
@@ -236,7 +236,7 @@ public class GuestTest {
     private boolean CheckLoggerLines(String s) {
         String line= null;
         try {
-            BufferedReader BR=new BufferedReader(new FileReader(new File("BusinessLayer.Logger.Logger")));
+            BufferedReader BR=new BufferedReader(new FileReader(new File("Logger")));
             line = BR.readLine();
             BR.close();
             if(s.equals(line.substring(line.indexOf('-')+2)))

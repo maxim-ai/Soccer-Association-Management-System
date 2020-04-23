@@ -3,6 +3,7 @@ import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import DataLayer.*;
 
+import ServiceLayer.OurSystem;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -210,7 +211,7 @@ public class AssociationRepresentative extends Role {
     else
     {
       approvedTeams.put(request,true);
-      Alert.notifyOtherRole("You are approved to open team: "+teamName,owner);
+      OurSystem.notifyOtherRole("You are approved to open team: "+teamName,owner);
       Logger.getInstance().writeNewLine(getName()+" approved "+owner.getName()+" to open the team: "+teamName);
       return true;
     }

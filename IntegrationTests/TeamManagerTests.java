@@ -38,7 +38,7 @@ public class TeamManagerTests {
     public void setUp() {
         DataManager.clearDataBase();
         DataManager dataManager = new DataManager();
-        Logger logger = new Logger();
+        Logger logger = Logger.getInstance();
         OurSystem ourSystem = new OurSystem();
         ourSystem.Initialize();
         List<TeamManager.PermissionEnum> permissions=new ArrayList<>();

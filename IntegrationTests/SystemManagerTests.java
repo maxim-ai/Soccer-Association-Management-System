@@ -35,8 +35,8 @@ public class SystemManagerTests {
         fan.addPage(page);
         systemManager.DeleteTeamPermanently(team);
         assertEquals(0,fan.getPages().size());
-        assertEquals("description: Delete BusinessLayer.OtherCrudOperations.Team Permanently:" + team.getName(),owner.getAlertList().get(0).toString());
-        assertEquals("description: Delete BusinessLayer.OtherCrudOperations.Team Permanently:" + team.getName(),teamManager.getAlertList().get(0).toString());
+        assertEquals("description: Delete Team Permanently:" + team.getName(),owner.getAlertList().get(0).toString());
+        assertEquals("description: Delete Team Permanently:" + team.getName(),teamManager.getAlertList().get(0).toString());
         assertEquals(0,DataManager.getTeams().size());
     }
     @Test

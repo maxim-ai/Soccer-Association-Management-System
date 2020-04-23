@@ -31,7 +31,7 @@ public class MatchTest {
     public void setUp()
     {
         DataManager.clearDataBase();
-        Logger logger=new Logger();
+        Logger logger=Logger.getInstance();
         OurSystem ourSystem=new OurSystem();
         ourSystem.Initialize();
 

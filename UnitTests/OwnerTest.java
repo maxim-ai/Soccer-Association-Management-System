@@ -28,7 +28,7 @@ public class OwnerTest {
     @Before
     public void setUp() throws Exception {
         DataManager.clearDataBase();
-        Logger logger=new Logger();
+        Logger logger=Logger.getInstance();
         OurSystem ourSystem=new OurSystem();
         ourSystem.Initialize();
         ownerAccount=new Account("sean",20,"sean","sean");
@@ -595,11 +595,11 @@ public class OwnerTest {
     {
         String notification=ownerc.getName()+" has deactivated team: "+ownerc.getTeam().getName();
         for(Owner owner:ownerc.getTeam().getOwners())
-            Alert.notifyOtherRole(notification,owner);
+            OurSystem.notifyOtherRole(notification,owner);
         for(TeamManager teamManager:ownerc.getTeam().getTeamManagers())
-            Alert.notifyOtherRole(notification,teamManager);
+            OurSystem.notifyOtherRole(notification,teamManager);
         for(SystemManager systemManager:DataManager.getSystemManagersFromAccounts())
-            Alert.notifyOtherRole(notification,systemManager);
+            OurSystem.notifyOtherRole(notification,systemManager);
 
         loggerStub("");
         deleteStub(ownerc.getTeam());
@@ -633,7 +633,7 @@ public class OwnerTest {
         {
             for(AssociationRepresentative ar:DataManager.getAssiciationRepresentivesFromAccounts())
             {
-                Alert.notifyOtherRole(owner.getName()+" is requesting to create a new team, teamName: "+teamName,ar);
+                OurSystem.notifyOtherRole(owner.getName()+" is requesting to create a new team, teamName: "+teamName,ar);
                 addOpenTeamRequestStub(owner,teamName);
             }
             return "Request sent, waiting for approval";

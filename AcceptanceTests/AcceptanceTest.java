@@ -61,7 +61,7 @@ public class AcceptanceTest {
             file.delete();
         ourSystem=new OurSystem();
         ourSystem.Initialize();
-        File loggerFile=new File("BusinessLayer.Logger.Logger");
+        File loggerFile=new File("Logger");
         if(loggerFile.exists())
             loggerFile.delete();
     }
@@ -1123,8 +1123,8 @@ public class AcceptanceTest {
         assertEquals(null,team3.getLeague());
         assertEquals(null,team3.getPage());
         assertEquals(0,team3.getPlayers().size());
-        assertEquals("description: Delete BusinessLayer.OtherCrudOperations.Team Permanently:" + team3.getName(),owner3.getAlertList().get(0).toString());
-        assertEquals("description: Delete BusinessLayer.OtherCrudOperations.Team Permanently:" + team3.getName(),tm3.getAlertList().get(0).toString());
+        assertEquals("description: Delete Team Permanently:" + team3.getName(),owner3.getAlertList().get(0).toString());
+        assertEquals("description: Delete Team Permanently:" + team3.getName(),tm3.getAlertList().get(0).toString());
         long time = after-before;
         assertTrue(time<acceptableTime);
     }
@@ -1683,7 +1683,7 @@ public class AcceptanceTest {
 
     }
     @Test
-    public void UC10point3(){
+    public void UC10point3() throws Exception {
         GuestController guestController=OurSystem.makeGuestController();
         List<Object> controllerList=guestController.LogIn("Referee1X","Password");
         RefereeController refereeController= (RefereeController)controllerList.get(0);
@@ -1705,7 +1705,7 @@ public class AcceptanceTest {
 
     }
     @Test
-    public void UC10point4(){
+    public void UC10point4() throws Exception {
         GuestController guestController=OurSystem.makeGuestController();
         List<Object> controllerList=guestController.LogIn("Referee1X","Password");
         RefereeController refereeController= (RefereeController)controllerList.get(0);

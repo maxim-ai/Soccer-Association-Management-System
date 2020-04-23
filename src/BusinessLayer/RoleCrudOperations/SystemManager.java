@@ -5,6 +5,7 @@ import BusinessLayer.OtherCrudOperations.Alert;
 import BusinessLayer.Pages.Page;
 import BusinessLayer.OtherCrudOperations.Team;
 import DataLayer.*;
+import ServiceLayer.OurSystem;
 
 import java.io.Serializable;
 import java.util.*;
@@ -57,10 +58,10 @@ public class SystemManager extends Role implements Serializable
 
   private void notifyOnDelete(Team team) {
     for (Owner owner : team.getOwners()){
-      owner.addAlert(new Alert("Delete BusinessLayer.OtherCrudOperations.Team Permanently:" + team.getName()));
+      OurSystem.notifyOtherRole("Delete Team Permanently:" + team.getName(),owner);
     }
     for(TeamManager teamManager : team.getTeamManagers()){
-      teamManager.addAlert(new Alert("Delete BusinessLayer.OtherCrudOperations.Team Permanently:" + team.getName()));
+      OurSystem.notifyOtherRole("Delete Team Permanently:" + team.getName(),teamManager);
     }
   }
 

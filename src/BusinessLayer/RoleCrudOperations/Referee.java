@@ -205,8 +205,7 @@ public class Referee extends Role implements Serializable
   /*
   UC-10.3 update event during match
    */
-  public boolean updateEventDuringMatch(Match match, EventEnum aType, String aDescription)
-  {
+  public boolean updateEventDuringMatch(Match match, EventEnum aType, String aDescription) throws Exception {
     boolean wasUpdate=false;
     if(matchs.contains(match)){
       Date currDate=new Date(System.currentTimeMillis());
@@ -219,7 +218,14 @@ public class Referee extends Role implements Serializable
         wasUpdate=true;
         Logger.getInstance().writeNewLine("BusinessLayer.RoleCrudOperations.Referee "+super.getName()+" update event during the match between: "+match.getHomeTeam().getName()+","+match.getAwayTeam().getName()+" to "+event.getType());
       }
-      return false;
+      else {
+        (Logger.getInstanceError()).writeNewLineError("Referee tried to add event not during the match");
+        throw new Exception("Referee tried to add event not during the match");
+      }
+    }
+    else{
+      (Logger.getInstanceError()).writeNewLineError("Referee didnt take part in this match");
+      throw new Exception("Referee didnt take part in this match");
     }
     return wasUpdate;
   }

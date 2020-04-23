@@ -98,9 +98,13 @@ public class RefereeController {
      * @param aType type of the event
      * @param aDescription of the event
      */
-    public void updateEventDuringMatch(Match match, EventEnum aType, String aDescription)
-    {
-        referee.updateEventDuringMatch(match,aType,aDescription);
+    public String updateEventDuringMatch(Match match, EventEnum aType, String aDescription) throws Exception {
+        try {
+            referee.updateEventDuringMatch(match,aType,aDescription);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return "";
     }
 
     /**

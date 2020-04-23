@@ -76,7 +76,7 @@ public class RefereeTests {
     }
 
     @Test
-    public void updateEventDuringMatch() {
+    public void updateEventDuringMatch() throws Exception {
         Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,null,lineRefereeOne,lineRefereeTwo);
         referee.addMatch(match,"main");
         referee.updateEventDuringMatch(match, EventEnum.foul,"aya aya");
