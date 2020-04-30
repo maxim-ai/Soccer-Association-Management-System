@@ -2,7 +2,7 @@ import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.RoleCrudOperations.AssociationRepresentative;
 import BusinessLayer.RoleCrudOperations.Owner;
 import BusinessLayer.RoleCrudOperations.Referee;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +16,7 @@ public class AssociationRepresentativeTests {
 
     @Before
     public void setUp(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
     }
 
 
@@ -24,15 +24,15 @@ public class AssociationRepresentativeTests {
     public void createNewLeague() {
         List<Team> teamsList = new LinkedList<>();
         League league = associationRepresentative.createNewLeague("TestLeague",teamsList);
-        assertTrue(DataManager.getLeagues().contains(league));
+        assertTrue(DataController.getLeagues().contains(league));
     }
 
     @Test
     public void setYearToLeague() {
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         League testLeague = new League("Test");
-        if(associationRepresentative.setYearToLeague(testLeague,"0000") && DataManager.getLeagues().contains(testLeague)) {
-            List<Season> seasonsList = DataManager.getSeasons();
+        if(associationRepresentative.setYearToLeague(testLeague,"0000") && DataController.getLeagues().contains(testLeague)) {
+            List<Season> seasonsList = DataController.getSeasons();
             for (Season season : seasonsList) {
                 if (season.getName().equals("0000")) {
                     assertNotNull(season.getSLsettingsByLeague(testLeague));
@@ -45,7 +45,7 @@ public class AssociationRepresentativeTests {
     @Test
     public void addNewReferee() {
         Referee referee=associationRepresentative.addNewReferee("Test","Test",0,"Test","Test");
-        assertNotNull(DataManager.getAccountByRole(referee));
+        assertNotNull(DataController.getAccountByRole(referee));
     }
 
     @Test
@@ -55,8 +55,8 @@ public class AssociationRepresentativeTests {
         League testLeague = new League("Test");
         boolean actual = (associationRepresentative.addRefereeToLeague(testReferee,testLeague,testSeason));
 
-        if(DataManager.getLeagues().contains(testLeague)&& DataManager.getSeasons().contains(testSeason))
-            for(League league:DataManager.getLeagues()){
+        if(DataController.getLeagues().contains(testLeague)&& DataController.getSeasons().contains(testSeason))
+            for(League league: DataController.getLeagues()){
                 SLsettings sLsettings = league.getSLsettingsBySeason(testSeason);
                 if(sLsettings!=null){
                     if(testReferee.getsLsettings().equals(sLsettings))

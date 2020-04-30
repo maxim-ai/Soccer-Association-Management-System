@@ -1,4 +1,5 @@
 package BusinessLayer.RoleCrudOperations;
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.Account;
 import BusinessLayer.OtherCrudOperations.Alert;
@@ -6,7 +7,6 @@ import BusinessLayer.OtherCrudOperations.Pageable;
 import BusinessLayer.Pages.Page;
 import BusinessLayer.OtherCrudOperations.PositionEnum;
 import BusinessLayer.OtherCrudOperations.Team;
-import DataLayer.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -144,7 +144,7 @@ public class Player extends Role implements Pageable, Serializable
     System.out.println();
     System.out.println("Age:");
     int age=0;
-    for(Account account: DataManager.getAccounts()){
+    for(Account account: DataController.getAccounts()){
       for(Role role:account.getRoles()){
         if(role.equals(this))
           age=account.getAge();
@@ -172,5 +172,17 @@ public class Player extends Role implements Pageable, Serializable
     if(page==null) return;
     if(!page.getType().equals(this))
       page.setType(this);
+  }
+  public static Player convertStringToPlayer(String userName){
+    for (Account account : DataController.getAccounts()){
+      if(account.getUserName().equals(userName)){
+        for(Role role : account.getRoles()){
+          if(role instanceof Player){
+            return  (Player)role;
+          }
+        }
+      }
+    }
+    return null;
   }
 }

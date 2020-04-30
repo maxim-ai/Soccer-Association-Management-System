@@ -1,5 +1,7 @@
 package BusinessLayer.OtherCrudOperations;
 
+import BusinessLayer.DataController;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -169,7 +171,13 @@ public class League implements Serializable
     System.out.println();
   }
 
-
-
+  public static League convertStringToLeague(String leagueName){
+    for (League league : DataController.getLeagues()){
+      if(league.getName().equals(leagueName)){
+        return league;
+      }
+    }
+    return null;
+  }
 
 }

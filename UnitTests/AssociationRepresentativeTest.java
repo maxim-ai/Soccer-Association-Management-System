@@ -3,7 +3,7 @@ import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.RoleCrudOperations.AssociationRepresentative;
 import BusinessLayer.RoleCrudOperations.Owner;
 import BusinessLayer.RoleCrudOperations.Referee;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public class AssociationRepresentativeTest {
 
     @Before
     public void setUp(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
     }
 
     @Test
@@ -32,7 +32,7 @@ public class AssociationRepresentativeTest {
             return  null;
         }
         League league = new League(name);
-        DataManager.addLeague(league);
+        DataController.addLeague(league);
         for(Team team : teams){
             addTeamStub(team);
         }
@@ -56,8 +56,8 @@ public class AssociationRepresentativeTest {
             return  wasSet;
         }
         Season season=new Season(year);
-        DataManager.addSeason(season);
-        DataManager.addLeague(league);
+        DataController.addSeason(season);
+        DataController.addLeague(league);
         SLsettings sLsettings = getSLsettingsBySeasonStub(league,season);
         if (sLsettings==null)
         {
@@ -88,7 +88,7 @@ public class AssociationRepresentativeTest {
 
     private Referee addNewRefereeTest(String training, String name, int age, String userName, String password){
         Account account = new Account(name,age,userName,password);
-        DataManager.addAccount(account);
+        DataController.addAccount(account);
         if(training != null && name != null) {
             return createNewRefereeStub(account,training,name);
         }
@@ -101,9 +101,9 @@ public class AssociationRepresentativeTest {
     public void createNewReferee() {
         Account testAccount = new Account("Test",0,"Test","Test");
         Referee referee=associationRepresentative.createNewReferee(testAccount, "Test","Test");
-        DataManager.addAccount(testAccount);
+        DataController.addAccount(testAccount);
         boolean actual=false;
-        if(DataManager.getAccountByRole(referee)!=null)
+        if(DataController.getAccountByRole(referee)!=null)
             actual = true;
         for(Alert alert:referee.getAlertList()){
             if(alert.getDescription().startsWith("Invitation")){
@@ -197,7 +197,7 @@ public class AssociationRepresentativeTest {
     @Test
     public void setNewSeason() {
         Season testSeason = associationRepresentative.setNewSeason("0000");
-        assertTrue(DataManager.getSeasons().contains(testSeason));
+        assertTrue(DataController.getSeasons().contains(testSeason));
     }
 
     @Test

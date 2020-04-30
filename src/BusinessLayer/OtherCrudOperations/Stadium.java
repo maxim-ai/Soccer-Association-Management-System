@@ -1,5 +1,7 @@
 package BusinessLayer.OtherCrudOperations;
 
+import BusinessLayer.DataController;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -181,7 +183,13 @@ public class Stadium implements Serializable
             "name" + ":" + getName()+ "]";
   }
 
-
+  public static Stadium convertStringToStadium(String stadiumName){
+    for (Stadium stadium : DataController.getStadiums()){
+        if (stadium.getName().equals(stadiumName))
+          return stadium;
+      }
+    return null;
+  }
 
 
 }

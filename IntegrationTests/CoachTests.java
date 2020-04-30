@@ -6,7 +6,7 @@ import BusinessLayer.Pages.Page;
 import BusinessLayer.RoleCrudOperations.Coach;
 import BusinessLayer.RoleCrudOperations.Fan;
 import BusinessLayer.RoleCrudOperations.Referee;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class CoachTests {
     Fan fan=new Fan("tzlil");
     @Before
     public void init(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 

@@ -1,5 +1,5 @@
 import BusinessLayer.OtherCrudOperations.Alert;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,7 +10,7 @@ public class AlertTest {
 
     @Before
     public void setUp() throws Exception {
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         alert=new Alert("aaa");
     }
 

@@ -1,5 +1,6 @@
 package BusinessLayer.OtherCrudOperations;
 import BusinessLayer.RoleCrudOperations.*;
+import BusinessLayer.DataController;
 
 import java.io.Serializable;
 import java.util.*;
@@ -264,6 +265,15 @@ public class Account implements Serializable {
     for(Role role:this.getRoles())
       System.out.println(role.getClass().getName());
     System.out.println();
+  }
+
+  public static Account convertStringToAccount(String userName){
+    for (Account account : DataController.getAccounts()){
+      if(account.getUserName().equals(userName)){
+        return account;
+      }
+    }
+    return null;
   }
 
 

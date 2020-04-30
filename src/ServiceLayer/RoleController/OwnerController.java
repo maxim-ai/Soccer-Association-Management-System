@@ -24,8 +24,9 @@ public class OwnerController
         return owner.getTeam();
     }
 
-    public void setTeam(Team team)
+    public void setTeam(String teamName)
     {
+        Team team = Team.convertStringToTeam(teamName);
         owner.setTeam(team);
     }
 
@@ -34,8 +35,9 @@ public class OwnerController
         return owner.getAppointer();
     }
 
-    public void setAppointer(Owner appointedBy)
+    public void setAppointer(String userName)
     {
+        Owner appointedBy = Owner.convertStringToOwner(userName);
         owner.setAppointer(appointedBy);
     }
 
@@ -45,6 +47,7 @@ public class OwnerController
      */
     public boolean addAssetToTeam(Object o)
     {
+
         if(o==null || (!(o instanceof Coach) && !(o instanceof Player) && !(o instanceof Stadium)))
             return false;
         return owner.addAssetToTeam(o);
@@ -87,8 +90,9 @@ public class OwnerController
     /**
      * adds a new owner to a team
      */
-    public boolean appointOwnerToTeam(Account account)
+    public boolean appointOwnerToTeam(String userName)
     {
+        Account account = Account.convertStringToAccount(userName);
         if(account==null)
             return false;
         return owner.appointOwnerToTeam(account);
@@ -97,8 +101,9 @@ public class OwnerController
     /**
      * remove an owner from the team
      */
-    public boolean removeOwnerFromTeam(Owner owner)
+    public boolean removeOwnerFromTeam(String userName)
     {
+        Owner owner = Owner.convertStringToOwner(userName);
         if(owner==null)
             return false;
         return owner.removeOwnerFromTeam(owner);
@@ -108,8 +113,10 @@ public class OwnerController
      * adds a new team manager to the team
      * permissions: manageName, manageManagers, managePage, manageCoaches, managePlayers, manageLeague, manageMatches, manageStadium
      */
-    public boolean appointTeamManagerToTeam(Account account, List<TeamManager.PermissionEnum> permissions)
+    public boolean appointTeamManagerToTeam(String userName, List<TeamManager.PermissionEnum> permissions)
     {
+        Account account = Account.convertStringToAccount(userName);
+
         if(account==null || permissions==null)
             return false;
         return owner.appointTeamManagerToTeam(account,permissions);
@@ -205,8 +212,9 @@ public class OwnerController
     /**
      * creates a new team, provided there is an authorisation from the Association
      */
-    public String createTeam(String teamName, League league, Stadium stadium)
+    public String createTeam(String teamName, String leagueName, Stadium stadium)
     {
+        League league = League.convertStringToLeague(leagueName);
         if(teamName==null)
             return "Wrong input, team name is null";
 
@@ -216,11 +224,13 @@ public class OwnerController
     /**
      * creates a new player in the team
      */
-    public Account createPlayer(String aName, int age, Date aBirthday, PositionEnum aPosition, String userName, String password)
+    public Account createPlayer(String aName, String ageString, String aBirthday, PositionEnum aPosition, String userName, String password)
     {
+        int age = Integer.getInteger(ageString);
+        java.util.Date date = new java.util.Date(aBirthday);
         if(aName==null || userName==null || password==null)
             return null;
-        return owner.createPlayer(userName,age,aBirthday,aPosition,userName,password);
+        return owner.createPlayer(userName,age,date,aPosition,userName,password);
     }
 
     /**

@@ -2,7 +2,7 @@ import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.Pages.Page;
 import BusinessLayer.RoleCrudOperations.Fan;
 import BusinessLayer.RoleCrudOperations.Referee;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class GameEventTest {
     private final PrintStream PS=System.out;
     @Before
     public void init(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 

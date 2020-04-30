@@ -1,4 +1,4 @@
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -6,7 +6,7 @@ public class SLsettingsTest {
 
     @Before
     public void setUp(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
     }
 
 

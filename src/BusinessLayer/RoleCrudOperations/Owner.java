@@ -1,8 +1,8 @@
 package BusinessLayer.RoleCrudOperations;
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.Pages.Page;
-import DataLayer.*;
 import ServiceLayer.OurSystem;
 
 import java.io.Serializable;
@@ -261,7 +261,7 @@ public class Owner extends Role implements Serializable {
 
         owner.team.removeOwner(owner);
 
-        for (Account account : DataManager.getAccounts())
+        for (Account account : DataController.getAccounts())
             for (Role role : account.getRoles())
                 if (role instanceof Owner && role.equals(owner))
                 {
@@ -318,9 +318,9 @@ public class Owner extends Role implements Serializable {
 
         teamManager.delete();
 
-        List<Account> tamp= DataManager.getAccounts();
+        List<Account> tamp= DataController.getAccounts();
 
-        for (Account account : DataManager.getAccounts())
+        for (Account account : DataController.getAccounts())
         {
             if(account.checkIfTeamManagr()!=null && account.checkIfTeamManagr().equals(teamManager))
             {
@@ -389,7 +389,7 @@ public class Owner extends Role implements Serializable {
             OurSystem.notifyOtherRole(notification,owner);
         for(TeamManager teamManager:team.getTeamManagers())
             OurSystem.notifyOtherRole(notification,teamManager);
-        for(SystemManager systemManager: DataManager.getSystemManagersFromAccounts())
+        for(SystemManager systemManager: DataController.getSystemManagersFromAccounts())
             OurSystem.notifyOtherRole(notification,systemManager);
 
         nonActiveTeams.add(team);
@@ -411,7 +411,7 @@ public class Owner extends Role implements Serializable {
 
         String notification=this.getName()+" has activated team: "+teamName;
 
-        for(SystemManager systemManager: DataManager.getSystemManagersFromAccounts())
+        for(SystemManager systemManager: DataController.getSystemManagersFromAccounts())
             OurSystem.notifyOtherRole(notification,systemManager);
 
         Logger.getInstance().writeNewLine(this.getName()+" has activated "+teamName);
@@ -450,7 +450,7 @@ public class Owner extends Role implements Serializable {
     public String createTeam(String teamName, League league, Stadium stadium)
     {
         boolean teamExists=false;
-        for(Team t: DataManager.getTeams())
+        for(Team t: DataController.getTeams())
         {
             if(t.getName().equals(teamName))
             {
@@ -464,7 +464,7 @@ public class Owner extends Role implements Serializable {
 
         else if(!AssociationRepresentative.checkIfRequestExists(this,teamName))
         {
-            for(AssociationRepresentative ar: DataManager.getAssiciationRepresentivesFromAccounts())
+            for(AssociationRepresentative ar: DataController.getAssiciationRepresentivesFromAccounts())
             {
                 OurSystem.notifyOtherRole(getName()+" is requesting to create a new team, teamName: "+teamName,ar);
                 AssociationRepresentative.addOpenTeamRequest(this,teamName);
@@ -479,7 +479,7 @@ public class Owner extends Role implements Serializable {
             {
                 Team team=new Team(teamName,league,stadium);
                 team.addOwner(this);
-                DataManager.addTeam(team);
+                DataController.addTeam(team);
                 AssociationRepresentative.removeOpenTeamRequest(this,teamName);
                 Logger.getInstance().writeNewLine(getName()+" just opened the team: "+teamName);
                 return "BusinessLayer.OtherCrudOperations.Team successfully added";
@@ -533,6 +533,19 @@ public class Owner extends Role implements Serializable {
         SystemManager.createAccount(account);
         Logger.getInstance().writeNewLine(getName()+" just a new coach: "+aName+" to team: "+getTeam());
         return account;
+    }
+
+    public static Owner convertStringToOwner(String userName){
+        for (Account account : DataController.getAccounts()){
+            if(account.getUserName().equals(userName)){
+                for(Role role : account.getRoles()){
+                    if(role instanceof Owner){
+                        return (Owner) role;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
 

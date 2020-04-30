@@ -3,6 +3,7 @@ import BusinessLayer.OtherCrudOperations.Account;
 import BusinessLayer.OtherCrudOperations.Guest;
 import ServiceLayer.OurSystem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GuestController {
@@ -24,13 +25,22 @@ public class GuestController {
     //endregion
 
     //region Transition Methods
-    public List<Object> LogIn(String UserName, String Password){
-        if(UserName.length()==0||Password.length()==0) return null;
-        Account account=guest.LogIn(UserName,Password);
-        if(account==null)
-            return null;
-        OurSystem.addAccount(account);
-        return OurSystem.makeControllersByRoles(account);
+    public List<Object> LogIn(String UserName, String Password) {
+        List<Object> list=new ArrayList<>();
+        try {
+            if(UserName.length()==0)
+                list.add("Username length is 0");
+            if(Password.length()==0)
+                list.add("Password length is 0");
+            Account account=guest.LogIn(UserName,Password);
+            if(account==null)
+                return null;
+            OurSystem.addAccount(account);
+            return OurSystem.makeControllersByRoles(account);
+        } catch (Exception e) {
+            list.add(e.getMessage());
+        }
+        return list;
     }
 
     public boolean SignIn(String name, int age, String UserName, String Password){

@@ -1,6 +1,6 @@
 import BusinessLayer.OtherCrudOperations.Policy;
 import BusinessLayer.OtherCrudOperations.SLsettings;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class PolicyTest {
     @Before
     public void setUp()
     {
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         policy=new Policy("pc","gs");
         sLsettings=new SLsettings(policy);
         policy1=new Policy("pc1","gs1");

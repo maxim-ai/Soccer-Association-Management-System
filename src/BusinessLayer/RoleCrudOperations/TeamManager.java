@@ -1,9 +1,7 @@
 package BusinessLayer.RoleCrudOperations;
 import BusinessLayer.Logger.Logger;
-import BusinessLayer.OtherCrudOperations.League;
-import BusinessLayer.OtherCrudOperations.Match;
-import BusinessLayer.OtherCrudOperations.Stadium;
-import BusinessLayer.OtherCrudOperations.Team;
+import BusinessLayer.OtherCrudOperations.*;
+import BusinessLayer.DataController;
 
 import java.io.Serializable;
 
@@ -210,7 +208,32 @@ public class TeamManager extends Role implements Serializable
     System.out.println(this.getTeam().getName());
   }
 
-
-
+  public static TeamManager convertStringToTeamManager(String userName){
+    for (Account account : DataController.getAccounts()){
+      if(account.getUserName().equals(userName)){
+        for(Role role : account.getRoles()){
+          if(role instanceof TeamManager){
+            return (TeamManager) role;
+          }
+        }
+      }
+    }
+    return null;
+  }
+  public static PermissionEnum  convertStringToPermissionEnum(String permissionEnum){
+    if (permissionEnum.equals("Manage Name"))
+      return PermissionEnum.manageName;
+    else if(permissionEnum.equals("Manage Managers"))
+      return PermissionEnum.manageManagers;
+    else if(permissionEnum.equals("Manage Page"))
+      return PermissionEnum.managePage;
+    else if(permissionEnum.equals("Manage Players"))
+      return PermissionEnum.managePlayers;
+    else if(permissionEnum.equals("Manage Matches"))
+      return PermissionEnum.manageMatches;
+    else if(permissionEnum.equals("Manage Stadium"))
+      return PermissionEnum.manageStadium;
+    return null;
+  }
 
 }

@@ -1,6 +1,6 @@
 
 import BusinessLayer.OtherCrudOperations.*;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class LeagueTest {
 
     @Before
     public void setUp(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
     }
 
     @Test

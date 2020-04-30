@@ -1,7 +1,7 @@
 import BusinessLayer.RoleCrudOperations.Coach;
 import BusinessLayer.RoleCrudOperations.Fan;
 import BusinessLayer.Pages.Page;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ public class PageTest {
     List<Fan> fans=new LinkedList<>();
     @Before
     public void setUp() throws Exception {
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         coach=new Coach("Maxim","aaa","bbb",null);
         page=new Page(coach);
         coach.setPage(page);

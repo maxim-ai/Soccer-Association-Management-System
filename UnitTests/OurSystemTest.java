@@ -1,6 +1,6 @@
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.RoleCrudOperations.*;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import ServiceLayer.OurSystem;
 import org.junit.After;
 import org.junit.Before;
@@ -22,7 +22,7 @@ public class OurSystemTest {
 
     @Before
     public void setUp() throws Exception {
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         ourSystem=new OurSystem();
         System.setOut(new PrintStream(OS));
         File loggerFile=new File("Logger");
@@ -207,15 +207,15 @@ public class OurSystemTest {
     private void setUpDatabase(List<Account> checkListAccounts, List<Team> checkListTeams, List<League> checkListLeagues, List<Season> checkListSeasons, List<Stadium> checkListStadiums) {
         Account refAccount1 = new Account("Maxim",26,"MaximX","1234");
         refAccount1.addRole(new Referee("High","Maxim"));
-        DataManager.addAccount(refAccount1);
+        DataController.addAccount(refAccount1);
         checkListAccounts.add(refAccount1);
         Account refAccount2 = new Account("Maxim",26,"MaximX","1234");
         refAccount2.addRole(new Referee("High","Maxim"));
-        DataManager.addAccount(refAccount2);
+        DataController.addAccount(refAccount2);
         checkListAccounts.add(refAccount2);
         Account refAccount3 = new Account("Maxim",26,"MaximX","1234");
         refAccount3.addRole(new Referee("High","Maxim"));
-        DataManager.addAccount(refAccount3);
+        DataController.addAccount(refAccount3);
         checkListAccounts.add(refAccount3);
         List<Referee> refs=new ArrayList<>();
         refs.add(((Referee)refAccount1.getRole(0)));
@@ -228,10 +228,10 @@ public class OurSystemTest {
         checkPolicy.setsLsettings(checkSLsettings);
 
         League checkLeague=new League("Champions");
-        DataManager.addLeague(checkLeague);
+        DataController.addLeague(checkLeague);
         checkListLeagues.add(checkLeague);
         Season checkSeason=new Season("Winter");
-        DataManager.addSeason(checkSeason);
+        DataController.addSeason(checkSeason);
         checkListSeasons.add(checkSeason);
         HashMap<Season,SLsettings> checkSeasonSLSettingsMap=new HashMap();
         checkSeasonSLSettingsMap.put(checkSeason,checkSLsettings);
@@ -242,54 +242,54 @@ public class OurSystemTest {
 
 
         Stadium CampNo=new Stadium("CampNo");
-        DataManager.addStadium(CampNo);
+        DataController.addStadium(CampNo);
         checkListStadiums.add(CampNo);
         Stadium Vasermil=new Stadium("Vasermil");
-        DataManager.addStadium(Vasermil);
+        DataController.addStadium(Vasermil);
         checkListStadiums.add(Vasermil);
 
         Team barcelona=new Team("Barcelona",checkLeague,CampNo);
-        DataManager.addTeam(barcelona);
+        DataController.addTeam(barcelona);
         checkListTeams.add(barcelona);
         Team rome=new Team("Rome",checkLeague,Vasermil);
-        DataManager.addTeam(rome);
+        DataController.addTeam(rome);
         checkListTeams.add(rome);
 
         Account coachAccount1=new Account("Sean",25,"SeanX","1234");
-        DataManager.addAccount(coachAccount1);
+        DataController.addAccount(coachAccount1);
         checkListAccounts.add(coachAccount1);
         coachAccount1.addRole(new Coach("Sean","aaa","bbb",null));
         ((Coach)coachAccount1.getRole(0)).addTeam(barcelona);
         Account coachAccount2=new Account("Sean",25,"ascxvxcv","1234");
-        DataManager.addAccount(coachAccount2);
+        DataController.addAccount(coachAccount2);
         checkListAccounts.add(coachAccount2);
         coachAccount2.addRole(new Coach("Sean","aaa","bbb",null));
         ((Coach)coachAccount2.getRole(0)).addTeam(rome);
 
         Account ownerAccount1=new Account("Maxim",26,"sdsadas","3asd");
-        DataManager.addAccount(ownerAccount1);
+        DataController.addAccount(ownerAccount1);
         checkListAccounts.add(ownerAccount1);
         ownerAccount1.addRole(new Owner("Maxim",barcelona,null));
         Account ownerAccount2=new Account("Maxim",26,"cvxvcx","3asd");
-        DataManager.addAccount(ownerAccount2);
+        DataController.addAccount(ownerAccount2);
         checkListAccounts.add(ownerAccount2);
         ownerAccount2.addRole(new Owner("Maxim",rome,null));
 
         Account playerAccount1=new Account("Maxim",26,"vcxvcxvx","3asd");
-        DataManager.addAccount(playerAccount1);
+        DataController.addAccount(playerAccount1);
         checkListAccounts.add(playerAccount1);
         playerAccount1.addRole(new Player("Maxim",new Date(),PositionEnum.Goalkeeper,barcelona,null));
         Account playerAccount2=new Account("Maxim",26,"bter","3asd");
-        DataManager.addAccount(playerAccount2);
+        DataController.addAccount(playerAccount2);
         checkListAccounts.add(playerAccount2);
         playerAccount2.addRole(new Player("Maxim",new Date(),PositionEnum.Goalkeeper,rome,null));
 
         Account teamManagerAccount1=new Account("Maxim",26,"vcxvchgfxvx","3asd");
-        DataManager.addAccount(teamManagerAccount1);
+        DataController.addAccount(teamManagerAccount1);
         checkListAccounts.add(teamManagerAccount1);
         teamManagerAccount1.addRole(new TeamManager("Maxim",barcelona,(Owner)ownerAccount1.getRole(0)));
         Account teamManagerAccount2=new Account("Maxim",26,"bter","3asd");
-        DataManager.addAccount(teamManagerAccount2);
+        DataController.addAccount(teamManagerAccount2);
         checkListAccounts.add(teamManagerAccount2);
         teamManagerAccount2.addRole(new TeamManager("Maxim",rome,(Owner)ownerAccount2.getRole(0)));
 

@@ -1,9 +1,11 @@
 package BusinessLayer.RoleCrudOperations;
 import BusinessLayer.Logger.Logger;
+import BusinessLayer.OtherCrudOperations.Account;
 import BusinessLayer.OtherCrudOperations.Alert;
 import BusinessLayer.OtherCrudOperations.Pageable;
 import BusinessLayer.OtherCrudOperations.Team;
 import BusinessLayer.Pages.Page;
+import BusinessLayer.DataController;
 
 
 import java.io.Serializable;
@@ -230,5 +232,16 @@ public class Coach extends Role implements Pageable, Serializable
     if(!page.getType().equals(this))
       page.setType(this);
   }
-
+  public static Coach convertStringToCoach(String userName){
+    for (Account account : DataController.getAccounts()){
+      if(account.getUserName().equals(userName)){
+        for(Role role : account.getRoles()){
+          if(role instanceof Coach){
+            return (Coach) role;
+          }
+        }
+      }
+    }
+    return null;
+  }
 }

@@ -2,7 +2,7 @@ import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.Pages.Page;
 import BusinessLayer.RoleCrudOperations.Fan;
 import BusinessLayer.RoleCrudOperations.Referee;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class RefereeTests {
     Fan fan=new Fan("tzlil");
     @Before
     public void init(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 
@@ -54,7 +54,7 @@ public class RefereeTests {
     }
 
     @Test
-    public void displayAllMatches() {
+    public void displayAllMatches() throws Exception {
 
         Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,null,lineRefereeOne,lineRefereeTwo);
         referee.addMatch(match,"main");
@@ -98,7 +98,7 @@ public class RefereeTests {
         assertFalse(ans);
     }
     @Test
-    public void editEventAfterGame() {
+    public void editEventAfterGame() throws Exception {
         Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,null,lineRefereeOne,lineRefereeTwo);
         referee.addMatch(match,"main");
         match.getDate().setTime(1000);

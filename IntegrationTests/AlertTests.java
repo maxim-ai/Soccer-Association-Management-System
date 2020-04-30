@@ -1,7 +1,7 @@
 import BusinessLayer.OtherCrudOperations.Alert;
 import BusinessLayer.RoleCrudOperations.Fan;
 import BusinessLayer.RoleCrudOperations.Role;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import ServiceLayer.OurSystem;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,7 @@ public class AlertTests {
 
     @Before
     public void setUp() throws Exception {
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         alert=new Alert("aaa");
     }
 

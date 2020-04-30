@@ -1,7 +1,7 @@
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.RoleCrudOperations.*;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import ServiceLayer.OurSystem;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,19 +26,19 @@ public class OwnerTests {
 
     @Before
     public void setUp() throws Exception {
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         Logger logger=Logger.getInstance();
         OurSystem ourSystem=new OurSystem();
         ourSystem.Initialize();
         ownerAccount=new Account("sean",20,"sean","sean");
         secondAccount=new Account("notSean",30,"sean","sean");
-        DataManager.addAccount(ownerAccount);
-        DataManager.addAccount(secondAccount);
+        DataController.addAccount(ownerAccount);
+        DataController.addAccount(secondAccount);
 
         owner=new Owner("sean",new Team("myTeam",new League("myLeague"),new Stadium("myStadium")),null);
         tmpOwner=new Owner("tmp",owner.getTeam(),owner);
         tempTeam=new Team("newTeam",new League("newLeague"),new Stadium("newStadium"));
-        DataManager.addTeam(tempTeam);
+        DataController.addTeam(tempTeam);
 
         ownerAccount.addRole(owner);
     }
@@ -119,7 +119,7 @@ public class OwnerTests {
 
         // checks standard removal
         Account account=new Account("tmp",20,"cla","cla");
-        DataManager.addAccount(account);
+        DataController.addAccount(account);
         account.addRole(new Coach(account.getName(),"bla","bla",null));
         owner.appointOwnerToTeam(account);
 
@@ -216,7 +216,7 @@ public class OwnerTests {
     public void createPlayer()
     {
         Account test=owner.createPlayer("testPla",20,new Date(123),PositionEnum.CenterBack,"bla11","bla");
-        assertTrue(DataManager.getAccounts().contains(test));
+        assertTrue(DataController.getAccounts().contains(test));
         assertNotNull(test.checkIfPlayer());
     }
 
@@ -224,7 +224,7 @@ public class OwnerTests {
     public void createTeamManager()
     {
         Account test=owner.createTeamManager("testPla",20,null,"bla11","bla");
-        assertTrue(DataManager.getAccounts().contains(test));
+        assertTrue(DataController.getAccounts().contains(test));
         assertNotNull(test.checkIfTeamManagr());
     }
 
@@ -232,7 +232,7 @@ public class OwnerTests {
     public void createCoach()
     {
         Account test=owner.createCoach("testPla",20,"bla","bla","bla11","bla");
-        assertTrue(DataManager.getAccounts().contains(test));
+        assertTrue(DataController.getAccounts().contains(test));
         assertNotNull(test.checkIfCoach());
     }
 

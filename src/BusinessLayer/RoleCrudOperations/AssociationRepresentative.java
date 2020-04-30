@@ -1,7 +1,7 @@
 package BusinessLayer.RoleCrudOperations;
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
-import DataLayer.*;
 
 import ServiceLayer.OurSystem;
 import javafx.util.Pair;
@@ -29,7 +29,7 @@ public class AssociationRepresentative extends Role {
       return  null;
     }
     League league = new League(name);
-    DataManager.addLeague(league);
+    DataController.addLeague(league);
     for(Team team : teams){
       league.addTeam(team);
     }
@@ -48,8 +48,8 @@ public class AssociationRepresentative extends Role {
       return  wasSet;
     }
     Season season=new Season(year);
-    DataManager.addSeason(season);
-    DataManager.addLeague(league);
+    DataController.addSeason(season);
+    DataController.addLeague(league);
     SLsettings sLsettings = league.getSLsettingsBySeason(season);
     if (sLsettings==null)
     {
@@ -86,7 +86,7 @@ public class AssociationRepresentative extends Role {
    */
   public Referee addNewReferee(String training, String name, int age, String userName, String password){
     Account account = new Account(name,age,userName,password);
-    DataManager.addAccount(account);
+    DataController.addAccount(account);
     if(training != null && name != null) {
       return createNewReferee(account,training,name);
     }
@@ -184,7 +184,7 @@ public class AssociationRepresentative extends Role {
 
   public Season setNewSeason(String year){
     Season season = new Season(year);
-    DataManager.addSeason(season);
+    DataController.addSeason(season);
     return season;
   }
 

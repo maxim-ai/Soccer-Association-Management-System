@@ -1,10 +1,9 @@
 package BusinessLayer.RoleCrudOperations;
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.Account;
-import BusinessLayer.OtherCrudOperations.Alert;
 import BusinessLayer.Pages.Page;
 import BusinessLayer.OtherCrudOperations.Team;
-import DataLayer.*;
 import ServiceLayer.OurSystem;
 
 import java.io.Serializable;
@@ -51,7 +50,7 @@ public class SystemManager extends Role implements Serializable
 
   private boolean removeTeamFromDm(Team aTeam) {
     boolean wasRemoved = true;
-    DataManager.removeTeam(aTeam);
+    DataController.removeTeam(aTeam);
     wasRemoved = true;
     return wasRemoved;
   }
@@ -113,24 +112,24 @@ public class SystemManager extends Role implements Serializable
     if(isOwner){
       if(owner.getTeam().getOwners().size()>1){
         owner=null;
-        wasSet = DataManager.removeAccount(account);
+        wasSet = DataController.removeAccount(account);
         return  wasSet;
       }
       return false;// to find someone else who will be next owner before remove this one
     }
     if(isSystemManger){
-      List<Account> accounts = DataManager.getAccounts();
+      List<Account> accounts = DataController.getAccounts();
       for(Account account1 : accounts){
         for(Role role : account1.getRoles()){
           if(role instanceof SystemManager && !account.equals(account1)){
-            wasSet = DataManager.removeAccount(account);
+            wasSet = DataController.removeAccount(account);
             return  wasSet;
           }
         }
       }
     }
 
-    wasSet = DataManager.removeAccount(account);
+    wasSet = DataController.removeAccount(account);
     return wasSet;
   }
 
@@ -175,7 +174,7 @@ public class SystemManager extends Role implements Serializable
    */
   public void buildRecommendationSystem(){ }
   public static boolean createAccount(Account accountToAdd){
-    DataManager.addAccount(accountToAdd);
+    DataController.addAccount(accountToAdd);
     return true;
   }
 

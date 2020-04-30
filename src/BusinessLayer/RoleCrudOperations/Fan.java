@@ -1,8 +1,8 @@
 package BusinessLayer.RoleCrudOperations;
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.Pages.Page;
-import DataLayer.*;
 import ServiceLayer.OurSystem;
 
 import java.io.Serializable;
@@ -160,7 +160,7 @@ public class Fan extends Role implements Serializable
   }
 
   public static void notifyFansAboutMatch(Match match){
-    List<Fan> fans= DataManager.getFansFromAccounts();
+    List<Fan> fans= DataController.getFansFromAccounts();
     if(fans==null)return;
     for(Fan fan:fans){
       if(fan.isGetMatchNotifications())
@@ -222,11 +222,11 @@ public class Fan extends Role implements Serializable
   }
 
   public boolean EditPersonalInfo(String newName, String newUserName, String newPassword){
-    for(Account account: DataManager.getAccounts()){
+    for(Account account: DataController.getAccounts()){
       if(account.getUserName().equals(newUserName))
         return false;
     }
-    Account account= DataManager.getAccountByRole(this);
+    Account account= DataController.getAccountByRole(this);
     if(!(newName.length()==0)) account.setName(newName);
     if(!(newUserName.length()==0)) account.setUserName(newUserName);
     if(!(newPassword.length()==0)) account.setPassword((newPassword));

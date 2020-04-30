@@ -4,7 +4,7 @@ import BusinessLayer.RoleCrudOperations.Fan;
 import BusinessLayer.RoleCrudOperations.Player;
 import BusinessLayer.RoleCrudOperations.Referee;
 import BusinessLayer.RoleCrudOperations.Role;
-import DataLayer.DataManager;
+import BusinessLayer.DataController;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class PlayerTest {
 
     @Before
     public void init(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 
