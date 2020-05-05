@@ -1,7 +1,7 @@
+import BusinessLayer.DataController;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.Pages.Page;
 import BusinessLayer.RoleCrudOperations.*;
-import DataLayer.DataManager;
 import ServiceLayer.OurSystem;
 import org.junit.After;
 import org.junit.Before;
@@ -24,7 +24,7 @@ public class FanTests {
 
     @Before
     public void setUp() throws Exception {
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         System.setOut(new PrintStream(OS));
         fan = new Fan("Danny");
         account1=new Account("Maxim",26,"MaximX","1234");
@@ -52,13 +52,13 @@ public class FanTests {
         playerPage.addFan(fan);
         teamPage.addFan(fan);
         season.addMatch(match);
-        DataManager.clearDataBase();
-        DataManager.addAccount(account1);
-        DataManager.addAccount(account2);
-        DataManager.addLeague(league);
-        DataManager.addStadium(stadium);
-        DataManager.addSeason(season);
-        DataManager.addTeam(team);
+        DataController.clearDataBase();
+        DataController.addAccount(account1);
+        DataController.addAccount(account2);
+        DataController.addLeague(league);
+        DataController.addStadium(stadium);
+        DataController.addSeason(season);
+        DataController.addTeam(team);
 
 
         File loggerFile=new File("Logger");
@@ -179,7 +179,7 @@ public class FanTests {
     public void filterRoleReferees() {
         Account account3=new Account("Eitan",25,"EitanX","1234");
         account3.addRole(new Referee("Abroad","Eitan"));
-        DataManager.addAccount(account3);
+        DataController.addAccount(account3);
         fan.Filter("BusinessLayer.RoleCrudOperations.Role","Referees");
         String s="Name:\r\nEitan\r\n\r\nTraining:\r\nAbroad\r\n\r\nMatches judged:\r\n";
         assertEquals(OS.toString(),s);
@@ -207,7 +207,7 @@ public class FanTests {
     public void notifyFansAboutMatch() {
         Account checkAccount=new Account("Yossi",30,"YossiX","1234");
         checkAccount.addRole(fan);
-        DataManager.addAccount(checkAccount);
+        DataController.addAccount(checkAccount);
         Stadium checkStadium=new Stadium("Blumfield");
         League checkLeague=new League("Haal");
         Season checkSeason=new Season("Summer");

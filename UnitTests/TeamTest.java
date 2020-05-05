@@ -1,3 +1,4 @@
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.Pages.Page;
@@ -5,7 +6,6 @@ import BusinessLayer.RoleCrudOperations.Coach;
 import BusinessLayer.RoleCrudOperations.Owner;
 import BusinessLayer.RoleCrudOperations.Player;
 import BusinessLayer.RoleCrudOperations.TeamManager;
-import DataLayer.DataManager;
 import ServiceLayer.OurSystem;
 import org.junit.After;
 import org.junit.Before;
@@ -35,8 +35,8 @@ public class TeamTest {
     @Before
     public void setUp()
     {
-        DataManager.clearDataBase();
-        DataManager dataManager = new DataManager();
+        DataController.clearDataBase();
+        DataController dataController = new DataController();
         Logger logger = Logger.getInstance();
         OurSystem ourSystem = new OurSystem();
         ourSystem.Initialize();

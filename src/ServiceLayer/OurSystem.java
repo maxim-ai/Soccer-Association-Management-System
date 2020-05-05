@@ -1,8 +1,8 @@
 package ServiceLayer;
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.RoleCrudOperations.*;
-import DataLayer.*;
 import ServiceLayer.GuestController.GuestController;
 import ServiceLayer.RoleController.*;
 
@@ -23,6 +23,26 @@ public class OurSystem {
         currAccounts=new ArrayList<>();
     }
 
+//    public static ArrayList<String> getOptions(String substring) {
+//        ArrayList<String> strings=new ArrayList<>();
+//        if(substring.equals("League"))
+//        {
+//            strings.add("LeagueOne");
+//            strings.add("LeagueTwo");
+//            strings.add("LeagueThree");
+//            strings.add("LeagueFour");
+//        }
+//        else if(substring.equals("Season"))
+//        {
+//            strings.add("SeasonOne");
+//            strings.add("SeasonTwo");
+//            strings.add("SeasonThree");
+//            strings.add("SeasonFour");
+//        }
+//
+//        return strings;
+//    }
+
     //region Initialize the System
 
 
@@ -34,11 +54,11 @@ public class OurSystem {
             Account SMaccount=new Account("Nadav",26,"NadavX","1234");
             SM=new SystemManager(SMaccount.getName());
             SMaccount.addRole(SM);
-            DataManager.addAccount(SMaccount);
+            DataController.addAccount(SMaccount);
             (Logger.getInstance()).writeNewLine("System has been initialized");
         } else {
             loadData();
-            SM= DataManager.getSystemManagersFromAccounts().get(0);
+            SM= DataController.getSystemManagersFromAccounts().get(0);
         }
 
     }
@@ -46,23 +66,23 @@ public class OurSystem {
         try {
             FileInputStream fi = new FileInputStream(new File("AccountsData.txt"));
             ObjectInputStream oi = new ObjectInputStream(fi);
-            DataManager.setAccounts((List<Account>)oi.readObject());
+            DataController.setAccounts((List<Account>)oi.readObject());
 
             fi=new FileInputStream(new File("TeamsData.txt"));
             oi = new ObjectInputStream(fi);
-            DataManager.setTeams((List<Team>)oi.readObject());
+            DataController.setTeams((List<Team>)oi.readObject());
 
             fi=new FileInputStream(new File("LeaguesData.txt"));
             oi = new ObjectInputStream(fi);
-            DataManager.setLeagues((List<League>)oi.readObject());
+            DataController.setLeagues((List<League>)oi.readObject());
 
             fi=new FileInputStream(new File("SeasonsData.txt"));
             oi = new ObjectInputStream(fi);
-            DataManager.setSeasons((List<Season>)oi.readObject());
+            DataController.setSeasons((List<Season>)oi.readObject());
 
             fi=new FileInputStream(new File("StadiumsData.txt"));
             oi = new ObjectInputStream(fi);
-            DataManager.setStadiums((List<Stadium>)oi.readObject());
+            DataController.setStadiums((List<Stadium>)oi.readObject());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -80,7 +100,7 @@ public class OurSystem {
         saveData("Leagues");
         saveData("Seasons");
         saveData("Stadiums");
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         File logOnCheckFile = new File("firstInitCheck");
         try {
             if(!logOnCheckFile.exists())
@@ -93,15 +113,15 @@ public class OurSystem {
             FileOutputStream f = new FileOutputStream(new File(dataAbout+"Data.txt"));
             ObjectOutputStream o = new ObjectOutputStream(f);
             if(dataAbout.equals("Accounts"))
-                o.writeObject(DataManager.getAccounts());
+                o.writeObject(DataController.getAccounts());
             else if(dataAbout.equals("Teams"))
-                o.writeObject(DataManager.getTeams());
+                o.writeObject(DataController.getTeams());
             else if(dataAbout.equals("Leagues"))
-                o.writeObject(DataManager.getLeagues());
+                o.writeObject(DataController.getLeagues());
             else if(dataAbout.equals("Seasons"))
-                o.writeObject(DataManager.getSeasons());
+                o.writeObject(DataController.getSeasons());
             else if(dataAbout.equals("Stadiums"))
-                o.writeObject(DataManager.getStadiums());
+                o.writeObject(DataController.getStadiums());
             o.flush();
             o.close();
             f.flush();
@@ -192,5 +212,52 @@ public class OurSystem {
     public static void notifyOtherRole(String notification, Role role){
         Alert alert=new Alert(notification);
         role.addAlert(alert);
+    }
+
+    public static List<String> getDropList(String string,List<Object> controllers,List<String> arguments){
+        List<String> list=new ArrayList<>();
+        if(string.equals("Team")){
+            List<Team> teams= DataController.getTeams();
+            for(Team team:teams)
+                list.add(team.getName());
+        }
+        else if(string.equals("Season")){
+            List<Season> seasons=DataController.getSeasons();
+            for(Season season:seasons)
+                list.add(season.getName());
+        }
+        else if(string.equals("League")){
+            List<League> leagues=DataController.getLeagues();
+            for(League league:leagues)
+                list.add(league.getName());
+        }
+        else if(string.equals("Stadium")){
+            List<Stadium> stadiums=DataController.getStadiums();
+            for(Stadium stadium:stadiums)
+                list.add(stadium.getName());
+        }
+        else if(string.equals("EventEnum")){
+            for(EventEnum eventEnum:EventEnum.values())
+                list.add(eventEnum.toString());
+        }
+        else if(string.equals("Match")){
+            list=((RefereeController)controllers.get(0)).getMatchList();
+        }
+        else if(string.equals("GameEvent")){
+            list=((RefereeController)controllers.get(0)).getEvantsByMatch(arguments.get(0));
+        }
+        else if(string.equals("Referee")){
+            List<Referee> refs=DataController.getRefereesFromAccounts();
+            for(Referee ref:refs)
+                list.add(ref.getName());
+        }
+        else if(string.equals("Account")){
+            List<Account> accounts=DataController.getAccounts();
+            for(Account account:accounts)
+                list.add(account.getUserName());
+        }
+
+        return list;
+
     }
 }

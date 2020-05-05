@@ -1,7 +1,7 @@
+import BusinessLayer.DataController;
 import BusinessLayer.OtherCrudOperations.Alert;
 import BusinessLayer.RoleCrudOperations.Fan;
 import BusinessLayer.RoleCrudOperations.Role;
-import DataLayer.DataManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ public class RoleTest {
 
     @Before
     public void setUp() throws Exception {
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         role=new Fan("Maxim");
     }
 

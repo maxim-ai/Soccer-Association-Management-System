@@ -1,10 +1,10 @@
 package BusinessLayer.RoleCrudOperations;
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.Account;
-import BusinessLayer.OtherCrudOperations.Alert;
+import BusinessLayer.OtherCrudOperations.Stadium;
 import BusinessLayer.Pages.Page;
 import BusinessLayer.OtherCrudOperations.Team;
-import DataLayer.*;
 import ServiceLayer.OurSystem;
 
 import java.io.Serializable;
@@ -36,24 +36,22 @@ public class SystemManager extends Role implements Serializable
    * @param team
    * @return
    */
-  public boolean DeleteTeamPermanently(Team team){
-    boolean wasSet = false;
+  public String DeleteTeamPermanently(Team team){
     if(team == null){
-      return  wasSet;
+      Logger.getInstanceError().writeNewLineError(this.getUsername()+" delete "+(team.getName() +"Permanently failed"));
+      return "Delete team failed";
     }
-    wasSet = removeTeamFromDm(team);
+    removeTeamFromDm(team);
     //saveAction(team);
     notifyOnDelete(team);
     deleteFromAllFollowers(team);
     team.delete();
-    return wasSet;
+    Logger.getInstance().writeNewLine(this.getUsername()+" delete "+(team.getName() +"Permanently" ));
+    return "Team successfully deleted";
   }
 
-  private boolean removeTeamFromDm(Team aTeam) {
-    boolean wasRemoved = true;
-    DataManager.removeTeam(aTeam);
-    wasRemoved = true;
-    return wasRemoved;
+  private void removeTeamFromDm(Team aTeam) {
+    DataController.removeTeam(aTeam);
   }
 
   private void notifyOnDelete(Team team) {
@@ -92,10 +90,10 @@ public class SystemManager extends Role implements Serializable
    * @param account
    * @return
    */
-  public boolean deleteAccount(Account account){
-    boolean wasSet = false;
+  public String deleteAccount(Account account){
     if (account == null){
-      return  wasSet;
+      Logger.getInstanceError().writeNewLineError(this.getUsername()+" delete "+(account.getName() +" failed"));
+      return  "Delete account failed";
     }
     List <Role> roles = account.getRoles();
     boolean isOwner= false;
@@ -113,52 +111,64 @@ public class SystemManager extends Role implements Serializable
     if(isOwner){
       if(owner.getTeam().getOwners().size()>1){
         owner=null;
-        wasSet = DataManager.removeAccount(account);
-        return  wasSet;
+        DataController.removeAccount(account);
+        Logger.getInstance().writeNewLine(this.getUsername()+" delete "+(account.getName() +"successfully"));
+        return  "Delete account successfully";
+      }else {
+        Logger.getInstanceError().writeNewLineError(this.getUsername() + " delete " + (account.getName() + "failed"));
+        return "Delete account failed";// to find someone else who will be next owner before remove this one
       }
-      return false;// to find someone else who will be next owner before remove this one
     }
     if(isSystemManger){
-      List<Account> accounts = DataManager.getAccounts();
+      List<Account> accounts = DataController.getAccounts();
       for(Account account1 : accounts){
         for(Role role : account1.getRoles()){
           if(role instanceof SystemManager && !account.equals(account1)){
-            wasSet = DataManager.removeAccount(account);
-            return  wasSet;
+            DataController.removeAccount(account);
+            Logger.getInstance().writeNewLine(this.getUsername()+" delete "+(account.getName() +"successfully"));
+            return  "Delete account successfully";
           }
         }
       }
+      Logger.getInstanceError().writeNewLineError(this.getUsername() + " delete " + (account.getName() + "failed"));
+      return  "Delete account failed";
     }
-
-    wasSet = DataManager.removeAccount(account);
-    return wasSet;
+    DataController.removeAccount(account);
+    Logger.getInstance().writeNewLine(this.getUsername()+" delete "+(account.getName() +"successfully"));
+    return "Delete account successfully";
   }
 
   /**
    * show all the complaints of the accounts in the system
    */
-  public void showComplaints(){
+  public String showComplaints(){
+    String complaints=null;
     for(Map.Entry <String,String> complain : complaintAndComments.entrySet()) {
-      System.out.println(complain.getKey().toString());
+      //System.out.println(complain.getKey().toString());
+      complaints= complaints + "\n" + complain.getKey().toString();
     }
+    return complaints;
   }
 
   /**
-   * add comment to the complaint
+   * add new complain
    */
   public void addComplain(String complain){
     complaintAndComments.put(complain,null);
+
   }
 
   /**
    * add comment to the complaint
    */
-  public void addComment(String comment,String acomplain){
+  public String addComment(String comment,String acomplain){
     for(Map.Entry <String,String> complain : complaintAndComments.entrySet()){
       if(complain.getKey().equals(acomplain)){
         complaintAndComments.put(acomplain,comment);
       }
     }
+    Logger.getInstance().writeNewLine(this.getUsername()+" add "+(comment +" successfully"));
+    return "Add comment successfully";
   }
 
   /**
@@ -166,7 +176,7 @@ public class SystemManager extends Role implements Serializable
    */
   public String showSystemLog(){
     String s= Logger.getInstance().readLoggerFile();
-    System.out.println(s);
+    //System.out.println(s);
     return s;
   }
 
@@ -174,8 +184,9 @@ public class SystemManager extends Role implements Serializable
    * build recommendation system
    */
   public void buildRecommendationSystem(){ }
+
   public static boolean createAccount(Account accountToAdd){
-    DataManager.addAccount(accountToAdd);
+    DataController.addAccount(accountToAdd);
     return true;
   }
 

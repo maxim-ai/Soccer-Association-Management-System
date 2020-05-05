@@ -1,7 +1,7 @@
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.RoleCrudOperations.Referee;
-import DataLayer.DataManager;
 import ServiceLayer.OurSystem;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class MatchTests {
 
     @Before
     public void setUp() {
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         Logger logger = Logger.getInstance();
         OurSystem ourSystem = new OurSystem();
         ourSystem.Initialize();
@@ -37,9 +37,9 @@ public class MatchTests {
         refAcc2 = new Account("ref2", 40, "ref2", "ref2");
         refAcc3 = new Account("ref3", 40, "ref3", "ref3");
 
-        DataManager.addAccount(refAcc1);
-        DataManager.addAccount(refAcc2);
-        DataManager.addAccount(refAcc3);
+        DataController.addAccount(refAcc1);
+        DataController.addAccount(refAcc2);
+        DataController.addAccount(refAcc3);
 
         refAcc1.addRole(new Referee("good1", refAcc1.getName()));
         refAcc2.addRole(new Referee("good2", refAcc2.getName()));

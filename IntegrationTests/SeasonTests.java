@@ -1,9 +1,9 @@
 
+import BusinessLayer.DataController;
 import BusinessLayer.OtherCrudOperations.League;
 import BusinessLayer.OtherCrudOperations.Policy;
 import BusinessLayer.OtherCrudOperations.SLsettings;
 import BusinessLayer.OtherCrudOperations.Season;
-import DataLayer.DataManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class SeasonTests {
 
     @Before
     public void setUp(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
     }
 
     @Test

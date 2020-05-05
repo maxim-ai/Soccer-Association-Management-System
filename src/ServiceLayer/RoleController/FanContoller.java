@@ -1,98 +1,107 @@
 package ServiceLayer.RoleController;
+import BusinessLayer.Controllers.FanBusinessController;
 import BusinessLayer.OtherCrudOperations.Account;
 import BusinessLayer.RoleCrudOperations.Fan;
 import BusinessLayer.RoleCrudOperations.Role;
 import ServiceLayer.OurSystem;
 
+import java.util.List;
+
 public class FanContoller {
-    private Fan fan;
+
+    private FanBusinessController fanBusinessController;
 
     public FanContoller(Fan fan){
-        this.fan=fan;
+        fanBusinessController=new FanBusinessController(fan);
     }
 
-    //region Getters&Setters
-    public Fan getFan() {
-        return fan;
+
+    //region Getters&&Setter
+    public FanBusinessController getFanBusinessController() {
+        return fanBusinessController;
     }
 
-    public void setFan(Fan fan) {
-        this.fan = fan;
+    public void setFanBusinessController(FanBusinessController fanBusinessController) {
+        this.fanBusinessController = fanBusinessController;
     }
     //endregion
 
-    //region Transition methods
-    public boolean ShowInfo(String InfoAbout){
-        if(InfoAbout.length()==0) return false;
+    //region Transition methods for version 3
+    public void LogOut(){
+        fanBusinessController.LogOut();
+    }
+
+    public String EditPersonalInfo(String newName,String newUserName,String newPassword){
+        if(newName.length()==0) return "Name field is empty";
+        if(newUserName.length()==0) return "Username field is empty";
+        if(newPassword.length()==0) return "Password field is empty";
+        return fanBusinessController.EditPersonalInfo(newName,newUserName,newPassword);
+    }
+    //endregion
+
+    //region Transition methods for other UC
+    public String ShowInfo(String InfoAbout){
+        if(InfoAbout.length()==0) return "InfoAbout field is empty";
         if(!(InfoAbout.equals("Teams")||InfoAbout.equals("Players")||InfoAbout.equals("Coaches")||
                 InfoAbout.equals("Leagues")||InfoAbout.equals("Seasons")))
-            return false;
-        fan.ShowInfo(InfoAbout);
-        return true;
+            return "Wrong InfoAbout field";
+        fanBusinessController.ShowInfo(InfoAbout);
+        return "";
     }
 
-    public boolean Search(String criterion, String query){
-        if(criterion.length()==0||query.length()==0) return false;
-        if(!(criterion.equals("Name")||criterion.equals("Category")))
-            return false;
+    public String Search(String criterion, String query){
+        if(criterion.length()==0) return "Criterion field is empty";
+        if(query.length()==0) return "Query length is empty";
+        if(!(criterion.equals("Name")||criterion.equals("Category"))) return "Wrong criterion";
         if(criterion.equals("Category")){
             if(!(query.equals("Teams")||query.equals("Accounts")||query.equals("Leagues")||query.equals("Seasons")))
-                return false;
+                return "Wrong query";
         }
-        fan.Search(criterion,query);
-        return true;
+        fanBusinessController.Search(criterion,query);
+        return "";
     }
 
-    public boolean Filter(String category, String roleFilter){
-        if(category.length()==0) return false;
-        if(!(category.equals("BusinessLayer.RoleCrudOperations.Role")||category.equals("BusinessLayer.OtherCrudOperations.Team")||category.equals("BusinessLayer.OtherCrudOperations.League")||category.equals("BusinessLayer.OtherCrudOperations.Season")))
-            return false;
-        if(category.equals("BusinessLayer.RoleCrudOperations.Role")){
+    public String Filter(String category, String roleFilter){
+        if(category.length()==0) return "Catergory field is empty";
+        if(!(category.equals("Role")||category.equals("Team")||category.equals("League")||category.equals("Season")))
+            return "Wrong category";
+        if(category.equals("Role")){
             if(!(roleFilter.equals("Players")||roleFilter.equals("Coaches")||roleFilter.equals("TeamManagers")||
                     roleFilter.equals("Owners")||roleFilter.equals("Referees")))
-                return false;
+                return "Wrong role filter";
         }
-        fan.Filter(category,roleFilter);
-        return true;
+        fanBusinessController.Filter(category,roleFilter);
+        return "";
     }
 
-    public void LogOut(){
-        fan.Logout();
-        for(Account account: OurSystem.getCurrAccounts()){
-            for(Role role:account.getRoles()){
-                if(role.equals(fan)){
-                    OurSystem.removeAccount(account);
-                    return;
-                }
-            }
-        }
-    }
+
 
     public void SubscribeTrackPersonalPages(){
-        fan.SubscribeTrackPersonalPages();
+        fanBusinessController.SubscribeTrackPersonalPages();
     }
 
-    public void SubscribeGetMatchNotifications(){fan.SubscribeGetMatchNotifications();}
+    public void SubscribeGetMatchNotifications(){fanBusinessController.SubscribeGetMatchNotifications();}
 
-    public boolean Report(String report){
+    public String Report(String report){
         if(report.length()==0)
-            return false;
-        fan.Report("report");
-        return true;
+            return "Report is blank";
+        fanBusinessController.Report(report);
+        return "";
     }
 
-    public boolean ShowSearchHistory(){
-        return fan.ShowSearchHistory();
+    public String ShowSearchHistory() throws Exception {
+        return fanBusinessController.ShowSearchHistory();
     }
 
     public void ShowPersonalInfo(){
-        fan.ShowPersonalInfo();
+        fanBusinessController.ShowPersonalInfo();
+    }
+	
+    public List<String> getAlerts()
+    {
+        return fanBusinessController.getAlerts();
     }
 
-    public boolean EditPersonalInfo(String newName,String newUserName,String newPassword){
-        if(newName.length()==0&&newUserName.length()==0&&newPassword.length()==0)
-            return false;
-        return fan.EditPersonalInfo(newName,newUserName,newPassword);
-    }
+
     //endregion
 }

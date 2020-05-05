@@ -4,6 +4,7 @@ import BusinessLayer.RoleCrudOperations.Coach;
 import BusinessLayer.RoleCrudOperations.Owner;
 import BusinessLayer.RoleCrudOperations.Player;
 import BusinessLayer.RoleCrudOperations.TeamManager;
+import BusinessLayer.DataController;
 
 import java.io.Serializable;
 import java.util.*;
@@ -572,6 +573,15 @@ public class Team implements Pageable, Serializable
   public void pageUpdated(){
     if(page!=null)
       page.notifyTrackingFans(new Alert(getName()+" page updated"));
+  }
+
+  public static Team convertStringToTeam(String teamName){
+    for (Team team : DataController.getTeams()){
+      if(team.getName().equals(teamName)){
+        return team;
+      }
+    }
+    return null;
   }
 
 }

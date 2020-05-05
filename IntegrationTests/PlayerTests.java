@@ -1,9 +1,9 @@
+import BusinessLayer.DataController;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.Pages.Page;
 import BusinessLayer.RoleCrudOperations.Fan;
 import BusinessLayer.RoleCrudOperations.Player;
 import BusinessLayer.RoleCrudOperations.Referee;
-import DataLayer.DataManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class PlayerTests {
 
     @Before
     public void init(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 

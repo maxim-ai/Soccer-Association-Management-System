@@ -1,7 +1,7 @@
 package BusinessLayer.RoleCrudOperations;
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
-import DataLayer.*;
 
 import ServiceLayer.OurSystem;
 import javafx.util.Pair;
@@ -24,16 +24,14 @@ public class AssociationRepresentative extends Role {
    * @param teams
    * @return
    */
-  public League createNewLeague(String name, List<Team> teams){
-    if(teams == null || name == null){
-      return  null;
-    }
+  public String createNewLeague(String name, List<Team> teams){
     League league = new League(name);
-    DataManager.addLeague(league);
+    DataController.addLeague(league);
     for(Team team : teams){
       league.addTeam(team);
     }
-    return league;
+    Logger.getInstance().writeNewLine(this.getUsername()+" created new leauge: "+(league.getName() ));
+    return "New leauge created successfully";
   }
 
   /**
@@ -42,38 +40,35 @@ public class AssociationRepresentative extends Role {
    * @param year
    * @return
    */
-  public boolean setYearToLeague(League league, String year){
-    boolean wasSet = false;
-    if(league == null || year == null){
-      return  wasSet;
-    }
+  public String setYearToLeague(League league, String year){
     Season season=new Season(year);
-    DataManager.addSeason(season);
-    DataManager.addLeague(league);
+    DataController.addSeason(season);
+    DataController.addLeague(league);
     SLsettings sLsettings = league.getSLsettingsBySeason(season);
     if (sLsettings==null)
     {
       sLsettings = new SLsettings(new Policy(null,null));
     }
-    wasSet = league.addSLsettingsToSeason(season,sLsettings);
-    return wasSet;
+    league.addSLsettingsToSeason(season,sLsettings);
+    Logger.getInstance().writeNewLine(this.getUsername()+" set new year to league: "+(league.getName() ));
+    return "Set year to league successfully";
   }
 
   /**
    * remove specific referee
    * @return
    */
-  public void deleteReferee(Referee referee){
-    if(referee == null){
-      return;
-    }
+  public String deleteReferee(Referee referee){
     SLsettings refSLsettings = referee.getsLsettings();
     for(Referee referee1 : refSLsettings.getReferees()){
       if(referee.equals(referee1)) {
         referee1.delete();
-        return;
+        Logger.getInstance().writeNewLine(this.getUsername()+" remove referee: "+(referee.getName() ));
+        return "Remove referee successfully";
       }
     }
+    Logger.getInstanceError().writeNewLineError(this.getUsername()+" delete "+(referee.getName() +" failed"));
+    return "Remove referee failed";
   }
 
   /**
@@ -84,13 +79,12 @@ public class AssociationRepresentative extends Role {
    * @param age the age of the user
    * @param training the training of the user, as a referee
    */
-  public Referee addNewReferee(String training, String name, int age, String userName, String password){
+  public String addNewReferee(String training, String name, int age, String userName, String password){
     Account account = new Account(name,age,userName,password);
-    DataManager.addAccount(account);
-    if(training != null && name != null) {
-      return createNewReferee(account,training,name);
-    }
-    return null;
+    DataController.addAccount(account);
+    Referee referee = createNewReferee(account,training,name);
+    Logger.getInstance().writeNewLine(this.getUsername()+" add referee: "+(referee.getName()));
+    return "Add new referee successfully";
   }
 
   /**
@@ -121,11 +115,7 @@ public class AssociationRepresentative extends Role {
    * @param season
    * @return
    */
-  public boolean addRefereeToLeague(Referee referee, League league, Season season){ // to fix uc
-    boolean wasAdded = false;
-    if(league == null || referee == null || season == null){
-      return  wasAdded;
-    }
+  public String addRefereeToLeague(Referee referee, League league, Season season){ // to fix uc
     SLsettings sLsettings = league.getSLsettingsBySeason(season);
     if (sLsettings==null)
     {
@@ -133,8 +123,9 @@ public class AssociationRepresentative extends Role {
     }
     referee.setsLsettings(sLsettings);
     sLsettings.addReferee(referee);
-    wasAdded= referee.addLeague(league,season);
-    return  wasAdded;
+    referee.addLeague(league,season);
+    Logger.getInstance().writeNewLine(this.getUsername()+" add referee: " +referee.getName()+  " to league: "+(league.getName()));
+    return  "Add referee to league successfully";
   }
 
   /**
@@ -144,11 +135,7 @@ public class AssociationRepresentative extends Role {
    * @param season
    * @return
    */
-  public  boolean setLeaguePointCalcPolicy(League league, Policy policy, Season season, String pointCalc){
-    boolean wasAdded = false;
-    if(league == null || policy == null || season == null){
-      return  wasAdded;
-    }
+  public  String setLeaguePointCalcPolicy(League league, Policy policy, Season season, String pointCalc){
     policy.setPointCalc(pointCalc);
     SLsettings sLsettings = league.getSLsettingsBySeason(season);
     if(sLsettings!=null)
@@ -157,7 +144,8 @@ public class AssociationRepresentative extends Role {
       sLsettings = new SLsettings(policy);
       season.addSLsettingsToLeague(league,sLsettings);
     }
-    return true;
+    Logger.getInstance().writeNewLine(this.getUsername()+" set League Point Calculation Policy: " +(pointCalc));
+    return "Set league point calculation policy successfully";
   }
 
   /**
@@ -167,11 +155,7 @@ public class AssociationRepresentative extends Role {
    * @param season
    * @return
    */
-  public  boolean setLeagueGameSchedualPolicy(League league, Policy policy, Season season, String gameSchedule){
-    boolean wasAdded = false;
-    if(league == null || policy == null || season == null){
-      return  wasAdded;
-    }
+  public  String setLeagueGameSchedualPolicy(League league, Policy policy, Season season, String gameSchedule){
     policy.setGameSchedual(gameSchedule);
     SLsettings sLsettings = league.getSLsettingsBySeason(season);
     if(sLsettings!=null)
@@ -179,13 +163,17 @@ public class AssociationRepresentative extends Role {
     else{
       sLsettings = new SLsettings(policy);
       season.addSLsettingsToLeague(league,sLsettings);
-    }    return true;
+    }
+
+    Logger.getInstance().writeNewLine(this.getUsername()+" set League Game schedule Policy: " +(gameSchedule));
+    return "Set league game schedule policy successfully";
   }
 
-  public Season setNewSeason(String year){
+  public String setNewSeason(String year){
     Season season = new Season(year);
-    DataManager.addSeason(season);
-    return season;
+    DataController.addSeason(season);
+    Logger.getInstance().writeNewLine(this.getUsername()+" set new season: " +(season.getName()));
+    return "Set new season successfully";
   }
 
   public void addAmountToAssociationBudget(double amount){
@@ -199,21 +187,19 @@ public class AssociationRepresentative extends Role {
   /**
    * approve the opening of a team
    */
-  public boolean approveTeam(String teamName, Owner owner)
+  public String approveTeam(String teamName, Owner owner)
   {
-    if(teamName==null || owner==null)
-      return false;
-
     Pair request=new Pair(owner,teamName);
-
-    if(!approvedTeams.containsKey(request))
-      return false;
+    if(!approvedTeams.containsKey(request)){
+      Logger.getInstanceError().writeNewLineError(this.getUsername()+" approve team "+(teamName) +" failed");
+      return "Team approved failed";
+    }
     else
     {
       approvedTeams.put(request,true);
       OurSystem.notifyOtherRole("You are approved to open team: "+teamName,owner);
       Logger.getInstance().writeNewLine(getName()+" approved "+owner.getName()+" to open the team: "+teamName);
-      return true;
+      return "Team approved successfully";
     }
   }
 

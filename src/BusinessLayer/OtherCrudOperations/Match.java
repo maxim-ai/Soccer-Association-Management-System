@@ -1,6 +1,7 @@
 package BusinessLayer.OtherCrudOperations;
 import BusinessLayer.RoleCrudOperations.Fan;
 import BusinessLayer.RoleCrudOperations.Referee;
+import BusinessLayer.DataController;
 import ServiceLayer.OurSystem;
 
 import java.io.Serializable;
@@ -272,7 +273,26 @@ public class Match implements Serializable
       System.out.println(", ");
     }
   }
-
+  public static Match convertStringToMatch(String match){
+      String [] splitArr=match.split(",");
+      String homeTeam=splitArr[0].substring(new String("Teams: ").length(),splitArr[0].indexOf(" against"));
+      String awayTeam=splitArr[0].substring(splitArr[0].indexOf("against")+new String("against ").length());
+      String []date=splitArr[1].substring(splitArr[1].indexOf("Date:")+new String("Date: ").length()).split("/");
+      String day=date[0];
+      String month=date[1];
+      String year=date[2];
+      for (Referee referee: DataController.getRefereesFromAccounts()
+           ) {
+          for (Match m:referee.getMatchs()
+               ) {
+              if (m.homeTeam.getName().equals(homeTeam)&&m.awayTeam.getName().equals(awayTeam)&&m.getDate().getYear()==Integer.parseInt(year)
+              &&m.getDate().getMonth()==Integer.parseInt(month)&&m.getDate().getDay()
+              ==Integer.parseInt(day))
+                  return m;
+          }
+      }
+    return null;
+  }
 
 
 }

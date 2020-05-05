@@ -1,75 +1,63 @@
 package ServiceLayer.RoleController;
-import BusinessLayer.OtherCrudOperations.*;
-import BusinessLayer.RoleCrudOperations.Coach;
+import BusinessLayer.Controllers.OwnerBusinessController;
 import BusinessLayer.RoleCrudOperations.Owner;
-import BusinessLayer.RoleCrudOperations.Player;
-import BusinessLayer.RoleCrudOperations.TeamManager;
+import javafx.util.Pair;
 
 
-import java.sql.Date;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class OwnerController
 {
-    Owner owner;
+    OwnerBusinessController ownerBusinessController;
 
     public OwnerController(Owner owner)
     {
-        this.owner = owner;
+        ownerBusinessController=new OwnerBusinessController(owner);
     }
 
-    public Team getTeam()
-    {
-        return owner.getTeam();
-    }
-
-    public void setTeam(Team team)
-    {
-        owner.setTeam(team);
-    }
-
-    public Owner getAppointer()
-    {
-        return owner.getAppointer();
-    }
-
-    public void setAppointer(Owner appointedBy)
-    {
-        owner.setAppointer(appointedBy);
-    }
 
     /**
      * add the entered asset to the owner's team
      * assets: coach, player, stadium
      */
-    public boolean addAssetToTeam(Object o)
+    public String addAssetToTeam(String identifier)
     {
-        if(o==null || (!(o instanceof Coach) && !(o instanceof Player) && !(o instanceof Stadium)))
-            return false;
-        return owner.addAssetToTeam(o);
+
+        if(identifier==null)
+            return "wrong asset identifier";
+        return ownerBusinessController.addAssetToTeam(identifier);
     }
 
     /**
      * removes the entered asset from the owner's team
      * assets: coach, player, stadium
      */
-    public boolean removeAssetFromTeam(Object o)
+    public String removeAssetFromTeam(String identifier)
     {
-        if(o==null || (!(o instanceof Coach) && !(o instanceof Player) && !(o instanceof Stadium)))
-            return false;
-        return owner.removeAssetFromTeam(o);
+        if(identifier==null)
+            return "wrong asset identifier";
+        return ownerBusinessController.removeAssetFromTeam(identifier);
     }
 
     /**
      * edits a team asset, according to specified entry
      * assets: BusinessLayer.OtherCrudOperations.Team manager, coach, player, stadium
      */
-    public boolean editTeamAsset(Object o, int action, String input)
+    public String editTeamAsset(String identifier, String actionString, String input)
     {
-        if(o==null || (!(o instanceof Coach) && (!(o instanceof TeamManager) && !(o instanceof Player) && !(o instanceof Stadium))))
-            return false;
-        return owner.editTeamAsset(o,action,input);
+        if(identifier==null)
+            return "wrong asset identifier";
+        int action;
+        try {
+            action = Integer.parseInt(actionString);
+        }
+        catch (NumberFormatException e) {
+            return "action is not a valid number";
+        }
+        return ownerBusinessController.editTeamAsset(identifier,action,input);
     }
 
     /**
@@ -77,174 +65,242 @@ public class OwnerController
      * assets: BusinessLayer.OtherCrudOperations.Team manager, coach, player, stadium
      * (for it to work, start the list at 1 in the UI)
      */
-    public ArrayList<String> showEditingOptions(Object o)
+    public ArrayList<String> showEditingOptions(String identifier)
     {
-        if(o==null || (!(o instanceof Coach) && (!(o instanceof TeamManager) && !(o instanceof Player) && !(o instanceof Stadium))))
-            return null;
-        return owner.showEditingOptions(o);
+        if(identifier==null)
+        {
+            ArrayList<String> tempList=new ArrayList<>();
+            tempList.add("wrong asset identifier");
+            return tempList;
+        }
+        return ownerBusinessController.showEditingOptions(identifier);
     }
 
     /**
      * adds a new owner to a team
      */
-    public boolean appointOwnerToTeam(Account account)
+    public String appointOwnerToTeam(String userName)
     {
-        if(account==null)
-            return false;
-        return owner.appointOwnerToTeam(account);
+        if(userName==null)
+            return "wrong input, username not valid";
+        return ownerBusinessController.appointOwnerToTeam(userName);
     }
 
     /**
      * remove an owner from the team
      */
-    public boolean removeOwnerFromTeam(Owner owner)
+    public String removeOwnerFromTeam(String userName)
     {
-        if(owner==null)
-            return false;
-        return owner.removeOwnerFromTeam(owner);
+        if(userName==null)
+            return "wrong input, username not valid";
+        return ownerBusinessController.removeOwnerFromTeam(userName);
     }
 
     /**
      * adds a new team manager to the team
      * permissions: manageName, manageManagers, managePage, manageCoaches, managePlayers, manageLeague, manageMatches, manageStadium
      */
-    public boolean appointTeamManagerToTeam(Account account, List<TeamManager.PermissionEnum> permissions)
+    public String appointTeamManagerToTeam(String userName, List<String> permissions)
     {
-        if(account==null || permissions==null)
-            return false;
-        return owner.appointTeamManagerToTeam(account,permissions);
+        if(userName==null)
+            return "wrong input, username not valid";
+        if(permissions==null)
+            return "wrong input, permissions are not valid";
+        for(String permission:permissions)
+            if(permission==null)
+                return "wrong input, at least one permission is not valid";
+        return ownerBusinessController.appointTeamManagerToTeam(userName,permissions);
     }
 
     /**
      * removes a team manager from the team
      */
-    public boolean removeTeamManagerFromTeam(TeamManager teamManager)
+    public String removeTeamManagerFromTeam(String userName)
     {
-        if(teamManager==null)
-            return false;
-        return owner.removeTeamManagerFromTeam(teamManager);
+        if(userName==null)
+            return "wrong input, username not valid";
+        return ownerBusinessController.removeTeamManagerFromTeam(userName);
     }
 
     /**
      * checks if manager has a certain permission
      */
-    public boolean hasPermission(TeamManager teamManager, TeamManager.PermissionEnum permission)
+    public String hasPermission(String userName, String permission)
     {
-        if(teamManager==null || permission==null)
-            return false;
-        return owner.hasPermission(teamManager,permission);
+        if(userName==null)
+            return "wrong input, username not valid";
+        if(permission==null)
+            return "wrong input, permission is not valid";
+        return ownerBusinessController.hasPermission(userName,permission);
     }
 
     /**
      * returns all the permissions of a manager
      */
-    public List<TeamManager.PermissionEnum> getAllPermitions(TeamManager teamManager)
+    public List<String> getAllPermissions(String userName)
     {
-        if(teamManager==null)
-            return null;
-        return owner.getAllPermitions(teamManager);
+        if(userName==null)
+        {
+            ArrayList<String> tempList=new ArrayList<>();
+            tempList.add("wrong input, username not valid");
+            return tempList;
+        }
+        return ownerBusinessController.getAllPermissions(userName);
     }
 
     /**
      * add a permission to a team manager
      */
-    public boolean addPermissionToManager(TeamManager teamManager,TeamManager.PermissionEnum permissionEnum)
+    public String addPermissionToManager(String userName,String permission)
     {
-        if(teamManager==null || permissionEnum==null)
-        {
-            return false;
-        }
-        return owner.addPermissionToManager(teamManager,permissionEnum);
+        if(userName==null)
+            return "wrong input, username not valid";
+        if(permission==null)
+            return "wrong input, permission is not valid";
+        return ownerBusinessController.addPermissionToManager(userName,permission);
     }
 
     /**
      * remove a permission from a team manager
      */
-    public boolean removePermissionFromManager(TeamManager teamManager,TeamManager.PermissionEnum permissionEnum)
+    public String removePermissionFromManager(String userName,String permission)
     {
-        if(teamManager==null || permissionEnum==null)
-        {
-            return false;
-        }
-        return owner.removePermissionFromManager(teamManager,permissionEnum);
+        if(userName==null)
+            return "wrong input, username not valid";
+        if(permission==null)
+            return "wrong input, permission is not valid";
+        return ownerBusinessController.removePermissionFromManager(userName,permission);
     }
 
     /**
      * deactivates the owner's team
      */
-    public boolean deactivateTeam()
+    public String deactivateTeam()
     {
-        return owner.deactivateTeam();
+        return ownerBusinessController.deactivateTeam();
     }
 
     /**
      * activates the owner's team
      */
-    public Team activateTeam(String teamName)
+    public String activateTeam(String teamName)
     {
         if(teamName==null)
-            return null;
-        return owner.activateTeam(teamName);
+            return "wrong input, team name not valid";
+        return ownerBusinessController.activateTeam(teamName);
     }
 
     /**
      * return the chosen non active team
      */
-    public Team getNonActiveTeam(String teamName)
+    public String getNonActiveTeam(String teamName)
     {
         if(teamName==null)
-            return null;
-       return owner.getNonActiveTeam(teamName);
+            return "wrong input, team name not valid";
+       return ownerBusinessController.getNonActiveTeam(teamName);
     }
 
     public void delete()
     {
-        owner.delete();
+        ownerBusinessController.delete();
     }
 
     /**
      * creates a new team, provided there is an authorisation from the Association
      */
-    public String createTeam(String teamName, League league, Stadium stadium)
+    public String createTeam(String teamName, String leagueName, String stadiumName)
     {
         if(teamName==null)
-            return "Wrong input, team name is null";
+            return "wrong input, team name not valid";
+        if(leagueName==null)
+            return "wrong input, league name not valid";
+        if(stadiumName==null)
+            return "wrong input, stadium name not valid";
 
-        return owner.createTeam(teamName,league,stadium);
+        return ownerBusinessController.createTeam(teamName,leagueName,stadiumName);
     }
 
     /**
      * creates a new player in the team
      */
-    public Account createPlayer(String aName, int age, Date aBirthday, PositionEnum aPosition, String userName, String password)
+    public String createPlayer(String aName, String ageString, String aBirthday, String aPosition, String userName, String password)
     {
-        if(aName==null || userName==null || password==null)
-            return null;
-        return owner.createPlayer(userName,age,aBirthday,aPosition,userName,password);
+        if(aName==null || ageString==null || aBirthday==null || aPosition==null || userName==null || password==null)
+            return "wrong input, one of the inputs is not valid";
+        int age;
+        try {
+            age = Integer.getInteger(ageString);
+        }
+        catch (Exception e) {
+            return "wrong input, age is not valid";
+        }
+        java.util.Date date;
+        try {
+            date = new java.util.Date(aBirthday);
+        }
+        catch (Exception e) {
+            return "wrong input, date is not valid";
+        }
+
+        return ownerBusinessController.createPlayer(userName,age,date,aPosition,userName,password);
     }
 
     /**
      * creates a new team manager in the team
      */
-    public Account createTeamManager(String aName, int age, List<TeamManager.PermissionEnum> permissions, String userName, String password)
+    public String createTeamManager(String aName, String ageString, List<String> permissions, String userName, String password)
     {
-        if(aName==null || userName==null || password==null)
-            return null;
-        return owner.createTeamManager(aName,age,permissions,userName,password);
+        if(aName==null || ageString==null || permissions==null ||userName==null || password==null)
+            return "wrong input, one of the inputs is not valid";
+
+        int age;
+        try {
+            age = Integer.getInteger(ageString);
+        }
+        catch (Exception e) {
+            return "wrong input, age is not valid";
+        }
+
+        return ownerBusinessController.createTeamManager(aName,age,permissions,userName,password);
     }
 
     /**
      * creates a new coach in the team
      */
-    public Account createCoach(String aName,int age, String aTraining, String aTeamRole,String userName, String password)
+    public String createCoach(String aName,String ageString, String aTraining, String aTeamRole,String userName, String password)
     {
-        if(aName==null || userName==null || password==null)
-            return null;
-        return owner.createCoach(aName,age,aTraining,aTeamRole,userName,password);
+        if(aName==null || ageString==null || aTraining==null || aTeamRole==null || userName==null || password==null)
+            return "wrong input, one of the inputs is not valid";
+
+        int age;
+        try {
+            age = Integer.getInteger(ageString);
+        }
+        catch (Exception e) {
+            return "wrong input, age is not valid";
+        }
+        return ownerBusinessController.createCoach(aName,age,aTraining,aTeamRole,userName,password);
     }
 
 
     public void ShowOwner(){
-        owner.ShowOwner();
+        ownerBusinessController.ShowOwner();
+    }
+
+    public HashMap<String, Pair<Method,List<String>>> showUserMethods() throws NoSuchMethodException
+    {
+
+        HashMap<String, Pair<Method,List<String>>> options=new HashMap<>();
+        List<String> showUserList=new ArrayList<>();
+        showUserList.add("Team name");
+        showUserList.add("League name@League");
+        showUserList.add("Stadium name@Stadium");
+        options.put("Create new team",new Pair<>(this.getClass().getDeclaredMethod("createTeam",String.class,String.class,String.class),showUserList));
+        return options;
+    }
+
+    public List<String> getAlerts()
+    {
+        return ownerBusinessController.getAlerts();
     }
 }

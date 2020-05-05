@@ -1,142 +1,123 @@
 package ServiceLayer.RoleController;
-import BusinessLayer.OtherCrudOperations.League;
-import BusinessLayer.OtherCrudOperations.Match;
-import BusinessLayer.OtherCrudOperations.Stadium;
-import BusinessLayer.OtherCrudOperations.Team;
-import BusinessLayer.RoleCrudOperations.Coach;
-import BusinessLayer.RoleCrudOperations.Owner;
-import BusinessLayer.RoleCrudOperations.Player;
+import BusinessLayer.Controllers.TeamManagerBusinessController;
 import BusinessLayer.RoleCrudOperations.TeamManager;
 
 public class TeamManagerController
 {
-    TeamManager teamManager;
+    TeamManagerBusinessController teamManagerBusinessController;
 
     public TeamManagerController(TeamManager teamManager) {
-        this.teamManager = teamManager;
+        teamManagerBusinessController = new TeamManagerBusinessController(teamManager);
     }
-
-    public Team getTeam() {
-        return teamManager.getTeam();
-    }
-
-    public void setTeam(Team team) {
-        teamManager.setTeam(team);
-    }
-
-    public Owner getAppointer() {
-        return teamManager.getAppointer();
-    }
-
 
     /**
      * allows the team manager to change the name of the team
      */
-    public boolean changeTeamName(String name)
+    public String changeTeamName(String name)
     {
         if(name==null)
-            return false;
-        return teamManager.changeTeamName(name);
+            return "name is not valid";
+        return teamManagerBusinessController.changeTeamName(name);
     }
 
     /**
      * allows the team manager to add a team manager
      */
-    public boolean addTeamManager(TeamManager aTeamManager)
+    public String addTeamManager(String username)
     {
-        if(aTeamManager==null)
-            return false;
-        return teamManager.addTeamManager(aTeamManager);
+        if(username==null)
+            return "username is not valid";
+        return teamManagerBusinessController.addTeamManager(username);
     }
 
     /**
      * allows the team manager to remove a team manager
      */
-    public boolean removeTeamManager(TeamManager aTeamManager)
+    public String removeTeamManager(String username)
     {
-        if(aTeamManager==null)
-            return false;
-        return teamManager.removeTeamManager(aTeamManager);
+        if(username==null)
+            return "username is not valid";
+        return teamManagerBusinessController.removeTeamManager(username);
     }
 
     /**
      * allows the team manager to add a coach
      */
-    public boolean addCoach(Coach aCoach)
+    public String addCoach(String username)
     {
-        if(aCoach==null)
-            return false;
-        return teamManager.addCoach(aCoach);
+        if(username==null)
+            return "username is not valid";
+        return teamManagerBusinessController.addCoach(username);
     }
 
     /**
      * allows the team manager to remove a coach
      */
-    public boolean removeCoach(Coach aCoach)
+    public String removeCoach(String username)
     {
-        if(aCoach==null)
-            return false;
-        return teamManager.removeCoach(aCoach);
+        if(username==null)
+            return "username is not valid";
+        return teamManagerBusinessController.removeCoach(username);
     }
 
     /**
      * allows the team manager to add a player
      */
-    public boolean addPlayer(Player aPlayer)
+    public String addPlayer(String username)
     {
-        if(aPlayer==null)
-            return false;
-        return teamManager.addPlayer(aPlayer);
+        if(username==null)
+            return "username is not valid";
+        return teamManagerBusinessController.addPlayer(username);
     }
 
     /**
      * allows the team manager to remove a player
      */
-    public boolean removePlayer(Player aPlayer)
+    public String removePlayer(String username)
     {
-        if(aPlayer==null)
-            return false;
-        return teamManager.removePlayer(aPlayer);
+        if(username==null)
+            return "username is not valid";
+        return teamManagerBusinessController.removePlayer(username);
     }
 
     /**
      * allows the team manager to change the league
      */
-    public boolean setLeague(League aLeague)
+    public String setLeague(String leagueName)
     {
-        if(aLeague==null)
-            return false;
-        return teamManager.setLeague(aLeague);
+        if(leagueName==null)
+            return "league name is not valid";
+        return teamManagerBusinessController.setLeague(leagueName);
     }
 
     /**
      * allows the team manager to remove a match
      */
-    public boolean removeMatch(Match aMatch)
+    public String removeMatch(String aMatch)
     {
         if(aMatch==null)
-            return false;
-        return teamManager.removeMatch(aMatch);
+            return "match name is not valid";
+        return teamManagerBusinessController.removeMatch(aMatch);
     }
 
 
     /**
      * allows the team manager to change the stadium
      */
-    public boolean setStadium(Stadium aStadium)
+    public String setStadium(String stadiumName)
     {
-        if(aStadium==null)
-            return false;
-        return teamManager.setStadium(aStadium);
+        if(stadiumName==null)
+            return "stadium name is not valid";
+        return teamManagerBusinessController.setStadium(stadiumName);
     }
 
     public void ShowTeamManager(){
-        teamManager.ShowTeamManager();
+        teamManagerBusinessController.ShowTeamManager();
 
     }
 
     public void delete()
     {
-        teamManager.delete();
+        teamManagerBusinessController.delete();
     }
 }

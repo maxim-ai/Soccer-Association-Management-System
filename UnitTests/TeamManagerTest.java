@@ -1,10 +1,10 @@
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.RoleCrudOperations.Coach;
 import BusinessLayer.RoleCrudOperations.Owner;
 import BusinessLayer.RoleCrudOperations.Player;
 import BusinessLayer.RoleCrudOperations.TeamManager;
-import DataLayer.DataManager;
 import ServiceLayer.OurSystem;
 import org.junit.After;
 import org.junit.Before;
@@ -36,9 +36,9 @@ public class TeamManagerTest {
     Team t2;
     Team t3;
     @Before
-    public void setUp() {
-        DataManager.clearDataBase();
-        DataManager dataManager = new DataManager();
+    public void setUp() throws Exception {
+        DataController.clearDataBase();
+        DataController dataController = new DataController();
         Logger logger = Logger.getInstance();
         OurSystem ourSystem = new OurSystem();
         ourSystem.Initialize();
@@ -53,14 +53,14 @@ public class TeamManagerTest {
         permissions.add(TeamManager.PermissionEnum.manageStadium);
 
 
-        tm1=new Account("tm1",20,"tm1","tm1"); DataManager.addAccount(tm1);
-        tm2=new Account("tm2",20,"tm2","tm2"); DataManager.addAccount(tm2);
-        tm3=new Account("tm3",20,"tm3","tm3"); DataManager.addAccount(tm3);
-        o1=new Account("o1",20,"o1","o1"); DataManager.addAccount(o1);
-        o2=new Account("o2",20,"o2","o2"); DataManager.addAccount(o2);
-        o3=new Account("o3",20,"o3","o3"); DataManager.addAccount(o3);
-        p2=new Account("p2",20,"p2","p2"); DataManager.addAccount(p2);
-        c2=new Account("c2",20,"c2","c2"); DataManager.addAccount(c2);
+        tm1=new Account("tm1",20,"tm1","tm1"); DataController.addAccount(tm1);
+        tm2=new Account("tm2",20,"tm2","tm2"); DataController.addAccount(tm2);
+        tm3=new Account("tm3",20,"tm3","tm3"); DataController.addAccount(tm3);
+        o1=new Account("o1",20,"o1","o1"); DataController.addAccount(o1);
+        o2=new Account("o2",20,"o2","o2"); DataController.addAccount(o2);
+        o3=new Account("o3",20,"o3","o3"); DataController.addAccount(o3);
+        p2=new Account("p2",20,"p2","p2"); DataController.addAccount(p2);
+        c2=new Account("c2",20,"c2","c2"); DataController.addAccount(c2);
         t1=new Team("t1",new League("l1"),new Stadium("s1"));
         t2=new Team("t2",new League("l2"),new Stadium("s2"));
         t3=new Team("t3",new League("l3"),new Stadium("s3"));
@@ -97,20 +97,21 @@ public class TeamManagerTest {
     }
 
     @Test /*UC 7.1*/
-    public void changeTeamName()
-    {
+    public void changeTeamName() throws Exception {
         //change with permissions
         tm1.checkIfTeamManagr().changeTeamName("newName");
         assertEquals("newName",t1.getName());
         //change without permissions
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageName);
-        tm1.checkIfTeamManagr().changeTeamName("newnewName");
-        assertNotEquals("newnewName",t1.getName());
+        try {
+            tm1.checkIfTeamManagr().changeTeamName("newnewName");
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The Team manager does not have permission to manage team name");
+        }
     }
 
     @Test /*UC 7.1*/
-    public void addTeamManager()
-    {
+    public void addTeamManager() throws Exception {
 
         //change with permissions
 
@@ -122,8 +123,7 @@ public class TeamManagerTest {
     }
 
     @Test /*UC 7.1*/
-    public void removeTeamManager()
-    {
+    public void removeTeamManager() throws Exception {
         //change with permissions
         tm1.checkIfTeamManagr().addTeamManager(tm2.checkIfTeamManagr());
 
@@ -137,8 +137,7 @@ public class TeamManagerTest {
     }
 
     @Test /*UC 7.1*/
-    public void addCoach()
-    {
+    public void addCoach() throws Exception {
         //change without permissions
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageCoaches);
 
@@ -152,8 +151,7 @@ public class TeamManagerTest {
     }
 
     @Test /*UC 7.1*/
-    public void removeCoach()
-    {
+    public void removeCoach() throws Exception {
         //change with permissions
         tm1.checkIfTeamManagr().addCoach(c2.checkIfCoach());
         assertTrue(removeCoach(c2.checkIfCoach()));
@@ -166,8 +164,7 @@ public class TeamManagerTest {
     }
 
     @Test /*UC 7.1*/
-    public void addPlayer()
-    {
+    public void addPlayer() throws Exception {
         //change without permissions
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.managePlayers);
 
@@ -180,8 +177,7 @@ public class TeamManagerTest {
     }
 
     @Test /*UC 7.1*/
-    public void removePlayer()
-    {
+    public void removePlayer() throws Exception {
         //change with permissions
 
         assertTrue(addPlayer(p2.checkIfPlayer()));
@@ -193,21 +189,22 @@ public class TeamManagerTest {
     }
 
     @Test /*UC 7.1*/
-    public void setLeague()
-    {
+    public void setLeague() throws Exception {
         //change with permissions
         tm1.checkIfTeamManagr().setLeague(new League("newL"));
         assertEquals(t1.getLeague().getName(),"newL");
         //change without permissions
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageLeague);
-        tm1.checkIfTeamManagr().setLeague(new League("brandNewL"));
-        assertNotEquals(t1.getLeague().getName(),"brandNewL");
+        try {
+            tm1.checkIfTeamManagr().setLeague(new League("brandNewL"));
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The Team manager does not have permission to manage leauges");
+        }
     }
 
 
     @Test /*UC 7.1*/
-    public void removeMatch()
-    {
+    public void removeMatch() throws Exception {
         //change with permissions
         Match match=new Match(new Date(123),new Time(132),0,0,t1.getStadium(),new Season("s1"),t2,t1,null,null,null);
 
@@ -220,15 +217,17 @@ public class TeamManagerTest {
     }
 
     @Test /*UC 7.1*/
-    public void setStadium()
-    {
+    public void setStadium() throws Exception {
         //change with permissions
         tm1.checkIfTeamManagr().setStadium(new Stadium("newS"));
         assertEquals(t1.getStadium().getName(),"newS");
         //change without permissions
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageStadium);
-        tm1.checkIfTeamManagr().setStadium(new Stadium("brandNewS"));
-        assertNotEquals(t1.getStadium().getName(),"brandNewS");
+        try {
+            tm1.checkIfTeamManagr().setStadium(new Stadium("brandNewS"));
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The Team manager does not have permission to manage stadiums");
+        }
     }
 
 

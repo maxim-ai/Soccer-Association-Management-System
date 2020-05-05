@@ -49,14 +49,14 @@ public class TeamManager extends Role implements Serializable
   /**
    * allows the team manager to change the name of the team
    */
-  public boolean changeTeamName(String name)
-  {
+  public boolean changeTeamName(String name) throws Exception {
     if(team==null)
-      return false;
+      throw new Exception("Team manager does not have a team");
     if(!appointedBy.hasPermission(this,PermissionEnum.manageName))
-      return false;
+      throw new Exception("The Team manager does not have permission to manage team name");
 
-    Logger.getInstance().writeNewLine(this.getName()+" changed the name of the team "+team.getName() +" to be:" + name);
+
+    Logger.getInstance().writeNewLine(this.getUsername()+" changed the name of the team "+team.getName() +" to be:" + name);
 
     return team.setName(name);
   }
@@ -64,14 +64,13 @@ public class TeamManager extends Role implements Serializable
   /**
    * allows the team manager to add a team manager
    */
-  public boolean addTeamManager(TeamManager aTeamManager)
-  {
+  public boolean addTeamManager(TeamManager aTeamManager) throws Exception {
     if(team==null)
-      return false;
+      throw new Exception("Team manager does not have a team");
     if(!appointedBy.hasPermission(this,PermissionEnum.manageManagers))
-      return false;
+      throw new Exception("The Team manager does not have permission to manage team managers");
 
-    Logger.getInstance().writeNewLine(this.getName()+" set "+aTeamManager.getName() +" as a team manager for the team:" + team.getName());
+    Logger.getInstance().writeNewLine(this.getUsername()+" set "+aTeamManager.getUsername() +" as a team manager for the team:" + team.getName());
 
     return team.addTeamManager(aTeamManager);
   }
@@ -79,14 +78,13 @@ public class TeamManager extends Role implements Serializable
   /**
    * allows the team manager to remove a team manager
    */
-  public boolean removeTeamManager(TeamManager aTeamManager)
-  {
+  public boolean removeTeamManager(TeamManager aTeamManager) throws Exception {
     if(team==null)
-      return false;
+      throw new Exception("Team manager does not have a team");
     if(!appointedBy.hasPermission(this,PermissionEnum.manageManagers))
-      return false;
+      throw new Exception("The Team manager does not have permission to manage team managers");
 
-    Logger.getInstance().writeNewLine(this.getName()+" removed the team manager"+(aTeamManager.getName() +" from the team:" + team.getName()));
+    Logger.getInstance().writeNewLine(this.getUsername()+" removed the team manager"+(aTeamManager.getUsername() +" from the team:" + team.getName()));
 
     return team.removeTeamManager(aTeamManager);
   }
@@ -94,14 +92,13 @@ public class TeamManager extends Role implements Serializable
   /**
    * allows the team manager to add a coach
    */
-  public boolean addCoach(Coach aCoach)
-  {
+  public boolean addCoach(Coach aCoach) throws Exception {
     if(team==null)
-      return false;
+      throw new Exception("Team manager does not have a team");
     if(!appointedBy.hasPermission(this,PermissionEnum.manageCoaches))
-      return false;
+      throw new Exception("The Team manager does not have permission to manage coaches");
 
-    Logger.getInstance().writeNewLine(this.getName()+" set "+(aCoach.getName() +" as a coach for the team:" + team.getName()));
+    Logger.getInstance().writeNewLine(this.getUsername()+" set "+(aCoach.getUsername() +" as a coach for the team:" + team.getName()));
 
     return team.addCoach(aCoach);
   }
@@ -109,14 +106,13 @@ public class TeamManager extends Role implements Serializable
   /**
    * allows the team manager to remove a coach
    */
-  public boolean removeCoach(Coach aCoach)
-  {
+  public boolean removeCoach(Coach aCoach) throws Exception {
     if(team==null)
-      return false;
+      throw new Exception("Team manager does not have a team");
     if(!appointedBy.hasPermission(this,PermissionEnum.manageCoaches))
-      return false;
+      throw new Exception("The Team manager does not have permission to manage coaches");
 
-    Logger.getInstance().writeNewLine(this.getName()+" removed the BusinessLayer.RoleCrudOperations.Coach"+(aCoach.getName() +" from the team:" + team.getName()));
+    Logger.getInstance().writeNewLine(this.getUsername()+" removed the BusinessLayer.RoleCrudOperations.Coach"+(aCoach.getUsername() +" from the team:" + team.getName()));
 
     return team.removeCoach(aCoach);
   }
@@ -124,14 +120,13 @@ public class TeamManager extends Role implements Serializable
   /**
    * allows the team manager to add a player
    */
-  public boolean addPlayer(Player aPlayer)
-  {
+  public boolean addPlayer(Player aPlayer) throws Exception {
     if(team==null)
-      return false;
+      throw new Exception("Team manager does not have a team");
     if(!appointedBy.hasPermission(this,PermissionEnum.managePlayers))
-      return false;
+      throw new Exception("The Team manager does not have permission to manage players");
 
-    Logger.getInstance().writeNewLine(this.getName()+" set "+aPlayer.getName() +" as a player for the team:" + team.getName());
+    Logger.getInstance().writeNewLine(this.getUsername()+" set "+aPlayer.getUsername() +" as a player for the team:" + team.getName());
 
     return team.addPlayer(aPlayer);
   }
@@ -139,14 +134,13 @@ public class TeamManager extends Role implements Serializable
   /**
    * allows the team manager to remove a player
    */
-  public boolean removePlayer(Player aPlayer)
-  {
+  public boolean removePlayer(Player aPlayer) throws Exception {
     if(team==null)
-      return false;
+      throw new Exception("Team manager does not have a team");
     if(!appointedBy.hasPermission(this,PermissionEnum.managePlayers))
-      return false;
+      throw new Exception("The Team manager does not have permission to manage players");
 
-    Logger.getInstance().writeNewLine(this.getName()+" removed the BusinessLayer.RoleCrudOperations.Player"+(aPlayer.getName() +" from the team:" + team.getName()));
+    Logger.getInstance().writeNewLine(this.getUsername()+" removed the BusinessLayer.RoleCrudOperations.Player"+(aPlayer.getUsername() +" from the team:" + team.getName()));
 
     return team.removePlayer(aPlayer);
   }
@@ -154,13 +148,12 @@ public class TeamManager extends Role implements Serializable
   /**
    * allows the team manager to change the league
    */
-  public boolean setLeague(League aLeague)
-  {
+  public boolean setLeague(League aLeague) throws Exception {
     if(team==null)
-      return false;
+      throw new Exception("Team manager does not have a team");
     if(!appointedBy.hasPermission(this,PermissionEnum.manageLeague))
-      return false;
-    Logger.getInstance().writeNewLine(this.getName()+" set the BusinessLayer.OtherCrudOperations.League of the team "+team.getName()+" to be "+aLeague.getName());
+      throw new Exception("The Team manager does not have permission to manage leauges");
+    Logger.getInstance().writeNewLine(this.getUsername()+" set the BusinessLayer.OtherCrudOperations.League of the team "+team.getName()+" to be "+aLeague.getName());
 
     return team.setLeague(aLeague);
   }
@@ -168,14 +161,13 @@ public class TeamManager extends Role implements Serializable
   /**
    * allows the team manager to remove a match
    */
-  public boolean removeMatch(Match aMatch)
-  {
+  public boolean removeMatch(Match aMatch) throws Exception {
     if(team==null)
-    return false;
+      throw new Exception("Team manager does not have a team");
     if(!appointedBy.hasPermission(this,PermissionEnum.manageMatches))
-      return false;
+      throw new Exception("The Team manager does not have permission to manage matches ");
 
-    Logger.getInstance().writeNewLine(this.getName()+"removed a match on "+aMatch.getDate()+" for the team "+team.getName());
+    Logger.getInstance().writeNewLine(this.getUsername()+"removed a match on "+aMatch.getDate()+" for the team "+team.getName());
 
     return team.removeMatch(aMatch);
   }
@@ -184,22 +176,21 @@ public class TeamManager extends Role implements Serializable
   /**
    * allows the team manager to change the stadium
    */
-  public boolean setStadium(Stadium aStadium)
-  {
+  public boolean setStadium(Stadium aStadium) throws Exception {
     if(team==null)
-      return false;
+      throw new Exception("Team manager does not have a team");
     if(!appointedBy.hasPermission(this,PermissionEnum.manageStadium))
-      return false;
+      throw new Exception("The Team manager does not have permission to manage stadiums");
 
-    Logger.getInstance().writeNewLine(this.getName()+" set "+(aStadium.getName() +" as the stadium for the team:" + team.getName()));
+    Logger.getInstance().writeNewLine(this.getUsername()+" set "+(aStadium.getName() +" as the stadium for the team:" + team.getName()));
 
     return team.setStadium(aStadium);
   }
 
   public void delete()
   {
-      team.removeTeamManager(this);
-      setTeam(null);
+    team.removeTeamManager(this);
+    setTeam(null);
   }
 
   public void ShowTeamManager(){

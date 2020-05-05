@@ -1,6 +1,6 @@
+import BusinessLayer.DataController;
 import BusinessLayer.OtherCrudOperations.Account;
 import BusinessLayer.RoleCrudOperations.*;
-import DataLayer.DataManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class AccountTest {
 
     @Before
     public void setUp(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
     }
 
     @Test

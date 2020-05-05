@@ -9,6 +9,7 @@ public abstract class Role implements Serializable
 {
 
   private String name;
+  private String username;
   private List<Alert> alertList;
 
   public Role(String aName)
@@ -58,7 +59,11 @@ public abstract class Role implements Serializable
     }
   }
 
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-
-
+  public String getUsername() {
+    return username;
+  }
 }

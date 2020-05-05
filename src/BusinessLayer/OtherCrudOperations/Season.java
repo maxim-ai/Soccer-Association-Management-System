@@ -1,5 +1,7 @@
 package BusinessLayer.OtherCrudOperations;
 
+import BusinessLayer.DataController;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -168,6 +170,15 @@ public class Season implements Serializable
         return false;
     }
     return true;
+  }
+
+  public static Season convertStringToSeason(String seasonName){
+    for (Season season : DataController.getSeasons()){
+      if(season.getName().equals(seasonName)){
+        return season;
+      }
+    }
+    return null;
   }
 
 

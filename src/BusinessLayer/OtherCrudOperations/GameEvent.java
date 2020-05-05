@@ -1,5 +1,8 @@
 package BusinessLayer.OtherCrudOperations;
 
+import BusinessLayer.RoleCrudOperations.Referee;
+import BusinessLayer.DataController;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.sql.Time;
@@ -156,4 +159,39 @@ public class GameEvent implements Serializable
     System.out.println(getGameMinute());
     System.out.println();
   }
+
+  public static GameEvent convertStringToGameEvent(String gameEvent){
+    String [] splitArr=gameEvent.split(",");
+    String eventType=splitArr[0].substring(new String("EventType: ").length());
+    String description=splitArr[1].substring(new String(" Description: ").length());
+    String minute=splitArr[2].substring(new String(" Minute: ").length());
+
+    for (Referee referee : DataController.getRefereesFromAccounts()){
+      for (Match match:referee.getMatchs()) {
+          for (GameEvent event : match.getEventCalender().getGameEvents()) {
+            if (event.gameMinute == Integer.parseInt(minute)&&convertStringToGameEvent(eventType).equals(event.type)&&event.getDescription().equals(description))
+              return event;
+          }
+        }
+      }
+      return null;
+  }
+  public static EventEnum  convertStringToEventEnum(String eventEnum){
+    if (eventEnum.equals("Red card"))
+      return EventEnum.redCard;
+    else if(eventEnum.equals("Goal"))
+      return EventEnum.goal;
+    else if(eventEnum.equals("Foul"))
+      return EventEnum.foul;
+    else if(eventEnum.equals("Yellow Card"))
+      return EventEnum.yellowCard;
+    else if(eventEnum.equals("Offside"))
+      return EventEnum.offside;
+    else if(eventEnum.equals("Substitution Player"))
+      return EventEnum.substitutionPlayer;
+    else if(eventEnum.equals("Injury"))
+      return EventEnum.injury;
+    return null;
+}
+
 }

@@ -1,18 +1,30 @@
 package BusinessLayer.OtherCrudOperations;
 
+import BusinessLayer.DataController;
+
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Policy implements Serializable
 {
-  
   private String pointCalc;
   private String gameSchedual;
   private SLsettings sLsettings;
+  private String id;
 
   public Policy(String aPointCalc, String aGameSchedual)
   {
     pointCalc = aPointCalc;
     gameSchedual = aGameSchedual;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
   public SLsettings getsLsettings() {
@@ -49,8 +61,6 @@ public class Policy implements Serializable
     return gameSchedual;
   }
 
-
-
   public String toString()
   {
     return super.toString() + "["+
@@ -59,6 +69,16 @@ public class Policy implements Serializable
   }
 
 
-
+  public static Policy convertStringToPolicy(String policyID){
+    for (League league : DataController.getLeagues()){
+      HashMap<Season,SLsettings> sLsetting = league.getsLsetting();
+        for(Map.Entry<Season,SLsettings> entry: sLsetting.entrySet()){
+          if(entry.getValue().getPolicy().getId().equals(policyID)){
+            return entry.getValue().getPolicy();
+          }
+        }
+      }
+    return null;
+  }
 
 }

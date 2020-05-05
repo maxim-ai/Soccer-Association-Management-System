@@ -1,74 +1,103 @@
 package ServiceLayer.RoleController;
+import BusinessLayer.Controllers.AssociationRepresentativeBusinessController;
+import BusinessLayer.Controllers.RefereeBusinessController;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.RoleCrudOperations.AssociationRepresentative;
 import BusinessLayer.RoleCrudOperations.Owner;
 import BusinessLayer.RoleCrudOperations.Referee;
+import javafx.util.Pair;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class AssociationRepresentativeController {
 
-    AssociationRepresentative associationRepresentative;
+    AssociationRepresentativeBusinessController associationRepresentativeBusinessController;
 
     public AssociationRepresentativeController(AssociationRepresentative associationRepresentative) {
-        this.associationRepresentative = associationRepresentative;
+        associationRepresentativeBusinessController = new AssociationRepresentativeBusinessController(associationRepresentative);
     }
 
     /**
      * create new league and put teams inside
      */
-    public League createNewLeague(String name, List<Team> teams) {
-
-        return associationRepresentative.createNewLeague(name, teams);
+    public String createNewLeague(String name, List<String> teamNames) {
+        if(teamNames == null || name == null){
+            return  "null";
+        }else {
+            return associationRepresentativeBusinessController.createNewLeague(name, teamNames);
+        }
     }
 
     /**
      * set season to league by year
      */
-    public boolean setYearToLeague(League league, String year) {
-        return associationRepresentative.setYearToLeague(league, year);
+    public String setYearToLeague(String leagueName, String year) {
+        if(leagueName == null || year == null){
+            return  "";
+        }else{
+
+            return associationRepresentativeBusinessController.setYearToLeague(leagueName, year);
+        }
     }
 
     /**
      * remove specific referee
      */
-    public void deleteReferee(Referee referee) {
-        associationRepresentative.deleteReferee(referee);
+    public String deleteReferee(String userName) {
+        if(userName == null){
+            return "";
+        }else{
+             return associationRepresentativeBusinessController.deleteReferee(userName);
+        }
     }
 
     /**
      * creates an account and adds it as a referee to the system
      */
-    public Referee addNewReferee(String training, String name, int age, String userName, String password) {
-        return associationRepresentative.addNewReferee(training, name, age, userName, password);
-    }
+    public String addNewReferee(String training, String name, String stringAge, String userName, String password) {
+        if(training == null || name == null || stringAge==null || userName==null || password ==null)  {
+            return "";
+        }else{
+            return associationRepresentativeBusinessController.addNewReferee(training, name, stringAge, userName, password);
+        }
 
-    /**
-     * create new referee and link it to account
-     */
-    public Referee createNewReferee(Account account, String training, String name) {
-        return associationRepresentative.createNewReferee(account, training, name);
     }
 
     /**
      * add referee to a league in specific season , add referee to SLsetting referee list
      */
-    public boolean addRefereeToLeague(Referee referee, League league, Season season) { // to fix uc
-        return associationRepresentative.addRefereeToLeague(referee, league, season);
+    public String addRefereeToLeague(String userName, String leagueName, String seasonName) { // to fix uc
+        if(userName == null || leagueName == null || seasonName == null){
+            return  "";
+        }
+        return associationRepresentativeBusinessController.addRefereeToLeague(userName, leagueName, seasonName);
     }
 
     /**
      * set league pointCalc policy in specific season
      */
-    public boolean setLeaguePointCalcPolicy(League league, Policy policy, Season season, String pointCalc) {
-        return associationRepresentative.setLeaguePointCalcPolicy(league, policy, season, pointCalc);
+    public String setLeaguePointCalcPolicy(String leagueName, String policyID, String seasonName, String pointCalc) {
+        if(leagueName == null || policyID == null || seasonName == null || pointCalc ==null){
+            return  "";
+        }else{
+            return associationRepresentativeBusinessController.setLeaguePointCalcPolicy(leagueName, policyID, seasonName, pointCalc);
+        }
     }
 
     /**
      * set league game Schedule policy in specific season
      */
-    public boolean setLeagueGameSchedualPolicy(League league, Policy policy, Season season, String gameSchedule) {
-        return associationRepresentative.setLeagueGameSchedualPolicy(league, policy, season, gameSchedule);
+    public String setLeagueGameSchedualPolicy(String leagueName, String policyID, String seasonName, String gameSchedule) {
+        if(leagueName == null || policyID == null || seasonName == null || gameSchedule ==null){
+            return  "";
+
+        }else{
+            return associationRepresentativeBusinessController.setLeagueGameSchedualPolicy(leagueName, policyID, seasonName, gameSchedule);
+        }
     }
 
     /**
@@ -77,42 +106,63 @@ public class AssociationRepresentativeController {
      * @param year the year in which the season will take place
      * @return
      */
-    public Season setNewSeason(String year) {
-        return associationRepresentative.setNewSeason(year);
+    public String setNewSeason(String year) {
+        if(year==null){
+            return "";
+        }
+        return associationRepresentativeBusinessController.setNewSeason(year);
     }
 
-    public void addAmountToAssociationBudget(double amount) {
-        associationRepresentative.addAmountToAssociationBudget(amount);
+    public void addAmountToAssociationBudget(String amountName) {
+        associationRepresentativeBusinessController.addAmountToAssociationBudget(amountName);
     }
 
-    public void subtractAmountToAssociationBudget(double amount) {
-        associationRepresentative.subtractAmountFromAssociationBudget(amount);
+    public void subtractAmountToAssociationBudget(String amountName) {
+        associationRepresentativeBusinessController.subtractAmountToAssociationBudget(amountName);
     }
 
-        public boolean approveTeam(String teamName, Owner owner) {
-        return associationRepresentative.approveTeam(teamName, owner);
+    public String approveTeam(String teamName, String userName) {
+        if (teamName == null || userName == null) {
+            return "";
+        } else {
+            return associationRepresentativeBusinessController.approveTeam(teamName, userName);
+        }
     }
 
-    public boolean addOpenTeamRequest(Owner owner, String teamName)
+    public HashMap<String, Pair<Method,List<String>>> showUserMethods() throws NoSuchMethodException
     {
-        return AssociationRepresentative.addOpenTeamRequest(owner,teamName);
+        HashMap<String, Pair<Method,List<String>>> options=new HashMap<>();
+        List<String> showUserList=new ArrayList<>();
+        showUserList.add("League name@League");
+        showUserList.add("Policy ID");
+        showUserList.add("Season name@Season");
+        showUserList.add("Game Schedule:");
+        options.put("Set Schedule Policy to League",new Pair<>(this.getClass().getDeclaredMethod("setLeagueGameSchedualPolicy",String.class,String.class,String.class,String.class),showUserList));
+
+        showUserList=new ArrayList<>();
+        showUserList.add("League name@League");
+        showUserList.add("Policy ID");
+        showUserList.add("Season name@Season");
+        showUserList.add("Point Calculation:");
+        options.put("Set Point Calculation Policy to League",new Pair<>(this.getClass().getDeclaredMethod("setLeaguePointCalcPolicy",String.class,String.class,String.class,String.class),showUserList));
+
+        showUserList=new ArrayList<>();
+        showUserList.add("Referee name@Referee");
+        showUserList.add("League name@League");
+        showUserList.add("Season name@Season");
+        options.put("Add a Referee to a League",new Pair<>(this.getClass().getDeclaredMethod("addRefereeToLeague",String.class,String.class,String.class),showUserList));
+
+        showUserList=new ArrayList<>();
+        showUserList.add("Team name");
+        showUserList.add("Owner username@Account");
+        options.put("Approve the opening of a team",new Pair<>(this.getClass().getDeclaredMethod("approveTeam",String.class,String.class),showUserList));
+
+        return options;
     }
 
-    public boolean removeOpenTeamRequest(Owner owner, String teamName)
+    public List<String> getAlerts()
     {
-        return AssociationRepresentative.removeOpenTeamRequest(owner,teamName);
+        return associationRepresentativeBusinessController.getAlerts();
     }
-
-    public boolean checkIfRequestExists(Owner owner, String teamName){
-        return AssociationRepresentative.checkIfRequestExists(owner, teamName);
-    }
-
-    public boolean getRequestStatus(Owner owner, String teamName)
-    {
-        return AssociationRepresentative.getRequestStatus(owner,teamName);
-    }
-
-
-
 
 }

@@ -1,8 +1,8 @@
 package BusinessLayer.RoleCrudOperations;
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.Pages.Page;
-import DataLayer.*;
 import ServiceLayer.OurSystem;
 
 import java.io.Serializable;
@@ -25,6 +25,10 @@ public class Owner extends Role implements Serializable {
             appointedBy = appointer;
         managerPermissions=new HashMap<>();
         nonActiveTeams=new ArrayList<>();
+    }
+
+    public static Owner convertStringToOwner(String userName) {
+        return null;
     }
 
     public Team getTeam()
@@ -53,18 +57,17 @@ public class Owner extends Role implements Serializable {
      * add the entered asset to the owner's team
      * assets: coach, player, stadium
      */
-    public boolean addAssetToTeam(Object o)
-    {
+    public boolean addAssetToTeam(Object o) throws Exception {
         if (this.team == null)
-            return false;
+            throw new Exception("Owner does not have a team");
 
         else if (o instanceof Coach)
         {
-            Logger.getInstance().writeNewLine(this.getName()+" set "+((Coach) o).getName() +" as a coach for the team:" + team.getName());
+            Logger.getInstance().writeNewLine(this.getName()+" set "+((Coach) o).getUsername() +" as a coach for the team:" + team.getName());
             return team.addCoach((Coach) o);
         }
         else if (o instanceof Player) {
-            Logger.getInstance().writeNewLine(this.getName()+" set "+((Player) o).getName() +" as a player for the team:" + team.getName());
+            Logger.getInstance().writeNewLine(this.getName()+" set "+((Player) o).getUsername() +" as a player for the team:" + team.getName());
             return team.addPlayer((Player) o);
         }
         else if (o instanceof Stadium) {
@@ -72,39 +75,41 @@ public class Owner extends Role implements Serializable {
             return team.setStadium((Stadium) o);
         }
         else
-            return false;
+            throw new Exception("Input is not a team asset");
     }
 
     /**
      * removes the entered asset from the owner's team
      * assets: coach, player, stadium
      */
-    public boolean removeAssetFromTeam(Object o)
-    {
+    public boolean removeAssetFromTeam(Object o) throws Exception {
         boolean validRemoval = true;
         if (this.team == null)
-            return false;
+            throw new Exception("Owner does not have a team");
 
         else if (o instanceof Coach) {
             if (team.getCoachs()==null || team.indexOfCoach((Coach) o) == -1)
-                return false;
-            Logger.getInstance().writeNewLine(this.getName()+" removed the BusinessLayer.RoleCrudOperations.Coach"+((Coach) o).getName() +" from the team:" + team.getName());
+                throw new Exception("The coach does no exist in the team");
+            Logger.getInstance().writeNewLine(this.getUsername()+" removed the BusinessLayer.RoleCrudOperations.Coach"+((Coach) o).getUsername() +" from the team:" + team.getName());
             return team.removeCoach((Coach) o);
         }
         else if (o instanceof Player) {
             if (team.getPlayers()==null || team.indexOfPlayer((Player) o) == -1)
-                return false;
-            Logger.getInstance().writeNewLine(this.getName()+" removed the BusinessLayer.RoleCrudOperations.Player"+((Player) o).getName() +" from the team:" + team.getName());
+                throw new Exception("The player does no exist in the team");
+
+            Logger.getInstance().writeNewLine(this.getUsername()+" removed the BusinessLayer.RoleCrudOperations.Player"+((Player) o).getUsername() +" from the team:" + team.getName());
             return team.removePlayer((Player) o);
         }
         else if (o instanceof Stadium) {
             if (team.getStadium()==null || !team.getStadium().equals(o))
-                return false;
-            Logger.getInstance().writeNewLine(this.getName()+" removed the BusinessLayer.OtherCrudOperations.Stadium"+((Stadium) o).getName() +" from the team:" + team.getName());
+                throw new Exception("The stadium does no exist in the team");
+
+            Logger.getInstance().writeNewLine(this.getUsername()+" removed the BusinessLayer.OtherCrudOperations.Stadium"+((Stadium) o).getName() +" from the team:" + team.getName());
             return team.setStadium(null);
         }
         else
-            return false;
+            throw new Exception("Input is not a team asset");
+
     }
 
     /**
@@ -112,46 +117,45 @@ public class Owner extends Role implements Serializable {
      * assets: BusinessLayer.OtherCrudOperations.Team manager, coach, player, stadium
      * 1:  change name, 2: training for coach, birthday fr player (dd-mm-yyyy), 3:team role for coach, position for player
      */
-    public boolean editTeamAsset(Object o, int action, String input)
-    {
+    public boolean editTeamAsset(Object o, int action, String input) throws Exception {
         if (this.team == null)
-            return false;
+            throw new Exception("Owner does not have a team");
 
         if (o instanceof TeamManager)
         {
             if(action==1)
             {
-                Logger.getInstance().writeNewLine(this.getName()+" changed the name of the BusinessLayer.OtherCrudOperations.Team manager "+((TeamManager) o).getName() +" to be:" + input);
+                Logger.getInstance().writeNewLine(this.getUsername()+" changed the name of the BusinessLayer.OtherCrudOperations.Team manager "+((TeamManager) o).getUsername() +" to be:" + input);
                 return ((TeamManager)o).setName(input);
             }
             else
-                return false;
+                throw new Exception("a team manager does not have functionality for this action");
         }
         else if (o instanceof Coach)
         {
             if(action==1)
             {
-                Logger.getInstance().writeNewLine(this.getName()+" changed the name of the BusinessLayer.RoleCrudOperations.Coach "+((Coach) o).getName() +" to be:" + input);
+                Logger.getInstance().writeNewLine(this.getUsername()+" changed the name of the BusinessLayer.RoleCrudOperations.Coach "+((Coach) o).getUsername() +" to be:" + input);
                 return ((Coach)o).setName(input);
             }
             else if(action==2)
             {
-                Logger.getInstance().writeNewLine(this.getName()+" changed the training of the BusinessLayer.RoleCrudOperations.Coach "+((Coach) o).getName() +" from "+((Coach) o).getTraining()+" to be:" + input);
+                Logger.getInstance().writeNewLine(this.getUsername()+" changed the training of the BusinessLayer.RoleCrudOperations.Coach "+((Coach) o).getUsername() +" from "+((Coach) o).getTraining()+" to be:" + input);
                 return ((Coach)o).setTraining(input);
             }
             else if(action==3)
             {
-                Logger.getInstance().writeNewLine(this.getName()+" changed the team role of the BusinessLayer.RoleCrudOperations.Coach "+((Coach) o).getName() +" from "+((Coach) o).getTeamRole()+" to be:" + input);
+                Logger.getInstance().writeNewLine(this.getUsername()+" changed the team role of the BusinessLayer.RoleCrudOperations.Coach "+((Coach) o).getUsername() +" from "+((Coach) o).getTeamRole()+" to be:" + input);
                 return ((Coach)o).setTeamRole(input);
             }
             else
-                return false;
+                throw new Exception("a coach does not have functionality for this action");
         }
         else if (o instanceof Player)
         {
             if(action==1)
             {
-                Logger.getInstance().writeNewLine(this.getName()+" changed the name of the BusinessLayer.RoleCrudOperations.Player "+((Player) o).getName() +" to be:" + input);
+                Logger.getInstance().writeNewLine(this.getUsername()+" changed the name of the BusinessLayer.RoleCrudOperations.Player "+((Player) o).getUsername() +" to be:" + input);
                 return ((Player)o).setName(input);
             }
             else if(action==2)
@@ -159,11 +163,11 @@ public class Owner extends Role implements Serializable {
                 Date newDate= null;
                 try {
                     String[] parsedDate=input.split("-");
-                    Logger.getInstance().writeNewLine(this.getName()+" changed the birthday of the BusinessLayer.RoleCrudOperations.Player "+((Player) o).getName() +" from "+((Player) o).getBirthday()+" to be:" + input);
+                    Logger.getInstance().writeNewLine(this.getUsername()+" changed the birthday of the BusinessLayer.RoleCrudOperations.Player "+((Player) o).getUsername() +" from "+((Player) o).getBirthday()+" to be:" + input);
                     newDate = new Date(Integer.parseInt(parsedDate[2]),Integer.parseInt(parsedDate[1]),Integer.parseInt(parsedDate[0]));
                 }
                 catch (Exception e) {
-                    return false;
+                    throw new Exception("The date entered is not valid");
                 }
                 return ((Player)o).setBirthday(newDate);
             }
@@ -171,28 +175,28 @@ public class Owner extends Role implements Serializable {
             {
                 try
                 {
-                    Logger.getInstance().writeNewLine(this.getName()+" changed the position of the BusinessLayer.RoleCrudOperations.Player "+((Player) o).getName() +" from "+((Player) o).getPosition()+" to be:" + input);
+                    Logger.getInstance().writeNewLine(this.getUsername()+" changed the position of the BusinessLayer.RoleCrudOperations.Player "+((Player) o).getUsername() +" from "+((Player) o).getPosition()+" to be:" + input);
                     return ((Player)o).setPosition(PositionEnum.valueOf(input));
                 }
                 catch (Exception e)
                 {
-                    return false;
+                    throw new Exception("The position entered is not valid");
                 }
             }
             else
-                return false;
+                throw new Exception("a player does not have functionality for this action");
         }
         else if (o instanceof Stadium) {
             if(action==1)
             {
-                Logger.getInstance().writeNewLine(this.getName()+" changed the name of the BusinessLayer.OtherCrudOperations.Stadium "+((Stadium) o).getName() +" to be:" + input);
+                Logger.getInstance().writeNewLine(this.getUsername()+" changed the name of the BusinessLayer.OtherCrudOperations.Stadium "+((Stadium) o).getName() +" to be:" + input);
                 return ((Stadium)o).setName(input);
             }
             else
-                return false;
+                throw new Exception("a stadium does not have functionality for this action");
         }
         else
-            return false;
+            throw new Exception("Input is not a team asset");
     }
 
     /**
@@ -200,11 +204,10 @@ public class Owner extends Role implements Serializable {
      * assets: BusinessLayer.OtherCrudOperations.Team manager, coach, player, stadium
      * (for it to work, start the list at 1 in the UI)
      */
-    public ArrayList<String> showEditingOptions(Object o)
-    {
+    public ArrayList<String> showEditingOptions(Object o) throws Exception {
         ArrayList<String> options=new ArrayList();
         if (this.team == null)
-            return null;
+            throw new Exception("Owner does not have a team");
 
         if (o instanceof TeamManager) {
             options.add("name");
@@ -223,45 +226,43 @@ public class Owner extends Role implements Serializable {
             options.add("name");
         }
         else
-            return null;
+            throw new Exception("Input is not a team asset");
         return options;
     }
 
     /**
      * adds a new owner to a team
      */
-    public boolean appointOwnerToTeam(Account account)
-    {
-
+    public boolean appointOwnerToTeam(Account account) throws Exception {
         if(account.hasRoles() && account.checkIfOwner()==null &&account.checkIfTeamManagr()==null && account.checkIfCoach()==null && account.checkIfPlayer()==null)
-            return false;
+            throw new Exception("The account already has a role");
         Owner checkOwner = account.checkIfOwner();
         if (checkOwner != null) {
             if (team.indexOfOwner(checkOwner) != -1)
-                return false;
+                throw new Exception("The account is already an owner for the team");
         }
         else
         {
             checkOwner = new Owner(account.getRole(0).getName(), this.team, this);
             account.addRole(checkOwner);
         }
-        Logger.getInstance().writeNewLine(this.getName()+" appointed "+account.getName()+" to be an owner on team "+ team.getName());
+        Logger.getInstance().writeNewLine(this.getUsername()+" appointed "+account.getUserName()+" to be an owner on team "+ team.getName());
         return team.addOwner(checkOwner);
     }
 
     /**
      * remove an owner from the team
      */
-    public boolean removeOwnerFromTeam(Owner owner) {
+    public boolean removeOwnerFromTeam(Owner owner) throws Exception {
         if (owner.team.numberOfOwners() == 1)
-            return false;
+            throw new Exception("The team has only one owner");
 
         if (!owner.getTeam().equals(this.team) || !owner.appointedBy.equals(this))
-            return false;
+            throw new Exception(getUsername()+" is not the appointer of "+owner.getUsername());
 
         owner.team.removeOwner(owner);
 
-        for (Account account : DataManager.getAccounts())
+        for (Account account : DataController.getAccounts())
             for (Role role : account.getRoles())
                 if (role instanceof Owner && role.equals(owner))
                 {
@@ -275,7 +276,7 @@ public class Owner extends Role implements Serializable {
                     if(account.checkIfTeamManagr()!=null) account.checkIfTeamManagr().delete();
                     ((Owner) role).delete();
 
-                    Logger.getInstance().writeNewLine(this.getName()+" removed "+account.getName()+"'s entire permissions");
+                    Logger.getInstance().writeNewLine(this.getUsername()+" removed "+account.getUserName()+"'s entire permissions");
                     return true;
                 }
 
@@ -286,24 +287,24 @@ public class Owner extends Role implements Serializable {
      * adds a new team manager to the team
      * permissions: manageName, manageManagers, managePage, manageCoaches, managePlayers, manageLeague, manageMatches, manageStadium
      */
-    public boolean appointTeamManagerToTeam(Account account,List<TeamManager.PermissionEnum> permissions) {
+    public boolean appointTeamManagerToTeam(Account account,List<TeamManager.PermissionEnum> permissions) throws Exception {
         TeamManager tempTeamManager=account.checkIfTeamManagr();
         if(account.hasRoles())
         {
             if((account.checkIfOwner()!=null && team.getOwners().contains(account.checkIfOwner())) || ((account.checkIfTeamManagr()!=null && team.getTeamManagers().contains(account.checkIfTeamManagr()))))
-                return false;
+                throw new Exception("The account is already an owner or a team manager in the team");
             if(!(account.checkIfTeamManagr()!=null || account.checkIfOwner()!=null))
-                return false;
+                throw new Exception("The account already has another role");
         }
 
         if(tempTeamManager==null)
         {
-            tempTeamManager=new TeamManager(account.getName(),this.team,this);
+            tempTeamManager=new TeamManager(account.getUserName(),this.team,this);
             account.addRole(tempTeamManager);
         }
         this.managerPermissions.put(tempTeamManager,permissions);
 
-        Logger.getInstance().writeNewLine(this.getName()+" appointed "+account.getName()+" to be an BusinessLayer.OtherCrudOperations.Team manager on team "+ team.getName());
+        Logger.getInstance().writeNewLine(this.getUsername()+" appointed "+account.getUserName()+" to be an BusinessLayer.OtherCrudOperations.Team manager on team "+ team.getName());
 
         return this.team.addTeamManager(tempTeamManager);
     }
@@ -311,16 +312,17 @@ public class Owner extends Role implements Serializable {
     /**
      * removes a team manager from the team
      */
-    public boolean removeTeamManagerFromTeam(TeamManager teamManager)
-    {
-        if (!teamManager.getTeam().equals(this.team) || !teamManager.getAppointer().equals(this))
-            return false;
+    public boolean removeTeamManagerFromTeam(TeamManager teamManager) throws Exception {
+        if (!teamManager.getTeam().equals(this.team))
+            throw new Exception("The team does not contain the entered team manager");
+        if(!teamManager.getAppointer().equals(this))
+            throw new Exception(getUsername()+" is no the oppinter of "+teamManager.getUsername());
 
         teamManager.delete();
 
-        List<Account> tamp= DataManager.getAccounts();
+        List<Account> tamp= DataController.getAccounts();
 
-        for (Account account : DataManager.getAccounts())
+        for (Account account : DataController.getAccounts())
         {
             if(account.checkIfTeamManagr()!=null && account.checkIfTeamManagr().equals(teamManager))
             {
@@ -329,7 +331,7 @@ public class Owner extends Role implements Serializable {
             }
         }
 
-        Logger.getInstance().writeNewLine(this.getName()+" removed "+teamManager.getName()+"'s permission as a BusinessLayer.OtherCrudOperations.Team manager on team "+team.getName());
+        Logger.getInstance().writeNewLine(this.getUsername()+" removed "+teamManager.getUsername()+"'s permission as a BusinessLayer.OtherCrudOperations.Team manager on team "+team.getName());
 
         return true;
     }
@@ -353,11 +355,10 @@ public class Owner extends Role implements Serializable {
     /**
      * add a permission to a team manager
      */
-    public boolean addPermissionToManager(TeamManager teamManager, TeamManager.PermissionEnum permissionEnum)
-    {
+    public boolean addPermissionToManager(TeamManager teamManager, TeamManager.PermissionEnum permissionEnum) throws Exception {
 
         if(!teamManager.getAppointer().equals(this))
-            return false;
+            throw new Exception(getUsername()+" is no the oppinter of "+teamManager.getUsername());
         List<TeamManager.PermissionEnum> permissions=managerPermissions.get(teamManager);
         if(!permissions.contains(permissionEnum))
             permissions.add(permissionEnum);
@@ -368,11 +369,10 @@ public class Owner extends Role implements Serializable {
     /**
      * remove a permission from a team manager
      */
-    public boolean removePermissionFromManager(TeamManager teamManager, TeamManager.PermissionEnum permissionEnum)
-    {
+    public boolean removePermissionFromManager(TeamManager teamManager, TeamManager.PermissionEnum permissionEnum) throws Exception {
 
         if(!teamManager.getAppointer().equals(this))
-            return false;
+            throw new Exception(getUsername()+" is no the oppinter of "+teamManager.getUsername());
         List<TeamManager.PermissionEnum> permissions=managerPermissions.get(teamManager);
         permissions.remove(permissionEnum);
         managerPermissions.put(teamManager,permissions);
@@ -384,16 +384,16 @@ public class Owner extends Role implements Serializable {
      */
     public boolean deactivateTeam()
     {
-        String notification=this.getName()+" has deactivated team: "+team.getName();
+        String notification=this.getUsername()+" has deactivated team: "+team.getName();
         for(Owner owner:team.getOwners())
             OurSystem.notifyOtherRole(notification,owner);
         for(TeamManager teamManager:team.getTeamManagers())
             OurSystem.notifyOtherRole(notification,teamManager);
-        for(SystemManager systemManager: DataManager.getSystemManagersFromAccounts())
+        for(SystemManager systemManager: DataController.getSystemManagersFromAccounts())
             OurSystem.notifyOtherRole(notification,systemManager);
 
         nonActiveTeams.add(team);
-        Logger.getInstance().writeNewLine(this.getName()+" has deactivated "+team.getName());
+        Logger.getInstance().writeNewLine(this.getUsername()+" has deactivated "+team.getName());
         team.delete();
 
         return true;
@@ -402,19 +402,18 @@ public class Owner extends Role implements Serializable {
     /**
      * activates the chosen team
      */
-    public Team activateTeam(String teamName)
-    {
+    public Team activateTeam(String teamName) throws Exception {
         Team teamToActivate=getNonActiveTeam(teamName);
         if(teamToActivate==null)
-            return null;
+            throw new Exception("the entered team is not a previous team for the owner");
         nonActiveTeams.remove(teamToActivate);
 
-        String notification=this.getName()+" has activated team: "+teamName;
+        String notification=this.getUsername()+" has activated team: "+teamName;
 
-        for(SystemManager systemManager: DataManager.getSystemManagersFromAccounts())
+        for(SystemManager systemManager: DataController.getSystemManagersFromAccounts())
             OurSystem.notifyOtherRole(notification,systemManager);
 
-        Logger.getInstance().writeNewLine(this.getName()+" has activated "+teamName);
+        Logger.getInstance().writeNewLine(this.getUsername()+" has activated "+teamName);
 
         return teamToActivate;
     }
@@ -422,19 +421,18 @@ public class Owner extends Role implements Serializable {
     /**
      * return the chosen non active team
      */
-    public Team getNonActiveTeam(String teamName)
-    {
+    public Team getNonActiveTeam(String teamName) throws Exception {
         for(Team team:nonActiveTeams)
         {
             if(team.getName().equals(teamName))
                 return team;
         }
-        return null;
+        throw new Exception("the entered team is not a previous team for the owner");
     }
 
     public void ShowOwner(){
         System.out.println("Name:");
-        System.out.println(this.getName());
+        System.out.println(this.getUsername());
         System.out.println("BusinessLayer.OtherCrudOperations.Team owned:");
         System.out.println(this.getTeam().getName());
     }
@@ -450,7 +448,7 @@ public class Owner extends Role implements Serializable {
     public String createTeam(String teamName, League league, Stadium stadium)
     {
         boolean teamExists=false;
-        for(Team t: DataManager.getTeams())
+        for(Team t: DataController.getTeams())
         {
             if(t.getName().equals(teamName))
             {
@@ -464,9 +462,9 @@ public class Owner extends Role implements Serializable {
 
         else if(!AssociationRepresentative.checkIfRequestExists(this,teamName))
         {
-            for(AssociationRepresentative ar: DataManager.getAssiciationRepresentivesFromAccounts())
+            for(AssociationRepresentative ar: DataController.getAssiciationRepresentivesFromAccounts())
             {
-                OurSystem.notifyOtherRole(getName()+" is requesting to create a new team, teamName: "+teamName,ar);
+                OurSystem.notifyOtherRole(getUsername()+" is requesting to create a new team, teamName: "+teamName,ar);
                 AssociationRepresentative.addOpenTeamRequest(this,teamName);
             }
             return "Request sent, waiting for approval";
@@ -479,10 +477,10 @@ public class Owner extends Role implements Serializable {
             {
                 Team team=new Team(teamName,league,stadium);
                 team.addOwner(this);
-                DataManager.addTeam(team);
+                DataController.addTeam(team);
                 AssociationRepresentative.removeOpenTeamRequest(this,teamName);
-                Logger.getInstance().writeNewLine(getName()+" just opened the team: "+teamName);
-                return "BusinessLayer.OtherCrudOperations.Team successfully added";
+                Logger.getInstance().writeNewLine(getUsername()+" just opened the team: "+teamName);
+                return "Team successfully created";
             }
         }
 
@@ -491,47 +489,44 @@ public class Owner extends Role implements Serializable {
     /**
      * creates a new player in the team
      */
-    public Account createPlayer(String aName, int age, Date aBirthday, PositionEnum aPosition, String userName, String password)
-    {
+    public Account createPlayer(String aName, int age, Date aBirthday, PositionEnum aPosition, String userName, String password) throws Exception {
         if(getTeam()==null)
-            return null;
+            throw new Exception("Owner does not have a team");
         Player player=new Player(aName,aBirthday,aPosition,getTeam(),null);
         new Page(player);
         Account account=new Account(aName,age,userName,password);
         account.addRole(player);
         SystemManager.createAccount(account);
-        Logger.getInstance().writeNewLine(getName()+" just a new player: "+aName+" to team: "+getTeam());
+        Logger.getInstance().writeNewLine(getUsername()+" just a new player: "+aName+" to team: "+getTeam());
         return account;
     }
 
     /**
      * creates a new team manager in the team
      */
-    public Account createTeamManager(String aName, int age, List<TeamManager.PermissionEnum> permissions, String userName, String password)
-    {
+    public Account createTeamManager(String aName, int age, List<TeamManager.PermissionEnum> permissions, String userName, String password) throws Exception {
         if(getTeam()==null)
-            return null;
+            throw new Exception("Owner does not have a team");
         Account account=new Account(aName,age,userName,password);
         appointTeamManagerToTeam(account,permissions);
         SystemManager.createAccount(account);
-        Logger.getInstance().writeNewLine(getName()+" just a new team manager: "+aName+" to team: "+getTeam());
+        Logger.getInstance().writeNewLine(getUsername()+" just a new team manager: "+aName+" to team: "+getTeam());
         return account;
     }
 
     /**
      * creates a new coach in the team
      */
-    public Account createCoach(String aName,int age, String aTraining, String aTeamRole,String userName, String password)
-    {
+    public Account createCoach(String aName,int age, String aTraining, String aTeamRole,String userName, String password) throws Exception {
         if(getTeam()==null)
-            return null;
+            throw new Exception("Owner does not have a team");
         Coach coach=new Coach(aName,aTraining,aTeamRole,null);
         coach.addTeam(getTeam());
         new Page(coach);
         Account account=new Account(aName,age,userName,password);
         account.addRole(coach);
         SystemManager.createAccount(account);
-        Logger.getInstance().writeNewLine(getName()+" just a new coach: "+aName+" to team: "+getTeam());
+        Logger.getInstance().writeNewLine(getUsername()+" just a new coach: "+aName+" to team: "+getTeam());
         return account;
     }
 

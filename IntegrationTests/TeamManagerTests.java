@@ -1,10 +1,10 @@
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.RoleCrudOperations.Coach;
 import BusinessLayer.RoleCrudOperations.Owner;
 import BusinessLayer.RoleCrudOperations.Player;
 import BusinessLayer.RoleCrudOperations.TeamManager;
-import DataLayer.DataManager;
 import ServiceLayer.OurSystem;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,9 +35,9 @@ public class TeamManagerTests {
     Team t2;
     Team t3;
     @Before
-    public void setUp() {
-        DataManager.clearDataBase();
-        DataManager dataManager = new DataManager();
+    public void setUp() throws Exception {
+        DataController.clearDataBase();
+        DataController dataController = new DataController();
         Logger logger = Logger.getInstance();
         OurSystem ourSystem = new OurSystem();
         ourSystem.Initialize();
@@ -52,14 +52,14 @@ public class TeamManagerTests {
         permissions.add(TeamManager.PermissionEnum.manageStadium);
 
 
-        tm1=new Account("tm1",20,"tm1","tm1"); DataManager.addAccount(tm1);
-        tm2=new Account("tm2",20,"tm2","tm2"); DataManager.addAccount(tm2);
-        tm3=new Account("tm3",20,"tm3","tm3"); DataManager.addAccount(tm3);
-        o1=new Account("o1",20,"o1","o1"); DataManager.addAccount(o1);
-        o2=new Account("o2",20,"o2","o2"); DataManager.addAccount(o2);
-        o3=new Account("o3",20,"o3","o3"); DataManager.addAccount(o3);
-        p2=new Account("p2",20,"p2","p2"); DataManager.addAccount(p2);
-        c2=new Account("c2",20,"c2","c2"); DataManager.addAccount(c2);
+        tm1=new Account("tm1",20,"tm1","tm1"); DataController.addAccount(tm1);
+        tm2=new Account("tm2",20,"tm2","tm2"); DataController.addAccount(tm2);
+        tm3=new Account("tm3",20,"tm3","tm3"); DataController.addAccount(tm3);
+        o1=new Account("o1",20,"o1","o1"); DataController.addAccount(o1);
+        o2=new Account("o2",20,"o2","o2"); DataController.addAccount(o2);
+        o3=new Account("o3",20,"o3","o3"); DataController.addAccount(o3);
+        p2=new Account("p2",20,"p2","p2"); DataController.addAccount(p2);
+        c2=new Account("c2",20,"c2","c2"); DataController.addAccount(c2);
         t1=new Team("t1",new League("l1"),new Stadium("s1"));
         t2=new Team("t2",new League("l2"),new Stadium("s2"));
         t3=new Team("t3",new League("l3"),new Stadium("s3"));
@@ -76,21 +76,23 @@ public class TeamManagerTests {
     }
 
     @Test /*UC 7.1*/
-    public void addTeamManager()
-    {
+    public void addTeamManager() throws Exception {
 
         //change with permissions
         tm1.checkIfTeamManagr().addTeamManager(tm2.checkIfTeamManagr());
         assertTrue(t1.getTeamManagers().contains(tm2.checkIfTeamManagr()));
         //change without permissions
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageManagers);
-        tm1.checkIfTeamManagr().addTeamManager(tm3.checkIfTeamManagr());
-        assertFalse(t1.getTeamManagers().contains(tm3.checkIfTeamManagr()));
+        try {
+            tm1.checkIfTeamManagr().addTeamManager(tm3.checkIfTeamManagr());
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The Team manager does not have permission to manage team managers");
+
+        }
     }
 
     @Test /*UC 7.1*/
-    public void removeTeamManager()
-    {
+    public void removeTeamManager() throws Exception {
         //change with permissions
         tm1.checkIfTeamManagr().addTeamManager(tm2.checkIfTeamManagr());
         assertTrue(t1.getTeamManagers().contains(tm2.checkIfTeamManagr()));
@@ -101,17 +103,23 @@ public class TeamManagerTests {
         tm1.checkIfTeamManagr().addTeamManager(tm2.checkIfTeamManagr());
         assertTrue(t1.getTeamManagers().contains(tm2.checkIfTeamManagr()));
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageManagers);
-        tm1.checkIfTeamManagr().removeTeamManager(tm2.checkIfTeamManagr());
-        assertTrue(t1.getTeamManagers().contains(tm2.checkIfTeamManagr()));
+        try {
+            tm1.checkIfTeamManagr().removeTeamManager(tm2.checkIfTeamManagr());
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The Team manager does not have permission to manage team managers");
+
+        }
     }
 
     @Test /*UC 7.1*/
-    public void addCoach()
-    {
+    public void addCoach() throws Exception {
         //change without permissions
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageCoaches);
-        tm1.checkIfTeamManagr().addCoach(c2.checkIfCoach());
-        assertFalse(t1.getCoachs().contains(c2.checkIfCoach()));
+        try {
+            tm1.checkIfTeamManagr().addCoach(c2.checkIfCoach());
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The Team manager does not have permission to manage coaches");
+        }
 
         //change with permissions
         o1.checkIfOwner().addPermissionToManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageCoaches);
@@ -120,8 +128,7 @@ public class TeamManagerTests {
     }
 
     @Test /*UC 7.1*/
-    public void removeCoach()
-    {
+    public void removeCoach() throws Exception {
         //change with permissions
         tm1.checkIfTeamManagr().addCoach(c2.checkIfCoach());
         assertTrue(t1.getCoachs().contains(c2.checkIfCoach()));
@@ -131,17 +138,24 @@ public class TeamManagerTests {
         tm1.checkIfTeamManagr().addCoach(c2.checkIfCoach());
         assertTrue(t1.getCoachs().contains(c2.checkIfCoach()));
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageCoaches);
-        tm1.checkIfTeamManagr().removeCoach(c2.checkIfCoach());
-        assertTrue(t1.getCoachs().contains(c2.checkIfCoach()));
+        try {
+            tm1.checkIfTeamManagr().removeCoach(c2.checkIfCoach());
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The Team manager does not have permission to manage coaches");
+
+        }
     }
 
     @Test /*UC 7.1*/
-    public void addPlayer()
-    {
+    public void addPlayer() throws Exception {
         //change without permissions
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.managePlayers);
-        tm1.checkIfTeamManagr().addPlayer(p2.checkIfPlayer());
-        assertFalse(t1.getPlayers().contains(p2.checkIfPlayer()));
+        try {
+            tm1.checkIfTeamManagr().addPlayer(p2.checkIfPlayer());
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The Team manager does not have permission to manage players");
+
+        }
 
         //change with permissions
         o1.checkIfOwner().addPermissionToManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.managePlayers);
@@ -150,8 +164,7 @@ public class TeamManagerTests {
     }
 
     @Test /*UC 7.1*/
-    public void removePlayer()
-    {
+    public void removePlayer() throws Exception {
         //change with permissions
         tm1.checkIfTeamManagr().addPlayer(p2.checkIfPlayer());
         assertTrue(t1.getPlayers().contains(p2.checkIfPlayer()));
@@ -161,14 +174,17 @@ public class TeamManagerTests {
         tm1.checkIfTeamManagr().addPlayer(p2.checkIfPlayer());
         assertTrue(t1.getPlayers().contains(p2.checkIfPlayer()));
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.managePlayers);
-        tm1.checkIfTeamManagr().removePlayer(p2.checkIfPlayer());
-        assertTrue(t1.getPlayers().contains(p2.checkIfPlayer()));
+        try {
+            tm1.checkIfTeamManagr().removePlayer(p2.checkIfPlayer());
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The Team manager does not have permission to manage players");
+
+        }
     }
 
 
     @Test /*UC 7.1*/
-    public void removeMatch()
-    {
+    public void removeMatch() throws Exception {
         //change with permissions
         Match match=new Match(new Date(123),new Time(132),0,0,t1.getStadium(),new Season("s1"),t2,t1,null,null,null);
         tm1.checkIfTeamManagr().removeMatch(match);
@@ -176,8 +192,12 @@ public class TeamManagerTests {
         //change without permissions
         match=new Match(new Date(123),new Time(132),0,0,t1.getStadium(),new Season("s1"),t2,t1,null,null,null);
         o1.checkIfOwner().removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageMatches);
-        tm1.checkIfTeamManagr().removeMatch(match);
-        assertTrue(t1.getMatchs().contains(match));
+        try {
+            tm1.checkIfTeamManagr().removeMatch(match);
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The Team manager does not have permission to manage matches ");
+
+        }
     }
 
 

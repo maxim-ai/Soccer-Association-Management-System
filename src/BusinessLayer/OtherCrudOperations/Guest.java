@@ -1,7 +1,7 @@
 package BusinessLayer.OtherCrudOperations;
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.RoleCrudOperations.*;
-import DataLayer.*;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -18,7 +18,9 @@ public class Guest implements Serializable {
     id=(++guestIDCounter);
   }
 
-  //region Umple Methods
+
+
+  //region Getters&&Setters
   public static int getGuestIDCounter() {
     return guestIDCounter;
   }
@@ -26,8 +28,6 @@ public class Guest implements Serializable {
   public static void resetGuestIDCounter(){
     guestIDCounter=0;
   }
-
-
 
   public int getId()
   {
@@ -40,56 +40,68 @@ public class Guest implements Serializable {
   }
   //endregion
 
-  //region My Methods
-  public Account LogIn(String UserName, String Password){
-    List<Account> accountList= DataManager.getAccounts();
+
+
+  //region Methods for version 3
+  public Account LogIn(String UserName, String Password) throws Exception {
+    List<Account> accountList= DataController.getAccounts();
     for(Account a:accountList){
-      if(a.getUserName().equals(UserName)&&a.getPassword().equals(Password)){
-        (Logger.getInstance()).writeNewLine("BusinessLayer.OtherCrudOperations.Account "+UserName+" logged in");
-        return a;
+      if(a.getUserName().equals(UserName)){
+        if(a.getPassword().equals(Password)){
+          (Logger.getInstance()).writeNewLine("Account "+UserName+" logged in");
+          return a;
+        }
+        else{
+          (Logger.getInstanceError()).writeNewLineError("Guest #"+this.id+"tried to log in with wrong password");
+          throw new Exception("Wrong password");
+        }
       }
     }
-    return null;
+    (Logger.getInstanceError()).writeNewLineError("Guest #"+this.id+"tried to log in with wrong username");
+    throw new Exception("Username does not exist");
   }
 
-  public boolean SignIn(String Name, int Age, String UserName, String Password){
-    for(Account account: DataManager.getAccounts()){
-      if(account.getUserName().equals(UserName))
-        return false;
+  public void SignIn(String Name, int Age, String UserName, String Password) throws Exception {
+    for(Account account: DataController.getAccounts()){
+      if(account.getUserName().equals(UserName)){
+        (Logger.getInstanceError()).writeNewLineError("Guest #"+this.id+"tries to sign in with existing username");
+        throw new Exception("Username already exists");
+      }
     }
     Account newAccount=new Account(Name,Age,UserName,Password);
     newAccount.addRole(new Fan(newAccount.getName()));
-    DataManager.addAccount(newAccount);
+    DataController.addAccount(newAccount);
     (Logger.getInstance()).writeNewLine("New account "+UserName+" created");
-    return true;
   }
+  //endregion
 
+  //region Other UC methods
   public void ShowInfo(String InfoAbout){
     if(InfoAbout.equals("Teams")){
-      for(Team team: DataManager.getTeams())
+      for(Team team: DataController.getTeams())
         team.ShowTeam();
     }
 
     if(InfoAbout.equals("Players")){
-      List<Player> players= DataManager.getPlayersFromAccounts();
+      List<Player> players= DataController.getPlayersFromAccounts();
       for(Player player:players){
         player.ShowPlayer();
       }
     }
     if(InfoAbout.equals("Coaches")){
-      List<Coach> coaches= DataManager.getCoachesFromAccounts();
+      List<Coach> coaches= DataController.getCoachesFromAccounts();
       for(Coach coach:coaches){
         coach.ShowCoach();
       }
     }
 
     if(InfoAbout.equals("Leagues")){
-      for(League league: DataManager.getLeagues())
+      for(League league: DataController.getLeagues())
         league.ShowLeague();
     }
 
     if(InfoAbout.equals("Seasons")){
-      for(Season season: DataManager.getSeasons())
+      for(Season season: DataController.getSeasons())
         season.ShowSeason();
     }
 
@@ -98,22 +110,22 @@ public class Guest implements Serializable {
   public void Search(String criterion, String query){
     if(criterion.equals("Name")){
       List<Team> teams=new LinkedList<>();
-      for(Team team: DataManager.getTeams()){
+      for(Team team: DataController.getTeams()){
         if(team.getName().equals(query))
           teams.add(team);
       }
       List<Account> accounts=new LinkedList<>();
-      for(Account account: DataManager.getAccounts()){
+      for(Account account: DataController.getAccounts()){
         if(account.getName().equals(query))
           accounts.add(account);
       }
       List<League> leagues=new LinkedList<>();
-      for(League league: DataManager.getLeagues()){
+      for(League league: DataController.getLeagues()){
         if(league.getName().equals(query))
           leagues.add(league);
       }
       List<Season> seasons=new LinkedList<>();
-      for(Season season: DataManager.getSeasons()){
+      for(Season season: DataController.getSeasons()){
         if(season.getName().equals(query))
           seasons.add(season);
       }
@@ -142,19 +154,19 @@ public class Guest implements Serializable {
     }
     if(criterion.equals("Category")){
       if(query.equals("Teams")){
-        for(Team team: DataManager.getTeams())
+        for(Team team: DataController.getTeams())
           team.ShowTeam();
       }
       if(query.equals("Accounts")){
-        for(Account account: DataManager.getAccounts())
+        for(Account account: DataController.getAccounts())
           account.ShowAccount();
       }
       if(query.equals("Leagues")){
-        for(League league: DataManager.getLeagues())
+        for(League league: DataController.getLeagues())
           league.ShowLeague();
       }
       if(query.equals("Seasons")){
-        for(Season season: DataManager.getSeasons())
+        for(Season season: DataController.getSeasons())
           season.ShowSeason();
       }
     }
@@ -163,50 +175,53 @@ public class Guest implements Serializable {
   public void Filter(String category,String roleFilter){
     if(category.equals("BusinessLayer.RoleCrudOperations.Role")){
       if(roleFilter.equals("Players")){
-        List<Player> players= DataManager.getPlayersFromAccounts();
+        List<Player> players= DataController.getPlayersFromAccounts();
         for(Player player:players)
           player.ShowPlayer();
       }
 
       if(roleFilter.equals("Coaches")){
-        List<Coach> coaches= DataManager.getCoachesFromAccounts();
+        List<Coach> coaches= DataController.getCoachesFromAccounts();
         for(Coach coach:coaches)
           coach.ShowCoach();
       }
 
       if(roleFilter.equals("TeamManagers")){
-        List<TeamManager> tms= DataManager.getTeamManagersFromAccounts();
+        List<TeamManager> tms= DataController.getTeamManagersFromAccounts();
         for(TeamManager tm:tms)
           tm.ShowTeamManager();
       }
 
       if(roleFilter.equals("Owners")){
-        List<Owner> owners= DataManager.getOwnersFromAccounts();
+        List<Owner> owners= DataController.getOwnersFromAccounts();
         for(Owner owner:owners)
           owner.ShowOwner();
       }
 
       if(roleFilter.equals("Referees")){//************************************
-        List<Referee> refs= DataManager.getRefereesFromAccounts();
+        List<Referee> refs= DataController.getRefereesFromAccounts();
         for(Referee ref:refs)
           ref.ShowReferee();
       }
 
     }
     if(category.equals("BusinessLayer.OtherCrudOperations.Team")){
-      for(Team team: DataManager.getTeams())
+      for(Team team: DataController.getTeams())
         team.ShowTeam();
     }
     if(category.equals("BusinessLayer.OtherCrudOperations.League")){
-      for(League league: DataManager.getLeagues())
+      for(League league: DataController.getLeagues())
         league.ShowLeague();
     }
     if(category.equals("BusinessLayer.OtherCrudOperations.Season")){
-      for(Season season: DataManager.getSeasons())
+      for(Season season: DataController.getSeasons())
         season.ShowSeason();
     }
   }
   //endregion
+
+
+
 
 
 

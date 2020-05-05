@@ -1,8 +1,8 @@
+import BusinessLayer.DataController;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.Pages.Page;
 import BusinessLayer.RoleCrudOperations.Fan;
 import BusinessLayer.RoleCrudOperations.Referee;
-import DataLayer.DataManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +38,7 @@ public class EventCalenderTest {
 
     @Before
     public void setUp(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
     }
     @Test
     public void getMatch() {

@@ -1,11 +1,11 @@
 
+import BusinessLayer.DataController;
 import BusinessLayer.OtherCrudOperations.Account;
 import BusinessLayer.OtherCrudOperations.League;
 import BusinessLayer.OtherCrudOperations.Stadium;
 import BusinessLayer.OtherCrudOperations.Team;
 import BusinessLayer.Pages.Page;
 import BusinessLayer.RoleCrudOperations.*;
-import DataLayer.DataManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class SystemManagerTests {
 
     @Before
     public void setUp() throws Exception {
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
     }
 
     @Test
@@ -24,7 +24,7 @@ public class SystemManagerTests {
         League league = new League("First BusinessLayer.OtherCrudOperations.League");
         Stadium stadium = new Stadium("Bloomfield");
         Team team = new Team("Maccabi",league,stadium);
-        DataManager.addTeam(team);
+        DataController.addTeam(team);
         Page page = new Page(team);
         team.setPage(page);
         Owner owner = new Owner("nadav",team,null);
@@ -37,7 +37,7 @@ public class SystemManagerTests {
         assertEquals(0,fan.getPages().size());
         assertEquals("description: Delete Team Permanently:" + team.getName(),owner.getAlertList().get(0).toString());
         assertEquals("description: Delete Team Permanently:" + team.getName(),teamManager.getAlertList().get(0).toString());
-        assertEquals(0,DataManager.getTeams().size());
+        assertEquals(0, DataController.getTeams().size());
     }
     @Test
     public void createOwner()
@@ -47,8 +47,8 @@ public class SystemManagerTests {
         Team team = new Team("Maccabi",league,stadium);
         Owner owner = new Owner("nadav",team,null);
         Account account = systemManager.createOwner("yosi",99,"yosi","1234");
-        assertEquals(account, DataManager.getAccount(0));
-        assertEquals(account.getRole(0),DataManager.getAccount(0).getRole(0));
+        assertEquals(account, DataController.getAccount(0));
+        assertEquals(account.getRole(0), DataController.getAccount(0).getRole(0));
 
     }
     @Test
@@ -59,8 +59,8 @@ public class SystemManagerTests {
         Team team = new Team("Maccabi",league,stadium);
         SystemManager systemManager = new SystemManager("nadav");
         Account account = systemManager.createSystemManager("yosi",99,"yosi","1234");
-        assertEquals(account,DataManager.getAccount(0));
-        assertEquals(account.getRole(0),DataManager.getAccount(0).getRole(0));
+        assertEquals(account, DataController.getAccount(0));
+        assertEquals(account.getRole(0), DataController.getAccount(0).getRole(0));
 
     }
 
@@ -72,8 +72,8 @@ public class SystemManagerTests {
         Team team = new Team("Maccabi",league,stadium);
         AssociationRepresentative associationRepresentative = new AssociationRepresentative("nadav");
         Account account = systemManager.createAssociationRepresentative("yosi",99,"yosi","1234");
-        assertEquals(account,DataManager.getAccount(0));
-        assertEquals(account.getRole(0),DataManager.getAccount(0).getRole(0));
+        assertEquals(account, DataController.getAccount(0));
+        assertEquals(account.getRole(0), DataController.getAccount(0).getRole(0));
 
     }
 

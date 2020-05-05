@@ -1,7 +1,7 @@
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.RoleCrudOperations.*;
-import DataLayer.DataManager;
 import ServiceLayer.OurSystem;
 import org.junit.After;
 import org.junit.Before;
@@ -27,19 +27,19 @@ public class OwnerTest {
 
     @Before
     public void setUp() throws Exception {
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         Logger logger=Logger.getInstance();
         OurSystem ourSystem=new OurSystem();
         ourSystem.Initialize();
         ownerAccount=new Account("sean",20,"sean","sean");
         secondAccount=new Account("notSean",30,"sean","sean");
-        DataManager.addAccount(ownerAccount);
-        DataManager.addAccount(secondAccount);
+        DataController.addAccount(ownerAccount);
+        DataController.addAccount(secondAccount);
 
         owner=new Owner("sean",new Team("myTeam",new League("myLeague"),new Stadium("myStadium")),null);
         tmpOwner=new Owner("tmp",owner.getTeam(),owner);
         tempTeam=new Team("newTeam",new League("newLeague"),new Stadium("newStadium"));
-        DataManager.addTeam(tempTeam);
+        DataController.addTeam(tempTeam);
 
         ownerAccount.addRole(owner);
     }
@@ -108,8 +108,7 @@ public class OwnerTest {
     }
 
     @Test /*UC 6.1*/
-    public void removeAssetFromTeam()
-    {
+    public void removeAssetFromTeam() throws Exception {
         Player tmpPlayer=new Player("tmpPlayer",new Date(1997,11,18), PositionEnum.CenterBack,tempTeam,null);
         Coach tmpCoach=new Coach("tmpCoach","bla","bla",null);
         Stadium tmpStadium=new Stadium("tmpStadium");
@@ -140,8 +139,7 @@ public class OwnerTest {
     }
 
     @Test /*UC 6.1*/
-    public void editTeamAsset()
-    {
+    public void editTeamAsset() throws Exception {
         Player tmpPlayer=new Player("tmpPlayer",new Date(1997,11,18),PositionEnum.CenterBack,tempTeam,null);
         Coach tmpCoach=new Coach("tmpCoach","bla","bla",null);
         Stadium tmpStadium=new Stadium("tmpStadium");
@@ -161,16 +159,31 @@ public class OwnerTest {
 
         //successful editing
 
-        assertFalse(owner.editTeamAsset(tmpPlayer,4,"01-01-1990"));
-        assertFalse(owner.editTeamAsset(tmpCoach,4,"01-01-1990"));
-        assertFalse(owner.editTeamAsset(tmpStadium,4,"01-01-1990"));
+        try {
+            owner.editTeamAsset(tmpPlayer,4,"01-01-1990");
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"a player does not have functionality for this action");
+        }
+        try {
+            owner.editTeamAsset(tmpCoach,4,"01-01-1990");
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"a coach does not have functionality for this action");
+        }
+        try {
+            owner.editTeamAsset(tmpStadium,4,"01-01-1990");
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"a stadium does not have functionality for this action");
+        }
 
-        assertFalse(owner.editTeamAsset(tmpPlayer,2,"01.01.1990"));
+        try {
+            owner.editTeamAsset(tmpPlayer,2,"01.01.1990");
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The date entered is not valid");
+        }
     }
 
     @Test /*UC 6.1*/
-    public void showEditingOptions()
-    {
+    public void showEditingOptions() throws Exception {
         Player tmpPlayer=new Player("tmpPlayer",new Date(1997,11,18),PositionEnum.CenterBack,tempTeam,null);
         Coach tmpCoach=new Coach("tmpCoach","bla","bla",null);
         Stadium tmpStadium=new Stadium("tmpStadium");
@@ -185,17 +198,28 @@ public class OwnerTest {
         assertEquals(owner.showEditingOptions(tmpCoach),list2);
         assertEquals(owner.showEditingOptions(tmpPlayer),list3);
         //unsuccessful
-        assertNull(owner.showEditingOptions("sdf"));
-        owner.setTeam(null);
-        assertNull(owner.showEditingOptions(tmpStadium));
+        try {
+            owner.showEditingOptions("sdf");
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"Input is not a team asset");
+        }
+        try {
+            owner.setTeam(null);
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The account already has a role");
+        }
+//        assertNull(owner.showEditingOptions(tmpStadium));
     }
 
     @Test /*UC 6.2*/
-    public void appointOwnerToTeam()
-    {
+    public void appointOwnerToTeam() throws Exception {
         Account account=new Account("newacc",20,"cla","cla");
         account.addRole(new Referee("bla","bla"));
-        assertFalse(owner.appointOwnerToTeam(account));
+        try {
+            owner.appointOwnerToTeam(account);
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The account already has a role");
+        }
 
         account.addRole(new Coach("newC","bla","bla",null));
         account.removeRole(account.checkIfReferee());
@@ -209,13 +233,12 @@ public class OwnerTest {
     }
 
     @Test /*UC 6.3*/
-    public void removeOwnerFromTeam()
-    {
+    public void removeOwnerFromTeam() throws Exception {
         owner.removeOwnerFromTeam(tmpOwner); //remove the owner from different test
 
         // checks standard removal
         Account account=new Account("tmp",20,"cla","cla");
-        DataManager.addAccount(account);
+        DataController.addAccount(account);
         account.addRole(new Coach(account.getName(),"bla","bla",null));
         owner.appointOwnerToTeam(account);
 
@@ -246,8 +269,7 @@ public class OwnerTest {
     }
 
     @Test /*UC 6.5*/
-    public void removeTeamManagerFromTeam()
-    {
+    public void removeTeamManagerFromTeam() throws Exception {
         List<TeamManager.PermissionEnum> permissionEnumList=new ArrayList<>();
         permissionEnumList.add(TeamManager.PermissionEnum.manageLeague);
         permissionEnumList.add(TeamManager.PermissionEnum.manageName);
@@ -260,8 +282,7 @@ public class OwnerTest {
     }
 
     @Test
-    public void hasPermission()
-    {
+    public void hasPermission() throws Exception {
         List<TeamManager.PermissionEnum> permissionEnumList=new ArrayList<>();
         permissionEnumList.add(TeamManager.PermissionEnum.manageLeague);
         permissionEnumList.add(TeamManager.PermissionEnum.manageName);
@@ -274,8 +295,7 @@ public class OwnerTest {
     }
 
     @Test
-    public void getAllPermitions()
-    {
+    public void getAllPermitions() throws Exception {
         List<TeamManager.PermissionEnum> permissionEnumList=new ArrayList<>();
         permissionEnumList.add(TeamManager.PermissionEnum.manageLeague);
         permissionEnumList.add(TeamManager.PermissionEnum.manageName);
@@ -293,24 +313,35 @@ public class OwnerTest {
     }
 
     @Test /*UC 6.6*/
-    public void activateTeam()
-    {
+    public void activateTeam() throws Exception {
         Team existingTeam=owner.getTeam();
         owner.deactivateTeam();
         assertEquals(owner.getNonActiveTeam(existingTeam.getName()),existingTeam);
         owner.activateTeam(existingTeam.getName());
-        assertNull(owner.getNonActiveTeam(existingTeam.getName()));
+
+        try {
+            owner.getNonActiveTeam(existingTeam.getName());
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"the entered team is not a previous team for the owner");
+        }
 
     }
 
     @Test
-    public void getNonActiveTeam()
-    {
+    public void getNonActiveTeam() throws Exception {
         Team existingTeam=owner.getTeam();
-        assertNull(owner.getNonActiveTeam(existingTeam.getName()));
+        try {
+            owner.getNonActiveTeam(existingTeam.getName());
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"the entered team is not a previous team for the owner");
+        }
         owner.deactivateTeam();
         assertEquals(owner.getNonActiveTeam(existingTeam.getName()),existingTeam);
-        assertNull(owner.getNonActiveTeam("check"));
+        try {
+            owner.getNonActiveTeam("check");
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"the entered team is not a previous team for the owner");
+        }
 
     }
 
@@ -324,16 +355,18 @@ public class OwnerTest {
     }
 
     @Test /*UC 6.4*/
-    public void addPermissionToManager()
-    {
+    public void addPermissionToManager() throws Exception {
         List<TeamManager.PermissionEnum> permissions=new ArrayList<>();
         permissions.add(TeamManager.PermissionEnum.manageName);
         Account tm1=new Account("tm1",20,"tm1","tm1");
         owner.appointTeamManagerToTeam(tm1,permissions);
 
         //check without permissions
-        tm1.checkIfTeamManagr().setStadium(new Stadium("newSta"));
-        assertFalse(owner.getTeam().getStadium().getName().equals("newSta"));
+        try {
+            tm1.checkIfTeamManagr().setStadium(new Stadium("newSta"));
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The Team manager does not have permission to manage stadiums");
+        }
 
         //check with permissions
         owner.addPermissionToManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageStadium);
@@ -343,8 +376,7 @@ public class OwnerTest {
     }
 
     @Test /*UC 6.4*/
-    public void removePermissionFromManager()
-    {
+    public void removePermissionFromManager() throws Exception {
         List<TeamManager.PermissionEnum> permissions=new ArrayList<>();
         permissions.add(TeamManager.PermissionEnum.manageName);
         Account tm1=new Account("tm1",20,"tm1","tm1");
@@ -354,10 +386,13 @@ public class OwnerTest {
         tm1.checkIfTeamManagr().changeTeamName("newTName");
         assertTrue(owner.getTeam().getName().equals("newTName"));
 
-        //check with permissions
+        //check without permissions
         owner.removePermissionFromManager(tm1.checkIfTeamManagr(), TeamManager.PermissionEnum.manageName);
-        tm1.checkIfTeamManagr().changeTeamName("brandNewTName");
-        assertFalse(owner.getTeam().getName().equals("brandNewTName"));
+        try {
+            tm1.checkIfTeamManagr().changeTeamName("brandNewTName");
+        } catch (Exception e) {
+            assertEquals(e.getMessage(),"The Team manager does not have permission to manage team name");
+        }
 
     }
 
@@ -511,7 +546,7 @@ public class OwnerTest {
 
         removeOwnerStub(owner);
 
-        for (Account account : DataManager.getAccounts())
+        for (Account account : DataController.getAccounts())
             for (Role role : account.getRoles())
                 if (role instanceof Owner && role.equals(owner))
                 {
@@ -571,9 +606,9 @@ public class OwnerTest {
 
         deleteStub(teamManager);
 
-        List<Account> tamp= DataManager.getAccounts();
+        List<Account> tamp= DataController.getAccounts();
 
-        for (Account account : DataManager.getAccounts())
+        for (Account account : DataController.getAccounts())
         {
             if(account.checkIfTeamManagr()!=null && account.checkIfTeamManagr().equals(teamManager))
             {
@@ -598,7 +633,7 @@ public class OwnerTest {
             OurSystem.notifyOtherRole(notification,owner);
         for(TeamManager teamManager:ownerc.getTeam().getTeamManagers())
             OurSystem.notifyOtherRole(notification,teamManager);
-        for(SystemManager systemManager:DataManager.getSystemManagersFromAccounts())
+        for(SystemManager systemManager: DataController.getSystemManagersFromAccounts())
             OurSystem.notifyOtherRole(notification,systemManager);
 
         loggerStub("");
@@ -617,7 +652,7 @@ public class OwnerTest {
     public String createTeam(String teamName,League league, Stadium stadium,Owner owner)
     {
         boolean teamExists=false;
-        for(Team t: DataManager.getTeams())
+        for(Team t: DataController.getTeams())
         {
             if(t.getName().equals(teamName))
             {
@@ -631,7 +666,7 @@ public class OwnerTest {
 
         else if(!checkIfRequestExistsStub(owner,teamName))
         {
-            for(AssociationRepresentative ar:DataManager.getAssiciationRepresentivesFromAccounts())
+            for(AssociationRepresentative ar: DataController.getAssiciationRepresentivesFromAccounts())
             {
                 OurSystem.notifyOtherRole(owner.getName()+" is requesting to create a new team, teamName: "+teamName,ar);
                 addOpenTeamRequestStub(owner,teamName);
@@ -646,7 +681,7 @@ public class OwnerTest {
             {
                 Team team=new Team(teamName,league,stadium);
                 addOwnerStub(owner,team);
-                DataManager.addTeam(team);
+                DataController.addTeam(team);
                 removeOpenTeamRequestStub(owner,teamName);
                 Logger.getInstance().writeNewLine(owner.getName()+" just opened the team: "+teamName);
                 return "BusinessLayer.OtherCrudOperations.Team successfully added";

@@ -1,3 +1,4 @@
+import BusinessLayer.DataController;
 import BusinessLayer.OtherCrudOperations.League;
 import BusinessLayer.OtherCrudOperations.Season;
 import BusinessLayer.OtherCrudOperations.Stadium;
@@ -6,7 +7,6 @@ import BusinessLayer.Pages.Page;
 import BusinessLayer.RoleCrudOperations.Coach;
 import BusinessLayer.RoleCrudOperations.Fan;
 import BusinessLayer.RoleCrudOperations.Referee;
-import DataLayer.DataManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class CoachTest {
     List<Team> teams=new LinkedList<>();
     @Before
     public void init(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 

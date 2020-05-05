@@ -1,5 +1,5 @@
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
-import DataLayer.DataManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ public class LoggerTest {
 
     @Before
     public void setUp(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
     }
 
 

@@ -1,7 +1,7 @@
 
+import BusinessLayer.DataController;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.RoleCrudOperations.Referee;
-import DataLayer.DataManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ public class SeasonTest {
 
     @Before
     public void setUp(){
-        DataManager.clearDataBase();
+        DataController.clearDataBase();
     }
 
     @Test

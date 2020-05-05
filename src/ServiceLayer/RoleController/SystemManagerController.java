@@ -1,19 +1,21 @@
 package ServiceLayer.RoleController;
+import BusinessLayer.Controllers.SystemManagerBusinessController;
 import BusinessLayer.OtherCrudOperations.Account;
 import BusinessLayer.OtherCrudOperations.Team;
 import BusinessLayer.RoleCrudOperations.SystemManager;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class SystemManagerController {
-    SystemManager systemManager;
+    SystemManagerBusinessController systemManagerBusinessController;
 
     public SystemManagerController(SystemManager systemManager) {
-        this.systemManager = systemManager;
+        systemManagerBusinessController = new SystemManagerBusinessController(systemManager);
     }
 
     public HashMap<String, String> getComplaintAndComments() {
-            return systemManager.getComplaintAndComments();
+            return systemManagerBusinessController.getComplaintAndComments();
     }
 
     public void setComplaintAndComments(HashMap<String, String> complaintAndComments) {
@@ -24,52 +26,68 @@ public class SystemManagerController {
      * delete team for Permanently, saving all her actions, notify owner and team manger and delete team's
      * page from all fans.
      */
-    public boolean DeleteTeamPermanently(Team team)
+    public String DeleteTeamPermanently(String teamName)
     {
-        return systemManager.DeleteTeamPermanently(team);
+        if(teamName==null){
+            return "";
+        }else {
+            return systemManagerBusinessController.DeleteTeamPermanently(teamName);
+        }
     }
 
     /**
      * remove account from system
      */
-    public boolean deleteAccount(Account account){
-      return systemManager.deleteAccount(account);
+    public String deleteAccount(String username){
+        if (username == null) {
+            return "";
+        }else{
+            return systemManagerBusinessController.deleteAccount(username);
+        }
     }
 
     /**
      * show all the complaints of the accounts in the system
      */
     public void showComplaints(){
-       systemManager.showComplaints();
+        systemManagerBusinessController.showComplaints();
     }
 
     /**
      * add comment to the complaint
      */
     public void addComplain(String complain){
-        systemManager.addComplain(complain);
+        systemManagerBusinessController.addComplain(complain);
     }
 
     /**
      * add comment to the complaint
      */
-    public void addComment(String comment,String acomplain){
-        systemManager.addComment(comment,acomplain);
+    public String addComment(String comment,String acomplain){
+        if (comment == null) {
+            return "";
+        }else{
+            return systemManagerBusinessController.addComment(comment,acomplain);
+        }
     }
 
     /**
      * show system logger
      */
     public String showSystemLog(){
-        return systemManager.showSystemLog();
+        return systemManagerBusinessController.showSystemLog();
     }
 
     /**
      * build recommendation system
      */
     public void buildRecommendationSystem(){
-        systemManager.buildRecommendationSystem();
+        systemManagerBusinessController.buildRecommendationSystem();
     }
 
+    public List<String> getAlerts()
+    {
+        return systemManagerBusinessController.getAlerts();
+    }
 
 }

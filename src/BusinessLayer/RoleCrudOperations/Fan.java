@@ -1,8 +1,8 @@
 package BusinessLayer.RoleCrudOperations;
+import BusinessLayer.DataController;
 import BusinessLayer.Logger.Logger;
 import BusinessLayer.OtherCrudOperations.*;
 import BusinessLayer.Pages.Page;
-import DataLayer.*;
 import ServiceLayer.OurSystem;
 
 import java.io.Serializable;
@@ -26,8 +26,8 @@ public class Fan extends Role implements Serializable
     searchHistory=new LinkedList<>();
   }
 
-  //region Umple Methods
 
+  //region Getters&&Setters
   public List<String[]> getSearchHistory() {
     return searchHistory;
   }
@@ -130,8 +130,30 @@ public class Fan extends Role implements Serializable
   }
   //endregion
 
-  //region My Methods
 
+
+  //region Methods for version 3
+  public void Logout(){
+    System.out.println("Logged out");
+    (Logger.getInstance()).writeNewLine("BusinessLayer.RoleCrudOperations.Fan "+this.getName()+" logged out");
+  }
+
+  public void  EditPersonalInfo(String newName, String newUserName, String newPassword) throws Exception {
+    for(Account account: DataController.getAccounts()){
+      if(account.getUserName().equals(newUserName))
+        throw new Exception("Username already exists");
+    }
+    Account account= DataController.getAccountByRole(this);
+    if(!(newName.length()==0)) account.setName(newName);
+    if(!(newUserName.length()==0)) account.setUserName(newUserName);
+    if(!(newPassword.length()==0)) account.setPassword((newPassword));
+    (Logger.getInstance()).writeNewLine("Fan "+this.getName()+" eddited his personal infomation");
+  }
+  //endregion
+
+
+
+  //region Other UC methods
   public void ShowInfo(String InfoAbout){
     new Guest().ShowInfo(InfoAbout);
   }
@@ -146,10 +168,7 @@ public class Fan extends Role implements Serializable
     new Guest().Filter(category,roleFilter);
   }
 
-  public void Logout(){
-    System.out.println("Logged out");
-    (Logger.getInstance()).writeNewLine("BusinessLayer.RoleCrudOperations.Fan "+this.getName()+" logged out");
-  }
+
 
   public void SubscribeTrackPersonalPages(){
     trackPersonalPages=true;
@@ -160,7 +179,7 @@ public class Fan extends Role implements Serializable
   }
 
   public static void notifyFansAboutMatch(Match match){
-    List<Fan> fans= DataManager.getFansFromAccounts();
+    List<Fan> fans= DataController.getFansFromAccounts();
     if(fans==null)return;
     for(Fan fan:fans){
       if(fan.isGetMatchNotifications())
@@ -174,9 +193,9 @@ public class Fan extends Role implements Serializable
   }
 
 
-  public boolean ShowSearchHistory(){
+  public void ShowSearchHistory() throws Exception {
     if(searchHistory.size()==0)
-      return false;
+      throw new Exception("You have not searched anything yet");
     for(String[] savedSearch:searchHistory){
       System.out.println("Criterion:");
       System.out.println(savedSearch[0]);
@@ -184,7 +203,6 @@ public class Fan extends Role implements Serializable
       System.out.println(savedSearch[1]);
       System.out.println();
     }
-    return true;
   }
 
   public void ShowPersonalInfo(){
@@ -201,7 +219,6 @@ public class Fan extends Role implements Serializable
       if(page.getType() instanceof Coach)
         coaches.add((Coach)page.getType());
     }
-    Guest guestDummy=new Guest();
     System.out.println();
     if (teams.size()>0) {
       System.out.println("Teams Tracked:");
@@ -221,18 +238,7 @@ public class Fan extends Role implements Serializable
     }
   }
 
-  public boolean EditPersonalInfo(String newName, String newUserName, String newPassword){
-    for(Account account: DataManager.getAccounts()){
-      if(account.getUserName().equals(newUserName))
-        return false;
-    }
-    Account account= DataManager.getAccountByRole(this);
-    if(!(newName.length()==0)) account.setName(newName);
-    if(!(newUserName.length()==0)) account.setUserName(newUserName);
-    if(!(newPassword.length()==0)) account.setPassword((newPassword));
-    (Logger.getInstance()).writeNewLine("BusinessLayer.RoleCrudOperations.Fan "+this.getName()+" eddited his personal infomation");
-    return true;
-  }
+
   //endregion
 
 
