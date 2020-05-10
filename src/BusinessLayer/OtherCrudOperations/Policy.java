@@ -12,11 +12,13 @@ public class Policy implements Serializable
   private String gameSchedual;
   private SLsettings sLsettings;
   private String id;
+  private static int policyIDCounter=0;
 
   public Policy(String aPointCalc, String aGameSchedual)
   {
     pointCalc = aPointCalc;
     gameSchedual = aGameSchedual;
+    id=(++policyIDCounter)+"";
   }
 
   public String getId() {

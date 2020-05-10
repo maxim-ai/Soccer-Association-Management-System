@@ -18,6 +18,8 @@ public class Referee extends Role implements Serializable
   private List<Match> matchs;
   private SLsettings sLsettings;
 
+  public Referee(String name){super(name);}
+
 
 
   public Referee(String aTraining, String aName)
@@ -211,64 +213,66 @@ public class Referee extends Role implements Serializable
   UC-10.3 update event during match
    */
   public boolean updateEventDuringMatch(Match match, EventEnum aType, String aDescription) throws Exception {
-    boolean wasUpdate=false;
-    if(matchs.contains(match)){
-      Date currDate=new Date(System.currentTimeMillis());
-      if (getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES)<90)
-      {
-        Time currTime=new Time(Calendar.getInstance().getTimeInMillis());
-        GameEvent event=new GameEvent(aType,currDate,currTime,aDescription,(int)(getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES)),match.getEventCalender());
-        match.getEventCalender().addGameEvent(event);
-        wasUpdate=true;
-        Logger.getInstance().writeNewLine("BusinessLayer.RoleCrudOperations.Referee "+super.getName()+" update event during the match between: "+match.getHomeTeam().getName()+","+match.getAwayTeam().getName()+" to "+event.getType());
-      }
-      else {
-        (Logger.getInstanceError()).writeNewLineError("Referee tried to add event not during the match");
-        throw new Exception("Referee tried to add event not during the match");
-      }
-    }
-    else{
-      (Logger.getInstanceError()).writeNewLineError("Referee didnt take part in this match");
-      throw new Exception("Referee didnt take part in this match");
-    }
-    return wasUpdate;
+//    boolean wasUpdate=false;
+//    if(matchs.contains(match)){
+//      Date currDate=new Date(System.currentTimeMillis());
+//      if (getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES)<90)
+//      {
+//        Time currTime=new Time(Calendar.getInstance().getTimeInMillis());
+//        GameEvent event=new GameEvent(aType,currDate,currTime,aDescription,(int)(getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES)),match.getEventCalender());
+//        match.getEventCalender().addGameEvent(event);
+//        wasUpdate=true;
+//        Logger.getInstance().writeNewLine("BusinessLayer.RoleCrudOperations.Referee "+super.getName()+" update event during the match between: "+match.getHomeTeam().getName()+","+match.getAwayTeam().getName()+" to "+event.getType());
+//      }
+//      else {
+//        (Logger.getInstanceError()).writeNewLineError("Referee tried to add event not during the match");
+//        throw new Exception("Referee tried to add event not during the match");
+//      }
+//    }
+//    else{
+//      (Logger.getInstanceError()).writeNewLineError("Referee didnt take part in this match");
+//      throw new Exception("Referee didnt take part in this match");
+//    }
+//    return wasUpdate;
+    return true;
   }
   /*
   UC - 10.4 edit game after the game end
    */
   public boolean editEventAfterGame(Match match, GameEvent gameEvent, EventEnum aType, String aDescription) throws Exception {
-    boolean wasEdit = false;
-    if (matchs.contains(match)){
-      if(match.getMainReferee().equals(this)) {
-      Date currDate = new Date(System.currentTimeMillis());
-      if (getDateDiff(match.getDate(), currDate, TimeUnit.MINUTES) > 390) {
-        if (match.getEventCalender().getGameEvents().contains(gameEvent)) {
-          match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setType(aType);
-          match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setDescription(aDescription);
-          wasEdit = true;
-          Logger.getInstance().writeNewLine("BusinessLayer.RoleCrudOperations.Referee " + super.getName() + " edit event after the match between: " + match.getHomeTeam().getName() + "," + match.getAwayTeam().getName() + " to " + aType);
-
-        }
-        else{
-          (Logger.getInstanceError()).writeNewLineError("This match don't contain given game event");
-          throw new Exception("This match don't contain given game event");
-        }
-      }
-      else{
-        (Logger.getInstanceError()).writeNewLineError("Referee can edit event only after 5 hours");
-        throw new Exception("Referee can edit event only after 5 hours");
-      }
-    }
-      else{
-        (Logger.getInstanceError()).writeNewLineError("Referee is not a main referee");
-        throw new Exception("Referee is not a main referee");
-      }
-  }
-    else{
-      (Logger.getInstanceError()).writeNewLineError("Referee didnt take part in this match");
-      throw new Exception("Referee didnt take part in this match");
-    }
-    return wasEdit;
+//    boolean wasEdit = false;
+//    if (matchs.contains(match)){
+//      if(match.getMainReferee().equals(this)) {
+//      Date currDate = new Date(System.currentTimeMillis());
+//      if (getDateDiff(match.getDate(), currDate, TimeUnit.MINUTES) > 390) {
+//        if (match.getEventCalender().getGameEvents().contains(gameEvent)) {
+//          match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setType(aType);
+//          match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setDescription(aDescription);
+//          wasEdit = true;
+//          Logger.getInstance().writeNewLine("BusinessLayer.RoleCrudOperations.Referee " + super.getName() + " edit event after the match between: " + match.getHomeTeam().getName() + "," + match.getAwayTeam().getName() + " to " + aType);
+//
+//        }
+//        else{
+//          (Logger.getInstanceError()).writeNewLineError("This match don't contain given game event");
+//          throw new Exception("This match don't contain given game event");
+//        }
+//      }
+//      else{
+//        (Logger.getInstanceError()).writeNewLineError("Referee can edit event only after 5 hours");
+//        throw new Exception("Referee can edit event only after 5 hours");
+//      }
+//    }
+//      else{
+//        (Logger.getInstanceError()).writeNewLineError("Referee is not a main referee");
+//        throw new Exception("Referee is not a main referee");
+//      }
+//  }
+//    else{
+//      (Logger.getInstanceError()).writeNewLineError("Referee didnt take part in this match");
+//      throw new Exception("Referee didnt take part in this match");
+//    }
+//    return wasEdit;
+    return true;
   }
 
   public void ShowReferee() {

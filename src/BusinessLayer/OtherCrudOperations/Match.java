@@ -6,13 +6,17 @@ import ServiceLayer.OurSystem;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.sql.Time;
+import java.sql.*;
 import java.util.*;
 
 public class Match implements Serializable
 {
 
-  private Date date;
+  //private Date date;
+//  private int year;
+//  private int month;
+//  private int day;
+  private String date;
   private Time time;
   private int awayScore;
   private int homeScore;
@@ -25,9 +29,9 @@ public class Match implements Serializable
   private Season season;
   private EventCalender eventCalender;
 
-  public Match(Date aDate, Time aTime, int aAwayScore, int aHomeScore, Stadium aStadium, Season aSeason, Team awayTeam, Team homeTeam, Referee mainReferee, Referee lineRefereeOne, Referee lineRefereeTwo)
+  public Match(String date,Time aTime, int aAwayScore, int aHomeScore, Stadium aStadium, Season aSeason, Team awayTeam, Team homeTeam, Referee mainReferee, Referee lineRefereeOne, Referee lineRefereeTwo)
   {
-    date = aDate;
+    this.date=date;
     time = aTime;
     awayScore = aAwayScore;
     homeScore = aHomeScore;
@@ -44,10 +48,10 @@ public class Match implements Serializable
     Fan.notifyFansAboutMatch(this);
   }
 
-  public boolean setDate(Date aDate)
+  public boolean setDate(String date)
   {
     boolean wasSet = false;
-    date = aDate;
+    this.date = date;
     OurSystem.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),mainReferee);
     OurSystem.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),lineRefereeOne);
     OurSystem.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),lineRefereeTwo);
@@ -82,7 +86,7 @@ public class Match implements Serializable
     return wasSet;
   }
 
-  public Date getDate()
+  public String getDate()
   {
     return date;
   }
@@ -285,9 +289,7 @@ public class Match implements Serializable
            ) {
           for (Match m:referee.getMatchs()
                ) {
-              if (m.homeTeam.getName().equals(homeTeam)&&m.awayTeam.getName().equals(awayTeam)&&m.getDate().getYear()==Integer.parseInt(year)
-              &&m.getDate().getMonth()==Integer.parseInt(month)&&m.getDate().getDay()
-              ==Integer.parseInt(day))
+              if (m.homeTeam.getName().equals(homeTeam)&&m.awayTeam.getName().equals(awayTeam)&&m.getDate().equals(day+"-"+month+"-"+year))
                   return m;
           }
       }

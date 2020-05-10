@@ -25,6 +25,8 @@ public class TeamManager extends Role implements Serializable
   private Team team;
   private Owner appointedBy;
 
+  public TeamManager(String name){super(name);}
+
   public TeamManager(String aName, Team team, Owner appointer) {
     super(aName);
     this.team = team;

@@ -9,13 +9,20 @@ import java.util.*;
 public class Page implements Serializable
 {
 
+  private static int pageIDcounter=0;
   private Pageable type;
   private List<Fan> fans;
+  private int pageID;
 
   public Page(Pageable pageable)
   {
     setType(pageable);
     fans = new ArrayList<Fan>();
+    pageID=(++pageIDcounter);
+  }
+
+  public int getPageID() {
+    return pageID;
   }
 
   public Pageable getType() {

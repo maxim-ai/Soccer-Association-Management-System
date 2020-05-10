@@ -15,6 +15,8 @@ public class Owner extends Role implements Serializable {
     private HashMap<TeamManager,List<TeamManager.PermissionEnum>> managerPermissions;
     private List<Team> nonActiveTeams;
 
+    public Owner(String name){super(name);}
+
     public Owner(String aName, Team team, Owner appointer)
     {
         super(aName);
@@ -448,9 +450,9 @@ public class Owner extends Role implements Serializable {
     public String createTeam(String teamName, League league, Stadium stadium)
     {
         boolean teamExists=false;
-        for(Team t: DataController.getTeams())
+        for(String name: DataController.getTeamNames())
         {
-            if(t.getName().equals(teamName))
+            if(name.equals(teamName))
             {
                 teamExists=true;
                 break;
@@ -477,7 +479,7 @@ public class Owner extends Role implements Serializable {
             {
                 Team team=new Team(teamName,league,stadium);
                 team.addOwner(this);
-                DataController.addTeam(team);
+                DataController.addTeamDC(team);
                 AssociationRepresentative.removeOpenTeamRequest(this,teamName);
                 Logger.getInstance().writeNewLine(getUsername()+" just opened the team: "+teamName);
                 return "Team successfully created";

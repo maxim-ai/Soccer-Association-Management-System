@@ -185,33 +185,36 @@ public class RefereeBusinessController {
         return null;
     }
     public List<String> getEvantsByMatch(String matchString){
-        List<String> list=new ArrayList<>();
-        String homeTeam=matchString.substring(matchString.indexOf("Teams")+7,matchString.indexOf("against")-1);
-        String awayTeam=matchString.substring(matchString.indexOf("against")+8,matchString.indexOf("Date:")-2);
-        String day=matchString.substring(matchString.lastIndexOf(":")+2,matchString.indexOf("/"));
-        String month=matchString.substring(matchString.indexOf("/")+1,matchString.lastIndexOf("/"));
-        String year=matchString.substring(matchString.lastIndexOf("/")+1);
-
-        List<Match> matches=referee.getMatchs();
-
-        for(Match match:matches){
-            if(match.getHomeTeam().getName().equals(homeTeam)&&match.getAwayTeam().getName().equals(awayTeam)
-                    &&match.getDate().getDay()==Integer.parseInt(day)&&match.getDate().getMonth()==Integer.parseInt(month)
-                    &&match.getDate().getYear()==Integer.parseInt(year)){
-                for(GameEvent gameEvent:match.getEventCalender().getGameEvents()){
-                    list.add("EventType: "+gameEvent.getType().toString()+", Description: "+gameEvent.getDescription()+", Minute: "+gameEvent.getGameMinute());
-                }
-            }
-        }
-
-        return list;
+//        List<String> list=new ArrayList<>();
+//        String homeTeam=matchString.substring(matchString.indexOf("Teams")+7,matchString.indexOf("against")-1);
+//        String awayTeam=matchString.substring(matchString.indexOf("against")+8,matchString.indexOf("Date:")-2);
+//        String day=matchString.substring(matchString.lastIndexOf(":")+2,matchString.indexOf("/"));
+//        String month=matchString.substring(matchString.indexOf("/")+1,matchString.lastIndexOf("/"));
+//        String year=matchString.substring(matchString.lastIndexOf("/")+1);
+//
+//        List<Match> matches=referee.getMatchs();
+//
+//        for(Match match:matches){
+//            if(match.getHomeTeam().getName().equals(homeTeam)&&match.getAwayTeam().getName().equals(awayTeam)
+//                    &&match.getDate().getDay()==Integer.parseInt(day)&&match.getDate().getMonth()==Integer.parseInt(month)
+//                    &&match.getDate().getYear()==Integer.parseInt(year)){
+//                for(GameEvent gameEvent:match.getEventCalender().getGameEvents()){
+//                    list.add("EventType: "+gameEvent.getType().toString()+", Description: "+gameEvent.getDescription()+", Minute: "+gameEvent.getGameMinute());
+//                }
+//            }
+//        }
+//
+//        return list;
+        return null;
 
     }
     public List<String> getMatchList(){
-        List<String> list=new ArrayList<>();
-        for(Match match:referee.getMatchs())
-            list.add("Teams: "+match.getHomeTeam().getName()+" against "+match.getAwayTeam().getName()+
-                    ", Date: "+match.getDate().getDay()+"/"+match.getDate().getMonth()+"/"+match.getDate().getYear());
-        return list;
+//        List<String> list=new ArrayList<>();
+//        for(Match match:referee.getMatchs())
+//            list.add("Teams: "+match.getHomeTeam().getName()+" against "+match.getAwayTeam().getName()+
+//                    ", Date: "+match.getDate().getDay()+"/"+match.getDate().getMonth()+"/"+match.getDate().getYear());
+//        return list;
+
+        return null;
     }
 }

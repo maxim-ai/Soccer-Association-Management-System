@@ -16,7 +16,6 @@ public class Fan extends Role implements Serializable
   private List<String[]> searchHistory; //String[0]: Criterion, String[1]: Query
 
 
-
   public Fan(String aName)
   {
     super(aName);

@@ -18,6 +18,8 @@ public class Coach extends Role implements Pageable, Serializable
   private List<Team> teams;
   private Page page;
 
+  public Coach(String name){super(name);}
+
   public Coach(String aName, String aTraining, String aTeamRole, Page aPage)
   {
     super(aName);

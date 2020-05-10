@@ -22,6 +22,7 @@ public class Team implements Pageable, Serializable
   private League league;
   private List<Match> matchs;
   private Stadium stadium;
+  private int points;
 
 
   public Team(String aName,League aLeague,Stadium aStadium)
@@ -40,8 +41,16 @@ public class Team implements Pageable, Serializable
     owners = new ArrayList<Owner>();
     players = new ArrayList<Player>();
     matchs = new ArrayList<Match>();
+    points=0;
   }
 
+  public int getPoints() {
+    return points;
+  }
+
+  public void setPoints(int points) {
+    this.points = points;
+  }
 
   public boolean setName(String aName)
   {

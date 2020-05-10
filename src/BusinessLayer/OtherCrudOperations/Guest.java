@@ -44,21 +44,36 @@ public class Guest implements Serializable {
 
   //region Methods for version 3
   public Account LogIn(String UserName, String Password) throws Exception {
-    List<Account> accountList= DataController.getAccounts();
-    for(Account a:accountList){
-      if(a.getUserName().equals(UserName)){
-        if(a.getPassword().equals(Password)){
-          (Logger.getInstance()).writeNewLine("Account "+UserName+" logged in");
-          return a;
-        }
-        else{
-          (Logger.getInstanceError()).writeNewLineError("Guest #"+this.id+"tried to log in with wrong password");
-          throw new Exception("Wrong password");
-        }
-      }
+    String[] accountInfo=DataController.getUserNamePasswordDC(UserName);
+    if(accountInfo==null){
+      (Logger.getInstanceError()).writeNewLineError("Guest #"+this.id+"tried to log in with wrong username");
+      throw new Exception("Username does not exist");
     }
-    (Logger.getInstanceError()).writeNewLineError("Guest #"+this.id+"tried to log in with wrong username");
-    throw new Exception("Username does not exist");
+    else if(accountInfo[0].equals(UserName)&&!accountInfo[1].equals(Password)){
+      (Logger.getInstanceError()).writeNewLineError("Guest #"+this.id+"tried to log in with wrong password");
+      throw new Exception("Wrong password");
+    }
+    else{
+      Account account=new Account(accountInfo[2],Integer.parseInt(accountInfo[3]),accountInfo[0],accountInfo[1]);
+      account=DataController.getAccountRolesDC(account);
+      (Logger.getInstance()).writeNewLine("Account "+UserName+" logged in");
+      return account;
+    }
+//    List<Account> accountList = DataController.getAccounts();
+//    for(Account a:accountList){
+//      if(a.getUserName().equals(UserName)){
+//        if(a.getPassword().equals(Password)){
+//          (Logger.getInstance()).writeNewLine("Account "+UserName+" logged in");
+//          return a;
+//        }
+//        else{
+//          (Logger.getInstanceError()).writeNewLineError("Guest #"+this.id+"tried to log in with wrong password");
+//          throw new Exception("Wrong password");
+//        }
+//      }
+//    }
+//    (Logger.getInstanceError()).writeNewLineError("Guest #"+this.id+"tried to log in with wrong username");
+//    throw new Exception("Username does not exist");
   }
 
   public void SignIn(String Name, int Age, String UserName, String Password) throws Exception {

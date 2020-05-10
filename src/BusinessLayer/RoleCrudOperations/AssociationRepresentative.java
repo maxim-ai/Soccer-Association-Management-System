@@ -13,6 +13,7 @@ public class AssociationRepresentative extends Role {
 
   public static HashMap<Pair<Owner,String>,Boolean> approvedTeams=new HashMap<>();
 
+
   public AssociationRepresentative(String aName)
   {
     super(aName);

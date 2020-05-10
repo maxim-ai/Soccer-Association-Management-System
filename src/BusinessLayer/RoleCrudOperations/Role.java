@@ -12,11 +12,17 @@ public abstract class Role implements Serializable
   private String username;
   private List<Alert> alertList;
 
+
+
   public Role(String aName)
   {
     name = aName;
     alertList=new ArrayList<>();
   }
+
+
+
+
 
   public boolean setName(String aName)
   {
