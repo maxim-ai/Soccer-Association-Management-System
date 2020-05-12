@@ -172,7 +172,7 @@ public class League implements Serializable
   }
 
   public static League convertStringToLeague(String leagueName){
-    for (League league : DataController.getLeagues()){
+    for (League league : DataController.getInstance().getLeagues()){
       if(league.getName().equals(leagueName)){
         return league;
       }

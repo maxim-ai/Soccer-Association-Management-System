@@ -20,7 +20,7 @@ public class SystemManagerTest {
 
     @Before
     public void setUp() throws Exception {
-        DataController.clearDataBase();
+        DataController.getInstance().clearDataBase();
     }
     @Test
     public void getComplaintAndComments() {
@@ -41,7 +41,7 @@ public class SystemManagerTest {
         League league = new League("First BusinessLayer.OtherCrudOperations.League");
         Stadium stadium = new Stadium("Bloomfield");
         Team team = new Team("Maccabi",league,stadium);
-        DataController.addTeam(team);
+        DataController.getInstance().addTeam(team);
         Page page = new Page(team);
         team.setPage(page);
         Owner owner = new Owner("nadav",team,null);
@@ -54,7 +54,7 @@ public class SystemManagerTest {
         assertEquals(0,fan.getPages().size());
         assertEquals( "description: Delete BusinessLayer.OtherCrudOperations.Team Permanently:" + team.getName(),owner.getAlertList().get(0).toString());
         assertEquals("description: Delete BusinessLayer.OtherCrudOperations.Team Permanently:" + team.getName(),teamManager.getAlertList().get(0).toString());
-        assertEquals(0, DataController.getTeams().size());
+        assertEquals(0, DataController.getInstance().getTeams().size());
     }
 
 
@@ -126,7 +126,7 @@ public class SystemManagerTest {
 
     private boolean removeTeamFromDmStub(Team aTeam) {
         boolean wasRemoved = true;
-        DataController.removeTeam(aTeam);
+        DataController.getInstance().removeTeam(aTeam);
         wasRemoved = true;
         return wasRemoved;
     }
@@ -163,9 +163,9 @@ public class SystemManagerTest {
     @Test
     public void deleteAccount() {
         Account account = new Account("nadav",12, "nadav270","12345");
-        DataController.addAccount(account);
+        DataController.getInstance().addAccount(account);
         systemManager.deleteAccount(account);
-        assertEquals(0, DataController.getAccounts().size());
+        assertEquals(0, DataController.getInstance().getAccounts().size());
 
     }
 
@@ -209,8 +209,8 @@ public class SystemManagerTest {
         Team team = new Team("Maccabi",league,stadium);
         Owner owner = new Owner("nadav",team,null);
         Account account = CreateOwner("yosi",99,"yosi","1234");
-        assertEquals(account, DataController.getAccount(0));
-        assertEquals(account.getRole(0), DataController.getAccount(0).getRole(0));
+        assertEquals(account, DataController.getInstance().getAccount(0));
+        assertEquals(account.getRole(0), DataController.getInstance().getAccount(0).getRole(0));
     }
     @Test
     public void createSystemManager()
@@ -220,8 +220,8 @@ public class SystemManagerTest {
         Team team = new Team("Maccabi",league,stadium);
         SystemManager systemManager = new SystemManager("nadav");
         Account account = CreateSystemManager("yosi",99,"yosi","1234");
-        assertEquals(account, DataController.getAccount(0));
-        assertEquals(account.getRole(0), DataController.getAccount(0).getRole(0));
+        assertEquals(account, DataController.getInstance().getAccount(0));
+        assertEquals(account.getRole(0), DataController.getInstance().getAccount(0).getRole(0));
 
     }
 
@@ -233,8 +233,8 @@ public class SystemManagerTest {
         Team team = new Team("Maccabi",league,stadium);
         AssociationRepresentative associationRepresentative = new AssociationRepresentative("nadav");
         Account account = CreateAssociationRepresentative("yosi",99,"yosi","1234");
-        assertEquals(account, DataController.getAccount(0));
-        assertEquals(account.getRole(0), DataController.getAccount(0).getRole(0));
+        assertEquals(account, DataController.getInstance().getAccount(0));
+        assertEquals(account.getRole(0), DataController.getInstance().getAccount(0).getRole(0));
 
     }
 
@@ -269,7 +269,7 @@ public class SystemManagerTest {
     }
 
     public static boolean createAccountStub(Account accountToAdd){
-        DataController.addAccount(accountToAdd);
+        DataController.getInstance().addAccount(accountToAdd);
         return true;
     }
 

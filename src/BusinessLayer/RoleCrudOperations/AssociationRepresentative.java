@@ -6,6 +6,7 @@ import BusinessLayer.OtherCrudOperations.*;
 import ServiceLayer.OurSystem;
 import javafx.util.Pair;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 
 
@@ -27,7 +28,7 @@ public class AssociationRepresentative extends Role {
    */
   public String createNewLeague(String name, List<Team> teams){
     League league = new League(name);
-    DataController.addLeague(league);
+    DataController.getInstance().addLeague(league);
     for(Team team : teams){
       league.addTeam(team);
     }
@@ -43,8 +44,8 @@ public class AssociationRepresentative extends Role {
    */
   public String setYearToLeague(League league, String year){
     Season season=new Season(year);
-    DataController.addSeason(season);
-    DataController.addLeague(league);
+    DataController.getInstance().addSeason(season);
+    DataController.getInstance().addLeague(league);
     SLsettings sLsettings = league.getSLsettingsBySeason(season);
     if (sLsettings==null)
     {
@@ -82,7 +83,7 @@ public class AssociationRepresentative extends Role {
    */
   public String addNewReferee(String training, String name, int age, String userName, String password){
     Account account = new Account(name,age,userName,password);
-    DataController.addAccount(account);
+    DataController.getInstance().addAccount(account);
     Referee referee = createNewReferee(account,training,name);
     Logger.getInstance().writeNewLine(this.getUsername()+" add referee: "+(referee.getName()));
     return "Add new referee successfully";
@@ -116,17 +117,18 @@ public class AssociationRepresentative extends Role {
    * @param season
    * @return
    */
-  public String addRefereeToLeague(Referee referee, League league, Season season){ // to fix uc
-    SLsettings sLsettings = league.getSLsettingsBySeason(season);
-    if (sLsettings==null)
-    {
-      sLsettings = new SLsettings(new Policy(null,null));
-    }
-    referee.setsLsettings(sLsettings);
-    sLsettings.addReferee(referee);
-    referee.addLeague(league,season);
+  public String addRefereeToLeague(Referee referee, League league, Season season){
+//    SLsettings sLsettings = league.getSLsettingsBySeason(season);
+//    if (sLsettings==null)
+//    {
+//      sLsettings = new SLsettings(new Policy(null,null));
+//    }
+//    referee.setsLsettings(sLsettings);
+//    sLsettings.addReferee(referee);
+//    referee.addLeague(league,season);
+    DataController.getInstance().addRefereeToLeague(referee,league,season);
     Logger.getInstance().writeNewLine(this.getUsername()+" add referee: " +referee.getName()+  " to league: "+(league.getName()));
-    return  "Add referee to league successfully";
+    return  "Added referee to league successfully";
   }
 
   /**
@@ -172,7 +174,7 @@ public class AssociationRepresentative extends Role {
 
   public String setNewSeason(String year){
     Season season = new Season(year);
-    DataController.addSeason(season);
+    DataController.getInstance().addSeason(season);
     Logger.getInstance().writeNewLine(this.getUsername()+" set new season: " +(season.getName()));
     return "Set new season successfully";
   }
@@ -191,15 +193,17 @@ public class AssociationRepresentative extends Role {
   public String approveTeam(String teamName, Owner owner)
   {
     Pair request=new Pair(owner,teamName);
-    if(!approvedTeams.containsKey(request)){
+    if(!checkIfRequestExists(owner,teamName)){
       Logger.getInstanceError().writeNewLineError(this.getUsername()+" approve team "+(teamName) +" failed");
-      return "Team approved failed";
+      return "Request doesn't exist";
     }
     else
     {
-      approvedTeams.put(request,true);
-      OurSystem.notifyOtherRole("You are approved to open team: "+teamName,owner);
+      DataController.getInstance().approveTeam(owner,this,teamName);
+      notifyAccount(owner.getUsername(),"You are approved to open team: "+teamName+" by "+getUsername());
+//      OurSystem.notifyOtherRole("You are approved to open team: "+teamName,owner);
       Logger.getInstance().writeNewLine(getName()+" approved "+owner.getName()+" to open the team: "+teamName);
+
       return "Team approved successfully";
     }
   }
@@ -213,10 +217,10 @@ public class AssociationRepresentative extends Role {
       return false;
 
     Pair request=new Pair(owner,teamName);
-    if(approvedTeams.containsKey(request))
+    if(checkIfRequestExists(owner,teamName))
       return false;
     else
-      approvedTeams.put(request,false);
+      DataController.getInstance().addOpenTeamRequest(owner,teamName);
     return true;
   }
 
@@ -229,10 +233,10 @@ public class AssociationRepresentative extends Role {
       return false;
 
     Pair request=new Pair(owner,teamName);
-    if(!approvedTeams.containsKey(request))
+    if(!checkIfRequestExists(owner,teamName))
       return false;
     else
-      approvedTeams.remove(request);
+      DataController.getInstance().removeOpenTeamRequest(owner,teamName);
     return true;
   }
 
@@ -245,7 +249,7 @@ public class AssociationRepresentative extends Role {
       return false;
 
     Pair request=new Pair(owner,teamName);
-    return approvedTeams.containsKey(request);
+    return DataController.getInstance().checkIfRequestExists(owner,teamName);
   }
 
   /**
@@ -257,7 +261,7 @@ public class AssociationRepresentative extends Role {
       return false;
 
     Pair request=new Pair(owner,teamName);
-    return approvedTeams.get(request);
+    return DataController.getInstance().getRequestStatus(owner,teamName);
   }
 
 }

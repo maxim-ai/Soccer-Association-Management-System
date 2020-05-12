@@ -173,7 +173,7 @@ public class Season implements Serializable
   }
 
   public static Season convertStringToSeason(String seasonName){
-    for (Season season : DataController.getSeasons()){
+    for (Season season : DataController.getInstance().getSeasons()){
       if(season.getName().equals(seasonName)){
         return season;
       }

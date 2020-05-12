@@ -264,7 +264,7 @@ public class Owner extends Role implements Serializable {
 
         owner.team.removeOwner(owner);
 
-        for (Account account : DataController.getAccounts())
+        for (Account account : DataController.getInstance().getAccounts())
             for (Role role : account.getRoles())
                 if (role instanceof Owner && role.equals(owner))
                 {
@@ -322,9 +322,9 @@ public class Owner extends Role implements Serializable {
 
         teamManager.delete();
 
-        List<Account> tamp= DataController.getAccounts();
+        List<Account> tamp= DataController.getInstance().getAccounts();
 
-        for (Account account : DataController.getAccounts())
+        for (Account account : DataController.getInstance().getAccounts())
         {
             if(account.checkIfTeamManagr()!=null && account.checkIfTeamManagr().equals(teamManager))
             {
@@ -391,7 +391,7 @@ public class Owner extends Role implements Serializable {
             OurSystem.notifyOtherRole(notification,owner);
         for(TeamManager teamManager:team.getTeamManagers())
             OurSystem.notifyOtherRole(notification,teamManager);
-        for(SystemManager systemManager: DataController.getSystemManagersFromAccounts())
+        for(SystemManager systemManager: DataController.getInstance().getSystemManagersFromAccounts())
             OurSystem.notifyOtherRole(notification,systemManager);
 
         nonActiveTeams.add(team);
@@ -412,7 +412,7 @@ public class Owner extends Role implements Serializable {
 
         String notification=this.getUsername()+" has activated team: "+teamName;
 
-        for(SystemManager systemManager: DataController.getSystemManagersFromAccounts())
+        for(SystemManager systemManager: DataController.getInstance().getSystemManagersFromAccounts())
             OurSystem.notifyOtherRole(notification,systemManager);
 
         Logger.getInstance().writeNewLine(this.getUsername()+" has activated "+teamName);
@@ -450,9 +450,9 @@ public class Owner extends Role implements Serializable {
     public String createTeam(String teamName, League league, Stadium stadium)
     {
         boolean teamExists=false;
-        for(String name: DataController.getTeamNames())
+        for(String team: DataController.getInstance().getNames("Team"))
         {
-            if(name.equals(teamName))
+            if(team.equals(teamName))
             {
                 teamExists=true;
                 break;
@@ -464,11 +464,12 @@ public class Owner extends Role implements Serializable {
 
         else if(!AssociationRepresentative.checkIfRequestExists(this,teamName))
         {
-            for(AssociationRepresentative ar: DataController.getAssiciationRepresentivesFromAccounts())
+            for(String ARuser: DataController.getInstance().getUserNames("AssociationRepresentative"))
             {
-                OurSystem.notifyOtherRole(getUsername()+" is requesting to create a new team, teamName: "+teamName,ar);
-                AssociationRepresentative.addOpenTeamRequest(this,teamName);
+                notifyAccount(ARuser,getUsername()+" is requesting to create a new team, teamName: "+teamName);
+//                OurSystem.notifyOtherRole(getUsername()+" is requesting to create a new team, teamName: "+teamName,ar);
             }
+            AssociationRepresentative.addOpenTeamRequest(this,teamName);
             return "Request sent, waiting for approval";
         }
         else
@@ -477,9 +478,12 @@ public class Owner extends Role implements Serializable {
                 return "waiting for approval";
             else
             {
+
                 Team team=new Team(teamName,league,stadium);
                 team.addOwner(this);
-                DataController.addTeamDC(team);
+                DataController.getInstance().addTeamDC(team);
+                DataController.getInstance().setTeamToOwner(this,team);
+                DataController.getInstance().addTeamDC(team);
                 AssociationRepresentative.removeOpenTeamRequest(this,teamName);
                 Logger.getInstance().writeNewLine(getUsername()+" just opened the team: "+teamName);
                 return "Team successfully created";

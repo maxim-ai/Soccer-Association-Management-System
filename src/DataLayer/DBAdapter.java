@@ -1,6 +1,10 @@
 package DataLayer;
 
+import BusinessLayer.OtherCrudOperations.League;
 import BusinessLayer.OtherCrudOperations.PositionEnum;
+import BusinessLayer.OtherCrudOperations.Season;
+import BusinessLayer.RoleCrudOperations.Referee;
+import jdk.nashorn.internal.codegen.types.Type;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +14,7 @@ import java.util.Map;
 
 public class DBAdapter {
 
-    private static Connection connectToDB(){
+    private Connection connectToDB(){
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String connectionUrl = "jdbc:sqlserver://localhost;databaseName=DB2020;integratedSecurity=true";
@@ -25,14 +29,15 @@ public class DBAdapter {
         return null;
     }
 
-    public static void addAccount(String userName, String password, String name, int age) {
+    public void addAccount(String userName, String password, String name, int age) {
         try {
             Connection con=connectToDB();
-            PreparedStatement st=con.prepareStatement("insert into Account values(?,?,?,?)");
+            PreparedStatement st=con.prepareStatement("insert into Account values(?,?,?,?,?)");
             st.setString(1,userName);
             st.setString(2,password);
             st.setString(3,name);
             st.setInt(4,age);
+            st.setString(5,"False");
             st.executeUpdate();
             st.close();
             con.close();
@@ -42,10 +47,19 @@ public class DBAdapter {
         }
     }
 
-    public static List<String> getTeamNames() {
+    public List<String> getNames(String Object) {
         try {
             Connection con = connectToDB();
-            PreparedStatement st=con.prepareStatement("select * from Team");
+            PreparedStatement st = null;
+            if(Object.equals("Team"))
+                st=con.prepareStatement("select * from Team");
+            else if(Object.equals("League"))
+                st=con.prepareStatement("select * from League");
+            else if(Object.equals("Stadium"))
+                st=con.prepareStatement("select * from Stadium");
+            else if(Object.equals("Season"))
+                st=con.prepareStatement("select * from Season");
+
             ResultSet resultSet = st.executeQuery();
             List <String> list=new ArrayList<>();
             while (resultSet.next()) {
@@ -56,13 +70,39 @@ public class DBAdapter {
         } catch (SQLException e) {
             if(!e.getMessage().contains("Violation of PRIMARY KEY"))
                 e.printStackTrace();
-
-
         }
         return null;
     }
 
-    public static void addOwnerRole(String userName, String name, String teamName, String appointedUserName) {
+    public List<String> getUserNames(String Object) {
+        try {
+            Connection con = connectToDB();
+            PreparedStatement st = null;
+            if(Object.equals("Account"))
+                st=con.prepareStatement("select * from Account");
+            else if(Object.equals("Owner"))
+                st=con.prepareStatement("select * from Owner");
+            else if(Object.equals("Referee"))
+                st=con.prepareStatement("select * from Referee");
+            else if(Object.equals("AssociationRepresentative"))
+                st=con.prepareStatement("select * from AssociationRepresentative");
+
+            ResultSet resultSet = st.executeQuery();
+            List <String> list=new ArrayList<>();
+            while (resultSet.next()) {
+                list.add(resultSet.getString("UserName"));
+            }
+            con.close();
+            return list;
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public void addOwnerRole(String userName, String name, String teamName, String appointedUserName) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps=con.prepareStatement("insert into Owner values(?,?,?,?) ");
@@ -79,7 +119,7 @@ public class DBAdapter {
         }
     }
 
-    public static void addPlayerRole(String userName, String name, Date birthday, String position, String teamName, int pageID) {
+    public void addPlayerRole(String userName, String name, Date birthday, String position, String teamName, int pageID) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps=con.prepareStatement("insert into Player values(?,?,?,?,?,?) ");
@@ -99,7 +139,7 @@ public class DBAdapter {
 
     }
 
-    public static void addFanRole(String userName, String name, boolean trackPersonalPages, boolean getMatchNotifications, List<Integer> pagesIDs) {
+    public void addFanRole(String userName, String name, boolean trackPersonalPages, boolean getMatchNotifications, List<Integer> pagesIDs) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps1=con.prepareStatement("insert into Fan values(?,?,?,?) ");
@@ -123,7 +163,7 @@ public class DBAdapter {
 
     }
 
-    public static void addRefereeRole(String userName, String name, String training, HashMap<String, String> refLeaguesAndSeasons) {
+    public void addRefereeRole(String userName, String name, String training, HashMap<String, String> refLeaguesAndSeasons) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps1=con.prepareStatement("insert into Referee values(?,?,?) ");
@@ -147,7 +187,7 @@ public class DBAdapter {
         }
     }
 
-    public static void addTeamManagerRole(String userName, String name, String teamName, String appointerUserName, List<String> permissions) {
+    public void addTeamManagerRole(String userName, String name, String teamName, String appointerUserName, List<String> permissions) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps1=con.prepareStatement("insert into TeamManager values(?,?,?,?) ");
@@ -170,7 +210,7 @@ public class DBAdapter {
         }
     }
 
-    public static void addSystemManagerRole(String userName, String name, HashMap<String, String> complaintAndComments) {
+    public void addSystemManagerRole(String userName, String name, HashMap<String, String> complaintAndComments) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps1=con.prepareStatement("insert into SystemManager values(?,?,?,?) ");
@@ -192,7 +232,7 @@ public class DBAdapter {
         }
     }
 
-    public static void addAssociationRepresentativeRole(String userName, String name) {
+    public void addAssociationRepresentativeRole(String userName, String name) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps=con.prepareStatement("insert into AssociationRepresentative values(?,?)");
@@ -206,7 +246,7 @@ public class DBAdapter {
         }
     }
 
-    public static void addCoachRole(String userName, String name, String training,String teamRole, int pageID, String teamName) {
+    public void addCoachRole(String userName, String name, String training,String teamRole, int pageID, String teamName) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps=con.prepareStatement("insert into Coach values(?,?,?,?,?,?) ");
@@ -225,7 +265,7 @@ public class DBAdapter {
         }
     }
 
-    public static void addLeague(String name, List<String> seasonList, List<String[]> policyList) {
+    public void addLeague(String name, List<String> seasonList, List<String[]> policyList) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps1=con.prepareStatement("insert into League values(?) ");
@@ -267,7 +307,7 @@ public class DBAdapter {
                 e.printStackTrace(); }
     }
 
-    public static void addSeason(String name, List<String> leagueList, List<String[]> policyList) {
+    public void addSeason(String name, List<String> leagueList, List<String[]> policyList) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps1=con.prepareStatement("insert into Season values(?) ");
@@ -296,7 +336,7 @@ public class DBAdapter {
                 e.printStackTrace(); }
     }
 
-    public static void addStadium(String name) {
+    public void addStadium(String name) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps=con.prepareStatement("insert into Stadium values(?) ");
@@ -308,12 +348,15 @@ public class DBAdapter {
         }
     }
 
-    public static void addTeam(String name, int pageID, String leagueName, String stadiumName,int points) {
+    public void addTeam(String name, int pageID, String leagueName, String stadiumName,int points) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps=con.prepareStatement("insert into Team values(?,?,?,?,?)");
             ps.setString(1,name);
-            ps.setInt(2,pageID);
+            if(pageID!=-1)
+                ps.setInt(2,pageID);
+            else
+                ps.setNull(2, Types.INTEGER);
             ps.setString(3,leagueName);
             ps.setString(4,stadiumName);
             ps.setInt(5,points);
@@ -325,7 +368,7 @@ public class DBAdapter {
         }
     }
 
-    public static void addMatch(String date, Time time, int awayScore, int homeScore, String awayTeamName, String homeTeamName,
+    public void addMatch(String date, Time time, int awayScore, int homeScore, String awayTeamName, String homeTeamName,
                                 String mainRefUN, String lineRefUN1, String lineRefUN2, String stadiumName,String seasonName) {
         try {
             Connection con=connectToDB();
@@ -349,7 +392,7 @@ public class DBAdapter {
         }
     }
 
-    public static void addAlert(String userName, List<String> alerts) {
+    public void addAlert(String userName, List<String> alerts) {
         try {
             Connection con=connectToDB();
             for(String alert:alerts){
@@ -365,7 +408,7 @@ public class DBAdapter {
         }
     }
 
-    public static void addPage(int pageID){
+    public void addPage(int pageID){
         try {
             Connection con=connectToDB();
             PreparedStatement ps=con.prepareStatement("insert into Page values(?)");
@@ -378,7 +421,7 @@ public class DBAdapter {
         }
     }
 
-    public static void addRefsToMatch(String date, Time time, String awayTeamName, String homeTeamName, String username1,String username2, String username3) {
+    public void addRefsToMatch(String date, Time time, String awayTeamName, String homeTeamName, String username1,String username2, String username3) {
         try {
             Connection con=connectToDB();
             PreparedStatement pr=con.prepareStatement("update Match set MainReferee=?, LineRefereeOne=?, LineRefereeTwo=? where Date=? and AwayTeam=? and homeTeam=?");
@@ -396,7 +439,7 @@ public class DBAdapter {
         }
     }
 
-    public static void addGameEvent(String eventType, Time hour, String description, int gameMinute, String date, String awayTeamName, String homeTeamName) {
+    public void addGameEvent(String eventType, Time hour, String description, int gameMinute, String date, String awayTeamName, String homeTeamName) {
         try {
             Connection con=connectToDB();
             PreparedStatement ps=con.prepareStatement("insert into GameEvent values (?,?,?,?,?,?,?)");
@@ -415,7 +458,7 @@ public class DBAdapter {
         }
     }
 
-    public static String[] getUserNamePasswordDC(String userName) {
+    public String[] getUserNamePasswordDC(String userName) {
         String[] arr=new String[4];
         try {
             Connection con=connectToDB();
@@ -438,7 +481,7 @@ public class DBAdapter {
         return arr;
     }
 
-    public static List<String> getAccountRoles(String userName) {
+    public List<String> getAccountRoles(String userName) {
         List<String> roleList=new ArrayList<>();
         try {
             Connection con=connectToDB();
@@ -456,5 +499,165 @@ public class DBAdapter {
             e.printStackTrace();
         }
         return roleList;
+    }
+
+    public void setTeamToOwner(String username, String teamname) {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("UPDATE Owner SET Team=(?) WHERE UserName=(?)");
+            ps.setString(1,teamname);
+            ps.setString(2,username);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+    }
+
+    public void approveTeam(String ownerUsername, String ARusername, String teamName) {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("UPDATE ApprovedTeams SET Approved=(?),AssociationRepresentative=(?) WHERE Owner=(?)");
+            ps.setString(1,"True");
+            ps.setString(2,ARusername);
+            ps.setString(3,ownerUsername);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+    }
+
+    public void addOpenTeamRequest(String username, String teamName) {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("insert into ApprovedTeams (Owner,TeamName,Approved) values(?,?,?) ");
+            ps.setString(1,username);
+            ps.setString(2,teamName);
+            ps.setString(3,"False");
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+    }
+
+    public void removeOpenTeamRequest(String username, String teamName) {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("DELETE FROM ApprovedTeams WHERE Owner=(?) AND TeamName=(?)");
+            ps.setString(1,username);
+            ps.setString(2,teamName);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+    }
+
+    public String checkIfRequestExists(String username, String teamName) {
+        String ans="";
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("select Approved from ApprovedTeams WHERE Owner=(?) AND TeamName=(?)");
+            ps.setString(1,username);
+            ps.setString(2,teamName);
+            ResultSet RS=ps.executeQuery();
+            while(RS.next()){
+                ans=RS.getString("Approved");
+            }
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ans;
+    }
+
+    public void setAccountLogIn(String username,String isLoggedIn) {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("UPDATE Account SET isLoggedIn=(?) WHERE UserName=(?)");
+            ps.setString(1,isLoggedIn);
+            ps.setString(2,username);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+    }
+
+    public List<String> getAlertsForAccount(String username) {
+        List<String> ans=new ArrayList<>();
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("select Description from Alert WHERE UserName=(?)");
+            ps.setString(1,username);
+            ResultSet RS=ps.executeQuery();
+            while(RS.next()){
+                ans.add(RS.getString("Description"));
+            }
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ans;
+    }
+
+    public void clearAlertsForAccount(String username) {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("DELETE FROM Alert WHERE UserName=(?)");
+            ps.setString(1,username);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+    }
+
+    public void addAlertToAccount(String userName, String notification) {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("insert into Alert (Description,UserName) values(?,?) ");
+            ps.setString(1,notification);
+            ps.setString(2,userName);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+    }
+
+    public String isAccountloggedIn(String userName) {
+        String ans="";
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("select isLoggedIn from Account WHERE UserName=(?)");
+            ps.setString(1,userName);
+            ResultSet RS=ps.executeQuery();
+            while(RS.next()){
+                ans=RS.getString("isLoggedIn");
+            }
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ans;
+    }
+
+    public void addRefereeToLeague(String referee, String league, String season) {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement st=con.prepareStatement("insert into LeaguesForReferee values(?,?,?)");
+            st.setString(1,referee);
+            st.setString(2,league);
+            st.setString(3,season);
+            st.executeUpdate();
+            st.close();
+            con.close();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
     }
 }

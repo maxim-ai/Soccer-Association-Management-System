@@ -153,7 +153,7 @@ public class RefereeBusinessController {
     }
 
     public static Referee convertStringToReferee(String userName) {
-        for (Account account : DataController.getAccounts()) {
+        for (Account account : DataController.getInstance().getAccounts()) {
             if (account.getUserName().equals(userName)) {
                 for (Role role : account.getRoles()) {
                     if (role instanceof Referee) {
@@ -174,7 +174,7 @@ public class RefereeBusinessController {
         String description=splitArr[1].substring(new String(" Description: ").length());
         String minute=splitArr[2].substring(new String(" Minute: ").length());
 
-        for (Referee referee : DataController.getRefereesFromAccounts()){
+        for (Referee referee : DataController.getInstance().getRefereesFromAccounts()){
             for (Match match:referee.getMatchs()) {
                 for (GameEvent event : match.getEventCalender().getGameEvents()) {
                     if (event.getGameMinute() == Integer.parseInt(minute)&&convertStringToGameEvent(eventType).equals(event.getType())&&event.getDescription().equals(description))

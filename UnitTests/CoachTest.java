@@ -41,7 +41,7 @@ public class CoachTest {
     List<Team> teams=new LinkedList<>();
     @Before
     public void init(){
-        DataController.clearDataBase();
+        DataController.getInstance().clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 

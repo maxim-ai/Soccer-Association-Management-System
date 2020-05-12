@@ -25,7 +25,7 @@ public class GuestTests {
 //
 //    @Before
 //    public void setUp() throws Exception {
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //        System.setOut(new PrintStream(OS));
 //        Guest.resetGuestIDCounter();
 //        guest = new Guest();
@@ -46,13 +46,13 @@ public class GuestTests {
 //        ((Player)account1.getRole(0)).setTeam(team);
 //        ((Coach)account2.getRole(0)).addTeam(team);
 //        season.addMatch(match);
-//        DataController.clearDataBase();
-//        DataController.addAccount(account1);
-//        DataController.addAccount(account2);
-//        DataController.addLeague(league);
-//        DataController.addStadium(stadium);
-//        DataController.addSeason(season);
-//        DataController.addTeam(team);
+//        DataController.getInstance().clearDataBase();
+//        DataController.getInstance().addAccount(account1);
+//        DataController.getInstance().addAccount(account2);
+//        DataController.getInstance().addLeague(league);
+//        DataController.getInstance().addStadium(stadium);
+//        DataController.getInstance().addSeason(season);
+//        DataController.getInstance().addTeam(team);
 //
 //
 //        File loggerFile=new File("Logger");
@@ -144,10 +144,10 @@ public class GuestTests {
 //    @Test
 //    public void filterRoleTeamManagers() {
 //        Account checkAccount1=new Account("Tom",30,"TomX","1234");
-//        DataController.addAccount(checkAccount1);
+//        DataController.getInstance().addAccount(checkAccount1);
 //        checkAccount1.addRole(new Owner("Tom", team,null));
 //        Account checkAccount2=new Account("Tommy",30,"TommyX","1234");
-//        DataController.addAccount(checkAccount2);
+//        DataController.getInstance().addAccount(checkAccount2);
 //        checkAccount2.addRole(new TeamManager("Tommy", team,(Owner)checkAccount1.getRoles().get(0)));
 //        guest.Filter("BusinessLayer.RoleCrudOperations.Role","TeamManagers");
 //        String s="Name:\r\nTommy\r\n\r\nBusinessLayer.OtherCrudOperations.Team managed:\r\nBarcelona\r\n";
@@ -156,7 +156,7 @@ public class GuestTests {
 //    @Test
 //    public void filterRoleOwners() {
 //        Account checkAccount=new Account("Tom",30,"TomX","1234");
-//        DataController.addAccount(checkAccount);
+//        DataController.getInstance().addAccount(checkAccount);
 //        checkAccount.addRole(new Owner("Tom", team,null));
 //        guest.Filter("BusinessLayer.RoleCrudOperations.Role","Owners");
 //        String s="Name:\r\nTom\r\nBusinessLayer.OtherCrudOperations.Team owned:\r\nBarcelona\r\n";
@@ -166,7 +166,7 @@ public class GuestTests {
 //    public void filterRoleReferees() {
 //        Account account3=new Account("Eitan",25,"EitanX","1234");
 //        account3.addRole(new Referee("Abroad","Eitan"));
-//        DataController.addAccount(account3);
+//        DataController.getInstance().addAccount(account3);
 //        guest.Filter("BusinessLayer.RoleCrudOperations.Role","Referees");
 //        String s="Name:\r\nEitan\r\n\r\nTraining:\r\nAbroad\r\n\r\nMatches judged:\r\n";
 //        assertEquals(OS.toString(),s);

@@ -72,7 +72,7 @@ public class Policy implements Serializable
 
 
   public static Policy convertStringToPolicy(String policyID){
-    for (League league : DataController.getLeagues()){
+    for (League league : DataController.getInstance().getLeagues()){
       HashMap<Season,SLsettings> sLsetting = league.getsLsetting();
         for(Map.Entry<Season,SLsettings> entry: sLsetting.entrySet()){
           if(entry.getValue().getPolicy().getId().equals(policyID)){

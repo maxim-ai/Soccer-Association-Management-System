@@ -138,11 +138,11 @@ public class Fan extends Role implements Serializable
   }
 
   public void  EditPersonalInfo(String newName, String newUserName, String newPassword) throws Exception {
-    for(Account account: DataController.getAccounts()){
+    for(Account account: DataController.getInstance().getAccounts()){
       if(account.getUserName().equals(newUserName))
         throw new Exception("Username already exists");
     }
-    Account account= DataController.getAccountByRole(this);
+    Account account= DataController.getInstance().getAccountByRole(this);
     if(!(newName.length()==0)) account.setName(newName);
     if(!(newUserName.length()==0)) account.setUserName(newUserName);
     if(!(newPassword.length()==0)) account.setPassword((newPassword));
@@ -178,7 +178,7 @@ public class Fan extends Role implements Serializable
   }
 
   public static void notifyFansAboutMatch(Match match){
-    List<Fan> fans= DataController.getFansFromAccounts();
+    List<Fan> fans= DataController.getInstance().getFansFromAccounts();
     if(fans==null)return;
     for(Fan fan:fans){
       if(fan.isGetMatchNotifications())

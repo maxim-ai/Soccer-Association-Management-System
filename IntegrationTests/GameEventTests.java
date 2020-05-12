@@ -37,7 +37,7 @@ public class GameEventTests {
 //    private final PrintStream PS=System.out;
 //    @Before
 //    public void init(){
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //        System.setOut(new PrintStream(OS));
 //    }
 //

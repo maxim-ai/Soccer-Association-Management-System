@@ -6,7 +6,7 @@ public class SLsettingsTest {
 
     @Before
     public void setUp(){
-        DataController.clearDataBase();
+        DataController.getInstance().clearDataBase();
     }
 
 

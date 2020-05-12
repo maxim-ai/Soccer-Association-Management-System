@@ -51,7 +51,7 @@ public class SystemManager extends Role implements Serializable
   }
 
   private void removeTeamFromDm(Team aTeam) {
-    DataController.removeTeam(aTeam);
+    DataController.getInstance().removeTeam(aTeam);
   }
 
   private void notifyOnDelete(Team team) {
@@ -111,7 +111,7 @@ public class SystemManager extends Role implements Serializable
     if(isOwner){
       if(owner.getTeam().getOwners().size()>1){
         owner=null;
-        DataController.removeAccount(account);
+        DataController.getInstance().removeAccount(account);
         Logger.getInstance().writeNewLine(this.getUsername()+" delete "+(account.getName() +"successfully"));
         return  "Delete account successfully";
       }else {
@@ -120,11 +120,11 @@ public class SystemManager extends Role implements Serializable
       }
     }
     if(isSystemManger){
-      List<Account> accounts = DataController.getAccounts();
+      List<Account> accounts = DataController.getInstance().getAccounts();
       for(Account account1 : accounts){
         for(Role role : account1.getRoles()){
           if(role instanceof SystemManager && !account.equals(account1)){
-            DataController.removeAccount(account);
+            DataController.getInstance().removeAccount(account);
             Logger.getInstance().writeNewLine(this.getUsername()+" delete "+(account.getName() +"successfully"));
             return  "Delete account successfully";
           }
@@ -133,7 +133,7 @@ public class SystemManager extends Role implements Serializable
       Logger.getInstanceError().writeNewLineError(this.getUsername() + " delete " + (account.getName() + "failed"));
       return  "Delete account failed";
     }
-    DataController.removeAccount(account);
+    DataController.getInstance().removeAccount(account);
     Logger.getInstance().writeNewLine(this.getUsername()+" delete "+(account.getName() +"successfully"));
     return "Delete account successfully";
   }
@@ -186,7 +186,7 @@ public class SystemManager extends Role implements Serializable
   public void buildRecommendationSystem(){ }
 
   public static boolean createAccount(Account accountToAdd){
-    DataController.addAccount(accountToAdd);
+    DataController.getInstance().addAccount(accountToAdd);
     return true;
   }
 

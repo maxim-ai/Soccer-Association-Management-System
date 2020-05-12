@@ -44,7 +44,7 @@ public class Guest implements Serializable {
 
   //region Methods for version 3
   public Account LogIn(String UserName, String Password) throws Exception {
-    String[] accountInfo=DataController.getUserNamePasswordDC(UserName);
+    String[] accountInfo=DataController.getInstance().getUserNamePasswordDC(UserName);
     if(accountInfo==null){
       (Logger.getInstanceError()).writeNewLineError("Guest #"+this.id+"tried to log in with wrong username");
       throw new Exception("Username does not exist");
@@ -55,11 +55,12 @@ public class Guest implements Serializable {
     }
     else{
       Account account=new Account(accountInfo[2],Integer.parseInt(accountInfo[3]),accountInfo[0],accountInfo[1]);
-      account=DataController.getAccountRolesDC(account);
+      account.setLoggedIn(true);
+      account=DataController.getInstance().getAccountRolesDC(account);
       (Logger.getInstance()).writeNewLine("Account "+UserName+" logged in");
       return account;
     }
-//    List<Account> accountList = DataController.getAccounts();
+//    List<Account> accountList = DataController.getInstance().getAccounts();
 //    for(Account a:accountList){
 //      if(a.getUserName().equals(UserName)){
 //        if(a.getPassword().equals(Password)){
@@ -77,7 +78,7 @@ public class Guest implements Serializable {
   }
 
   public void SignIn(String Name, int Age, String UserName, String Password) throws Exception {
-    for(Account account: DataController.getAccounts()){
+    for(Account account: DataController.getInstance().getAccounts()){
       if(account.getUserName().equals(UserName)){
         (Logger.getInstanceError()).writeNewLineError("Guest #"+this.id+"tries to sign in with existing username");
         throw new Exception("Username already exists");
@@ -85,7 +86,7 @@ public class Guest implements Serializable {
     }
     Account newAccount=new Account(Name,Age,UserName,Password);
     newAccount.addRole(new Fan(newAccount.getName()));
-    DataController.addAccount(newAccount);
+    DataController.getInstance().addAccount(newAccount);
     (Logger.getInstance()).writeNewLine("New account "+UserName+" created");
   }
   //endregion
@@ -93,30 +94,30 @@ public class Guest implements Serializable {
   //region Other UC methods
   public void ShowInfo(String InfoAbout){
     if(InfoAbout.equals("Teams")){
-      for(Team team: DataController.getTeams())
+      for(Team team: DataController.getInstance().getTeams())
         team.ShowTeam();
     }
 
     if(InfoAbout.equals("Players")){
-      List<Player> players= DataController.getPlayersFromAccounts();
+      List<Player> players= DataController.getInstance().getPlayersFromAccounts();
       for(Player player:players){
         player.ShowPlayer();
       }
     }
     if(InfoAbout.equals("Coaches")){
-      List<Coach> coaches= DataController.getCoachesFromAccounts();
+      List<Coach> coaches= DataController.getInstance().getCoachesFromAccounts();
       for(Coach coach:coaches){
         coach.ShowCoach();
       }
     }
 
     if(InfoAbout.equals("Leagues")){
-      for(League league: DataController.getLeagues())
+      for(League league: DataController.getInstance().getLeagues())
         league.ShowLeague();
     }
 
     if(InfoAbout.equals("Seasons")){
-      for(Season season: DataController.getSeasons())
+      for(Season season: DataController.getInstance().getSeasons())
         season.ShowSeason();
     }
 
@@ -125,22 +126,22 @@ public class Guest implements Serializable {
   public void Search(String criterion, String query){
     if(criterion.equals("Name")){
       List<Team> teams=new LinkedList<>();
-      for(Team team: DataController.getTeams()){
+      for(Team team: DataController.getInstance().getTeams()){
         if(team.getName().equals(query))
           teams.add(team);
       }
       List<Account> accounts=new LinkedList<>();
-      for(Account account: DataController.getAccounts()){
+      for(Account account: DataController.getInstance().getAccounts()){
         if(account.getName().equals(query))
           accounts.add(account);
       }
       List<League> leagues=new LinkedList<>();
-      for(League league: DataController.getLeagues()){
+      for(League league: DataController.getInstance().getLeagues()){
         if(league.getName().equals(query))
           leagues.add(league);
       }
       List<Season> seasons=new LinkedList<>();
-      for(Season season: DataController.getSeasons()){
+      for(Season season: DataController.getInstance().getSeasons()){
         if(season.getName().equals(query))
           seasons.add(season);
       }
@@ -169,19 +170,19 @@ public class Guest implements Serializable {
     }
     if(criterion.equals("Category")){
       if(query.equals("Teams")){
-        for(Team team: DataController.getTeams())
+        for(Team team: DataController.getInstance().getTeams())
           team.ShowTeam();
       }
       if(query.equals("Accounts")){
-        for(Account account: DataController.getAccounts())
+        for(Account account: DataController.getInstance().getAccounts())
           account.ShowAccount();
       }
       if(query.equals("Leagues")){
-        for(League league: DataController.getLeagues())
+        for(League league: DataController.getInstance().getLeagues())
           league.ShowLeague();
       }
       if(query.equals("Seasons")){
-        for(Season season: DataController.getSeasons())
+        for(Season season: DataController.getInstance().getSeasons())
           season.ShowSeason();
       }
     }
@@ -190,46 +191,46 @@ public class Guest implements Serializable {
   public void Filter(String category,String roleFilter){
     if(category.equals("BusinessLayer.RoleCrudOperations.Role")){
       if(roleFilter.equals("Players")){
-        List<Player> players= DataController.getPlayersFromAccounts();
+        List<Player> players= DataController.getInstance().getPlayersFromAccounts();
         for(Player player:players)
           player.ShowPlayer();
       }
 
       if(roleFilter.equals("Coaches")){
-        List<Coach> coaches= DataController.getCoachesFromAccounts();
+        List<Coach> coaches= DataController.getInstance().getCoachesFromAccounts();
         for(Coach coach:coaches)
           coach.ShowCoach();
       }
 
       if(roleFilter.equals("TeamManagers")){
-        List<TeamManager> tms= DataController.getTeamManagersFromAccounts();
+        List<TeamManager> tms= DataController.getInstance().getTeamManagersFromAccounts();
         for(TeamManager tm:tms)
           tm.ShowTeamManager();
       }
 
       if(roleFilter.equals("Owners")){
-        List<Owner> owners= DataController.getOwnersFromAccounts();
+        List<Owner> owners= DataController.getInstance().getOwnersFromAccounts();
         for(Owner owner:owners)
           owner.ShowOwner();
       }
 
       if(roleFilter.equals("Referees")){//************************************
-        List<Referee> refs= DataController.getRefereesFromAccounts();
+        List<Referee> refs= DataController.getInstance().getRefereesFromAccounts();
         for(Referee ref:refs)
           ref.ShowReferee();
       }
 
     }
     if(category.equals("BusinessLayer.OtherCrudOperations.Team")){
-      for(Team team: DataController.getTeams())
+      for(Team team: DataController.getInstance().getTeams())
         team.ShowTeam();
     }
     if(category.equals("BusinessLayer.OtherCrudOperations.League")){
-      for(League league: DataController.getLeagues())
+      for(League league: DataController.getInstance().getLeagues())
         league.ShowLeague();
     }
     if(category.equals("BusinessLayer.OtherCrudOperations.Season")){
-      for(Season season: DataController.getSeasons())
+      for(Season season: DataController.getInstance().getSeasons())
         season.ShowSeason();
     }
   }

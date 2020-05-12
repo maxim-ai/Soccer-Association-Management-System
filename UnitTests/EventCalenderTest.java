@@ -38,7 +38,7 @@ public class EventCalenderTest {
 //
 //    @Before
 //    public void setUp(){
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //    }
 //    @Test
 //    public void getMatch() {

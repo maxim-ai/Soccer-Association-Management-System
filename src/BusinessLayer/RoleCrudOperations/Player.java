@@ -146,7 +146,7 @@ public class Player extends Role implements Pageable, Serializable
     System.out.println();
     System.out.println("Age:");
     int age=0;
-    for(Account account: DataController.getAccounts()){
+    for(Account account: DataController.getInstance().getAccounts()){
       for(Role role:account.getRoles()){
         if(role.equals(this))
           age=account.getAge();

@@ -17,7 +17,7 @@ public class LeagueTest {
 
     @Before
     public void setUp(){
-        DataController.clearDataBase();
+        DataController.getInstance().clearDataBase();
     }
 
     @Test

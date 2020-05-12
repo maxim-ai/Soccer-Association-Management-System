@@ -16,7 +16,7 @@
 //
 //    @Before
 //    public void setUp(){
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //    }
 //
 //
@@ -24,15 +24,15 @@
 //    public void createNewLeague() {
 //        List<Team> teamsList = new LinkedList<>();
 //        League league = associationRepresentative.createNewLeague("TestLeague",teamsList);
-//        assertTrue(DataController.getLeagues().contains(league));
+//        assertTrue(DataController.getInstance().getLeagues().contains(league));
 //    }
 //
 //    @Test
 //    public void setYearToLeague() {
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //        League testLeague = new League("Test");
-//        if(associationRepresentative.setYearToLeague(testLeague,"0000") && DataController.getLeagues().contains(testLeague)) {
-//            List<Season> seasonsList = DataController.getSeasons();
+//        if(associationRepresentative.setYearToLeague(testLeague,"0000") && DataController.getInstance().getLeagues().contains(testLeague)) {
+//            List<Season> seasonsList = DataController.getInstance().getSeasons();
 //            for (Season season : seasonsList) {
 //                if (season.getName().equals("0000")) {
 //                    assertNotNull(season.getSLsettingsByLeague(testLeague));
@@ -45,7 +45,7 @@
 //    @Test
 //    public void addNewReferee() {
 //        Referee referee=associationRepresentative.addNewReferee("Test","Test",0,"Test","Test");
-//        assertNotNull(DataController.getAccountByRole(referee));
+//        assertNotNull(DataController.getInstance().getAccountByRole(referee));
 //    }
 //
 //    @Test
@@ -55,8 +55,8 @@
 //        League testLeague = new League("Test");
 //        boolean actual = (associationRepresentative.addRefereeToLeague(testReferee,testLeague,testSeason));
 //
-//        if(DataController.getLeagues().contains(testLeague)&& DataController.getSeasons().contains(testSeason))
-//            for(League league: DataController.getLeagues()){
+//        if(DataController.getInstance().getLeagues().contains(testLeague)&& DataController.getInstance().getSeasons().contains(testSeason))
+//            for(League league: DataController.getInstance().getLeagues()){
 //                SLsettings sLsettings = league.getSLsettingsBySeason(testSeason);
 //                if(sLsettings!=null){
 //                    if(testReferee.getsLsettings().equals(sLsettings))

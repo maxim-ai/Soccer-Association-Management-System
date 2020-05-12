@@ -57,7 +57,7 @@ public class OurSystem {
             Account SMaccount=new Account("Nadav",26,"NadavX","1234");
             SM=new SystemManager(SMaccount.getName());
             SMaccount.addRole(SM);
-            DataController.addAccount(SMaccount);
+            DataController.getInstance().addAccount(SMaccount);
             (Logger.getInstance()).writeNewLine("System has been initialized");
             try { InitDatabase(); } catch (Exception e) { e.printStackTrace(); }
         }
@@ -153,24 +153,24 @@ public class OurSystem {
     public static List<String> getDropList(String string,List<Object> controllers,List<String> arguments){
         List<String> list=new ArrayList<>();
         if(string.equals("Team")){
-            List<Team> teams= DataController.getTeams();
-            for(Team team:teams)
-                list.add(team.getName());
+            List<String> teamNames= DataController.getInstance().getNames(string);
+            for(String team:teamNames)
+                list.add(team);
         }
         else if(string.equals("Season")){
-            List<Season> seasons=DataController.getSeasons();
-            for(Season season:seasons)
-                list.add(season.getName());
+            List<String> seasons=DataController.getInstance().getNames(string);
+            for(String season:seasons)
+                list.add(season);
         }
         else if(string.equals("League")){
-            List<League> leagues=DataController.getLeagues();
-            for(League league:leagues)
-                list.add(league.getName());
+            List<String> leagues=DataController.getInstance().getNames(string);
+            for(String league:leagues)
+                list.add(league);
         }
         else if(string.equals("Stadium")){
-            List<Stadium> stadiums=DataController.getStadiums();
-            for(Stadium stadium:stadiums)
-                list.add(stadium.getName());
+            List<String> stadiums=DataController.getInstance().getNames(string);
+            for(String stadium:stadiums)
+                list.add(stadium);
         }
         else if(string.equals("EventEnum")){
             for(EventEnum eventEnum:EventEnum.values())
@@ -183,14 +183,14 @@ public class OurSystem {
             list=((RefereeController)controllers.get(0)).getEvantsByMatch(arguments.get(0));
         }
         else if(string.equals("Referee")){
-            List<Referee> refs=DataController.getRefereesFromAccounts();
-            for(Referee ref:refs)
-                list.add(ref.getName());
+            List<String> refs=DataController.getInstance().getUserNames(string);
+            for(String ref:refs)
+                list.add(ref);
         }
         else if(string.equals("Account")){
-            List<Account> accounts=DataController.getAccounts();
-            for(Account account:accounts)
-                list.add(account.getUserName());
+            List<String> accounts=DataController.getInstance().getUserNames(string);
+            for(String account:accounts)
+                list.add(account);
         }
 
         return list;
@@ -528,66 +528,66 @@ public class OurSystem {
 
 
         //region Datamanager adding
-        DataController.addLeagueDC(league1);
-        DataController.addLeagueDC(league2);
-        DataController.addSeasonDC(season);
-        DataController.addStadiumDC(stadium1);
-        DataController.addStadiumDC(stadium2);
-        DataController.addStadiumDC(stadium3);
-        DataController.addStadiumDC(stadium4);
-        DataController.addTeamDC(team1);
-        DataController.addTeamDC(team2);
-        DataController.addTeamDC(team3);
-        DataController.addTeamDC(team4);
-        for(Match match:team1.getMatchs()) DataController.addMatchWithoutRefsDC(match);
+        DataController.getInstance().addLeagueDC(league1);
+        DataController.getInstance().addLeagueDC(league2);
+        DataController.getInstance().addSeasonDC(season);
+        DataController.getInstance().addStadiumDC(stadium1);
+        DataController.getInstance().addStadiumDC(stadium2);
+        DataController.getInstance().addStadiumDC(stadium3);
+        DataController.getInstance().addStadiumDC(stadium4);
+        DataController.getInstance().addTeamDC(team1);
+        DataController.getInstance().addTeamDC(team2);
+        DataController.getInstance().addTeamDC(team3);
+        DataController.getInstance().addTeamDC(team4);
+        for(Match match:team1.getMatchs()) DataController.getInstance().addMatchWithoutRefsDC(match);
 
-        for(Match match:team2.getMatchs()) DataController.addMatchWithoutRefsDC(match);
+        for(Match match:team2.getMatchs()) DataController.getInstance().addMatchWithoutRefsDC(match);
 
-        for(Match match:team3.getMatchs()) DataController.addMatchWithoutRefsDC(match);
+        for(Match match:team3.getMatchs()) DataController.getInstance().addMatchWithoutRefsDC(match);
 
-        for(Match match:team4.getMatchs()) DataController.addMatchWithoutRefsDC(match);
-
-
+        for(Match match:team4.getMatchs()) DataController.getInstance().addMatchWithoutRefsDC(match);
 
 
-        DataController.addAccountDC(arAccount1);
-        DataController.addAccountDC(arAccount2);
-        DataController.addAccountDC(refAccount1);
-        DataController.addAccountDC(refAccount2);
-        DataController.addAccountDC(refAccount3);
-        DataController.addRefToMatchDC(match1,referee1,referee2,referee3);
-        DataController.addAccountDC(refAccount4);
-        DataController.addAccountDC(refAccount5);
-        DataController.addAccountDC(refAccount6);
-        DataController.addRefToMatchDC(match2,referee4,referee5,referee6);
-        DataController.addAccountDC(ownerAccount1);
-        DataController.addAccountDC(ownerAccount2);
-        DataController.addAccountDC(ownerAccount3);
-        DataController.addAccountDC(ownerAccount4);
-        DataController.addAccountDC(tmAccount1);
-        DataController.addAccountDC(tmAccount2);
-        DataController.addAccountDC(tmAccount3);
-        DataController.addAccountDC(tmAccount4);
-        DataController.addAccountDC(playerAccount1);
-        DataController.addAccountDC(playerAccount2);
-        DataController.addAccountDC(playerAccount3);
-        DataController.addAccountDC(playerAccount4);
-        DataController.addAccountDC(playerAccount5);
-        DataController.addAccountDC(playerAccount6);
-        DataController.addAccountDC(playerAccount7);
-        DataController.addAccountDC(playerAccount8);
-        DataController.addAccountDC(coachAccount1);
-        DataController.addAccountDC(coachAccount2);
-        DataController.addAccountDC(coachAccount3);
-        DataController.addAccountDC(coachAccount4);
-        DataController.addAccountDC(fanAccount1);
-        DataController.addAccountDC(fanAccount2);
-        DataController.addAccountDC(fanAccount3);
-        DataController.addAccountDC(fanAccount4);
-        DataController.addAccountDC(fanAccount5);
-        DataController.addAccountDC(fanAccount6);
-        DataController.addAccountDC(fanAccount7);
-        DataController.addAccountDC(fanAccount8);
+
+
+        DataController.getInstance().addAccountDC(arAccount1);
+        DataController.getInstance().addAccountDC(arAccount2);
+        DataController.getInstance().addAccountDC(refAccount1);
+        DataController.getInstance().addAccountDC(refAccount2);
+        DataController.getInstance().addAccountDC(refAccount3);
+        DataController.getInstance().addRefToMatchDC(match1,referee1,referee2,referee3);
+        DataController.getInstance().addAccountDC(refAccount4);
+        DataController.getInstance().addAccountDC(refAccount5);
+        DataController.getInstance().addAccountDC(refAccount6);
+        DataController.getInstance().addRefToMatchDC(match2,referee4,referee5,referee6);
+        DataController.getInstance().addAccountDC(ownerAccount1);
+        DataController.getInstance().addAccountDC(ownerAccount2);
+        DataController.getInstance().addAccountDC(ownerAccount3);
+        DataController.getInstance().addAccountDC(ownerAccount4);
+        DataController.getInstance().addAccountDC(tmAccount1);
+        DataController.getInstance().addAccountDC(tmAccount2);
+        DataController.getInstance().addAccountDC(tmAccount3);
+        DataController.getInstance().addAccountDC(tmAccount4);
+        DataController.getInstance().addAccountDC(playerAccount1);
+        DataController.getInstance().addAccountDC(playerAccount2);
+        DataController.getInstance().addAccountDC(playerAccount3);
+        DataController.getInstance().addAccountDC(playerAccount4);
+        DataController.getInstance().addAccountDC(playerAccount5);
+        DataController.getInstance().addAccountDC(playerAccount6);
+        DataController.getInstance().addAccountDC(playerAccount7);
+        DataController.getInstance().addAccountDC(playerAccount8);
+        DataController.getInstance().addAccountDC(coachAccount1);
+        DataController.getInstance().addAccountDC(coachAccount2);
+        DataController.getInstance().addAccountDC(coachAccount3);
+        DataController.getInstance().addAccountDC(coachAccount4);
+        DataController.getInstance().addAccountDC(fanAccount1);
+        DataController.getInstance().addAccountDC(fanAccount2);
+        DataController.getInstance().addAccountDC(fanAccount3);
+        DataController.getInstance().addAccountDC(fanAccount4);
+        DataController.getInstance().addAccountDC(fanAccount5);
+        DataController.getInstance().addAccountDC(fanAccount6);
+        DataController.getInstance().addAccountDC(fanAccount7);
+        DataController.getInstance().addAccountDC(fanAccount8);
 
 
 

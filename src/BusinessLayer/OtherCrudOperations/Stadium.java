@@ -184,7 +184,7 @@ public class Stadium implements Serializable
   }
 
   public static Stadium convertStringToStadium(String stadiumName){
-    for (Stadium stadium : DataController.getStadiums()){
+    for (Stadium stadium : DataController.getInstance().getStadiums()){
         if (stadium.getName().equals(stadiumName))
           return stadium;
       }

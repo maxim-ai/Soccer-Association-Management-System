@@ -33,7 +33,7 @@ public class EventCalenderTests {
 //
 //    @Before
 //    public void setUp(){
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //    }
 //
 //

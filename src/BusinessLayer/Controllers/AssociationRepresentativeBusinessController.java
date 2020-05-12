@@ -57,9 +57,10 @@ public class AssociationRepresentativeBusinessController {
      * add referee to a league in specific season , add referee to SLsetting referee list
      */
     public String addRefereeToLeague(String userName, String leagueName, String seasonName) { // to fix uc
-        Referee referee = RefereeBusinessController.convertStringToReferee(userName);
-        League league = League.convertStringToLeague(leagueName);
-        Season season = Season.convertStringToSeason(seasonName);
+        Referee referee = new Referee(userName);
+        referee.setUsername(userName);
+        League league = new League(leagueName);
+        Season season = new Season(seasonName);
         return associationRepresentative.addRefereeToLeague(referee, league, season);
     }
 
@@ -104,7 +105,8 @@ public class AssociationRepresentativeBusinessController {
     }
 
     public String approveTeam(String teamName, String userName) {
-        Owner owner = OwnerBusinessController.convertStringToOwner(userName);
+        Owner owner = new Owner(userName);
+        owner.setUsername(userName);
         return associationRepresentative.approveTeam(teamName, owner);
     }
 

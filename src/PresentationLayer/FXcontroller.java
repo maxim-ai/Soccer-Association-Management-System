@@ -11,10 +11,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import javafx.util.Pair;
+import org.controlsfx.control.Notifications;
+import org.controlsfx.control.PopOver;
 
 //import java.awt.*;
 import java.io.File;
@@ -43,16 +48,19 @@ public class FXcontroller implements Initializable {
     public Button runMethod_button;
     public TableView<String> alerts_table;
     public TableColumn<String,String> col_alerts;
+//    public Button alertButton;
 
-
-    OurSystem ourSystem;
-    List controllers=new ArrayList();
-    HashMap<String, Pair<Method,List<String>>> functionsToUser=new HashMap<>(); //key: name of option for user
-                                                                                //value: pairKey:actual method
-                                                                                //       pairValue: list of args for method
+    GuiMediator guiMediator;
 
     public void chooseLogin()
     {
+        Notifications notificationBuilder=Notifications.create()
+                .title("complete")
+                .text("bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla ")
+                .graphic(null)
+                .hideAfter(Duration.seconds(5))
+                .position(Pos.TOP_CENTER);
+        notificationBuilder.showInformation();
         starter_pane.setVisible(false);
         login_pane.setVisible(true);
     }
@@ -60,34 +68,24 @@ public class FXcontroller implements Initializable {
     public void logIn() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         String userName=username_input.getText();
         String password=password_input.getText();
-        GuestController guestController= OurSystem.makeGuestController();
-        ArrayList<Object> controllerList= (ArrayList<Object>) guestController.LogIn(userName,password);
-        if(controllerList.size()==1 && controllerList.get(0) instanceof String)
+
+        String result=guiMediator.getUserControllers(userName,password);
+        if(!result.equals("true"))
         {
-            showAlert((String)controllerList.get(0), Alert.AlertType.WARNING);
-            return;
+            showAlert(result, Alert.AlertType.WARNING);
         }
-        controllers=controllerList;
-        login_pane.setVisible(false);
-        options_pane.setVisible(true);
-        createOptionsForUser();
-        setAlerts();
+        else
+        {
+            login_pane.setVisible(false);
+            options_pane.setVisible(true);
+            createOptionsForUser();
+            setAlerts();
+        }
     }
 
-    public void createOptionsForUser() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        List options=new ArrayList();
-        for(Object o:controllers)
-        {
-            Method method=o.getClass().getDeclaredMethod("showUserMethods");
-            HashMap<String, Pair<Method,List<String>>> returnedMap= (HashMap<String, Pair<Method, List<String>>>) method.invoke(o);
-            for(Map.Entry<String, Pair<Method,List<String>>> entry:returnedMap.entrySet())
-            {
-                functionsToUser.put(entry.getKey(),entry.getValue());
-                options.add(entry.getKey());
-            }
-            //options= (List) ((HashMap<String, Pair<Method,List<String>>>)method.invoke(o)).keySet();
-        }
-
+    public void createOptionsForUser() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException
+    {
+        List<String> options=guiMediator.createOptionsForUser();
         ObservableList<String> details = FXCollections.observableArrayList(options);
         col_options.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         options_table.setItems(details);
@@ -97,18 +95,13 @@ public class FXcontroller implements Initializable {
     public void executeOption() throws InvocationTargetException, IllegalAccessException {
         String choice=options_table.getSelectionModel().getSelectedItem();
         List<String> arguments=new ArrayList<>();
-        Pair<Method, List<String>> methodPair=functionsToUser.get(choice);
+        Pair<Method, List<String>> methodPair=guiMediator.getUserChoice(choice);
         for(String arg:methodPair.getValue())
         {
             Dialog dialog;
             if(arg.contains("@"))
             {
-                List<String> choices = new ArrayList<>();
-                List<String> dropDownFunc = OurSystem.getDropList(arg.substring(arg.indexOf("@")+1),controllers,arguments);
-                for(String pick:dropDownFunc)
-                {
-                    choices.add(pick);
-                }
+                List<String> choices = guiMediator.getDropDownList(arg,arguments);
                 dialog=new ChoiceDialog<String>("", choices);
                 dialog.setHeaderText("list Input");
                 dialog.setContentText(arg.substring(0,arg.indexOf("@"))+":");
@@ -130,7 +123,7 @@ public class FXcontroller implements Initializable {
                 return;
             }
         }
-        String answer= (String) methodPair.getKey().invoke(getControllerByMethod(methodPair.getKey()),arguments.toArray());
+        String answer= guiMediator.executeMethod(methodPair,arguments);
         showAlert(answer, Alert.AlertType.INFORMATION);
     }
 
@@ -152,20 +145,10 @@ public class FXcontroller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ourSystem=new OurSystem();
-        ourSystem.Initialize();
+        guiMediator=new GuiMediator();
 
     }
 
-    private Object getControllerByMethod(Method argM){
-        for(Object o:controllers){
-            for(Method M:o.getClass().getDeclaredMethods()){
-                if(argM.getName().equals(M.getName()))
-                    return o;
-            }
-        }
-        return null;
-    }
 
     public void showRunQueryButton()
     {
@@ -174,20 +157,26 @@ public class FXcontroller implements Initializable {
 
 
     public void setAlerts() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        List<String> alerts=new ArrayList();
-        for(Object o:controllers)
-        {
-            Method method= null;
-            try {
-                method = o.getClass().getDeclaredMethod("getAlerts");
-            }
-            catch (NoSuchMethodException e) {
-                continue;
-            }
-            alerts.addAll((List<String>) method.invoke(o));
-        }
+        List<String> alerts=guiMediator.getAllAlerts();
+
+
         if(alerts.size()>0)
         {
+
+//            List<Label> labels=new ArrayList<>();
+//            for(String alert:alerts)
+//            {
+//                labels.add(new Label(alert));
+//            }
+//            VBox vBox=new VBox();
+//            vBox.getChildren().addAll(labels.get(0));
+//            PopOver popOver = new PopOver(vBox);
+//            alertButton.setOnMouseEntered(mouseEvent -> {
+//                //Show PopOver when mouse enters label
+//                popOver.show(alertButton);
+//            });
+
+
             alerts_table.setVisible(true);
             ObservableList<String> details = FXCollections.observableArrayList(alerts);
             col_alerts.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));

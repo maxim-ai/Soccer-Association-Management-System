@@ -209,7 +209,7 @@ public class TeamManagerBusinessController
     }
 
     public static TeamManager convertStringToTeamManager(String userName){
-        for (Account account : DataController.getAccounts()){
+        for (Account account : DataController.getInstance().getAccounts()){
             if(account.getUserName().equals(userName)){
                 for(Role role : account.getRoles()){
                     if(role instanceof TeamManager){

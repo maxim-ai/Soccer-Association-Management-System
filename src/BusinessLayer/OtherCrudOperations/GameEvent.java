@@ -166,7 +166,7 @@ public class GameEvent implements Serializable
     String description=splitArr[1].substring(new String(" Description: ").length());
     String minute=splitArr[2].substring(new String(" Minute: ").length());
 
-    for (Referee referee : DataController.getRefereesFromAccounts()){
+    for (Referee referee : DataController.getInstance().getRefereesFromAccounts()){
       for (Match match:referee.getMatchs()) {
           for (GameEvent event : match.getEventCalender().getGameEvents()) {
             if (event.gameMinute == Integer.parseInt(minute)&&convertStringToGameEvent(eventType).equals(event.type)&&event.getDescription().equals(description))

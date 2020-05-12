@@ -18,7 +18,7 @@
 //
 //    @Before
 //    public void setUp(){
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //    }
 //
 //    @Test
@@ -32,7 +32,7 @@
 //            return  null;
 //        }
 //        League league = new League(name);
-//        DataController.addLeague(league);
+//        DataController.getInstance().addLeague(league);
 //        for(Team team : teams){
 //            addTeamStub(team);
 //        }
@@ -56,8 +56,8 @@
 //            return  wasSet;
 //        }
 //        Season season=new Season(year);
-//        DataController.addSeason(season);
-//        DataController.addLeague(league);
+//        DataController.getInstance().addSeason(season);
+//        DataController.getInstance().addLeague(league);
 //        SLsettings sLsettings = getSLsettingsBySeasonStub(league,season);
 //        if (sLsettings==null)
 //        {
@@ -88,7 +88,7 @@
 //
 //    private Referee addNewRefereeTest(String training, String name, int age, String userName, String password){
 //        Account account = new Account(name,age,userName,password);
-//        DataController.addAccount(account);
+//        DataController.getInstance().addAccount(account);
 //        if(training != null && name != null) {
 //            return createNewRefereeStub(account,training,name);
 //        }
@@ -101,9 +101,9 @@
 //    public void createNewReferee() {
 //        Account testAccount = new Account("Test",0,"Test","Test");
 //        Referee referee=associationRepresentative.createNewReferee(testAccount, "Test","Test");
-//        DataController.addAccount(testAccount);
+//        DataController.getInstance().addAccount(testAccount);
 //        boolean actual=false;
-//        if(DataController.getAccountByRole(referee)!=null)
+//        if(DataController.getInstance().getAccountByRole(referee)!=null)
 //            actual = true;
 //        for(Alert alert:referee.getAlertList()){
 //            if(alert.getDescription().startsWith("Invitation")){
@@ -197,7 +197,7 @@
 //    @Test
 //    public void setNewSeason() {
 //        Season testSeason = associationRepresentative.setNewSeason("0000");
-//        assertTrue(DataController.getSeasons().contains(testSeason));
+//        assertTrue(DataController.getInstance().getSeasons().contains(testSeason));
 //    }
 //
 //    @Test

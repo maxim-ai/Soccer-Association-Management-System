@@ -23,7 +23,7 @@
 //
 //    @Before
 //    public void setUp() throws Exception {
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //        System.setOut(new PrintStream(OS));
 //        Guest.resetGuestIDCounter();
 //        guest = new Guest();
@@ -43,13 +43,13 @@
 //        team.addTeamManager(teamManager);
 //        ((Player)account1.getRole(0)).setTeam(team);
 //        ((Coach)account2.getRole(0)).addTeam(team);
-//        DataController.clearDataBase();
-//        DataController.addAccount(account1);
-//        DataController.addAccount(account2);
-//        DataController.addLeague(league);
-//        DataController.addStadium(stadium);
-//        DataController.addSeason(season);
-//        DataController.addTeam(team);
+//        DataController.getInstance().clearDataBase();
+//        DataController.getInstance().addAccount(account1);
+//        DataController.getInstance().addAccount(account2);
+//        DataController.getInstance().addLeague(league);
+//        DataController.getInstance().addStadium(stadium);
+//        DataController.getInstance().addSeason(season);
+//        DataController.getInstance().addTeam(team);
 //
 //
 //        File loggerFile=new File("Logger");
@@ -100,7 +100,7 @@
 //    @Test
 //    public void signInNotAccistingAccount() throws IOException {
 //        assertTrue(guest.SignIn("Sean",24,"SeanX","4321"));
-//        assertEquals("SeanX", DataController.getAccount(2).getUserName());
+//        assertEquals("SeanX", DataController.getInstance().getAccount(2).getUserName());
 //        assertTrue(CheckLoggerLines("New account SeanX created"));
 //    }
 //    //region Stubs Tests
@@ -179,10 +179,10 @@
 //    @Test
 //    public void filterRoleTeamManagers() {
 //        Account checkAccount1=new Account("Tom",30,"TomX","1234");
-//        DataController.addAccount(checkAccount1);
+//        DataController.getInstance().addAccount(checkAccount1);
 //        checkAccount1.addRole(new Owner("Tom", team,null));
 //        Account checkAccount2=new Account("Tommy",30,"TommyX","1234");
-//        DataController.addAccount(checkAccount2);
+//        DataController.getInstance().addAccount(checkAccount2);
 //        checkAccount2.addRole(new TeamManager("Tommy", team,(Owner)checkAccount1.getRoles().get(0)));
 //        Filter("BusinessLayer.RoleCrudOperations.Role","TeamManagers");
 //        String s="BusinessLayer.RoleCrudOperations.TeamManager\r\n";
@@ -191,7 +191,7 @@
 //    @Test
 //    public void filterRoleOwners() {
 //        Account checkAccount=new Account("Tom",30,"TomX","1234");
-//        DataController.addAccount(checkAccount);
+//        DataController.getInstance().addAccount(checkAccount);
 //        checkAccount.addRole(new Owner("Tom", team,null));
 //        Filter("BusinessLayer.RoleCrudOperations.Role","Owners");
 //        String s="BusinessLayer.RoleCrudOperations.Owner\r\n";
@@ -201,7 +201,7 @@
 //    public void filterRoleReferees() {
 //        Account account3=new Account("Eitan",25,"EitanX","1234");
 //        account3.addRole(new Referee("Abroad","Eitan"));
-//        DataController.addAccount(account3);
+//        DataController.getInstance().addAccount(account3);
 //        Filter("BusinessLayer.RoleCrudOperations.Role","Referees");
 //        String s="BusinessLayer.RoleCrudOperations.Referee\r\n";
 //        assertEquals(OS.toString(),s);
@@ -248,30 +248,30 @@
 //    }
 //    private void ShowInfo(String InfoAbout){
 //        if(InfoAbout.equals("Teams")){
-//            for(Team team: DataController.getTeams())
+//            for(Team team: DataController.getInstance().getTeams())
 //                ShowTeamStub();
 //        }
 //
 //        if(InfoAbout.equals("Players")){
-//            List<Player> players= DataController.getPlayersFromAccounts();
+//            List<Player> players= DataController.getInstance().getPlayersFromAccounts();
 //            for(Player player:players){
 //                ShowPlayerStub();
 //            }
 //        }
 //        if(InfoAbout.equals("Coaches")){
-//            List<Coach> coaches= DataController.getCoachesFromAccounts();
+//            List<Coach> coaches= DataController.getInstance().getCoachesFromAccounts();
 //            for(Coach coach:coaches){
 //                ShowCoachStub();
 //            }
 //        }
 //
 //        if(InfoAbout.equals("Leagues")){
-//            for(League league: DataController.getLeagues())
+//            for(League league: DataController.getInstance().getLeagues())
 //                ShowLeagueStub();
 //        }
 //
 //        if(InfoAbout.equals("Seasons")){
-//            for(Season season: DataController.getSeasons())
+//            for(Season season: DataController.getInstance().getSeasons())
 //                ShowSeasonStub();
 //        }
 //
@@ -279,22 +279,22 @@
 //    private void Search(String criterion, String query){
 //        if(criterion.equals("Name")){
 //            List<Team> teams=new LinkedList<>();
-//            for(Team team: DataController.getTeams()){
+//            for(Team team: DataController.getInstance().getTeams()){
 //                if(team.getName().equals(query))
 //                    teams.add(team);
 //            }
 //            List<Account> accounts=new LinkedList<>();
-//            for(Account account: DataController.getAccounts()){
+//            for(Account account: DataController.getInstance().getAccounts()){
 //                if(account.getName().equals(query))
 //                    accounts.add(account);
 //            }
 //            List<League> leagues=new LinkedList<>();
-//            for(League league: DataController.getLeagues()){
+//            for(League league: DataController.getInstance().getLeagues()){
 //                if(league.getName().equals(query))
 //                    leagues.add(league);
 //            }
 //            List<Season> seasons=new LinkedList<>();
-//            for(Season season: DataController.getSeasons()){
+//            for(Season season: DataController.getInstance().getSeasons()){
 //                if(season.getName().equals(query))
 //                    seasons.add(season);
 //            }
@@ -323,19 +323,19 @@
 //        }
 //        if(criterion.equals("Category")){
 //            if(query.equals("Teams")){
-//                for(Team team: DataController.getTeams())
+//                for(Team team: DataController.getInstance().getTeams())
 //                    ShowTeamStub();
 //            }
 //            if(query.equals("Accounts")){
-//                for(Account account: DataController.getAccounts())
+//                for(Account account: DataController.getInstance().getAccounts())
 //                    ShowAccountStub();
 //            }
 //            if(query.equals("Leagues")){
-//                for(League league: DataController.getLeagues())
+//                for(League league: DataController.getInstance().getLeagues())
 //                    ShowLeagueStub();
 //            }
 //            if(query.equals("Seasons")){
-//                for(Season season: DataController.getSeasons())
+//                for(Season season: DataController.getInstance().getSeasons())
 //                    ShowSeasonStub();
 //            }
 //        }
@@ -343,46 +343,46 @@
 //    public void Filter(String category,String roleFilter){
 //        if(category.equals("BusinessLayer.RoleCrudOperations.Role")){
 //            if(roleFilter.equals("Players")){
-//                List<Player> players= DataController.getPlayersFromAccounts();
+//                List<Player> players= DataController.getInstance().getPlayersFromAccounts();
 //                for(Player player:players)
 //                    ShowPlayerStub();
 //            }
 //
 //            if(roleFilter.equals("Coaches")){
-//                List<Coach> coaches= DataController.getCoachesFromAccounts();
+//                List<Coach> coaches= DataController.getInstance().getCoachesFromAccounts();
 //                for(Coach coach:coaches)
 //                    ShowCoachStub();
 //            }
 //
 //            if(roleFilter.equals("TeamManagers")){
-//                List<TeamManager> tms= DataController.getTeamManagersFromAccounts();
+//                List<TeamManager> tms= DataController.getInstance().getTeamManagersFromAccounts();
 //                for(TeamManager tm:tms)
 //                    ShowTeamManagerStub();
 //            }
 //
 //            if(roleFilter.equals("Owners")){
-//                List<Owner> owners= DataController.getOwnersFromAccounts();
+//                List<Owner> owners= DataController.getInstance().getOwnersFromAccounts();
 //                for(Owner owner:owners)
 //                    ShowOwnerStub();
 //            }
 //
 //            if(roleFilter.equals("Referees")){//************************************
-//                List<Referee> refs= DataController.getRefereesFromAccounts();
+//                List<Referee> refs= DataController.getInstance().getRefereesFromAccounts();
 //                for(Referee ref:refs)
 //                    ShowRefereeStub();
 //            }
 //
 //        }
 //        if(category.equals("BusinessLayer.OtherCrudOperations.Team")){
-//            for(Team team: DataController.getTeams())
+//            for(Team team: DataController.getInstance().getTeams())
 //                ShowTeamStub();
 //        }
 //        if(category.equals("BusinessLayer.OtherCrudOperations.League")){
-//            for(League league: DataController.getLeagues())
+//            for(League league: DataController.getInstance().getLeagues())
 //                ShowLeagueStub();
 //        }
 //        if(category.equals("BusinessLayer.OtherCrudOperations.Season")){
-//            for(Season season: DataController.getSeasons())
+//            for(Season season: DataController.getInstance().getSeasons())
 //                ShowSeasonStub();
 //        }
 //    }

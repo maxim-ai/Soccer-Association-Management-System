@@ -41,7 +41,7 @@ public class PlayerTest {
 
     @Before
     public void init(){
-        DataController.clearDataBase();
+        DataController.getInstance().clearDataBase();
         System.setOut(new PrintStream(OS));
     }
 

@@ -40,7 +40,7 @@ public class RefereeTest {
 //     SLsettings sLsettings=new SLsettings(policy);
 //    @Before
 //    public void init(){
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //        System.setOut(new PrintStream(OS));
 //    }
 //

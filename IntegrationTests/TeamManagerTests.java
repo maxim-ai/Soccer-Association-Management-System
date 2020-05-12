@@ -36,7 +36,7 @@ public class TeamManagerTests {
 //    Team t3;
 //    @Before
 //    public void setUp() throws Exception {
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //        DataController dataController = new DataController();
 //        Logger logger = Logger.getInstance();
 //        OurSystem ourSystem = new OurSystem();
@@ -52,14 +52,14 @@ public class TeamManagerTests {
 //        permissions.add(TeamManager.PermissionEnum.manageStadium);
 //
 //
-//        tm1=new Account("tm1",20,"tm1","tm1"); DataController.addAccount(tm1);
-//        tm2=new Account("tm2",20,"tm2","tm2"); DataController.addAccount(tm2);
-//        tm3=new Account("tm3",20,"tm3","tm3"); DataController.addAccount(tm3);
-//        o1=new Account("o1",20,"o1","o1"); DataController.addAccount(o1);
-//        o2=new Account("o2",20,"o2","o2"); DataController.addAccount(o2);
-//        o3=new Account("o3",20,"o3","o3"); DataController.addAccount(o3);
-//        p2=new Account("p2",20,"p2","p2"); DataController.addAccount(p2);
-//        c2=new Account("c2",20,"c2","c2"); DataController.addAccount(c2);
+//        tm1=new Account("tm1",20,"tm1","tm1"); DataController.getInstance().addAccount(tm1);
+//        tm2=new Account("tm2",20,"tm2","tm2"); DataController.getInstance().addAccount(tm2);
+//        tm3=new Account("tm3",20,"tm3","tm3"); DataController.getInstance().addAccount(tm3);
+//        o1=new Account("o1",20,"o1","o1"); DataController.getInstance().addAccount(o1);
+//        o2=new Account("o2",20,"o2","o2"); DataController.getInstance().addAccount(o2);
+//        o3=new Account("o3",20,"o3","o3"); DataController.getInstance().addAccount(o3);
+//        p2=new Account("p2",20,"p2","p2"); DataController.getInstance().addAccount(p2);
+//        c2=new Account("c2",20,"c2","c2"); DataController.getInstance().addAccount(c2);
 //        t1=new Team("t1",new League("l1"),new Stadium("s1"));
 //        t2=new Team("t2",new League("l2"),new Stadium("s2"));
 //        t3=new Team("t3",new League("l3"),new Stadium("s3"));

@@ -27,19 +27,19 @@ public class OwnerTest {
 
     @Before
     public void setUp() throws Exception {
-        DataController.clearDataBase();
+        DataController.getInstance().clearDataBase();
         Logger logger=Logger.getInstance();
         OurSystem ourSystem=new OurSystem();
         ourSystem.Initialize();
         ownerAccount=new Account("sean",20,"sean","sean");
         secondAccount=new Account("notSean",30,"sean","sean");
-        DataController.addAccount(ownerAccount);
-        DataController.addAccount(secondAccount);
+        DataController.getInstance().addAccount(ownerAccount);
+        DataController.getInstance().addAccount(secondAccount);
 
         owner=new Owner("sean",new Team("myTeam",new League("myLeague"),new Stadium("myStadium")),null);
         tmpOwner=new Owner("tmp",owner.getTeam(),owner);
         tempTeam=new Team("newTeam",new League("newLeague"),new Stadium("newStadium"));
-        DataController.addTeam(tempTeam);
+        DataController.getInstance().addTeam(tempTeam);
 
         ownerAccount.addRole(owner);
     }
@@ -238,7 +238,7 @@ public class OwnerTest {
 
         // checks standard removal
         Account account=new Account("tmp",20,"cla","cla");
-        DataController.addAccount(account);
+        DataController.getInstance().addAccount(account);
         account.addRole(new Coach(account.getName(),"bla","bla",null));
         owner.appointOwnerToTeam(account);
 
@@ -546,7 +546,7 @@ public class OwnerTest {
 
         removeOwnerStub(owner);
 
-        for (Account account : DataController.getAccounts())
+        for (Account account : DataController.getInstance().getAccounts())
             for (Role role : account.getRoles())
                 if (role instanceof Owner && role.equals(owner))
                 {
@@ -606,9 +606,9 @@ public class OwnerTest {
 
         deleteStub(teamManager);
 
-        List<Account> tamp= DataController.getAccounts();
+        List<Account> tamp= DataController.getInstance().getAccounts();
 
-        for (Account account : DataController.getAccounts())
+        for (Account account : DataController.getInstance().getAccounts())
         {
             if(account.checkIfTeamManagr()!=null && account.checkIfTeamManagr().equals(teamManager))
             {
@@ -633,7 +633,7 @@ public class OwnerTest {
             OurSystem.notifyOtherRole(notification,owner);
         for(TeamManager teamManager:ownerc.getTeam().getTeamManagers())
             OurSystem.notifyOtherRole(notification,teamManager);
-        for(SystemManager systemManager: DataController.getSystemManagersFromAccounts())
+        for(SystemManager systemManager: DataController.getInstance().getSystemManagersFromAccounts())
             OurSystem.notifyOtherRole(notification,systemManager);
 
         loggerStub("");
@@ -652,7 +652,7 @@ public class OwnerTest {
     public String createTeam(String teamName,League league, Stadium stadium,Owner owner)
     {
         boolean teamExists=false;
-        for(Team t: DataController.getTeams())
+        for(Team t: DataController.getInstance().getTeams())
         {
             if(t.getName().equals(teamName))
             {
@@ -666,7 +666,7 @@ public class OwnerTest {
 
         else if(!checkIfRequestExistsStub(owner,teamName))
         {
-            for(AssociationRepresentative ar: DataController.getAssiciationRepresentivesFromAccounts())
+            for(AssociationRepresentative ar: DataController.getInstance().getAssiciationRepresentivesFromAccounts())
             {
                 OurSystem.notifyOtherRole(owner.getName()+" is requesting to create a new team, teamName: "+teamName,ar);
                 addOpenTeamRequestStub(owner,teamName);
@@ -681,7 +681,7 @@ public class OwnerTest {
             {
                 Team team=new Team(teamName,league,stadium);
                 addOwnerStub(owner,team);
-                DataController.addTeam(team);
+                DataController.getInstance().addTeam(team);
                 removeOpenTeamRequestStub(owner,teamName);
                 Logger.getInstance().writeNewLine(owner.getName()+" just opened the team: "+teamName);
                 return "BusinessLayer.OtherCrudOperations.Team successfully added";

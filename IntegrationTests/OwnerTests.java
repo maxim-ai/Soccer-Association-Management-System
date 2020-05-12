@@ -26,19 +26,19 @@ public class OwnerTests {
 
     @Before
     public void setUp() throws Exception {
-        DataController.clearDataBase();
+        DataController.getInstance().clearDataBase();
         Logger logger=Logger.getInstance();
         OurSystem ourSystem=new OurSystem();
         ourSystem.Initialize();
         ownerAccount=new Account("sean",20,"sean","sean");
         secondAccount=new Account("notSean",30,"sean","sean");
-        DataController.addAccount(ownerAccount);
-        DataController.addAccount(secondAccount);
+        DataController.getInstance().addAccount(ownerAccount);
+        DataController.getInstance().addAccount(secondAccount);
 
         owner=new Owner("sean",new Team("myTeam",new League("myLeague"),new Stadium("myStadium")),null);
         tmpOwner=new Owner("tmp",owner.getTeam(),owner);
         tempTeam=new Team("newTeam",new League("newLeague"),new Stadium("newStadium"));
-        DataController.addTeam(tempTeam);
+        DataController.getInstance().addTeam(tempTeam);
 
         ownerAccount.addRole(owner);
     }
@@ -167,7 +167,7 @@ public class OwnerTests {
 
         // checks standard removal
         Account account=new Account("tmp",20,"cla","cla");
-        DataController.addAccount(account);
+        DataController.getInstance().addAccount(account);
         account.addRole(new Coach(account.getName(),"bla","bla",null));
         owner.appointOwnerToTeam(account);
 
@@ -276,21 +276,21 @@ public class OwnerTests {
     @Test
     public void createPlayer() throws Exception {
         Account test=owner.createPlayer("testPla",20,new Date(123),PositionEnum.CenterBack,"bla11","bla");
-        assertTrue(DataController.getAccounts().contains(test));
+        assertTrue(DataController.getInstance().getAccounts().contains(test));
         assertNotNull(test.checkIfPlayer());
     }
 
     @Test
     public void createTeamManager() throws Exception {
         Account test=owner.createTeamManager("testPla",20,null,"bla11","bla");
-        assertTrue(DataController.getAccounts().contains(test));
+        assertTrue(DataController.getInstance().getAccounts().contains(test));
         assertNotNull(test.checkIfTeamManagr());
     }
 
     @Test
     public void createCoach() throws Exception {
         Account test=owner.createCoach("testPla",20,"bla","bla","bla11","bla");
-        assertTrue(DataController.getAccounts().contains(test));
+        assertTrue(DataController.getInstance().getAccounts().contains(test));
         assertNotNull(test.checkIfCoach());
     }
 

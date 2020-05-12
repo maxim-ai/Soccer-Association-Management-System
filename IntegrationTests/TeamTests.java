@@ -34,7 +34,7 @@ public class TeamTests {
 //    @Before
 //    public void setUp()
 //    {
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //        DataController dataController = new DataController();
 //        Logger logger = Logger.getInstance();
 //        OurSystem ourSystem = new OurSystem();

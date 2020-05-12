@@ -30,7 +30,7 @@ public class MatchTest {
 //    @Before
 //    public void setUp()
 //    {
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //        Logger logger=Logger.getInstance();
 //        OurSystem ourSystem=new OurSystem();
 //        ourSystem.Initialize();
@@ -39,9 +39,9 @@ public class MatchTest {
 //        refAcc2=new Account("ref2",40,"ref2","ref2");
 //        refAcc3=new Account("ref3",40,"ref3","ref3");
 //
-//        DataController.addAccount(refAcc1);
-//        DataController.addAccount(refAcc2);
-//        DataController.addAccount(refAcc3);
+//        DataController.getInstance().addAccount(refAcc1);
+//        DataController.getInstance().addAccount(refAcc2);
+//        DataController.getInstance().addAccount(refAcc3);
 //
 //        refAcc1.addRole(new Referee("good1",refAcc1.getName()));
 //        refAcc2.addRole(new Referee("good2",refAcc2.getName()));

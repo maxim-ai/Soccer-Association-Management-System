@@ -24,7 +24,7 @@ public class FanTests {
 //
 //    @Before
 //    public void setUp() throws Exception {
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //        System.setOut(new PrintStream(OS));
 //        fan = new Fan("Danny");
 //        account1=new Account("Maxim",26,"MaximX","1234");
@@ -52,13 +52,13 @@ public class FanTests {
 //        playerPage.addFan(fan);
 //        teamPage.addFan(fan);
 //        season.addMatch(match);
-//        DataController.clearDataBase();
-//        DataController.addAccount(account1);
-//        DataController.addAccount(account2);
-//        DataController.addLeague(league);
-//        DataController.addStadium(stadium);
-//        DataController.addSeason(season);
-//        DataController.addTeam(team);
+//        DataController.getInstance().clearDataBase();
+//        DataController.getInstance().addAccount(account1);
+//        DataController.getInstance().addAccount(account2);
+//        DataController.getInstance().addLeague(league);
+//        DataController.getInstance().addStadium(stadium);
+//        DataController.getInstance().addSeason(season);
+//        DataController.getInstance().addTeam(team);
 //
 //
 //        File loggerFile=new File("Logger");
@@ -179,7 +179,7 @@ public class FanTests {
 //    public void filterRoleReferees() {
 //        Account account3=new Account("Eitan",25,"EitanX","1234");
 //        account3.addRole(new Referee("Abroad","Eitan"));
-//        DataController.addAccount(account3);
+//        DataController.getInstance().addAccount(account3);
 //        fan.Filter("BusinessLayer.RoleCrudOperations.Role","Referees");
 //        String s="Name:\r\nEitan\r\n\r\nTraining:\r\nAbroad\r\n\r\nMatches judged:\r\n";
 //        assertEquals(OS.toString(),s);
@@ -207,7 +207,7 @@ public class FanTests {
 //    public void notifyFansAboutMatch() {
 //        Account checkAccount=new Account("Yossi",30,"YossiX","1234");
 //        checkAccount.addRole(fan);
-//        DataController.addAccount(checkAccount);
+//        DataController.getInstance().addAccount(checkAccount);
 //        Stadium checkStadium=new Stadium("Blumfield");
 //        League checkLeague=new League("Haal");
 //        Season checkSeason=new Season("Summer");

@@ -10,7 +10,7 @@ public class AlertTest {
 
     @Before
     public void setUp() throws Exception {
-        DataController.clearDataBase();
+        DataController.getInstance().clearDataBase();
         alert=new Alert("aaa");
     }
 

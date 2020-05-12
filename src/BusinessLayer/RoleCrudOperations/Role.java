@@ -1,11 +1,13 @@
 package BusinessLayer.RoleCrudOperations;
+import BusinessLayer.DataController;
 import BusinessLayer.OtherCrudOperations.Alert;
+import javafx.util.Pair;
 
 import java.io.Serializable;
 import java.util.*;
 
 
-public abstract class Role implements Serializable
+public abstract class Role extends Observable implements Serializable
 {
 
   private String name;
@@ -43,7 +45,8 @@ public abstract class Role implements Serializable
   }
 
   public List<Alert> getAlertList() {
-    return alertList;
+//    return alertList;
+    return DataController.getInstance().getAlertsForAccount(username);
   }
 
   public void setAlertList(List<Alert> alertList) {
@@ -54,7 +57,7 @@ public abstract class Role implements Serializable
     alertList.add(alert);
   }
   public void clearAlerts(){
-    alertList=new ArrayList<>();
+    DataController.getInstance().clearAlertsForAccount(username);
   }
 
 
@@ -71,5 +74,18 @@ public abstract class Role implements Serializable
 
   public String getUsername() {
     return username;
+  }
+
+  public void notifyAccount(String userName, String notification)
+  {
+    if(DataController.getInstance().isAccountloggedIn(userName))
+    {
+      Pair<String,String> massage=new Pair<>(userName,notification);
+      notifyObservers(massage);
+    }
+    else
+    {
+      DataController.getInstance().addAlertToAccount(userName,notification);
+    }
   }
 }

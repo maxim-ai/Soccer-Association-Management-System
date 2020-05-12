@@ -15,7 +15,7 @@ public class LoggerTest {
 
     @Before
     public void setUp(){
-        DataController.clearDataBase();
+        DataController.getInstance().clearDataBase();
     }
 
 

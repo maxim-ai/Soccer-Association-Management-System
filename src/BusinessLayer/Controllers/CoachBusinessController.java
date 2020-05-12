@@ -147,7 +147,7 @@ public class CoachBusinessController {
     }
 
     public static Coach convertStringToCoach(String username) {
-        for (Account account : DataController.getAccounts()){
+        for (Account account : DataController.getInstance().getAccounts()){
             if(account.getUserName().equals(username)){
                 for(Role role : account.getRoles()){
                     if(role instanceof TeamManager){

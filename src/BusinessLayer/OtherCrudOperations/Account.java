@@ -1,18 +1,22 @@
 package BusinessLayer.OtherCrudOperations;
 import BusinessLayer.RoleCrudOperations.*;
 import BusinessLayer.DataController;
+import javafx.util.Pair;
 
 import java.io.Serializable;
 import java.util.*;
 
 
-public class Account implements Serializable {
+public class Account extends Observable implements Serializable {
 
   private String userName;
   private String password;
   private List<Role> roles;
   private String name;
   private int age;
+  private boolean isLoggedIn;
+
+
 
 
   public Account(String aName, int aAge,String aUserName, String aPassword)
@@ -22,6 +26,16 @@ public class Account implements Serializable {
     name=aName;
     age=aAge;
     roles = new ArrayList<Role>();
+    isLoggedIn=false;
+  }
+
+  public boolean isLoggedIn() {
+      return isLoggedIn;
+  }
+
+  public void setLoggedIn(boolean loggedIn) {
+    isLoggedIn = loggedIn;
+    DataController.getInstance().setAccountLogIn(this,loggedIn);
   }
 
   public String getName() {
@@ -268,15 +282,12 @@ public class Account implements Serializable {
   }
 
   public static Account convertStringToAccount(String userName){
-    for (Account account : DataController.getAccounts()){
+    for (Account account : DataController.getInstance().getAccounts()){
       if(account.getUserName().equals(userName)){
         return account;
       }
     }
     return null;
   }
-
-
-
 
 }

@@ -585,7 +585,7 @@ public class Team implements Pageable, Serializable
   }
 
   public static Team convertStringToTeam(String teamName){
-    for (Team team : DataController.getTeams()){
+    for (Team team : DataController.getInstance().getTeams()){
       if(team.getName().equals(teamName)){
         return team;
       }

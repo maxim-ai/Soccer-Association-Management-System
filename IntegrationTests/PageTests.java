@@ -16,7 +16,7 @@ public class PageTests {
 
     @Before
     public void setUp() throws Exception {
-        DataController.clearDataBase();
+        DataController.getInstance().clearDataBase();
         coach=new Coach("Maxim","aaa","bbb",null);
         page=new Page(coach);
         coach.setPage(page);

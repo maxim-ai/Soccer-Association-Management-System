@@ -33,7 +33,7 @@
 //    Fan fan=new Fan("tzlil");
 //    @Before
 //    public void init(){
-//        DataController.clearDataBase();
+//        DataController.getInstance().clearDataBase();
 //        System.setOut(new PrintStream(OS));
 //    }
 //

@@ -371,8 +371,8 @@ public class OwnerBusinessController
      */
     public String createTeam(String teamName, String leagueName, String stadiumName)
     {
-        League league = League.convertStringToLeague(leagueName);
-        Stadium stadium=Stadium.convertStringToStadium(stadiumName);
+        League league = new League(leagueName);
+        Stadium stadium=new Stadium(stadiumName);
         if(league==null)
             return "Wrong input, not such league";
         if(stadium==null)
@@ -448,7 +448,7 @@ public class OwnerBusinessController
      * @param userName
      */
     public static Owner convertStringToOwner(String userName){
-        for (Account account : DataController.getAccounts()){
+        for (Account account : DataController.getInstance().getAccounts()){
             if(account.getUserName().equals(userName)){
                 for(Role role : account.getRoles()){
                     if(role instanceof Owner){

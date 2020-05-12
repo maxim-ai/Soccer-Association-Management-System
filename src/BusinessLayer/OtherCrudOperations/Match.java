@@ -285,7 +285,7 @@ public class Match implements Serializable
       String day=date[0];
       String month=date[1];
       String year=date[2];
-      for (Referee referee: DataController.getRefereesFromAccounts()
+      for (Referee referee: DataController.getInstance().getRefereesFromAccounts()
            ) {
           for (Match m:referee.getMatchs()
                ) {

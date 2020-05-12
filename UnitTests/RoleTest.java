@@ -15,7 +15,7 @@ public class RoleTest {
 
     @Before
     public void setUp() throws Exception {
-        DataController.clearDataBase();
+        DataController.getInstance().clearDataBase();
         role=new Fan("Maxim");
     }
 

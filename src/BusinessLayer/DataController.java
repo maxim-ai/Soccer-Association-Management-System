@@ -17,42 +17,49 @@ public class DataController {
   private static List<Season> seasons = new ArrayList<Season>();
   private static List<Stadium> stadiums=new ArrayList<>();
 
+  private DBAdapter dbAdapter=new DBAdapter();
 
+  private static DataController dataController=null;
+
+  private DataController(){}
+
+  public static DataController getInstance(){
+    if(dataController==null)
+      dataController=new DataController();
+    return dataController;
+  }
 
 
 
   //region Teams Data Methods
-  public static Team getTeam(int index) {
+  public Team getTeam(int index) {
     Team aTeam = teams.get(index);
     return aTeam;
   }
 
-  public static List<Team> getTeams(){return teams;}
+  public List<Team> getTeams(){return teams;}
 
-  public static List<String> getTeamNames() {
-    return DBAdapter.getTeamNames();
-  }
 
-  public static int numberOfTeams() {
+  public int numberOfTeams() {
     int number = teams.size();
     return number;
   }
 
-  public static boolean hasTeams() {
+  public boolean hasTeams() {
     boolean has = teams.size() > 0;
     return has;
   }
 
-  public static int indexOfTeam(Team aTeam) {
+  public int indexOfTeam(Team aTeam) {
     int index = teams.indexOf(aTeam);
     return index;
   }
 
-  public static int minimumNumberOfTeams() {
+  public int minimumNumberOfTeams() {
     return 0;
   }
 
-  public static boolean addTeam(Team aTeam) {
+  public boolean addTeam(Team aTeam) {
     boolean wasAdded = true;
     if (teams.contains(aTeam)) {
       return true;
@@ -62,39 +69,12 @@ public class DataController {
     return wasAdded;
   }
 
-  public static void addTeamDC(Team team){
-    DBAdapter.addPage(team.getPage().getPageID());
-    DBAdapter.addTeam(team.getName(),team.getPage().getPageID(),team.getLeague().getName(),team.getStadium().getName(),team.getPoints());
-  }
-
-  public static void addMatchDC(Match match){
-    DBAdapter.addMatch(match.getDate(),match.getTime(),
-            match.getAwayScore(),match.getHomeScore(),match.getAwayTeam().getName(),match.getHomeTeam().getName(),
-            match.getMainReferee().getUsername(),match.getLineRefereeOne().getUsername(),match.getLineRefereeTwo().getUsername(),
-            match.getStadium().getName(),match.getSeason().getName());
-  }
-
-  public static void addMatchWithoutRefsDC(Match match){
-    DBAdapter.addMatch(match.getDate(),match.getTime(),
-            match.getAwayScore(),match.getHomeScore(),match.getAwayTeam().getName(),match.getHomeTeam().getName(),
-            null,null,null,
-            match.getStadium().getName(),match.getSeason().getName());
-
-    List<GameEvent> eventList=match.getEventCalender().getGameEvents();
-    for(GameEvent GE:eventList)
-      DBAdapter.addGameEvent(GE.getType().toString(),GE.getHour(),GE.getDescription(),GE.getGameMinute(),match.getDate(),
-              match.getAwayTeam().getName(),match.getHomeTeam().getName());
-  }
-
-  public static void addRefToMatchDC(Match match,Referee ref1,Referee ref2,Referee ref3){
-    DBAdapter.addRefsToMatch(match.getDate(),match.getTime(),match.getAwayTeam().getName(),
-            match.getHomeTeam().getName(),ref1.getUsername(),ref2.getUsername(),ref3.getUsername());
-  }
 
 
 
 
-  public static boolean removeTeam(Team aTeam) {
+
+  public boolean removeTeam(Team aTeam) {
     boolean wasRemoved = true;
     teams.remove(aTeam);
     wasRemoved = true;
@@ -104,35 +84,35 @@ public class DataController {
   //endregion
 
   //region Accounts Data Methods
-  public static Account getAccount(int index) {
+  public Account getAccount(int index) {
     Account aAccount = accounts.get(index);
     return aAccount;
   }
 
-  public static List<Account> getAccounts() {
+  public List<Account> getAccounts() {
     return accounts;
   }
 
-  public static int numberOfAccounts() {
+  public int numberOfAccounts() {
     int number = accounts.size();
     return number;
   }
 
-  public static boolean hasAccounts() {
+  public boolean hasAccounts() {
     boolean has = accounts.size() > 0;
     return has;
   }
 
-  public static int indexOfAccount(Account aAccount) {
+  public int indexOfAccount(Account aAccount) {
     int index = accounts.indexOf(aAccount);
     return index;
   }
 
-  public static int minimumNumberOfAccounts() {
+  public int minimumNumberOfAccounts() {
     return 0;
   }
 
-  public static boolean addAccount(Account aAccount) {
+  public boolean addAccount(Account aAccount) {
 
 
     boolean wasAdded = true;
@@ -144,55 +124,9 @@ public class DataController {
     return wasAdded;
   }
 
-  public static void addAccountDC(Account account){
-    List<Role> roles=account.getRoles();
-    List<String> alerts=new ArrayList<>();
-    DBAdapter.addAccount(account.getUserName(),account.getPassword(),account.getName(),account.getAge());
 
-    for(Role role: roles){
-      for(Alert alert:role.getAlertList())
-        alerts.add(alert.getDescription());
-      DBAdapter.addAlert(account.getUserName(),alerts);
-      if(role instanceof Owner)
-        DBAdapter.addOwnerRole(account.getUserName(),role.getName(),((Owner) role).getTeam().getName(),((Owner) role).getAppointer().getUsername());
-      else if(role instanceof Player){
-        DBAdapter.addPage(((Player) role).getPage().getPageID());
-        DBAdapter.addPlayerRole(account.getUserName(),role.getName(),new Date(((Player) role).getBirthday().getYear(),((Player) role).getBirthday().getMonth(),((Player) role).getBirthday().getMonth()),
-                ((Player) role).getPosition().toString(), ((Player) role).getTeam().getName(),((Player) role).getPage().getPageID());
-      }
-      else if(role instanceof Fan){
-        List<Integer> pagesIDs=new ArrayList<>();
-        for(Page page:((Fan) role).getPages())
-          pagesIDs.add(new Integer(page.getPageID()));
-        DBAdapter.addFanRole(account.getUserName(),role.getName(),((Fan) role).isTrackPersonalPages(),((Fan) role).isGetMatchNotifications(),pagesIDs);
-      }
-      else if(role instanceof Referee){
-        HashMap<String,String> refLeaguesAndSeasons=new HashMap<>();
-        for(Map.Entry<League,Season> entry: ((Referee) role).getLeagues().entrySet())
-          refLeaguesAndSeasons.put(entry.getKey().getName(),entry.getValue().getName());
-        DBAdapter.addRefereeRole(account.getUserName(),role.getName(),((Referee) role).getTraining(),refLeaguesAndSeasons);
-      }
-      else if(role instanceof TeamManager){
-        List<String> permissions=new ArrayList<>();
-        for(TeamManager.PermissionEnum permissionEnum:((TeamManager) role).getAppointer().getAllPermitions((TeamManager) role))
-          permissions.add(permissionEnum.toString());
-        DBAdapter.addTeamManagerRole(account.getUserName(),role.getName(),((TeamManager) role).getTeam().getName(),
-                ((TeamManager) role).getAppointer().getUsername(),permissions);
-      }
-      else if(role instanceof SystemManager)
-        DBAdapter.addSystemManagerRole(account.getUserName(),role.getName(),((SystemManager) role).getComplaintAndComments());
-      else if(role instanceof AssociationRepresentative)
-        DBAdapter.addAssociationRepresentativeRole(account.getUserName(),role.getName());
-      else if(role instanceof Coach){
-        DBAdapter.addPage(((Coach) role).getPage().getPageID());
-        DBAdapter.addCoachRole(account.getUserName(),role.getName(),((Coach) role).getTraining(),((Coach) role).getTeamRole(),
-                ((Coach) role).getPage().getPageID(),((Coach) role).getTeams().get(0).getName());
-      }
 
-    }
-  }
-
-  public static boolean removeAccount(Account aAccount) {
+  public boolean removeAccount(Account aAccount) {
     boolean wasRemoved = true;
     accounts.remove(aAccount);
     wasRemoved = true;
@@ -203,35 +137,35 @@ public class DataController {
 
 
   //region League Data Methods
-  public static League getLeague(int index) {
+  public League getLeague(int index) {
     League aLeague = leagues.get(index);
     return aLeague;
   }
 
-  public static List<League> getLeagues() {
+  public List<League> getLeagues() {
     return leagues;
   }
 
-  public static int numberOfLeagues() {
+  public int numberOfLeagues() {
     int number = leagues.size();
     return number;
   }
 
-  public static boolean hasLeagues() {
+  public boolean hasLeagues() {
     boolean has = leagues.size() > 0;
     return has;
   }
 
-  public static int indexOfLeague(League aLeague) {
+  public int indexOfLeague(League aLeague) {
     int index = leagues.indexOf(aLeague);
     return index;
   }
 
-  public static int minimumNumberOfLeagues() {
+  public int minimumNumberOfLeagues() {
     return 0;
   }
 
-  public static boolean addLeague(League aLeague) {
+  public boolean addLeague(League aLeague) {
     boolean wasAdded = true;
     if (leagues.contains(aLeague)) {
       return true;
@@ -241,19 +175,9 @@ public class DataController {
     return wasAdded;
   }
 
-  public static void addLeagueDC(League league){
-    List<String> seasonList=new ArrayList<>();
-    List<String[]> policyList=new ArrayList<>();
-    for(Map.Entry<Season,SLsettings> entry:league.getsLsetting().entrySet()){
-      seasonList.add(entry.getKey().getName());
-      Policy policy=entry.getValue().getPolicy();
-      String[] arr={policy.getPointCalc(),policy.getGameSchedual(),policy.getId()};
-      policyList.add(arr);
-    }
-    DBAdapter.addLeague(league.getName(),seasonList,policyList);
-  }
 
-  public static boolean removeLeague(League aLeague) {
+
+  public boolean removeLeague(League aLeague) {
     boolean wasRemoved = true;
     if (!leagues.contains(aLeague)) {
       return wasRemoved;
@@ -266,36 +190,36 @@ public class DataController {
   //endregion
 
   //region Seasons Data Methods
-  public static Season getSeason(int index) {
+  public Season getSeason(int index) {
     Season aSeason = seasons.get(index);
     return aSeason;
   }
 
-  public static List<Season> getSeasons() {
+  public List<Season> getSeasons() {
     return seasons;
   }
 
-  public static int numberOfSeasons() {
+  public int numberOfSeasons() {
     int number = seasons.size();
     return number;
   }
 
-  public static boolean hasSeasons() {
+  public boolean hasSeasons() {
     boolean has = seasons.size() > 0;
     return has;
   }
 
-  public static int indexOfSeason(Season aSeason) {
+  public int indexOfSeason(Season aSeason) {
     int index = seasons.indexOf(aSeason);
     return index;
   }
 
 
-  public static int minimumNumberOfSeasons() {
+  public int minimumNumberOfSeasons() {
     return 0;
   }
 
-  public static boolean addSeason(Season aSeason) {
+  public boolean addSeason(Season aSeason) {
     boolean wasAdded = true;
     if (seasons.contains(aSeason)) {
       return true;
@@ -305,19 +229,9 @@ public class DataController {
     return wasAdded;
   }
 
-  public static void addSeasonDC(Season season){
-    List<String> leagueList=new ArrayList<>();
-    List<String[]> policyList=new ArrayList<>();
-    for(Map.Entry<League,SLsettings> entry:season.getsLsettings().entrySet()){
-      leagueList.add(entry.getKey().getName());
-      Policy policy=entry.getValue().getPolicy();
-      String[] arr={policy.getPointCalc(),policy.getGameSchedual(),policy.getId()};
-      policyList.add(arr);
-    }
-    DBAdapter.addSeason(season.getName(),leagueList,policyList);
-  }
 
-  public static boolean removeSeason(Season aSeason) {
+
+  public boolean removeSeason(Season aSeason) {
     boolean wasRemoved = true;
     seasons.remove(aSeason);
     wasRemoved = true;
@@ -327,31 +241,31 @@ public class DataController {
   //endregion
 
   //region Stadiums Data Methods
-  public static Stadium getStadium(int index) {
+  public Stadium getStadium(int index) {
     return stadiums.get(index);
   }
 
-  public static List<Stadium> getStadiums() {
+  public List<Stadium> getStadiums() {
     return stadiums;
   }
 
-  public static int numberOfStadiums() {
+  public int numberOfStadiums() {
     return stadiums.size();
   }
 
-  public static boolean hasStadiums() {
+  public boolean hasStadiums() {
     return stadiums.isEmpty();
   }
 
-  public static int indexOfStadium(Team aTeam) {
+  public int indexOfStadium(Team aTeam) {
     return stadiums.indexOf(aTeam);
   }
 
-  public static int minimumNumberOfStadiums() {
+  public int minimumNumberOfStadiums() {
     return 0;
   }
 
-  public static boolean addStadium(Stadium aStadium) {
+  public boolean addStadium(Stadium aStadium) {
     boolean wasAdded = true;
     if (stadiums.contains(aStadium)) {
       return true;
@@ -361,11 +275,9 @@ public class DataController {
     return wasAdded;
   }
 
-  public static void addStadiumDC(Stadium stadium){
-    DBAdapter.addStadium(stadium.getName());
-  }
 
-  public static boolean removeStadium(Stadium aStadium) {
+
+  public boolean removeStadium(Stadium aStadium) {
     boolean wasRemoved = true;
     stadiums.remove(aStadium);
     wasRemoved = true;
@@ -375,9 +287,9 @@ public class DataController {
   //endregion
 
   //region Get Roles From Accounts
-  public static List<Player> getPlayersFromAccounts(){
+  public List<Player> getPlayersFromAccounts(){
     List<Player> players=new LinkedList<>();
-    for(Account account: DataController.getAccounts()){
+    for(Account account: DataController.getInstance().getInstance().getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof Player){
           players.add((Player)role);
@@ -388,9 +300,9 @@ public class DataController {
     return players;
   }
 
-  public static List<Coach> getCoachesFromAccounts(){
+  public List<Coach> getCoachesFromAccounts(){
     List<Coach> coaches=new LinkedList<>();
-    for(Account account: DataController.getAccounts()){
+    for(Account account: DataController.getInstance().getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof Coach){
           coaches.add((Coach)role);
@@ -401,9 +313,9 @@ public class DataController {
     return coaches;
   }
 
-  public static List<TeamManager> getTeamManagersFromAccounts(){
+  public List<TeamManager> getTeamManagersFromAccounts(){
     List<TeamManager> tms=new LinkedList<>();
-    for(Account account: DataController.getAccounts()){
+    for(Account account: DataController.getInstance().getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof TeamManager){
           tms.add((TeamManager) role);
@@ -414,9 +326,9 @@ public class DataController {
     return tms;
   }
 
-  public static List<Owner> getOwnersFromAccounts(){
+  public List<Owner> getOwnersFromAccounts(){
     List<Owner> owners=new LinkedList<>();
-    for(Account account: DataController.getAccounts()){
+    for(Account account: DataController.getInstance().getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof Owner){
           owners.add((Owner) role);
@@ -427,9 +339,9 @@ public class DataController {
     return owners;
   }
 
-  public static List<Referee> getRefereesFromAccounts(){
+  public List<Referee> getRefereesFromAccounts(){
     List<Referee> refs=new LinkedList<>();
-    for(Account account: DataController.getAccounts()){
+    for(Account account: DataController.getInstance().getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof Referee){
           refs.add((Referee) role);
@@ -440,11 +352,11 @@ public class DataController {
     return refs;
   }
 
-  public static List<Fan> getFansFromAccounts(){
+  public List<Fan> getFansFromAccounts(){
     List<Fan> fans=new LinkedList<>();
-    List<Account> accounts= DataController.getAccounts();
+    List<Account> accounts= DataController.getInstance().getAccounts();
     if(accounts.size()==0) return null;
-    for(Account account: DataController.getAccounts()){
+    for(Account account: DataController.getInstance().getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof Fan){
           fans.add((Fan) role);
@@ -455,11 +367,11 @@ public class DataController {
     return fans;
   }
 
-  public static List<AssociationRepresentative> getAssiciationRepresentivesFromAccounts(){
+  public List<AssociationRepresentative> getAssiciationRepresentivesFromAccounts(){
     List<AssociationRepresentative> assiciationRepresentives=new LinkedList<>();
-    List<Account> accounts= DataController.getAccounts();
+    List<Account> accounts= DataController.getInstance().getAccounts();
     if(accounts.size()==0) return null;
-    for(Account account: DataController.getAccounts()){
+    for(Account account: DataController.getInstance().getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof AssociationRepresentative){
           assiciationRepresentives.add((AssociationRepresentative) role);
@@ -470,11 +382,11 @@ public class DataController {
     return assiciationRepresentives;
   }
 
-  public static List<SystemManager> getSystemManagersFromAccounts() {
+  public List<SystemManager> getSystemManagersFromAccounts() {
     List<SystemManager> systemManagers=new LinkedList<>();
-    List<Account> accounts= DataController.getAccounts();
+    List<Account> accounts= DataController.getInstance().getAccounts();
     if(accounts.size()==0) return null;
-    for(Account account: DataController.getAccounts()){
+    for(Account account: DataController.getInstance().getAccounts()){
       for(Role role:account.getRoles()){
         if(role instanceof SystemManager){
           systemManagers.add((SystemManager) role);
@@ -487,30 +399,30 @@ public class DataController {
   //endregion
 
 
-  public static void setAccounts(List<Account> accounts) {
-    DataController.accounts = accounts;
+  public void setAccounts(List<Account> accounts) {
+    DataController.getInstance().accounts = accounts;
   }
 
-  public static void setTeams(List<Team> teams) {
-    DataController.teams = teams;
+  public void setTeams(List<Team> teams) {
+    DataController.getInstance().teams = teams;
   }
 
-  public static void setLeagues(List<League> leagues) {
-    DataController.leagues = leagues;
+  public void setLeagues(List<League> leagues) {
+    DataController.getInstance().leagues = leagues;
   }
 
-  public static void setSeasons(List<Season> seasons) {
-    DataController.seasons = seasons;
+  public void setSeasons(List<Season> seasons) {
+    DataController.getInstance().seasons = seasons;
   }
 
-  public static void setStadiums(List<Stadium> stadiums) {
-    DataController.stadiums = stadiums;
+  public void setStadiums(List<Stadium> stadiums) {
+    DataController.getInstance().stadiums = stadiums;
   }
 
-  public static void saveAction(Team team) {
+  public void saveAction(Team team) {
   }
 
-  public static void notifyOnDelete(Team team) {
+  public void notifyOnDelete(Team team) {
 
   }
 
@@ -524,7 +436,7 @@ public class DataController {
    * @param training
    * @param name
    */
-  public static Referee CreateNewReferee(String training, String name) {
+  public Referee CreateNewReferee(String training, String name) {
     Referee referee = new Referee(training, name);
     sendInvitation(referee);
     return referee;
@@ -536,7 +448,7 @@ public class DataController {
    *
    * @param referee
    */
-  private static void sendInvitation(Referee referee) {
+  private void sendInvitation(Referee referee) {
 
   }
 
@@ -546,7 +458,7 @@ public class DataController {
    *
    * @param team
    */
-  public static void deleteFromAllFollowers(Team team) {
+  public void deleteFromAllFollowers(Team team) {
     Page teamPageToDelete = team.getPage();
     List<Fan> fans = teamPageToDelete.getFans();
     for (Fan fan : fans) {
@@ -559,7 +471,7 @@ public class DataController {
     }
   }
 
-  public static void clearDataBase(){
+  public void clearDataBase(){
     teams= new ArrayList<Team>();
     accounts = new ArrayList<Account>();
     leagues = new ArrayList<League>();
@@ -567,7 +479,7 @@ public class DataController {
     stadiums=new ArrayList<>();
   }
 
-  public static Account getAccountByRole(Role role){
+  public Account getAccountByRole(Role role){
     for(Account account:accounts){
       for(Role currRole:account.getRoles()){
         if(role.equals(currRole))
@@ -578,12 +490,12 @@ public class DataController {
   }
 
 
-  public static String[] getUserNamePasswordDC(String userName) {
-    return DBAdapter.getUserNamePasswordDC(userName);
-  }
 
-  public static Account getAccountRolesDC(Account account) {
-    List<String> roles=DBAdapter.getAccountRoles(account.getUserName());
+
+  /*--------------------------------------------actual database--------------------------------------------------------*/
+
+  public Account getAccountRolesDC(Account account) {
+    List<String> roles=dbAdapter.getAccountRoles(account.getUserName());
     for(String role:roles){
       if(role.equals("Owner"))
         account.addRole(new Owner(account.getName()));
@@ -603,5 +515,184 @@ public class DataController {
         account.addRole(new Fan(account.getName()));
     }
     return account;
+  }
+
+  public String[] getUserNamePasswordDC(String userName) {
+    return dbAdapter.getUserNamePasswordDC(userName);
+  }
+
+  public void addSeasonDC(Season season){
+    List<String> leagueList=new ArrayList<>();
+    List<String[]> policyList=new ArrayList<>();
+    for(Map.Entry<League,SLsettings> entry:season.getsLsettings().entrySet()){
+      leagueList.add(entry.getKey().getName());
+      Policy policy=entry.getValue().getPolicy();
+      String[] arr={policy.getPointCalc(),policy.getGameSchedual(),policy.getId()};
+      policyList.add(arr);
+    }
+    dbAdapter.addSeason(season.getName(),leagueList,policyList);
+  }
+
+  public void addLeagueDC(League league){
+    List<String> seasonList=new ArrayList<>();
+    List<String[]> policyList=new ArrayList<>();
+    for(Map.Entry<Season,SLsettings> entry:league.getsLsetting().entrySet()){
+      seasonList.add(entry.getKey().getName());
+      Policy policy=entry.getValue().getPolicy();
+      String[] arr={policy.getPointCalc(),policy.getGameSchedual(),policy.getId()};
+      policyList.add(arr);
+    }
+    dbAdapter.addLeague(league.getName(),seasonList,policyList);
+  }
+
+  public void addStadiumDC(Stadium stadium){
+    dbAdapter.addStadium(stadium.getName());
+  }
+
+  public List<String> getNames(String Object) {
+    return dbAdapter.getNames(Object);
+  }
+
+  public void addTeamDC(Team team){
+    if(team.getPage()!=null)
+    {
+      dbAdapter.addPage(team.getPage().getPageID());
+      dbAdapter.addTeam(team.getName(),team.getPage().getPageID(),team.getLeague().getName(),team.getStadium().getName(),team.getPoints());
+    }
+    else
+      dbAdapter.addTeam(team.getName(),-1,team.getLeague().getName(),team.getStadium().getName(),team.getPoints());
+  }
+
+  public void addMatchDC(Match match){
+    dbAdapter.addMatch(match.getDate(),match.getTime(),
+            match.getAwayScore(),match.getHomeScore(),match.getAwayTeam().getName(),match.getHomeTeam().getName(),
+            match.getMainReferee().getUsername(),match.getLineRefereeOne().getUsername(),match.getLineRefereeTwo().getUsername(),
+            match.getStadium().getName(),match.getSeason().getName());
+  }
+
+  public void addMatchWithoutRefsDC(Match match){
+    dbAdapter.addMatch(match.getDate(),match.getTime(),
+            match.getAwayScore(),match.getHomeScore(),match.getAwayTeam().getName(),match.getHomeTeam().getName(),
+            null,null,null,
+            match.getStadium().getName(),match.getSeason().getName());
+
+    List<GameEvent> eventList=match.getEventCalender().getGameEvents();
+    for(GameEvent GE:eventList)
+      dbAdapter.addGameEvent(GE.getType().toString(),GE.getHour(),GE.getDescription(),GE.getGameMinute(),match.getDate(),
+              match.getAwayTeam().getName(),match.getHomeTeam().getName());
+  }
+
+  public void addRefToMatchDC(Match match,Referee ref1,Referee ref2,Referee ref3){
+    dbAdapter.addRefsToMatch(match.getDate(),match.getTime(),match.getAwayTeam().getName(),
+            match.getHomeTeam().getName(),ref1.getUsername(),ref2.getUsername(),ref3.getUsername());
+  }
+
+  public void addAccountDC(Account account){
+    List<Role> roles=account.getRoles();
+    List<String> alerts=new ArrayList<>();
+    dbAdapter.addAccount(account.getUserName(),account.getPassword(),account.getName(),account.getAge());
+
+    for(Role role: roles){
+      for(Alert alert:role.getAlertList())
+        alerts.add(alert.getDescription());
+      dbAdapter.addAlert(account.getUserName(),alerts);
+      if(role instanceof Owner)
+        dbAdapter.addOwnerRole(account.getUserName(),role.getName(),((Owner) role).getTeam().getName(),((Owner) role).getAppointer().getUsername());
+      else if(role instanceof Player){
+        dbAdapter.addPage(((Player) role).getPage().getPageID());
+        dbAdapter.addPlayerRole(account.getUserName(),role.getName(),new Date(((Player) role).getBirthday().getYear(),((Player) role).getBirthday().getMonth(),((Player) role).getBirthday().getMonth()),
+                ((Player) role).getPosition().toString(), ((Player) role).getTeam().getName(),((Player) role).getPage().getPageID());
+      }
+      else if(role instanceof Fan){
+        List<Integer> pagesIDs=new ArrayList<>();
+        for(Page page:((Fan) role).getPages())
+          pagesIDs.add(new Integer(page.getPageID()));
+        dbAdapter.addFanRole(account.getUserName(),role.getName(),((Fan) role).isTrackPersonalPages(),((Fan) role).isGetMatchNotifications(),pagesIDs);
+      }
+      else if(role instanceof Referee){
+        HashMap<String,String> refLeaguesAndSeasons=new HashMap<>();
+        for(Map.Entry<League,Season> entry: ((Referee) role).getLeagues().entrySet())
+          refLeaguesAndSeasons.put(entry.getKey().getName(),entry.getValue().getName());
+        dbAdapter.addRefereeRole(account.getUserName(),role.getName(),((Referee) role).getTraining(),refLeaguesAndSeasons);
+      }
+      else if(role instanceof TeamManager){
+        List<String> permissions=new ArrayList<>();
+        for(TeamManager.PermissionEnum permissionEnum:((TeamManager) role).getAppointer().getAllPermitions((TeamManager) role))
+          permissions.add(permissionEnum.toString());
+        dbAdapter.addTeamManagerRole(account.getUserName(),role.getName(),((TeamManager) role).getTeam().getName(),
+                ((TeamManager) role).getAppointer().getUsername(),permissions);
+      }
+      else if(role instanceof SystemManager)
+        dbAdapter.addSystemManagerRole(account.getUserName(),role.getName(),((SystemManager) role).getComplaintAndComments());
+      else if(role instanceof AssociationRepresentative)
+        dbAdapter.addAssociationRepresentativeRole(account.getUserName(),role.getName());
+      else if(role instanceof Coach){
+        dbAdapter.addPage(((Coach) role).getPage().getPageID());
+        dbAdapter.addCoachRole(account.getUserName(),role.getName(),((Coach) role).getTraining(),((Coach) role).getTeamRole(),
+                ((Coach) role).getPage().getPageID(),((Coach) role).getTeams().get(0).getName());
+      }
+
+    }
+  }
+
+  public void setTeamToOwner(Owner owner, Team team) {
+    dbAdapter.setTeamToOwner(owner.getUsername(),team.getName());
+  }
+
+  public void approveTeam(Owner owner, AssociationRepresentative associationRepresentative, String teamName) {
+    dbAdapter.approveTeam(owner.getUsername(),associationRepresentative.getUsername(),teamName);
+  }
+
+  public void addOpenTeamRequest(Owner owner, String teamName) {
+    dbAdapter.addOpenTeamRequest(owner.getUsername(),teamName);
+  }
+
+  public void removeOpenTeamRequest(Owner owner, String teamName) {
+    dbAdapter.removeOpenTeamRequest(owner.getUsername(),teamName);
+  }
+
+  public boolean checkIfRequestExists(Owner owner, String teamName) {
+    String ans=dbAdapter.checkIfRequestExists(owner.getUsername(),teamName);
+    if(ans.length()==0)
+      return false;
+    return true;
+  }
+
+  public boolean getRequestStatus(Owner owner, String teamName) {
+
+    String ans=dbAdapter.checkIfRequestExists(owner.getUsername(),teamName);
+    return ans.equals("1");
+  }
+
+  public void setAccountLogIn(Account account, boolean loggedIn) {
+    dbAdapter.setAccountLogIn(account.getUserName(),String.valueOf(loggedIn));
+  }
+
+  public List<Alert> getAlertsForAccount(String username) {
+    List<Alert> alerts=new ArrayList<>();
+    List<String> strings=dbAdapter.getAlertsForAccount(username);
+    for(String s:strings)
+      alerts.add(new Alert(s));
+    return alerts;
+  }
+
+  public void clearAlertsForAccount(String username) {
+    dbAdapter.clearAlertsForAccount(username);
+  }
+
+  public void addAlertToAccount(String userName, String notification) {
+    dbAdapter.addAlertToAccount(userName,notification);
+  }
+
+  public boolean isAccountloggedIn(String userName) {
+    return Boolean.parseBoolean(dbAdapter.isAccountloggedIn(userName));
+  }
+
+  public List<String> getUserNames(String object) {
+    return dbAdapter.getUserNames(object);
+  }
+
+  public void addRefereeToLeague(Referee referee, League league, Season season) {
+    dbAdapter.addRefereeToLeague(referee.getUsername(),league.getName(),season.getName());
   }
 }
