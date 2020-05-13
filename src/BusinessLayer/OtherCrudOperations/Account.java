@@ -26,7 +26,7 @@ public class Account extends Observable implements Serializable {
     name=aName;
     age=aAge;
     roles = new ArrayList<Role>();
-    isLoggedIn=false;
+    isLoggedIn=DataController.getInstance().isAccountloggedIn(userName);
   }
 
   public boolean isLoggedIn() {

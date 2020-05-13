@@ -695,4 +695,8 @@ public class DataController {
   public void addRefereeToLeague(Referee referee, League league, Season season) {
     dbAdapter.addRefereeToLeague(referee.getUsername(),league.getName(),season.getName());
   }
+
+  public int getNewPageCounter() {
+    return dbAdapter.getNewPageCounter();
+  }
 }

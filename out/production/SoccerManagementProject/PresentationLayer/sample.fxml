@@ -13,6 +13,7 @@
       </AnchorPane>
       <AnchorPane fx:id="options_pane" prefHeight="630.0" prefWidth="678.0" visible="false">
          <children>
+            <Label fx:id="alertLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="70.0" layoutY="125.0" prefHeight="34.0" prefWidth="45.0" style="-fx-background-color: white; -fx-border-radius: 5;" text="Alerts" />
             <TableView fx:id="options_table" layoutX="283.0" layoutY="100.0" onMouseClicked="#showRunQueryButton" prefHeight="200.0" prefWidth="288.0">
               <columns>
                 <TableColumn fx:id="col_options" prefWidth="286.800048828125" text="Options" />

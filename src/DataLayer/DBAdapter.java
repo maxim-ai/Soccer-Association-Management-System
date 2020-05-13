@@ -629,7 +629,7 @@ public class DBAdapter {
     }
 
     public String isAccountloggedIn(String userName) {
-        String ans="";
+        String ans="false";
         try {
             Connection con=connectToDB();
             PreparedStatement ps=con.prepareStatement("select isLoggedIn from Account WHERE UserName=(?)");
@@ -659,5 +659,21 @@ public class DBAdapter {
             if(!e.getMessage().contains("Violation of PRIMARY KEY"))
                 e.printStackTrace();
         }
+    }
+
+    public int getNewPageCounter() {
+        int ans=0;
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("select MAX(ID) from Page");
+            ResultSet RS=ps.executeQuery();
+            while(RS.next()){
+                ans=RS.getInt(1);
+            }
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ans;
     }
 }

@@ -6,6 +6,9 @@ import BusinessLayer.Pages.Page;
 import BusinessLayer.RoleCrudOperations.*;
 import ServiceLayer.GuestController.GuestController;
 import ServiceLayer.OurSystem;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,24 +51,21 @@ public class FXcontroller implements Initializable {
     public Button runMethod_button;
     public TableView<String> alerts_table;
     public TableColumn<String,String> col_alerts;
-//    public Button alertButton;
+    public Label alertLabel;
 
     GuiMediator guiMediator;
+    Timeline alertTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.3), evt -> alertLabel.setStyle("-fx-background-color:RED")),
+            new KeyFrame(Duration.seconds( 0.1), evt -> alertLabel.setStyle("-fx-background-color:White")));
 
     public void chooseLogin()
     {
-        Notifications notificationBuilder=Notifications.create()
-                .title("complete")
-                .text("bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla ")
-                .graphic(null)
-                .hideAfter(Duration.seconds(5))
-                .position(Pos.TOP_CENTER);
-        notificationBuilder.showInformation();
         starter_pane.setVisible(false);
         login_pane.setVisible(true);
     }
 
     public void logIn() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        alertTimeLine.setCycleCount(Animation.INDEFINITE);
+
         String userName=username_input.getText();
         String password=password_input.getText();
 
@@ -162,19 +162,28 @@ public class FXcontroller implements Initializable {
 
         if(alerts.size()>0)
         {
-
-//            List<Label> labels=new ArrayList<>();
-//            for(String alert:alerts)
-//            {
-//                labels.add(new Label(alert));
-//            }
-//            VBox vBox=new VBox();
-//            vBox.getChildren().addAll(labels.get(0));
-//            PopOver popOver = new PopOver(vBox);
-//            alertButton.setOnMouseEntered(mouseEvent -> {
-//                //Show PopOver when mouse enters label
-//                popOver.show(alertButton);
-//            });
+            alertTimeLine.play();
+            int i=1;
+            List<Label> labels=new ArrayList<>();
+            for(String alert:alerts)
+            {
+                labels.add(new Label(""));
+                labels.add(new Label("   "+i+")   "+alert+"   "));
+                labels.add(new Label(""));
+                i++;
+            }
+            VBox vBox=new VBox();
+            vBox.getChildren().addAll(labels);
+            PopOver popOver = new PopOver(vBox);
+            alertLabel.setOnMouseEntered(mouseEvent -> {
+                //Show PopOver when mouse enters label
+                popOver.show(alertLabel);
+                alertTimeLine.stop();
+                alertLabel.setStyle("-fx-background-color:White");
+            });
+            alertLabel.setOnMouseExited(mouseEvent ->{
+                popOver.hide();
+            });
 
 
             alerts_table.setVisible(true);
@@ -195,6 +204,17 @@ public class FXcontroller implements Initializable {
         login_pane.setVisible(true);
         username_input.setText("");
         password_input.setText("");
+    }
+
+    public void showRealTimeAlert(String alert)
+    {
+        Notifications notificationBuilder=Notifications.create()
+                .title("complete")
+                .text("bla bla bla bla bla")
+                .graphic(null)
+                .hideAfter(Duration.seconds(5))
+                .position(Pos.TOP_CENTER);
+        notificationBuilder.showInformation();
     }
 
 }

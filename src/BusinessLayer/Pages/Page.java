@@ -1,4 +1,5 @@
 package BusinessLayer.Pages;
+import BusinessLayer.DataController;
 import BusinessLayer.OtherCrudOperations.Alert;
 import BusinessLayer.OtherCrudOperations.Pageable;
 import BusinessLayer.RoleCrudOperations.Fan;
@@ -9,7 +10,7 @@ import java.util.*;
 public class Page implements Serializable
 {
 
-  private static int pageIDcounter=0;
+  private static int pageIDcounter=DataController.getInstance().getNewPageCounter()+1;
   private Pageable type;
   private List<Fan> fans;
   private int pageID;
@@ -19,6 +20,7 @@ public class Page implements Serializable
     setType(pageable);
     fans = new ArrayList<Fan>();
     pageID=(++pageIDcounter);
+//    DataController.getInstance().addPage(pageIDcounter);
   }
 
   public int getPageID() {

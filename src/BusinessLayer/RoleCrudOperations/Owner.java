@@ -480,10 +480,11 @@ public class Owner extends Role implements Serializable {
             {
 
                 Team team=new Team(teamName,league,stadium);
+                new Page(team);
                 team.addOwner(this);
                 DataController.getInstance().addTeamDC(team);
                 DataController.getInstance().setTeamToOwner(this,team);
-                DataController.getInstance().addTeamDC(team);
+//                DataController.getInstance().addTeamDC(team);
                 AssociationRepresentative.removeOpenTeamRequest(this,teamName);
                 Logger.getInstance().writeNewLine(getUsername()+" just opened the team: "+teamName);
                 return "Team successfully created";
@@ -503,7 +504,7 @@ public class Owner extends Role implements Serializable {
         Account account=new Account(aName,age,userName,password);
         account.addRole(player);
         SystemManager.createAccount(account);
-        Logger.getInstance().writeNewLine(getUsername()+" just a new player: "+aName+" to team: "+getTeam());
+        Logger.getInstance().writeNewLine(getUsername()+" just created a new player: "+aName+" to team: "+getTeam());
         return account;
     }
 
