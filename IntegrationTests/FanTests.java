@@ -1,19 +1,3 @@
-import BusinessLayer.DataController;
-import BusinessLayer.OtherCrudOperations.*;
-import BusinessLayer.Pages.Page;
-import BusinessLayer.RoleCrudOperations.*;
-import ServiceLayer.OurSystem;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.*;
-import java.sql.Time;
-import java.util.Date;
-import java.util.List;
-
-import static org.junit.Assert.*;
-
 public class FanTests {
 //    Fan fan;
 //    Account account1;Account account2;League league;Stadium stadium;Season season;

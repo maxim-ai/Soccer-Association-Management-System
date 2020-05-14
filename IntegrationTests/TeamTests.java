@@ -1,22 +1,3 @@
-import BusinessLayer.DataController;
-import BusinessLayer.Logger.Logger;
-import BusinessLayer.OtherCrudOperations.*;
-import BusinessLayer.Pages.Page;
-import BusinessLayer.RoleCrudOperations.Coach;
-import BusinessLayer.RoleCrudOperations.Owner;
-import BusinessLayer.RoleCrudOperations.Player;
-import BusinessLayer.RoleCrudOperations.TeamManager;
-import ServiceLayer.OurSystem;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.sql.Date;
-import java.sql.Time;
-
-import static org.junit.Assert.*;
-
 public class TeamTests {
 //    private final ByteArrayOutputStream OS=new ByteArrayOutputStream();
 //    private final PrintStream PS=System.out;

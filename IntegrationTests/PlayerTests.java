@@ -1,9 +1,9 @@
-import BusinessLayer.DataController;
-import BusinessLayer.OtherCrudOperations.*;
-import BusinessLayer.Pages.Page;
-import BusinessLayer.RoleCrudOperations.Fan;
-import BusinessLayer.RoleCrudOperations.Player;
-import BusinessLayer.RoleCrudOperations.Referee;
+import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.OtherCrudOperations.*;
+import Server.BusinessLayer.Pages.Page;
+import Server.BusinessLayer.RoleCrudOperations.Fan;
+import Server.BusinessLayer.RoleCrudOperations.Player;
+import Server.BusinessLayer.RoleCrudOperations.Referee;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

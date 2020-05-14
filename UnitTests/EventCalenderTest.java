@@ -1,19 +1,3 @@
-import BusinessLayer.DataController;
-import BusinessLayer.OtherCrudOperations.*;
-import BusinessLayer.Pages.Page;
-import BusinessLayer.RoleCrudOperations.Fan;
-import BusinessLayer.RoleCrudOperations.Referee;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.sql.Time;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.*;
-
 public class EventCalenderTest {
 //    Date date=new Date();
 //    Time time=new Time(System.currentTimeMillis());

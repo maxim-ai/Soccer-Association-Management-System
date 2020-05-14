@@ -1,8 +1,8 @@
-import BusinessLayer.DataController;
-import BusinessLayer.OtherCrudOperations.Alert;
-import BusinessLayer.RoleCrudOperations.Fan;
-import BusinessLayer.RoleCrudOperations.Role;
-import ServiceLayer.OurSystem;
+import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.OtherCrudOperations.Alert;
+import Server.BusinessLayer.RoleCrudOperations.Fan;
+import Server.BusinessLayer.RoleCrudOperations.Role;
+import Client.ServiceLayer.OurSystem;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,5 +1,5 @@
-import BusinessLayer.DataController;
-import BusinessLayer.Logger.Logger;
+import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.Logger.Logger;
 import org.junit.Before;
 import org.junit.Test;
 

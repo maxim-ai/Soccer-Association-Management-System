@@ -1,8 +1,8 @@
-import BusinessLayer.DataController;
-import BusinessLayer.Logger.Logger;
-import BusinessLayer.OtherCrudOperations.*;
-import BusinessLayer.RoleCrudOperations.*;
-import ServiceLayer.OurSystem;
+import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.Logger.Logger;
+import Server.BusinessLayer.OtherCrudOperations.*;
+import Server.BusinessLayer.RoleCrudOperations.*;
+import Client.ServiceLayer.OurSystem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,11 +1,11 @@
 
-import BusinessLayer.DataController;
-import BusinessLayer.OtherCrudOperations.Account;
-import BusinessLayer.OtherCrudOperations.League;
-import BusinessLayer.OtherCrudOperations.Stadium;
-import BusinessLayer.OtherCrudOperations.Team;
-import BusinessLayer.Pages.Page;
-import BusinessLayer.RoleCrudOperations.*;
+import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.OtherCrudOperations.Account;
+import Server.BusinessLayer.OtherCrudOperations.League;
+import Server.BusinessLayer.OtherCrudOperations.Stadium;
+import Server.BusinessLayer.OtherCrudOperations.Team;
+import Server.BusinessLayer.Pages.Page;
+import Server.BusinessLayer.RoleCrudOperations.*;
 import org.junit.Before;
 import org.junit.Test;
 

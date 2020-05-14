@@ -1,5 +1,5 @@
-import BusinessLayer.DataController;
-import BusinessLayer.OtherCrudOperations.Alert;
+import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.OtherCrudOperations.Alert;
 import org.junit.Before;
 import org.junit.Test;
 

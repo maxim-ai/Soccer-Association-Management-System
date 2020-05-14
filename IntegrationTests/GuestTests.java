@@ -1,18 +1,3 @@
-import BusinessLayer.DataController;
-import BusinessLayer.OtherCrudOperations.*;
-import BusinessLayer.RoleCrudOperations.*;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.PrintStream;
-import java.sql.Time;
-import java.util.Date;
-
-import static org.junit.Assert.*;
-
 public class GuestTests {
 //    Guest guest;
 //    Account account1;Account account2;League league;

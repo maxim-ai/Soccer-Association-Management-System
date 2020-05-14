@@ -1,6 +1,6 @@
 
-import BusinessLayer.DataController;
-import BusinessLayer.OtherCrudOperations.*;
+import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.OtherCrudOperations.*;
 import org.junit.Before;
 import org.junit.Test;
 

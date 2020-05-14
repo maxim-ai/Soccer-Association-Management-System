@@ -1,7 +1,7 @@
-import BusinessLayer.DataController;
-import BusinessLayer.RoleCrudOperations.Coach;
-import BusinessLayer.RoleCrudOperations.Fan;
-import BusinessLayer.Pages.Page;
+import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.RoleCrudOperations.Coach;
+import Server.BusinessLayer.RoleCrudOperations.Fan;
+import Server.BusinessLayer.Pages.Page;
 import org.junit.Before;
 import org.junit.Test;
 

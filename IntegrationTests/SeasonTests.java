@@ -1,9 +1,9 @@
 
-import BusinessLayer.DataController;
-import BusinessLayer.OtherCrudOperations.League;
-import BusinessLayer.OtherCrudOperations.Policy;
-import BusinessLayer.OtherCrudOperations.SLsettings;
-import BusinessLayer.OtherCrudOperations.Season;
+import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.OtherCrudOperations.League;
+import Server.BusinessLayer.OtherCrudOperations.Policy;
+import Server.BusinessLayer.OtherCrudOperations.SLsettings;
+import Server.BusinessLayer.OtherCrudOperations.Season;
 import org.junit.Before;
 import org.junit.Test;
 

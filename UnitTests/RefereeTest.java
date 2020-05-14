@@ -1,20 +1,3 @@
-import BusinessLayer.DataController;
-import BusinessLayer.Logger.Logger;
-import BusinessLayer.OtherCrudOperations.*;
-import BusinessLayer.Pages.Page;
-import BusinessLayer.RoleCrudOperations.Fan;
-import BusinessLayer.RoleCrudOperations.Referee;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.sql.Time;
-import java.util.*;
-
-import static org.junit.Assert.*;
-
 public class RefereeTest {
 //
 //    Referee referee=new Referee("Football Association","adi lioz");
