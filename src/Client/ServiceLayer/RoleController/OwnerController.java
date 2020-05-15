@@ -318,4 +318,10 @@ public class OwnerController
         return ( List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("getAlerts",parameters)));
         //return ownerBusinessController.getAlerts();
     }
+    public void logOff()
+    {
+        List<String> parameters = new LinkedList<>();
+        String sendToServer = "Owner@"+Client.getUserName();
+        Client.connectToServer(new Pair<>(sendToServer,new Pair<>("logOff",parameters)));
+    }
 }

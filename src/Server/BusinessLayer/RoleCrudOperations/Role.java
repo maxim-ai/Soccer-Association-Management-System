@@ -1,5 +1,6 @@
 package Server.BusinessLayer.RoleCrudOperations;
 import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.OtherCrudOperations.Account;
 import Server.BusinessLayer.OtherCrudOperations.Alert;
 import javafx.util.Pair;
 
@@ -89,4 +90,10 @@ public abstract class Role extends Observable implements Serializable
       DataController.getInstance().addAlertToAccount(userName,notification);
     }
   }
+
+    public void logOff()
+    {
+      DataController.getInstance().removeAlertsFromAccount(new Account(name,0,getUsername(),""));
+      DataController.getInstance().setAccountLogIn(new Account(name,0,getUsername(),""),false);
+    }
 }

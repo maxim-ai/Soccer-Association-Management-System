@@ -720,5 +720,8 @@ public class DataController {
   }
 
 
+  public void removeAlertsFromAccount(Account account) {
+    dbAdapter.removeAlertsFromAccount(account.getUserName());
+  }
 }
 

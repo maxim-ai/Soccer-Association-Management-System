@@ -151,6 +151,7 @@ public class FXcontroller implements Initializable {
 
         if(alerts.size()>0)
         {
+            alertLabel.setVisible(true);
             alertTimeLine.play();
             int i=1;
             List<Label> labels=new ArrayList<>();
@@ -182,6 +183,7 @@ public class FXcontroller implements Initializable {
 
     public void logout()
     {
+        guiMediator.logOff();
         options_pane.setVisible(false);
         login_pane.setVisible(true);
         username_input.setText("");

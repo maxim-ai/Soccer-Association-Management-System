@@ -189,5 +189,11 @@ public class AssociationRepresentativeController {
         String sendToServer = "AssociationRepresentative@"+Client.getUserName();
         return ( List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("getAlerts",parameters)));
     }
+    public void logOff()
+    {
+        List<String> parameters = new LinkedList<>();
+        String sendToServer = "AssociationRepresentative@"+Client.getUserName();
+        Client.connectToServer(new Pair<>(sendToServer,new Pair<>("logOff",parameters)));
+    }
 
 }

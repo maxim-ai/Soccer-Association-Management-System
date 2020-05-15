@@ -11,6 +11,7 @@ import java.util.*;
 public class GuiMediator implements Observer {
     OurSystem ourSystem;
     List controllers=new ArrayList();
+    String currentUserName;
     HashMap<String, Pair<Method,List<String>>> functionsToUser=new HashMap<>(); //key: name of option for user
                                                                                 //value: pairKey:actual method
                                                                                 //       pairValue: list of args for method
@@ -34,6 +35,7 @@ public class GuiMediator implements Observer {
 
     public String getUserControllers(String userName, String password)
     {
+        currentUserName=userName;
         GuestController guestController= OurSystem.makeGuestController();
         List<Object> controllerList= (List<Object>) guestController.LogIn(userName,password);
         if(controllerList.size()==1 && controllerList.get(0) instanceof String)
@@ -116,5 +118,16 @@ public class GuiMediator implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+    }
+
+    public void logOff() {
+        try {
+            controllers.get(0).getClass().getDeclaredMethod("logOff").invoke( controllers.get(0));
+        } catch (NoSuchMethodException e) {
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 }

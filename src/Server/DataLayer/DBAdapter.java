@@ -783,4 +783,16 @@ public class DBAdapter {
         }
         return null;
     }
+
+    public void removeAlertsFromAccount(String username) {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("DELETE FROM Alert WHERE UserName=(?)");
+            ps.setString(1,username);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+    }
 }

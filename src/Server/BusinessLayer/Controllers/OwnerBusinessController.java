@@ -26,6 +26,10 @@ public class OwnerBusinessController
         }
         return strings;
     }
+    public void logOff()
+    {
+        owner.logOff();
+    }
 
     public Team getTeam()
     {

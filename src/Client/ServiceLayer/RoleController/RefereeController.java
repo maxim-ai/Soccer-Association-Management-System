@@ -112,6 +112,12 @@ public class RefereeController {
         }
         return containsDigit;
     }
+    public void logOff()
+    {
+        List<String> parameters = new LinkedList<>();
+        String sendToServer = "Referee@"+Client.getUserName();
+        Client.connectToServer(new Pair<>(sendToServer,new Pair<>("logOff",parameters)));
+    }
 
     public HashMap<String, Pair<Method,List<String>>> showUserMethods() throws NoSuchMethodException
     {
@@ -131,4 +137,5 @@ public class RefereeController {
 
         return options;
     }
+
 }

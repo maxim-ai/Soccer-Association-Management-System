@@ -13,7 +13,6 @@ public class GuestBusinessController {
 
     public GuestBusinessController(){
         this.guest=new Guest();
-        OurSystem.addGuest(guest);
     }
 
     //region Getters&&Setters

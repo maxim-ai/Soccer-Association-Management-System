@@ -21,8 +21,8 @@ public class Main extends Application {
     public static void main(String[] args) {
         //connectToDB();
         //getTeamNames();
-        Server server=new Server();
-        server.start();
+//        Server server=new Server();
+//        server.start();
         launch(args);
 
 
