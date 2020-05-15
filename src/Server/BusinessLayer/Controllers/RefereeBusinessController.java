@@ -172,24 +172,11 @@ public class RefereeBusinessController {
         String eventType=splitArr[0].substring(new String("EventType: ").length());
         String description=splitArr[1].substring(new String(" Description: ").length());
         String minute=splitArr[2].substring(new String(" Minute: ").length());
-
-        for (Referee referee : DataController.getInstance().getRefereesFromAccounts()){
-            for (Match match:referee.getMatchs()) {
-                for (GameEvent event : match.getEventCalender().getGameEvents()) {
-                    if (event.getGameMinute() == Integer.parseInt(minute)&&convertStringToGameEvent(eventType).equals(event.getType())&&event.getDescription().equals(description))
-                        return event;
-                }
-            }
-        }
-        return null;
+        return new GameEvent(convertStringToEventEnum(eventType),null,null,description,Integer.parseInt(minute),null);
     }
     public List<String> getEvantsByMatch(String matchString){
 //        List<String> list=new ArrayList<>();
-//        String homeTeam=matchString.substring(matchString.indexOf("Teams")+7,matchString.indexOf("against")-1);
-//        String awayTeam=matchString.substring(matchString.indexOf("against")+8,matchString.indexOf("Date:")-2);
-//        String day=matchString.substring(matchString.lastIndexOf(":")+2,matchString.indexOf("/"));
-//        String month=matchString.substring(matchString.indexOf("/")+1,matchString.lastIndexOf("/"));
-//        String year=matchString.substring(matchString.lastIndexOf("/")+1);
+
 //
 //        List<Match> matches=referee.getMatchs();
 //
@@ -204,7 +191,10 @@ public class RefereeBusinessController {
 //        }
 //
 //        return list;
-        return null;
+        String homeTeam=matchString.substring(matchString.indexOf("Teams")+7,matchString.indexOf("against")-1);
+        String awayTeam=matchString.substring(matchString.indexOf("against")+8,matchString.indexOf("Date:")-2);
+        String date=matchString.substring(matchString.lastIndexOf(":")+2);
+        return DataController.getInstance().getGameEventsByMatch(homeTeam,awayTeam,date);
 
     }
     public List<String> getMatchList(){
@@ -213,7 +203,8 @@ public class RefereeBusinessController {
 //            list.add("Teams: "+match.getHomeTeam().getName()+" against "+match.getAwayTeam().getName()+
 //                    ", Date: "+match.getDate().getDay()+"/"+match.getDate().getMonth()+"/"+match.getDate().getYear());
 //        return list;
-
-        return null;
+//
+//        return null;
+        return DataController.getInstance().getAllMatches();
     }
 }

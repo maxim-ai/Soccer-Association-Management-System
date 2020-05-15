@@ -277,22 +277,13 @@ public class Match implements Serializable
     }
   }
   public static Match convertStringToMatch(String match){
-      String [] splitArr=match.split(",");
-      String homeTeam=splitArr[0].substring(new String("Teams: ").length(),splitArr[0].indexOf(" against"));
-      String awayTeam=splitArr[0].substring(splitArr[0].indexOf("against")+new String("against ").length());
-      String []date=splitArr[1].substring(splitArr[1].indexOf("Date:")+new String("Date: ").length()).split("/");
-      String day=date[0];
-      String month=date[1];
-      String year=date[2];
-      for (Referee referee: DataController.getInstance().getRefereesFromAccounts()
-           ) {
-          for (Match m:referee.getMatchs()
-               ) {
-              if (m.homeTeam.getName().equals(homeTeam)&&m.awayTeam.getName().equals(awayTeam)&&m.getDate().equals(day+"-"+month+"-"+year))
-                  return m;
-          }
-      }
-    return null;
+    String [] splitArr=match.split(",");
+    String homeTeam=splitArr[0].substring(new String("Teams: ").length(),splitArr[0].indexOf(" against"));
+    String awayTeam=splitArr[0].substring(splitArr[0].indexOf("against")+new String("against ").length());
+    String date=splitArr[1].substring(splitArr[1].indexOf("Date:")+new String("Date: ").length());
+    Team homeTeamObj=new Team(homeTeam,null,null);
+    Team awayTeamObj=new Team(awayTeam,null,null);
+    return new Match(date,null,0,0,null,null,awayTeamObj,homeTeamObj,null,null,null);
   }
 
 

@@ -1,8 +1,10 @@
 package Server.BusinessLayer.RoleCrudOperations;
+import Server.BusinessLayer.DataController;
 import Server.BusinessLayer.Logger.Logger;
 import Server.BusinessLayer.OtherCrudOperations.*;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +18,7 @@ public class Referee extends Role implements Serializable
   private List<Match> matchs;
   private SLsettings sLsettings;
 
-  public Referee(String name){setUsername(name);}
+  public Referee(String username){setUsername(username);}
 
 
 
@@ -211,66 +213,77 @@ public class Referee extends Role implements Serializable
   UC-10.3 update event during match
    */
   public boolean updateEventDuringMatch(Match match, EventEnum aType, String aDescription) throws Exception {
-//    boolean wasUpdate=false;
-//    if(matchs.contains(match)){
-//      Date currDate=new Date(System.currentTimeMillis());
-//      if (getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES)<90)
-//      {
-//        Time currTime=new Time(Calendar.getInstance().getTimeInMillis());
-//        GameEvent event=new GameEvent(aType,currDate,currTime,aDescription,(int)(getDateDiff(match.getDate(),currDate,TimeUnit.MINUTES)),match.getEventCalender());
-//        match.getEventCalender().addGameEvent(event);
-//        wasUpdate=true;
-//        Logger.getInstance().writeNewLine("BusinessLayer.RoleCrudOperations.Referee "+super.getName()+" update event during the match between: "+match.getHomeTeam().getName()+","+match.getAwayTeam().getName()+" to "+event.getType());
-//      }
-//      else {
-//        (Logger.getInstanceError()).writeNewLineError("Referee tried to add event not during the match");
-//        throw new Exception("Referee tried to add event not during the match");
-//      }
-//    }
-//    else{
-//      (Logger.getInstanceError()).writeNewLineError("Referee didnt take part in this match");
-//      throw new Exception("Referee didnt take part in this match");
-//    }
-//    return wasUpdate;
-    return true;
+    boolean wasUpdate=false;
+    if(!DataController.getInstance().getMatch(match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate()).isEmpty()){
+      Date currDate=new Date(System.currentTimeMillis());
+      String[]dateSplit=match.getDate().split("/");
+      Date gameDate=convertStringToDate(dateSplit[2],dateSplit[1],dateSplit[0]);
+      Time time =DataController.getInstance().getMatchTime(match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate());
+      gameDate.setHours(time.getHours());
+      gameDate.setMinutes(time.getMinutes());
+      gameDate.setSeconds(time.getSeconds());
+      if (getDateDiff(gameDate,currDate,TimeUnit.MINUTES)<90)
+      {
+        Time currTime=new Time(Calendar.getInstance().getTimeInMillis());
+        GameEvent event=new GameEvent(aType,currDate,currTime,aDescription,(int)(getDateDiff(gameDate,currDate,TimeUnit.MINUTES)),match.getEventCalender());
+        DataController.getInstance().addGameEvent(aType.toString(),currTime,aDescription,(int)(getDateDiff(gameDate,currDate,TimeUnit.MINUTES)),convertDateToString(currDate),match.getAwayTeam().getName(),match.getHomeTeam().getName());
+        wasUpdate=true;
+        Logger.getInstance().writeNewLine("BusinessLayer.RoleCrudOperations.Referee "+super.getName()+" update event during the match between: "+match.getHomeTeam().getName()+","+match.getAwayTeam().getName()+" to "+event.getType());
+      }
+      else {
+        (Logger.getInstanceError()).writeNewLineError("Referee tried to add event not during the match");
+        throw new Exception("Referee tried to add event not during the match");
+      }
+    }
+    else{
+      (Logger.getInstanceError()).writeNewLineError("Referee didnt take part in this match");
+      throw new Exception("Referee didnt take part in this match");
+    }
+    return wasUpdate;
   }
   /*
   UC - 10.4 edit game after the game end
    */
   public boolean editEventAfterGame(Match match, GameEvent gameEvent, EventEnum aType, String aDescription) throws Exception {
-//    boolean wasEdit = false;
-//    if (matchs.contains(match)){
-//      if(match.getMainReferee().equals(this)) {
-//      Date currDate = new Date(System.currentTimeMillis());
-//      if (getDateDiff(match.getDate(), currDate, TimeUnit.MINUTES) > 390) {
-//        if (match.getEventCalender().getGameEvents().contains(gameEvent)) {
-//          match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setType(aType);
-//          match.getEventCalender().getGameEvents().get(match.getEventCalender().indexOfGameEvent(gameEvent)).setDescription(aDescription);
-//          wasEdit = true;
-//          Logger.getInstance().writeNewLine("BusinessLayer.RoleCrudOperations.Referee " + super.getName() + " edit event after the match between: " + match.getHomeTeam().getName() + "," + match.getAwayTeam().getName() + " to " + aType);
-//
-//        }
-//        else{
-//          (Logger.getInstanceError()).writeNewLineError("This match don't contain given game event");
-//          throw new Exception("This match don't contain given game event");
-//        }
-//      }
-//      else{
-//        (Logger.getInstanceError()).writeNewLineError("Referee can edit event only after 5 hours");
-//        throw new Exception("Referee can edit event only after 5 hours");
-//      }
-//    }
-//      else{
-//        (Logger.getInstanceError()).writeNewLineError("Referee is not a main referee");
-//        throw new Exception("Referee is not a main referee");
-//      }
-//  }
-//    else{
-//      (Logger.getInstanceError()).writeNewLineError("Referee didnt take part in this match");
-//      throw new Exception("Referee didnt take part in this match");
-//    }
-//    return wasEdit;
-    return true;
+    boolean wasEdit = false;
+    if(!DataController.getInstance().getMatch(match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate()).isEmpty())
+    {
+      if(DataController.getInstance().getMainRefereeInMatch(match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate()).equals(this.getUsername()))
+      {
+        Date currDate=new Date(System.currentTimeMillis());
+        String[]dateSplit=match.getDate().split("/");
+        Date gameDate=convertStringToDate(dateSplit[2],dateSplit[1],dateSplit[0]);
+        Time time =DataController.getInstance().getMatchTime(match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate());
+        gameDate.setHours(time.getHours());
+        gameDate.setMinutes(time.getMinutes());
+        gameDate.setSeconds(time.getSeconds());
+        if (getDateDiff(gameDate, currDate, TimeUnit.MINUTES) > 390) {
+          if (!DataController.getInstance().getGameEvents(gameEvent.getType().toString(),gameEvent.getGameMinute()+"",gameEvent.getDescription()).isEmpty()) {
+            DataController.getInstance().updateGameEvent(aType.toString(),aDescription,match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate());
+            wasEdit = true;
+            Logger.getInstance().writeNewLine("BusinessLayer.RoleCrudOperations.Referee " + super.getName() + " edit event after the match between: " + match.getHomeTeam().getName() + "," + match.getAwayTeam().getName() + " to " + aType);
+
+          }
+          else{
+            (Logger.getInstanceError()).writeNewLineError("This match don't contain given game event");
+            throw new Exception("This match don't contain given game event");
+          }
+        }
+        else{
+          (Logger.getInstanceError()).writeNewLineError("Referee can edit event only after 5 hours");
+          throw new Exception("Referee can edit event only after 5 hours");
+        }
+      }
+      else{
+        (Logger.getInstanceError()).writeNewLineError("Referee is not a main referee");
+        throw new Exception("Referee is not a main referee");
+      }
+    }
+    else{
+      (Logger.getInstanceError()).writeNewLineError("Referee didnt take part in this match");
+      throw new Exception("Referee didnt take part in this match");
+    }
+    return wasEdit;
   }
 
   public void ShowReferee() {
@@ -292,7 +305,17 @@ public class Referee extends Role implements Serializable
   }
 
 
-
+  public static Date convertStringToDate( String day,String month,String year) {
+    Date date=new Date();
+    date.setYear(Integer.parseInt(year));
+    date.setMonth(Integer.parseInt(month));
+    date.setDate(Integer.parseInt(day));
+    return date;
+  }
+  public static String convertDateToString(Date date)
+  {
+    return date.getDay()+"/"+date.getMonth()+"/"+date.getYear();
+  }
 
 
 }

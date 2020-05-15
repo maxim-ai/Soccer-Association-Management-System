@@ -6,6 +6,7 @@ import Server.BusinessLayer.RoleCrudOperations.*;
 import Server.DataLayer.DBAdapter;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.*;
 
 public class DataController {
@@ -719,9 +720,37 @@ public class DataController {
     return dbAdapter.getGameSchedualPolicies(policy);
   }
 
-
   public void removeAlertsFromAccount(Account account) {
     dbAdapter.removeAlertsFromAccount(account.getUserName());
   }
+  public Time getMatchTime(String awayTeam, String homeTeam, String date){
+    return dbAdapter.getMatchTime(awayTeam,homeTeam,date);
+  }
+  public void addGameEvent(String eventType, Time hour, String description, int gameMinute, String date, String awayTeamName, String homeTeamName) {
+    dbAdapter.addGameEvent(eventType,hour,description,gameMinute,date,awayTeamName,homeTeamName);
+  }
+  public List<String> getMatch(String awayTeam,String homeTeam,String date)
+  {
+    return dbAdapter.getMatch(awayTeam,homeTeam,date);
+  }
+  public String getMainRefereeInMatch(String awayTeam,String homeTeam,String date){
+    return dbAdapter.getMainRefereeInMatch(awayTeam,homeTeam,date);
+  }
+  public void updateGameEvent(String event,String description,String awayTeam,String homeTeam,String date) {
+    dbAdapter.updateGameEvent(event,description,awayTeam,homeTeam,date);
+  }
+  public List<String> getGameEvents(String event,String minute,String description)
+  {
+    return dbAdapter.getGameEvents(event,minute,description);
+  }
+  public List<String> getAllMatches()
+  {
+    return dbAdapter.getAllMatches();
+  }
+  public List<String> getGameEventsByMatch(String homeTeam,String awayTeam,String date)
+  {
+    return dbAdapter.getGameEventsByMatch(homeTeam,awayTeam,date);
+  }
+
 }
 

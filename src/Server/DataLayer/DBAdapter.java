@@ -1,10 +1,8 @@
 package Server.DataLayer;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Date;
+import java.util.*;
 
 public class DBAdapter {
 
@@ -783,7 +781,6 @@ public class DBAdapter {
         }
         return null;
     }
-
     public void removeAlertsFromAccount(String username) {
         try {
             Connection con=connectToDB();
@@ -794,5 +791,142 @@ public class DBAdapter {
             if(!e.getMessage().contains("Violation of PRIMARY KEY"))
                 e.printStackTrace();
         }
+    }
+    public Time getMatchTime(String awayTeam,String homeTeam,String date)
+    {
+        Time time=null;
+        try {
+            Connection con = connectToDB();
+            PreparedStatement st=con.prepareStatement("select * from MATCH where Date=? AND AwayTeam=? AND homeTeam=?");
+            st.setString(1,date);
+            st.setString(2,awayTeam);
+            st.setString(3,homeTeam);
+            ResultSet resultSet = st.executeQuery();
+
+            while (resultSet.next()) {
+                time=resultSet.getTime(2);
+            }
+            con.close();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+
+        }
+        return time;
+    }
+    public List<String> getMatch(String awayTeam,String homeTeam,String date)
+    {
+        List<String> matches=new ArrayList<>();
+        try {
+            Connection con=connectToDB();
+            PreparedStatement st=con.prepareStatement("select * from MATCH where Date=? AND AwayTeam=? AND homeTeam=?");
+            st.setString(1,date);
+            st.setString(2,awayTeam);
+            st.setString(3,homeTeam);
+            ResultSet RS=st.executeQuery();
+            while(RS.next()){
+                matches.add(RS.getString(1));
+            }
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return matches;
+    }
+    public String getMainRefereeInMatch(String awayTeam,String homeTeam,String date)
+    {
+        String name="";
+        try {
+            Connection con = connectToDB();
+            PreparedStatement st=con.prepareStatement("select * from MATCH where Date=? AND AwayTeam=? AND homeTeam=?");
+            st.setString(1,date);
+            st.setString(2,awayTeam);
+            st.setString(3,homeTeam);
+            ResultSet resultSet = st.executeQuery();
+            while (resultSet.next()) {
+                name=resultSet.getString("MainReferee");
+            }
+            con.close();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+
+        }
+        return name;
+    }
+
+    public void updateGameEvent(String event,String description,String awayTeam,String homeTeam,String date) {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement pr=con.prepareStatement("update GameEvent set Description=?, EventType=? where Date=? and AwayTeam=? and homeTeam=?");
+            pr.setString(1,description);
+            pr.setString(2,event);
+            pr.setString(3,date);
+            pr.setString(4,awayTeam);
+            pr.setString(5,homeTeam);
+            pr.executeUpdate();
+            con.close();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+    }
+    public List<String> getGameEvents(String event,String minute,String description)
+    {
+        List<String> events=new LinkedList<>();
+        try {
+            Connection con=connectToDB();
+            PreparedStatement st=con.prepareStatement("select * from GameEvent where EventType=? AND GameMinute=? AND Description=?");
+            st.setString(1,event);
+            st.setString(2,minute);
+            st.setString(3,description);
+            ResultSet RS=st.executeQuery();
+            while(RS.next()){
+                events.add(RS.getString(1));
+            }
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
+    public List<String> getAllMatches()
+    {
+        List<String> ans=new ArrayList<>();
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("select * from Match");
+            ResultSet RS=ps.executeQuery();
+            while(RS.next()){
+                String s="Teams: "+RS.getString("homeTeam")+" against "+RS.getString("AwayTeam")+
+                        ", Date: "+RS.getString("Date");
+                ans.add(s);
+            }
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ans;
+    }
+
+    public List<String> getGameEventsByMatch(String homeTeam,String awayTeam,String date)
+    {
+        List<String> ans=new ArrayList<>();
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("select * from GameEvent where homeTeam=? and AwayTeam=? and Date=?");
+            ps.setString(1,homeTeam);
+            ps.setString(2,awayTeam);
+            ps.setString(3,date);
+            ResultSet RS=ps.executeQuery();
+            while(RS.next()){
+                String s="EventType: "+RS.getString("EventType")+", Description: "+RS.getString("Description")+", Minute: "+RS.getString("GameMinute");
+                ans.add(s);
+            }
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ans;
     }
 }
