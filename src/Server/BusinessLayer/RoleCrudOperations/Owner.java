@@ -4,6 +4,7 @@ import Server.BusinessLayer.Logger.Logger;
 import Server.BusinessLayer.OtherCrudOperations.*;
 import Server.BusinessLayer.Pages.Page;
 import Client.ServiceLayer.OurSystem;
+import Server.Server;
 
 import java.io.Serializable;
 
@@ -449,6 +450,9 @@ public class Owner extends Role implements Serializable {
      */
     public String createTeam(String teamName, League league, Stadium stadium)
     {
+        //Server server=Server.getInstance();
+        //server.sendMessageToClient("Hiiiiiiiiii");
+//        Server.getInstance().sendMessageToClient(this.getUsername(),"INFOOOOOOOOOOO");
         boolean teamExists=false;
         for(String team: DataController.getInstance().getNames("Team"))
         {

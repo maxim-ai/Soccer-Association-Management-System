@@ -42,9 +42,10 @@ public class GuestController {
         List<String> parameters = new LinkedList<>();
         parameters.add(UserName);
         parameters.add(Password);
-        Client.setUserName(UserName);
+        Client.getInstance().setUserName(UserName);
         String sendToServer = "Guest@"+Client.getUserName();
         List<String> stringControllers = (List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("LogIn",parameters)));
+        Client.getInstance().startListen(UserName);
         return getControllersList(stringControllers);
 //        return guestBusinessController.LogIn(UserName,Password);
 

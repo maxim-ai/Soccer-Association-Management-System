@@ -2,6 +2,7 @@ package Server.BusinessLayer.RoleCrudOperations;
 import Server.BusinessLayer.DataController;
 import Server.BusinessLayer.OtherCrudOperations.Account;
 import Server.BusinessLayer.OtherCrudOperations.Alert;
+import Server.Server;
 import javafx.util.Pair;
 
 import java.io.Serializable;
@@ -82,8 +83,8 @@ public abstract class Role extends Observable implements Serializable
   {
     if(DataController.getInstance().isAccountloggedIn(userName))
     {
-      Pair<String,String> massage=new Pair<>(userName,notification);
-      notifyObservers(massage);
+      Pair<String,String> message=new Pair<>(userName,notification);
+      Server.getInstance().sendMessageToClient(userName,message);
     }
     else
     {

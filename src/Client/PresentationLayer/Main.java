@@ -1,5 +1,6 @@
 package Client.PresentationLayer;
 
+import Client.Client;
 import Server.Server;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -21,8 +22,8 @@ public class Main extends Application {
     public static void main(String[] args) {
         //connectToDB();
         //getTeamNames();
-//        Server server=new Server();
-//        server.start();
+//        (Server.getInstance()).start();
+        //Client.startListen();
         launch(args);
 
 

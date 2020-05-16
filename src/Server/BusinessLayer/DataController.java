@@ -685,7 +685,8 @@ public class DataController {
   }
 
   public boolean isAccountloggedIn(String userName) {
-    return Boolean.parseBoolean(dbAdapter.isAccountloggedIn(userName));
+    String ans=dbAdapter.isAccountloggedIn(userName);
+    return ans.equals("1");
   }
 
   public List<String> getUserNames(String object) {

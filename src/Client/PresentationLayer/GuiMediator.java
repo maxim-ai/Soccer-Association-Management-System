@@ -8,13 +8,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class GuiMediator implements Observer {
+public class GuiMediator extends Observable {
     OurSystem ourSystem;
     List controllers=new ArrayList();
+
     String currentUserName;
+
     HashMap<String, Pair<Method,List<String>>> functionsToUser=new HashMap<>(); //key: name of option for user
                                                                                 //value: pairKey:actual method
                                                                                 //       pairValue: list of args for method
+    public String getCurrentUserName() {
+        return currentUserName;
+    }
 
     public GuiMediator() {
         this.ourSystem = new OurSystem();
@@ -116,8 +121,13 @@ public class GuiMediator implements Observer {
         return alerts;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
+
+    public void sendRealTimeAlerts(Pair<String,String> alert)
+    {
+        if(alert.getKey().equals(currentUserName))
+        {
+            notifyObservers(alert.getValue());
+        }
     }
 
     public void logOff() {

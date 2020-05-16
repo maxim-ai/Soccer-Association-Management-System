@@ -1,8 +1,10 @@
 package Client.PresentationLayer;
 
+import Client.Client;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +29,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class FXcontroller implements Initializable {
+public class FXcontroller implements Initializable,Observer {
 
     @FXML
     public AnchorPane starter_pane;
@@ -46,6 +48,8 @@ public class FXcontroller implements Initializable {
     GuiMediator guiMediator;
     Timeline alertTimeLine = new Timeline(new KeyFrame(Duration.seconds(0.3), evt -> alertLabel.setStyle("-fx-background-color:RED")),
             new KeyFrame(Duration.seconds( 0.1), evt -> alertLabel.setStyle("-fx-background-color:White")));
+
+//    public static Object realTime=null;
 
     public void chooseLogin()
     {
@@ -136,9 +140,9 @@ public class FXcontroller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         guiMediator=new GuiMediator();
-
+//        guiMediator.addObserver(this);
+        Client.getInstance().addObserver(this);
     }
-
 
     public void showRunQueryButton()
     {
@@ -192,13 +196,27 @@ public class FXcontroller implements Initializable {
 
     public void showRealTimeAlert(String alert)
     {
-        Notifications notificationBuilder=Notifications.create()
-                .title("complete")
-                .text("bla bla bla bla bla")
-                .graphic(null)
-                .hideAfter(Duration.seconds(5))
-                .position(Pos.TOP_CENTER);
-        notificationBuilder.showInformation();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Notifications notificationBuilder=Notifications.create()
+                        .title("You have a new alert")
+                        .text(alert)
+                        .graphic(null)
+                        .hideAfter(Duration.seconds(8))
+                        .position(Pos.TOP_CENTER);
+                notificationBuilder.showInformation();
+            }
+        });
     }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if(arg !=null && arg instanceof Pair &&((Pair<String,String>)arg).getKey().equals(guiMediator.getCurrentUserName()))
+        {
+            showRealTimeAlert(((Pair<String,String>)arg).getValue());
+        }
+    }
+
 
 }
