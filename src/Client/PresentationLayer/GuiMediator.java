@@ -1,5 +1,6 @@
 package Client.PresentationLayer;
 
+import Client.Client;
 import Client.ServiceLayer.GuestController.GuestController;
 import Client.ServiceLayer.OurSystem;
 import javafx.util.Pair;
@@ -8,7 +9,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class GuiMediator extends Observable {
+public class GuiMediator {
+
+    private static GuiMediator guiMediator;
+    private GuiMediator(){
+        this.ourSystem = new OurSystem();
+        ourSystem.Initialize();}
+    public static GuiMediator getInstance(){
+        if(guiMediator==null)
+            guiMediator=new GuiMediator();
+        return guiMediator;
+    }
+
     OurSystem ourSystem;
     List controllers=new ArrayList();
 
@@ -21,10 +33,10 @@ public class GuiMediator extends Observable {
         return currentUserName;
     }
 
-    public GuiMediator() {
-        this.ourSystem = new OurSystem();
-        ourSystem.Initialize();
-    }
+//    public GuiMediator() {
+//        this.ourSystem = new OurSystem();
+//        ourSystem.Initialize();
+//    }
 
     public OurSystem getOurSystem() {
         return ourSystem;
@@ -121,14 +133,6 @@ public class GuiMediator extends Observable {
         return alerts;
     }
 
-
-    public void sendRealTimeAlerts(Pair<String,String> alert)
-    {
-        if(alert.getKey().equals(currentUserName))
-        {
-            notifyObservers(alert.getValue());
-        }
-    }
 
     public void logOff() {
         try {

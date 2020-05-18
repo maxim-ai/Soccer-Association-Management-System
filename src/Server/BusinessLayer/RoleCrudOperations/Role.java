@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.*;
 
 
-public abstract class Role extends Observable implements Serializable
+public abstract class Role implements Serializable
 {
 
   private String name;

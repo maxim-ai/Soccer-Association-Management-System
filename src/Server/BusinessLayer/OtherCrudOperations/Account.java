@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 
-public class Account extends Observable implements Serializable {
+public class Account implements Serializable {
 
   private String userName;
   private String password;

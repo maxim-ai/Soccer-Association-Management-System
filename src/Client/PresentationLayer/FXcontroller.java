@@ -8,6 +8,8 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -139,7 +141,7 @@ public class FXcontroller implements Initializable,Observer {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        guiMediator=new GuiMediator();
+        guiMediator=GuiMediator.getInstance();
 //        guiMediator.addObserver(this);
         Client.getInstance().addObserver(this);
     }
@@ -199,13 +201,15 @@ public class FXcontroller implements Initializable,Observer {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+
                 Notifications notificationBuilder=Notifications.create()
                         .title("You have a new alert")
                         .text(alert)
                         .graphic(null)
-                        .hideAfter(Duration.seconds(8))
+                        .hideAfter(Duration.minutes(2))
                         .position(Pos.TOP_CENTER);
                 notificationBuilder.showInformation();
+                notificationBuilder.onAction((event) -> notificationBuilder.hideAfter(Duration.seconds(0)));
             }
         });
     }
