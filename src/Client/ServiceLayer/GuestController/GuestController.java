@@ -45,8 +45,15 @@ public class GuestController {
         Client.getInstance().setUserName(UserName);
         String sendToServer = "Guest@"+Client.getUserName();
         List<String> stringControllers = (List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("LogIn",parameters)));
-        Client.getInstance().startListen(UserName);
-        return getControllersList(stringControllers);
+        if(stringControllers.get(0).contains("?")){
+            list.add(stringControllers.get(0).substring(1));
+            return list;
+        }
+        else{
+            Client.getInstance().startListen(UserName);
+            return getControllersList(stringControllers);
+        }
+
 //        return guestBusinessController.LogIn(UserName,Password);
 
     }
@@ -69,7 +76,7 @@ public class GuestController {
             else if(role.equals("Coach"))
                 serviceControllersList.add(new OwnerController());
             else if(role.equals("Fan"))
-                serviceControllersList.add(new FanContoller());
+                serviceControllersList.add(new FanController());
         }
         return serviceControllersList;
     }

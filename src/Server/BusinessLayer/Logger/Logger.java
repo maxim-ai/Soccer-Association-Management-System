@@ -28,7 +28,7 @@ public class Logger {
             return;
         }
 
-        toWrite(line,"Logger");
+        toWrite(line,"event log");
     }
 
     public void writeNewLineError(String line){
@@ -37,7 +37,7 @@ public class Logger {
             return;
         }
 
-        toWrite(line,"errorLogger");
+        toWrite(line,"error log");
     }
 
     private void toWrite(String line,String fileToWrite) {

@@ -4,7 +4,7 @@ import Server.BusinessLayer.OtherCrudOperations.Account;
 import Server.BusinessLayer.OtherCrudOperations.Alert;
 import Server.BusinessLayer.RoleCrudOperations.Fan;
 import Server.BusinessLayer.RoleCrudOperations.Role;
-import Client.ServiceLayer.OurSystem;
+import Client.ServiceLayer.OurSystemClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,17 +28,17 @@ public class FanBusinessController {
     //endregion
 
     //region Transition methods for version 3
-    public void LogOut(){
-        fan.Logout();
-        for(Account account: OurSystem.getCurrAccounts()){
-            for(Role role:account.getRoles()){
-                if(role.equals(fan)){
-                    OurSystem.removeAccount(account);
-                    return;
-                }
-            }
-        }
-    }
+//    public void LogOut(){
+//        fan.Logout();
+//        for(Account account: OurSystemClient.getCurrAccounts()){
+//            for(Role role:account.getRoles()){
+//                if(role.equals(fan)){
+//                    OurSystemClient.removeAccount(account);
+//                    return;
+//                }
+//            }
+//        }
+//    }
 
     public String EditPersonalInfo(String newName,String newUserName,String newPassword){
         try {
@@ -71,12 +71,12 @@ public class FanBusinessController {
 
     public void SubscribeGetMatchNotifications(){fan.SubscribeGetMatchNotifications();}
 
-    public boolean Report(String report){
-        if(report.length()==0)
-            return false;
-        fan.Report(report);
-        return true;
-    }
+//    public boolean Report(String report){
+//        if(report.length()==0)
+//            return false;
+//        fan.Report(report);
+//        return true;
+//    }
 
     public String ShowSearchHistory() throws Exception {
         try {

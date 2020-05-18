@@ -1,8 +1,7 @@
 package Server.BusinessLayer.OtherCrudOperations;
 import Server.BusinessLayer.RoleCrudOperations.Fan;
 import Server.BusinessLayer.RoleCrudOperations.Referee;
-import Server.BusinessLayer.DataController;
-import Client.ServiceLayer.OurSystem;
+import Client.ServiceLayer.OurSystemClient;
 
 import java.io.Serializable;
 import java.sql.*;
@@ -51,9 +50,9 @@ public class Match implements Serializable
   {
     boolean wasSet = false;
     this.date = date;
-    OurSystem.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),mainReferee);
-    OurSystem.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),lineRefereeOne);
-    OurSystem.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),lineRefereeTwo);
+    OurSystemClient.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),mainReferee);
+    OurSystemClient.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),lineRefereeOne);
+    OurSystemClient.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to date: "+date.toString(),lineRefereeTwo);
     wasSet = true;
     return wasSet;
   }
@@ -62,9 +61,9 @@ public class Match implements Serializable
   {
     boolean wasSet = false;
     time = aTime;
-    OurSystem.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to time: "+time.toString(),mainReferee);
-    OurSystem.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to time: "+time.toString(),lineRefereeOne);
-    OurSystem.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to time: "+time.toString(),lineRefereeTwo);
+    OurSystemClient.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to time: "+time.toString(),mainReferee);
+    OurSystemClient.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to time: "+time.toString(),lineRefereeOne);
+    OurSystemClient.notifyOtherRole("Game between "+awayTeam.getName()+" and "+homeTeam.getName()+" update to time: "+time.toString(),lineRefereeTwo);
     wasSet = true;
     return wasSet;
   }
@@ -185,9 +184,9 @@ public class Match implements Serializable
     stadium = aStadium;
     stadium.addMatch(this);
     if(mainReferee!=null&&lineRefereeOne!=null&lineRefereeTwo!=null) {
-      OurSystem.notifyOtherRole("Game between " + awayTeam.getName() + " and " + homeTeam.getName() + " update to BusinessLayer.OtherCrudOperations.Stadium: " + stadium.getName(), mainReferee);
-      OurSystem.notifyOtherRole("Game between " + awayTeam.getName() + " and " + homeTeam.getName() + " update to BusinessLayer.OtherCrudOperations.Stadium: " + stadium.getName(), lineRefereeOne);
-      OurSystem.notifyOtherRole("Game between " + awayTeam.getName() + " and " + homeTeam.getName() + " update to BusinessLayer.OtherCrudOperations.Stadium: " + stadium.getName(), lineRefereeTwo);
+      OurSystemClient.notifyOtherRole("Game between " + awayTeam.getName() + " and " + homeTeam.getName() + " update to BusinessLayer.OtherCrudOperations.Stadium: " + stadium.getName(), mainReferee);
+      OurSystemClient.notifyOtherRole("Game between " + awayTeam.getName() + " and " + homeTeam.getName() + " update to BusinessLayer.OtherCrudOperations.Stadium: " + stadium.getName(), lineRefereeOne);
+      OurSystemClient.notifyOtherRole("Game between " + awayTeam.getName() + " and " + homeTeam.getName() + " update to BusinessLayer.OtherCrudOperations.Stadium: " + stadium.getName(), lineRefereeTwo);
     }
     wasSet = true;
     return wasSet;

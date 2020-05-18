@@ -2,7 +2,6 @@ package Server.BusinessLayer.Controllers;
 
 import Server.BusinessLayer.OtherCrudOperations.Account;
 import Server.BusinessLayer.OtherCrudOperations.Guest;
-import Client.ServiceLayer.OurSystem;
 import Server.BusinessLayer.RoleCrudOperations.*;
 
 import java.util.ArrayList;
@@ -29,14 +28,12 @@ public class GuestBusinessController {
 
     //region Transition methods for version 3
     public List<String> LogIn(String UserName, String Password) {
-        //List<String> list=new ArrayList<>();
+        List<String> list=new ArrayList<>();
         try {
             Account account=guest.LogIn(UserName,Password);
-            //OurSystem.addAccount(account);
             return makeControllersByRoles(account);
-        } catch (Exception e) { e.printStackTrace(); }
-        return null;
-
+        } catch (Exception e) { list.add("?"+e.getMessage()) ;}
+        return list;
     }
 
 

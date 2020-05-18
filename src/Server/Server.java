@@ -1,21 +1,19 @@
 package Server;
 
 import Server.BusinessLayer.Controllers.*;
-import Server.BusinessLayer.OtherCrudOperations.*;
+import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.OurSystemServer;
 import Server.BusinessLayer.RoleCrudOperations.*;
-import Server.DataLayer.DBAdapter;
 import javafx.util.Pair;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -30,13 +28,12 @@ public class Server {
 
     private static Server server;
 
+    private static OurSystemServer ourSystemServer;
 
 
 
 
     private Server() {
-//        this.port = port;
-//        this.listeningInterval = listeningInterval;
     }
 
     public static Server getInstance(){
@@ -65,7 +62,6 @@ public class Server {
             while (!stop) {
                 try { //opens new thread per request!!!!
                     Socket clientSocket = serverSocket.accept(); // waiting for new request and blocking other requests
-                    System.out.println("Request accepted");
                     threadPoolExecutor.execute(() -> {
                         handleClient(clientSocket);
                     });
@@ -88,18 +84,11 @@ public class Server {
             Object objectFromClient = objectInputStream.readObject();
             if(objectFromClient!=null) {
                 if(objectFromClient instanceof String){
-                    System.out.println("Got string");
+                    System.out.println("Listen request accepted");
                     clientsMap.put((String)objectFromClient,objectOutputStream);
-//                    while (true) {
-//                        Thread.sleep(5000);
-//                        objectOutputStream.writeObject("HIIIIIIIIyyyyyyyyyyyy");
-//                    }
-//                    objectOutputStream.flush();
                 }
                 else{
-                    String userName=((Pair<String, Pair<String, List<String>>>)objectFromClient).getKey().split("@")[1];
-                    InetAddress IP=clientSocket.getInetAddress();
-//                    clientsMap.put(userName,IP);
+                    System.out.println("Operation request accepted");
                     objectOutputStream.writeObject(receiveFromClient((Pair<String, Pair<String, List<String>>>) objectFromClient));
                 }
             }
@@ -134,12 +123,13 @@ public class Server {
             controller = new CoachBusinessController(new Coach(userName));
         else if(controllerName.equals("Fan"))
             controller = new FanBusinessController(new Fan(userName));
+        else if(controllerName.equals("Data"))
+            controller= DataController.getInstance();
 
         try {
             if(controller!=null) {
                 String declareMethod = fromClient.getValue().getKey();
                 List<String> parameters = fromClient.getValue().getValue();
-//              Method method = controller.getClass().getDeclaredMethod(declareMethod,);
                 Method method=getRightMethod(controller.getClass().getDeclaredMethods(),declareMethod);
                 answer = method.invoke(controller, parameters.toArray());
             }

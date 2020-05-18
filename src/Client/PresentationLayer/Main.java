@@ -1,6 +1,7 @@
 package Client.PresentationLayer;
 
 import Client.Client;
+import Server.BusinessLayer.OurSystemServer;
 import Server.Server;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -29,7 +30,7 @@ public class Main extends Application {
     public static void main(String[] args) {
         //connectToDB();
         //getTeamNames();
-//        (Server.getInstance()).start();
+        //(new OurSystemServer()).Initialize();
         //Client.startListen();
         launch(args);
 

@@ -4,15 +4,15 @@ import Server.BusinessLayer.RoleCrudOperations.Fan;
 
 import java.util.List;
 
-public class FanContoller {
+public class FanController {
 
     private FanBusinessController fanBusinessController;
 
-    public FanContoller(Fan fan){
+    public FanController(Fan fan){
         fanBusinessController=new FanBusinessController(fan);
     }
 
-    public FanContoller() {
+    public FanController() {
 
     }
 
@@ -28,9 +28,9 @@ public class FanContoller {
     //endregion
 
     //region Transition methods for version 3
-    public void LogOut(){
-        fanBusinessController.LogOut();
-    }
+//    public void LogOut(){
+//        fanBusinessController.LogOut();
+//    }
 
     public String EditPersonalInfo(String newName,String newUserName,String newPassword){
         if(newName.length()==0) return "Name field is empty";
@@ -83,12 +83,12 @@ public class FanContoller {
 
     public void SubscribeGetMatchNotifications(){fanBusinessController.SubscribeGetMatchNotifications();}
 
-    public String Report(String report){
-        if(report.length()==0)
-            return "Report is blank";
-        fanBusinessController.Report(report);
-        return "";
-    }
+//    public String Report(String report){
+//        if(report.length()==0)
+//            return "Report is blank";
+//        fanBusinessController.Report(report);
+//        return "";
+//    }
 
     public String ShowSearchHistory() throws Exception {
         return fanBusinessController.ShowSearchHistory();

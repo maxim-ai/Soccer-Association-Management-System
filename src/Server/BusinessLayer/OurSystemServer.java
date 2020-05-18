@@ -1,186 +1,48 @@
-package Client.ServiceLayer;
+package Server.BusinessLayer;
+
+import Client.ServiceLayer.GuestController.GuestController;
+import Client.ServiceLayer.RoleController.RefereeController;
 import Server.BusinessLayer.DataController;
 import Server.BusinessLayer.Logger.Logger;
 import Server.BusinessLayer.OtherCrudOperations.*;
 import Server.BusinessLayer.Pages.Page;
 import Server.BusinessLayer.RoleCrudOperations.*;
-import Client.ServiceLayer.GuestController.GuestController;
-import Client.ServiceLayer.RoleController.*;
+import Server.Server;
 
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OurSystem {
+public class OurSystemServer {
 
-    private static SystemManager SM;
-
-    private static List<Guest> currGuests;
-    private static List<Account> currAccounts;
-
-    public OurSystem(){
-        currGuests=new ArrayList<>();
-        currAccounts=new ArrayList<>();
-    }
-
-//    public static ArrayList<String> getOptions(String substring) {
-//        ArrayList<String> strings=new ArrayList<>();
-//        if(substring.equals("League"))
-//        {
-//            strings.add("LeagueOne");
-//            strings.add("LeagueTwo");
-//            strings.add("LeagueThree");
-//            strings.add("LeagueFour");
-//        }
-//        else if(substring.equals("Season"))
-//        {
-//            strings.add("SeasonOne");
-//            strings.add("SeasonTwo");
-//            strings.add("SeasonThree");
-//            strings.add("SeasonFour");
-//        }
-//
-//        return strings;
-//    }
-
-    //region Initialize the System
     public void Initialize() {
+        Server.getInstance().start();
         System.out.println("Established connection to Accounty System");
         System.out.println("Established connection to Federal Tax System");
+
+        File[] loggers={new File("event log"), new File("errog log")};
+        for(File file:loggers)
+            if(file.exists())
+                file.delete();
 
         File checkFile=new File("firstInitCheck");
         if(!checkFile.exists()){
             try { checkFile.createNewFile(); } catch (IOException e) { e.printStackTrace(); }
-            Account SMaccount=new Account("Nadav",26,"NadavX","1234");
-            SM=new SystemManager(SMaccount.getName());
+            Account SMaccount=new Account("SM1",99,"SM1X","Password");
+            SystemManager SM=new SystemManager(SMaccount.getName());
             SMaccount.addRole(SM);
-            DataController.getInstance().addAccount(SMaccount);
+            DataController.getInstance().addAccountDC(SMaccount);
             (Logger.getInstance()).writeNewLine("System has been initialized");
             try { InitDatabase(); } catch (Exception e) { e.printStackTrace(); }
         }
 
     }
-    //endregion
 
-
-
-    //region Getters&Setters Method
-    public static SystemManager getSM() {
-        return SM;
-    }
-
-
-    public static void setSM(SystemManager SM) {
-        OurSystem.SM = SM;
-        (Logger.getInstance()).writeNewLine("New system manager "+SM.getName()+" has been set");
-    }
-
-
-    public static List<Guest> getCurrGuests() {
-        return currGuests;
-    }
-
-    public static List<Account> getCurrAccounts() {
-        return currAccounts;
-    }
-
-    public static void removeGuest(Guest guest){
-        for(Guest currGuest:currGuests){
-            if(currGuest.equals(guest)){
-                currGuests.remove(guest);
-                break;
-            }
-        }
-    }
-
-    public static void removeAccount(Account account){
-        for(Account currAccount:currAccounts){
-            if(currAccount.equals(account)){
-                currAccounts.remove(account);
-                break;
-            }
-        }
-    }
-
-    public static void addGuest(Guest guest){
-        currGuests.add(guest);
-    }
-
-    public static void addAccount(Account account){
-        currAccounts.add(account);
-    }
-    //endregion
-
-    public static GuestController makeGuestController(){
-        return new GuestController();
-    }
-
-    public static void notifyOtherRole(String notification, Role role){
-        Alert alert=new Alert(notification);
-        role.addAlert(alert);
-    }
-
-    public static List<String> getDropList(String string,List<Object> controllers,List<String> arguments){
-        List<String> list=new ArrayList<>();
-        if(string.equals("Team")){
-            List<String> teamNames= DataController.getInstance().getNames(string);
-            for(String team:teamNames)
-                list.add(team);
-        }
-        else if(string.equals("Season")){
-            List<String> seasons=DataController.getInstance().getNames(string);
-            for(String season:seasons)
-                list.add(season);
-        }
-        else if(string.equals("League")){
-            List<String> leagues=DataController.getInstance().getNames(string);
-            for(String league:leagues)
-                list.add(league);
-    }
-        else if(string.equals("Stadium")){
-            List<String> stadiums=DataController.getInstance().getNames(string);
-            for(String stadium:stadiums)
-                list.add(stadium);
-        }
-        else if(string.equals("EventEnum")){
-            for(EventEnum eventEnum:EventEnum.values())
-                list.add(eventEnum.toString());
-        }
-        else if(string.equals("Match")){
-            list=((RefereeController)controllers.get(0)).getMatchList();
-        }
-        else if(string.equals("GameEvent")){
-            list=((RefereeController)controllers.get(0)).getEvantsByMatch(arguments.get(0));
-        }
-        else if(string.equals("Referee")){
-            List<String> refs=DataController.getInstance().getUserNames(string);
-            for(String ref:refs)
-                list.add(ref);
-        }
-        else if(string.equals("Account")){
-            List<String> accounts=DataController.getInstance().getUserNames(string);
-            for(String account:accounts)
-                list.add(account);
-        }
-        else if(string.equals("GameSchedual")){
-            List<String> policies=DataController.getInstance().getPolicies(string);
-            for(String policy:policies)
-                list.add(policy);
-        }
-        else if(string.equals("PointCalc")){
-            List<String> policies=DataController.getInstance().getPolicies(string);
-            for(String policy:policies)
-                list.add(policy);
-        }
-
-        return list;
-
-    }
-
-    public  void InitDatabase() throws Exception {
+    private void InitDatabase() throws Exception {
+        System.out.println("Initializing database");
         Account arAccount1, arAccount2;
         AssociationRepresentative ar1, ar2;
         League league1, league2;
@@ -502,8 +364,8 @@ public class OurSystem {
         fan1.addPage(teamPage4);
         //endregion
 
-        owner1.addAlert(new Server.BusinessLayer.OtherCrudOperations.Alert("bla bla bla bla"));
-        owner1.addAlert(new Server.BusinessLayer.OtherCrudOperations.Alert("tralalalala"));
+        owner1.addAlert(new Alert("bla bla bla bla"));
+        owner1.addAlert(new Alert("tralalalala"));
 
         match1.getEventCalender().addGameEvent(new GameEvent(EventEnum.goal,new Date(),new Time(1,1,1),"aaa",80,match1.getEventCalender()));
 

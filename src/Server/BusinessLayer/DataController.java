@@ -550,6 +550,12 @@ public class DataController {
   }
 
   public List<String> getNames(String Object) {
+    if(Object.equals("EventEnum")){
+      List<String> list=new ArrayList<>();
+      for(EventEnum EE:EventEnum.values())
+        list.add(EE.toString());
+      return list;
+    }
     return dbAdapter.getNames(Object);
   }
 

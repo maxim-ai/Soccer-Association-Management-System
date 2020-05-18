@@ -205,7 +205,7 @@ public class DBAdapter {
     public void addSystemManagerRole(String userName, String name, HashMap<String, String> complaintAndComments) {
         try {
             Connection con=connectToDB();
-            PreparedStatement ps1=con.prepareStatement("insert into SystemManager values(?,?,?,?) ");
+            PreparedStatement ps1=con.prepareStatement("insert into SystemManager values(?,?) ");
             ps1.setString(1,userName);
             ps1.setString(2,name);
             ps1.executeUpdate();
@@ -268,35 +268,48 @@ public class DBAdapter {
 
                 String[] policy=policyList.get(i);
 
-                PreparedStatement ps2=con.prepareStatement("insert into Season values(?)");
-                ps2.setString(1,seasonList.get(i));
-                ps2.executeUpdate();
+                try {
+                    PreparedStatement ps2=con.prepareStatement("insert into Season values(?)");
+                    ps2.setString(1,seasonList.get(i));
+                    ps2.executeUpdate();
+                } catch (SQLException e) {
+                    if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                        e.printStackTrace();
+                }
 
 
-                PreparedStatement ps3=con.prepareStatement("insert into Policy values (?,?,?,?,?)");
-                ps3.setString(1,policy[2]);
-                ps3.setString(2,policy[0]);
-                ps3.setString(3,policy[1]);
-                ps3.setString(4,name);
-                ps3.setString(5,seasonList.get(i));
-                ps3.executeUpdate();
+                try {
+                    PreparedStatement ps3=con.prepareStatement("insert into Policy values (?,?,?,?,?)");
+                    ps3.setString(1,policy[2]);
+                    ps3.setString(2,policy[0]);
+                    ps3.setString(3,policy[1]);
+                    ps3.setString(4,name);
+                    ps3.setString(5,seasonList.get(i));
+                    ps3.executeUpdate();
+                } catch (SQLException e) {
+                    if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                        e.printStackTrace();
+                }
 
 
-
-
-
-                PreparedStatement ps4=con.prepareStatement("insert into SLsettings values(?,?,?)");
-                ps4.setString(1,name);
-                ps4.setString(2,seasonList.get(i));
-                ps4.setString(3,policy[2]);
-                ps4.executeUpdate();
+                try {
+                    PreparedStatement ps4=con.prepareStatement("insert into SLsettings values(?,?,?)");
+                    ps4.setString(1,name);
+                    ps4.setString(2,seasonList.get(i));
+                    ps4.setString(3,policy[2]);
+                    ps4.executeUpdate();
+                } catch (SQLException e) {
+                    if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                        e.printStackTrace();
+                }
 
 
             }
             con.close();
         } catch (SQLException e) {
             if(!e.getMessage().contains("Violation of PRIMARY KEY"))
-                e.printStackTrace(); }
+                e.printStackTrace();
+        }
     }
 
     public void addSeason(String name, List<String> leagueList, List<String[]> policyList) {

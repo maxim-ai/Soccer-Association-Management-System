@@ -3,8 +3,7 @@ import Server.BusinessLayer.DataController;
 import Server.BusinessLayer.Logger.Logger;
 import Server.BusinessLayer.OtherCrudOperations.*;
 import Server.BusinessLayer.Pages.Page;
-import Client.ServiceLayer.OurSystem;
-import Server.Server;
+import Client.ServiceLayer.OurSystemClient;
 
 import java.io.Serializable;
 
@@ -389,11 +388,11 @@ public class Owner extends Role implements Serializable {
     {
         String notification=this.getUsername()+" has deactivated team: "+team.getName();
         for(Owner owner:team.getOwners())
-            OurSystem.notifyOtherRole(notification,owner);
+            OurSystemClient.notifyOtherRole(notification,owner);
         for(TeamManager teamManager:team.getTeamManagers())
-            OurSystem.notifyOtherRole(notification,teamManager);
+            OurSystemClient.notifyOtherRole(notification,teamManager);
         for(SystemManager systemManager: DataController.getInstance().getSystemManagersFromAccounts())
-            OurSystem.notifyOtherRole(notification,systemManager);
+            OurSystemClient.notifyOtherRole(notification,systemManager);
 
         nonActiveTeams.add(team);
         Logger.getInstance().writeNewLine(this.getUsername()+" has deactivated "+team.getName());
@@ -414,7 +413,7 @@ public class Owner extends Role implements Serializable {
         String notification=this.getUsername()+" has activated team: "+teamName;
 
         for(SystemManager systemManager: DataController.getInstance().getSystemManagersFromAccounts())
-            OurSystem.notifyOtherRole(notification,systemManager);
+            OurSystemClient.notifyOtherRole(notification,systemManager);
 
         Logger.getInstance().writeNewLine(this.getUsername()+" has activated "+teamName);
 

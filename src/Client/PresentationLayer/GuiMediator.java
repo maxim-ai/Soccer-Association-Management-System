@@ -1,8 +1,7 @@
 package Client.PresentationLayer;
 
-import Client.Client;
 import Client.ServiceLayer.GuestController.GuestController;
-import Client.ServiceLayer.OurSystem;
+import Client.ServiceLayer.OurSystemClient;
 import javafx.util.Pair;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,15 +12,15 @@ public class GuiMediator {
 
     private static GuiMediator guiMediator;
     private GuiMediator(){
-        this.ourSystem = new OurSystem();
-        ourSystem.Initialize();}
+        this.ourSystemClient = new OurSystemClient();
+        ourSystemClient.Initialize();}
     public static GuiMediator getInstance(){
         if(guiMediator==null)
             guiMediator=new GuiMediator();
         return guiMediator;
     }
 
-    OurSystem ourSystem;
+    OurSystemClient ourSystemClient;
     List controllers=new ArrayList();
 
     String currentUserName;
@@ -38,8 +37,8 @@ public class GuiMediator {
 //        ourSystem.Initialize();
 //    }
 
-    public OurSystem getOurSystem() {
-        return ourSystem;
+    public OurSystemClient getOurSystemClient() {
+        return ourSystemClient;
     }
 
     public List getControllers() {
@@ -53,7 +52,7 @@ public class GuiMediator {
     public String getUserControllers(String userName, String password)
     {
         currentUserName=userName;
-        GuestController guestController= OurSystem.makeGuestController();
+        GuestController guestController= OurSystemClient.makeGuestController();
         List<Object> controllerList= (List<Object>) guestController.LogIn(userName,password);
         if(controllerList.size()==1 && controllerList.get(0) instanceof String)
         {
@@ -84,7 +83,7 @@ public class GuiMediator {
     public List<String> getDropDownList(String arg,List<String> prevArgs)
     {
         List<String> choices = new ArrayList<>();
-        List<String> dropDownFunc = OurSystem.getDropList(arg.substring(arg.indexOf("@")+1),controllers,prevArgs);
+        List<String> dropDownFunc = OurSystemClient.getDropList(arg.substring(arg.indexOf("@")+1),controllers,prevArgs);
         for(String pick:dropDownFunc)
         {
             choices.add(pick);
