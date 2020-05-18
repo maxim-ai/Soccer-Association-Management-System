@@ -752,6 +752,10 @@ public class DataController {
   {
     return dbAdapter.getGameEventsByMatch(homeTeam,awayTeam,date);
   }
+  public List<String> getNotifiedFans()
+  {
+    return dbAdapter.getNotifiedFans();
+  }
 
 }
 

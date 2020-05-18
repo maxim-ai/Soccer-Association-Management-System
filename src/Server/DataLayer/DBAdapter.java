@@ -929,4 +929,23 @@ public class DBAdapter {
         }
         return ans;
     }
+
+    public List<String> getNotifiedFans()
+    {
+        List<String> ans=new ArrayList<>();
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("select * from Fan where GetMatchNotifications=?");
+            ps.setString(1,"True");
+            ResultSet RS=ps.executeQuery();
+            while(RS.next()){
+                String s=RS.getString("UserName");
+                ans.add(s);
+            }
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ans;
+    }
 }
