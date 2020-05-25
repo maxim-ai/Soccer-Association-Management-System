@@ -7,4 +7,9 @@ public class RealAssociationAccountingSystem implements AssociationAccountingSys
     public boolean addPayment(String teamName, String date, double amount) {
         return false;
     }
+
+    @Override
+    public void connectTo(String serverName) {
+        System.out.println("Connecting to accounting system...");
+    }
 }

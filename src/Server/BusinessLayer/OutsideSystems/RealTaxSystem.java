@@ -8,4 +8,11 @@ public class RealTaxSystem implements TaxSystem {
     public double getTaxRate(double revenueAmount) {
         return 0;
     }
+
+    @Override
+    public void connectTo(String serverName) {
+        System.out.println("Connecting to tax system...");
+    }
+
+
 }
