@@ -207,4 +207,9 @@ public class RefereeBusinessController {
 //        return null;
         return DataController.getInstance().getAllMatches();
     }
+
+    public String gameReport(String match){
+        Match m=Match.convertStringToMatch(match);
+        return referee.gameReport(m);
+    }
 }

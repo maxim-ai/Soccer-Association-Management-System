@@ -4,7 +4,7 @@ import Server.BusinessLayer.RoleCrudOperations.Referee;
 import java.io.Serializable;
 import java.util.*;
 
-public class SLsettings  implements Serializable {
+public class SLsettings implements Serializable {
 
     private List<Referee> referees;
     private Policy policy;

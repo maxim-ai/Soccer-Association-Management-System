@@ -388,11 +388,11 @@ public class Owner extends Role implements Serializable {
     {
         String notification=this.getUsername()+" has deactivated team: "+team.getName();
         for(Owner owner:team.getOwners())
-            OurSystemClient.notifyOtherRole(notification,owner);
+            owner.notifyAccount(owner.getUsername(),notification);
         for(TeamManager teamManager:team.getTeamManagers())
-            OurSystemClient.notifyOtherRole(notification,teamManager);
+            teamManager.notifyAccount(teamManager.getUsername(),notification);
         for(SystemManager systemManager: DataController.getInstance().getSystemManagersFromAccounts())
-            OurSystemClient.notifyOtherRole(notification,systemManager);
+            systemManager.notifyAccount(systemManager.getUsername(),notification);
 
         nonActiveTeams.add(team);
         Logger.getInstance().writeNewLine(this.getUsername()+" has deactivated "+team.getName());
@@ -413,7 +413,7 @@ public class Owner extends Role implements Serializable {
         String notification=this.getUsername()+" has activated team: "+teamName;
 
         for(SystemManager systemManager: DataController.getInstance().getSystemManagersFromAccounts())
-            OurSystemClient.notifyOtherRole(notification,systemManager);
+            systemManager.notifyAccount(systemManager.getUsername(),notification);
 
         Logger.getInstance().writeNewLine(this.getUsername()+" has activated "+teamName);
 

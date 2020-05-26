@@ -3,9 +3,15 @@ import Server.BusinessLayer.DataController;
 import Server.BusinessLayer.Logger.Logger;
 import Server.BusinessLayer.OtherCrudOperations.*;
 
+import Server.BusinessLayer.OutsideSystems.ProxyAssociationAccountingSystem;
+import Server.BusinessLayer.OutsideSystems.ProxyTaxSystem;
 import javafx.util.Pair;
 
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class AssociationRepresentative extends Role {
@@ -173,12 +179,16 @@ public class AssociationRepresentative extends Role {
     return "Set new season successfully";
   }
 
-  public void addAmountToAssociationBudget(double amount){
-
+  public double getTaxRate(double amount) {
+    return ProxyTaxSystem.getInstance().getTaxRate(amount);
   }
 
-  public void subtractAmountFromAssociationBudget(double amount){
+    public void addAmountToAssociationBudget(String teamName, String date, double amount){
+    ProxyAssociationAccountingSystem.getInstance().addPayment(teamName,date,amount);
+  }
 
+  public void subtractAmountFromAssociationBudget(String teamName, String date,double amount){
+    ProxyAssociationAccountingSystem.getInstance().addPayment(teamName,date,-1*amount);
   }
 
   /**
@@ -258,4 +268,98 @@ public class AssociationRepresentative extends Role {
     return DataController.getInstance().getRequestStatus(owner,teamName);
   }
 
+  //new!!
+  public String scheduleGamesInSeason(League league, Season season){
+    String gameSchedulePolicy = DataController.getInstance().getGameSchedulePolicy(league.getName(),season.getName());
+    List<Team> teams = stringToTeams(DataController.getInstance().getTeamsInLeague(league.getName()));
+    List<Referee> referees = stringToReferees(DataController.getInstance().getRefereesInLeague(league.getName(),season.getName()));
+    List<Match> matches = new LinkedList<>();
+    Random random = new Random();
+      for (int i = 0; i <teams.size() ; i++) {
+        Team team1 = teams.get(i);
+          for (int j = i+1; j <teams.size() ; j++){
+          Team team2 = teams.get(j);
+            String date = getRandomDate();
+            Time time = getRandomTime();
+            Match match = new Match(date, time, 0, 0, team1.getStadium(), season, team2, team1,
+                    referees.get(random.nextInt(referees.size())), referees.get(random.nextInt(referees.size())), referees.get(random.nextInt(referees.size())));
+            matches.add(match);
+            if (gameSchedulePolicy.equals("Twice in a season")) {
+              Match match2 = new Match(date, time, 0, 0, team2.getStadium(), season, team1, team2,
+                      referees.get(random.nextInt(referees.size())), referees.get(random.nextInt(referees.size())), referees.get(random.nextInt(referees.size())));
+              matches.add(match2);
+            }
+        }
+    }
+    //season.setMatchs(matches);
+    List<List<String>> stringMatches = matchesToString(matches);
+    DataController.getInstance().addMatches(stringMatches);
+    notifyFansForNewGames(league,season);
+    return "Game schedule succeed";
+  }
+
+  private void notifyFansForNewGames(League league, Season season){
+    List<String> usersToNotify = DataController.getInstance().getNotifiedFans();
+    for(String user : usersToNotify) {
+      notifyAccount(user,"New games were scheduled to league "+league.getName()+" in season "+season.getName());
+    }
+  }
+
+  private List<List<String>> matchesToString(List<Match> matches) {
+    List<List<String>> stringMatches = new LinkedList<>();
+    for(Match match : matches){
+      List<String> stringMatch = new LinkedList<>();
+      stringMatch.add(match.getDate());
+      stringMatch.add(String.valueOf(match.getTime()));
+      stringMatch.add(String.valueOf(match.getAwayScore()));
+      stringMatch.add(String.valueOf(match.getHomeScore()));
+      stringMatch.add(match.getAwayTeam().getName());
+      stringMatch.add(match.getHomeTeam().getName());
+      stringMatch.add(match.getMainReferee().getUsername());
+      stringMatch.add(match.getLineRefereeOne().getUsername());
+      stringMatch.add(match.getLineRefereeTwo().getUsername());
+      stringMatch.add(match.getStadium().getName());
+      stringMatch.add(match.getSeason().getName());
+      stringMatches.add(stringMatch);
+    }
+    return stringMatches;
+  }
+
+  private List<Team> stringToTeams(List<List<String>> stringTeams){
+    List<Team> teams = new LinkedList<>();
+    for(List<String> stringTeam : stringTeams){
+      Team team = new Team(stringTeam.get(0),new League(stringTeam.get(1)),new Stadium(stringTeam.get(2)));
+      teams.add(team);
+    }
+    return teams;
+  }
+
+  private List<Referee> stringToReferees(List<String> stringReferees){
+    List<Referee> referees = new LinkedList<>();
+    for(String refereeUserName : stringReferees){
+      Referee referee = new Referee(refereeUserName);
+      referees.add(referee);
+    }
+    return referees;
+  }
+
+  private Time getRandomTime() {
+    Random random = new Random();
+    return new Time(random.nextLong());
+
+  }
+
+  public static String getRandomDate() {
+    LocalDate currentDate= LocalDate.now();
+    LocalDate nextYear = LocalDate.of(currentDate.getYear()+1, currentDate.getMonth(),currentDate.getDayOfMonth());
+
+    long startEpochDay = currentDate.toEpochDay();
+    long endEpochDay = nextYear.toEpochDay();
+    long randomDay = ThreadLocalRandom
+            .current()
+            .nextLong(startEpochDay, endEpochDay);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+    return (formatter.format(LocalDate.ofEpochDay(randomDay)));
+
+  }
 }

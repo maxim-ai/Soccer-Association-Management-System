@@ -2,6 +2,7 @@ package Client.PresentationLayer;
 
 import Client.Client;
 import Server.BusinessLayer.OurSystemServer;
+import Server.BusinessLayer.RoleCrudOperations.AssociationRepresentative;
 import Server.Server;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -30,10 +31,10 @@ public class Main extends Application {
     public static void main(String[] args) {
         //connectToDB();
         //getTeamNames();
-        //(new OurSystemServer()).Initialize();
+//        (new OurSystemServer()).Initialize();
         //Client.startListen();
-        launch(args);
 
+        launch(args);
 
         int n=0;
     }

@@ -55,10 +55,6 @@ public class OurSystemClient {
         return new GuestController();
     }
 
-    public static void notifyOtherRole(String notification, Role role){
-        Alert alert=new Alert(notification);
-        role.addAlert(alert);
-    }
 
     public static List<String> getDropList(String string,List<Object> controllers,List<String> arguments){
         List<String> list=new ArrayList<>();

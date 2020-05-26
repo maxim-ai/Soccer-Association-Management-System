@@ -317,5 +317,17 @@ public class Referee extends Role implements Serializable
     return date.getDay()+"/"+date.getMonth()+"/"+date.getYear();
   }
 
-
+  public String gameReport(Match match){
+    String report="Referee Name:_"+this.getUsername()+"_\n";
+    List<String> matchList=DataController.getInstance().getMatch(match.getAwayTeam().toString(),match.getHomeTeam().toString(),match.getDate());
+    report+= "\tMatch Location:_"+matchList.get(9)+"_ Date:_"+matchList.get(0)+"_\n" +
+            "Home Team:_"+matchList.get(5)+"_, Score:_"+matchList.get(3)+"_\n"+
+            "Away Team:_"+matchList.get(4)+"_, Score:_"+matchList.get(2)+"_\n"+
+            "Game Events:\n";
+    List<String> events=DataController.getInstance().getGameEventsByMatch(matchList.get(5),matchList.get(4),matchList.get(0));
+    for (String event:events) {
+      report+= "\t\t"+event+"\n";
+    }
+    return report;
+  }
 }

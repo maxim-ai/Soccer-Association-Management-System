@@ -23,7 +23,7 @@ public class OurSystemServer {
         System.out.println("Established connection to Accounty System");
         System.out.println("Established connection to Federal Tax System");
 
-        File[] loggers={new File("event log"), new File("errog log")};
+        File[] loggers={new File("event log"), new File("error log")};
         for(File file:loggers)
             if(file.exists())
                 file.delete();
@@ -68,32 +68,32 @@ public class OurSystemServer {
         Fan fan1, fan2, fan3, fan4, fan5, fan6, fan7, fan8;
 
         //region AssociationRepresantives creations
-        arAccount1 = new Account("AR1", 99, "AR1X", "Password");
+        arAccount1 = new Account("AR1", 99, "AR1X", "AR1X");
         ar1 = new AssociationRepresentative("AR1");
         arAccount1.addRole(ar1);
 
-        arAccount2 = new Account("AR2", 99, "AR2X", "Password");
+        arAccount2 = new Account("AR2", 99, "AR2X", "AR2X");
         ar2 = new AssociationRepresentative("AR2");
         arAccount2.addRole(ar2);
         //endregion
 
         //region Referees creation
-        refAccount1 = new Account("Referee1", 99, "Referee1X", "Password");
+        refAccount1 = new Account("Referee1", 99, "Referee1X", "Referee1X");
         referee1 = ar1.createNewReferee(refAccount1, "Complete", "Referee1");
 
-        refAccount2 = new Account("Referee2", 99, "Referee2X", "Password");
+        refAccount2 = new Account("Referee2", 99, "Referee2X", "Referee2X");
         referee2 = ar1.createNewReferee(refAccount2, "Complete", "Referee2");
 
-        refAccount3 = new Account("Referee3", 99, "Referee3X", "Password");
+        refAccount3 = new Account("Referee3", 99, "Referee3X", "Referee3X");
         referee3 = ar1.createNewReferee(refAccount3, "Complete", "Referee3");
 
-        refAccount4 = new Account("Referee4", 99, "Referee4X", "Password");
+        refAccount4 = new Account("Referee4", 99, "Referee4X", "Referee4X");
         referee4 = ar1.createNewReferee(refAccount4, "Complete", "Referee4");
 
-        refAccount5 = new Account("Referee5", 99, "Referee5X", "Password");
+        refAccount5 = new Account("Referee5", 99, "Referee5X", "Referee5X");
         referee5 = ar1.createNewReferee(refAccount5, "Complete", "Referee5");
 
-        refAccount6 = new Account("Referee6", 99, "Referee6X", "Password");
+        refAccount6 = new Account("Referee6", 99, "Referee6X", "Referee6X");
         referee6 = ar1.createNewReferee(refAccount6, "Complete", "Referee6");
 
         //endregion
@@ -148,46 +148,46 @@ public class OurSystemServer {
         //endregion
 
         //region Owner creation
-        ownerAccount1 = new Account("Owner1", 99, "Owner1X", "Password");
+        ownerAccount1 = new Account("Owner1", 99, "Owner1X", "Owner1X");
         owner1 = new Owner("Owner1", team1, null);
         ownerAccount1.addRole(owner1);
 
-        ownerAccount2 = new Account("Owner2", 99, "Owner2X", "Password");
+        ownerAccount2 = new Account("Owner2", 99, "Owner2X", "Owner2X");
         owner2 = new Owner("Owner2", team2, null);
         ownerAccount2.addRole(owner2);
 
-        ownerAccount3 = new Account("Owner3", 99, "Owner3X", "Password");
+        ownerAccount3 = new Account("Owner3", 99, "Owner3X", "Owner3X");
         owner3 = new Owner("Owner3", team3, null);
         ownerAccount3.addRole(owner3);
 
-        ownerAccount4 = new Account("Owner4", 99, "Owner4X", "Password");
+        ownerAccount4 = new Account("Owner4", 99, "Owner4X", "Owner4X");
         owner4 = new Owner("Owner4", team4, null);
         ownerAccount4.addRole(owner4);
         //endregion
 
         //region TeamManagers creation
-        tmAccount1 = new Account("TM1", 99, "TM1X", "Password");
+        tmAccount1 = new Account("TM1", 99, "TM1X", "TM1X");
         List<TeamManager.PermissionEnum> tm1Permissions = new ArrayList<>();
         tm1Permissions.add(TeamManager.PermissionEnum.managePlayers);
         tm1Permissions.add(TeamManager.PermissionEnum.manageMatches);
         owner1.appointTeamManagerToTeam(tmAccount1, tm1Permissions);
         tm1 = tmAccount1.checkIfTeamManagr();
 
-        tmAccount2 = new Account("TM2", 99, "TM2X", "Password");
+        tmAccount2 = new Account("TM2", 99, "TM2X", "TM2X");
         List<TeamManager.PermissionEnum> tm2Permissions = new ArrayList<>();
         tm2Permissions.add(TeamManager.PermissionEnum.managePlayers);
         tm2Permissions.add(TeamManager.PermissionEnum.manageMatches);
         owner2.appointTeamManagerToTeam(tmAccount2, tm2Permissions);
         tm2 = tmAccount2.checkIfTeamManagr();
 
-        tmAccount3 = new Account("TM3", 99, "TM3X", "Password");
+        tmAccount3 = new Account("TM3", 99, "TM3X", "TM3X");
         List<TeamManager.PermissionEnum> tm3Permissions = new ArrayList<>();
         tm3Permissions.add(TeamManager.PermissionEnum.managePlayers);
         tm3Permissions.add(TeamManager.PermissionEnum.manageMatches);
         owner3.appointTeamManagerToTeam(tmAccount3, tm3Permissions);
         tm3 = tmAccount3.checkIfTeamManagr();
 
-        tmAccount4 = new Account("TM4", 99, "TM4X", "Password");
+        tmAccount4 = new Account("TM4", 99, "TM4X", "TM4X");
         List<TeamManager.PermissionEnum> tm4Permissions = new ArrayList<>();
         tm4Permissions.add(TeamManager.PermissionEnum.managePlayers);
         tm4Permissions.add(TeamManager.PermissionEnum.manageMatches);
@@ -197,53 +197,53 @@ public class OurSystemServer {
         //endregion
 
         //region Players creation
-        playerAccount1 = new Account("Player1", 99, "Player1X", "Password");
+        playerAccount1 = new Account("Player1", 99, "Player1X", "Player1X");
         player1 = new Player("Player1", new Date(), PositionEnum.Striker, team1, null);
         playerAccount1.addRole(player1);
 
-        playerAccount2 = new Account("Player2", 99, "Player2X", "Password");
+        playerAccount2 = new Account("Player2", 99, "Player2X", "Player2X");
         player2 = new Player("Player2", new Date(), PositionEnum.Striker, team1, null);
         playerAccount2.addRole(player2);
 
-        playerAccount3 = new Account("Player3", 99, "Player3X", "Password");
+        playerAccount3 = new Account("Player3", 99, "Player3X", "Player3X");
         player3 = new Player("Player3", new Date(), PositionEnum.Striker, team2, null);
         playerAccount3.addRole(player3);
 
-        playerAccount4 = new Account("Player4", 99, "Player4X", "Password");
+        playerAccount4 = new Account("Player4", 99, "Player4X", "Player4X");
         player4 = new Player("Player4", new Date(), PositionEnum.Striker, team2, null);
         playerAccount4.addRole(player4);
 
-        playerAccount5 = new Account("Player5", 99, "Player5X", "Password");
+        playerAccount5 = new Account("Player5", 99, "Player5X", "Player5X");
         player5 = new Player("Player5", new Date(), PositionEnum.Striker, team3, null);
         playerAccount5.addRole(player5);
 
-        playerAccount6 = new Account("Player6", 99, "Player6X", "Password");
+        playerAccount6 = new Account("Player6", 99, "Player6X", "Player6X");
         player6 = new Player("Player6", new Date(), PositionEnum.Striker, team3, null);
         playerAccount6.addRole(player6);
 
-        playerAccount7 = new Account("Player7", 99, "Player7X", "Password");
+        playerAccount7 = new Account("Player7", 99, "Player7X", "Player7X");
         player7 = new Player("Player7", new Date(), PositionEnum.Striker, team4, null);
         playerAccount7.addRole(player7);
 
-        playerAccount8 = new Account("Player8", 99, "Player8X", "Password");
+        playerAccount8 = new Account("Player8", 99, "Player8X", "Player8X");
         player8 = new Player("Player8", new Date(), PositionEnum.Striker, team4, null);
         playerAccount8.addRole(player8);
         //endregion
 
         //region Coach creation
-        coachAccount1 = new Account("Coach1", 99, "Coach1X", "Password");
+        coachAccount1 = new Account("Coach1", 99, "Coach1X", "Coach1X");
         coach1 = new Coach("Coach1", "Full", "Main", null);
         coachAccount1.addRole(coach1);
 
-        coachAccount2 = new Account("Coach2", 99, "Coach2X", "Password");
+        coachAccount2 = new Account("Coach2", 99, "Coach2X", "Coach2X");
         coach2 = new Coach("Coach2", "Full", "Main", null);
         coachAccount2.addRole(coach2);
 
-        coachAccount3 = new Account("Coach3", 99, "Coach3X", "Password");
+        coachAccount3 = new Account("Coach3", 99, "Coach3X", "Coach3X");
         coach3 = new Coach("Coach3", "Full", "Main", null);
         coachAccount3.addRole(coach3);
 
-        coachAccount4 = new Account("Coach4", 99, "Coach4X", "Password");
+        coachAccount4 = new Account("Coach4", 99, "Coach4X", "Coach4X");
         coach4 = new Coach("Coach4", "Full", "Main", null);
         coachAccount4.addRole(coach4);
         //endregion
@@ -316,35 +316,35 @@ public class OurSystemServer {
         //endregion
 
         //region Fan creation
-        fanAccount1 = new Account("Fan1", 99, "Fan1X", "Password");
+        fanAccount1 = new Account("Fan1", 99, "Fan1X", "Fan1X");
         fan1 = new Fan("Fan1");
         fanAccount1.addRole(fan1);
 
-        fanAccount2 = new Account("Fan2", 99, "Fan2X", "Password");
+        fanAccount2 = new Account("Fan2", 99, "Fan2X", "Fan2X");
         fan2 = new Fan("Fan2");
         fanAccount2.addRole(fan2);
 
-        fanAccount3 = new Account("Fan3", 99, "Fan3X", "Password");
+        fanAccount3 = new Account("Fan3", 99, "Fan3X", "Fan3X");
         fan3 = new Fan("Fan3");
         fanAccount3.addRole(fan3);
 
-        fanAccount4 = new Account("Fan4", 99, "Fan4X", "Password");
+        fanAccount4 = new Account("Fan4", 99, "Fan4X", "Fan4X");
         fan4 = new Fan("Fan4");
         fanAccount4.addRole(fan4);
 
-        fanAccount5 = new Account("Fan5", 99, "Fan5X", "Password");
+        fanAccount5 = new Account("Fan5", 99, "Fan5X", "Fan5X");
         fan5 = new Fan("Fan5");
         fanAccount5.addRole(fan5);
 
-        fanAccount6 = new Account("Fan6", 99, "Fan6X", "Password");
+        fanAccount6 = new Account("Fan6", 99, "Fan6X", "Fan6X");
         fan6 = new Fan("Fan6");
         fanAccount6.addRole(fan6);
 
-        fanAccount7 = new Account("Fan7", 99, "Fan7X", "Password");
+        fanAccount7 = new Account("Fan7", 99, "Fan7X", "Fan7X");
         fan7 = new Fan("Fan7");
         fanAccount7.addRole(fan7);
 
-        fanAccount8 = new Account("Fan8", 99, "Fan8X", "Password");
+        fanAccount8 = new Account("Fan8", 99, "Fan8X", "Fan8X");
         fan8 = new Fan("Fan8");
         fanAccount8.addRole(fan8);
         //endregion

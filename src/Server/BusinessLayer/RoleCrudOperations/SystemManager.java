@@ -55,10 +55,10 @@ public class SystemManager extends Role implements Serializable
 
   private void notifyOnDelete(Team team) {
     for (Owner owner : team.getOwners()){
-      OurSystemClient.notifyOtherRole("Delete Team Permanently:" + team.getName(),owner);
+      owner.notifyAccount(owner.getUsername(),"Delete Team Permanently:" + team.getName());
     }
     for(TeamManager teamManager : team.getTeamManagers()){
-      OurSystemClient.notifyOtherRole("Delete Team Permanently:" + team.getName(),teamManager);
+      teamManager.notifyAccount(teamManager.getUsername(),"Delete Team Permanently:" + team.getName());
     }
   }
 

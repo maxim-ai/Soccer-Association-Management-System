@@ -21,8 +21,8 @@ public class AssociationRepresentativeBusinessController {
      * create new league and put teams inside
      */
     public String createNewLeague(String name, List<String> teamNames) {
-        List <Team> teams = new LinkedList<>();
-        for(String teamName : teamNames){
+        List<Team> teams = new LinkedList<>();
+        for (String teamName : teamNames) {
             Team team = Team.convertStringToTeam(teamName);
             teams.add(team);
         }
@@ -92,14 +92,19 @@ public class AssociationRepresentativeBusinessController {
         return associationRepresentative.setNewSeason(year);
     }
 
-    public void addAmountToAssociationBudget(String amountName) {
-        double amount = Double.parseDouble(amountName);
-        associationRepresentative.addAmountToAssociationBudget(amount);
+    public double getTaxRate(String amount){
+        double revenueAmount = Double.parseDouble(amount);
+        return associationRepresentative.getTaxRate(revenueAmount);
     }
 
-    public void subtractAmountToAssociationBudget(String amountName) {
+    public void addAmountToAssociationBudget(String teamName, String date,String amountName) {
         double amount = Double.parseDouble(amountName);
-        associationRepresentative.subtractAmountFromAssociationBudget(amount);
+        associationRepresentative.addAmountToAssociationBudget(teamName, date,amount);
+    }
+
+    public void subtractAmountToAssociationBudget(String teamName, String date,String amountName) {
+        double amount = Double.parseDouble(amountName);
+        associationRepresentative.subtractAmountFromAssociationBudget(teamName, date,amount);
     }
 
     public String approveTeam(String teamName, String userName) {
@@ -109,13 +114,18 @@ public class AssociationRepresentativeBusinessController {
     }
 
     public List<String> getAlerts() {
-        List<Alert> alerts=associationRepresentative.getAlertList();
-        List<String> strings=new ArrayList<>();
-        for(Alert alert:alerts)
-        {
+        List<Alert> alerts = associationRepresentative.getAlertList();
+        List<String> strings = new ArrayList<>();
+        for (Alert alert : alerts) {
             strings.add(alert.getDescription());
         }
         return strings;
     }
 
+    //new!!
+    public String scheduleGamesInSeason(String leagueName, String seasonName) {
+        League league = new League(leagueName);
+        Season season = new Season(seasonName);
+        return associationRepresentative.scheduleGamesInSeason(league,season);
+    }
 }

@@ -132,6 +132,8 @@ public class Account implements Serializable {
    */
   public boolean addRole(Role aRole)
   {
+    //instanceOf check
+
     //instanceOf...
     aRole.setUsername(userName);
     boolean wasAdded = true;

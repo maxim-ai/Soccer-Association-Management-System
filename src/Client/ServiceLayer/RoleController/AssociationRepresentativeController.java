@@ -132,12 +132,16 @@ public class AssociationRepresentativeController {
         return associationRepresentativeBusinessController.setNewSeason(year);
     }
 
-    public void addAmountToAssociationBudget(String amountName) {
-        associationRepresentativeBusinessController.addAmountToAssociationBudget(amountName);
+    public void getTaxRate(String amountName) {
+        associationRepresentativeBusinessController.getTaxRate(amountName);
     }
 
-    public void subtractAmountToAssociationBudget(String amountName) {
-        associationRepresentativeBusinessController.subtractAmountToAssociationBudget(amountName);
+    public void addAmountToAssociationBudget(String teamName, String date,String amountName) {
+        associationRepresentativeBusinessController.addAmountToAssociationBudget(teamName, date,amountName);
+    }
+
+    public void subtractAmountToAssociationBudget(String teamName, String date,String amountName) {
+        associationRepresentativeBusinessController.subtractAmountToAssociationBudget(teamName, date,amountName);
     }
 
     public String approveTeam(String teamName, String userName) {
@@ -180,6 +184,11 @@ public class AssociationRepresentativeController {
         showUserList.add("Owner username@Account");
         options.put("Approve the opening of a team",new Pair<>(this.getClass().getDeclaredMethod("approveTeam",String.class,String.class),showUserList));
 
+        showUserList=new ArrayList<>();
+        showUserList.add("League name@League");
+        showUserList.add("Season name@Season");
+        options.put("Activate game scheduling algorithm",new Pair<>(this.getClass().getDeclaredMethod("scheduleGamesInSeason",String.class,String.class),showUserList));
+
         return options;
     }
 
@@ -189,7 +198,21 @@ public class AssociationRepresentativeController {
         String sendToServer = "AssociationRepresentative@"+Client.getUserName();
         return ( List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("getAlerts",parameters)));
     }
-    public void logOff()
+
+    //new!!
+    public String scheduleGamesInSeason(String leagueName, String seasonName) {
+        if(leagueName == null || seasonName == null){
+            return  "";
+
+        }else{
+            List<String> parameters = new LinkedList<>();
+            parameters.add(leagueName);
+            parameters.add(seasonName);
+            String sendToServer = "AssociationRepresentative@"+ Client.getUserName();
+            return (String) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("scheduleGamesInSeason",parameters)));
+        }
+    }
+        public void logOff()
     {
         List<String> parameters = new LinkedList<>();
         String sendToServer = "AssociationRepresentative@"+Client.getUserName();

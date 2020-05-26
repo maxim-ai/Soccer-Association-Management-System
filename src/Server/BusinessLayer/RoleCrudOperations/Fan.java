@@ -153,19 +153,19 @@ public class Fan extends Role implements Serializable
 
 
   //region Other UC methods
-  public void ShowInfo(String InfoAbout){
-    new Guest().ShowInfo(InfoAbout);
-  }
+//  public void ShowInfo(String InfoAbout){
+//    new Guest().ShowInfo(InfoAbout);
+//  }
 
-  public void Search(String criterion, String query){
-    new Guest().Search(criterion,query);
-    String[] savedSearch={criterion,query};
-    searchHistory.add(savedSearch);
-  }
+//  public void Search(String criterion, String query){
+//    new Guest().Search(criterion,query);
+//    String[] savedSearch={criterion,query};
+//    searchHistory.add(savedSearch);
+//  }
 
-  public void Filter(String category,String roleFilter){
-    new Guest().Filter(category,roleFilter);
-  }
+//  public void Filter(String category,String roleFilter){
+//    new Guest().Filter(category,roleFilter);
+//  }
 
 
 
@@ -173,8 +173,14 @@ public class Fan extends Role implements Serializable
     trackPersonalPages=true;
   }
 
-  public void SubscribeGetMatchNotifications(){
-    getMatchNotifications=true;
+  public String SubscribeGetMatchNotifications(){
+    DataController.getInstance().setGameNotificationSubscribtion(this,true);
+    return "Subscribed successfully!";
+  }
+  public String unSubscribeGetMatchNotifications()
+  {
+    DataController.getInstance().setGameNotificationSubscribtion(this,false);
+    return "Subscription removed successfully!";
   }
 
   public static void notifyFansAboutMatch(Match match){
@@ -237,6 +243,11 @@ public class Fan extends Role implements Serializable
     }
   }
 
+  @Override
+  public void logOff() {
+    super.logOff();
+    DataController.getInstance().setGameNotificationSubscribtion(this,false);
+  }
 
   //endregion
 
