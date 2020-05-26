@@ -41,39 +41,39 @@ public class FanController {
     //endregion
 
     //region Transition methods for other UC
-    public String ShowInfo(String InfoAbout){
-        if(InfoAbout.length()==0) return "InfoAbout field is empty";
-        if(!(InfoAbout.equals("Teams")||InfoAbout.equals("Players")||InfoAbout.equals("Coaches")||
-                InfoAbout.equals("Leagues")||InfoAbout.equals("Seasons")))
-            return "Wrong InfoAbout field";
-        fanBusinessController.ShowInfo(InfoAbout);
-        return "";
-    }
+//    public String ShowInfo(String InfoAbout){
+//        if(InfoAbout.length()==0) return "InfoAbout field is empty";
+//        if(!(InfoAbout.equals("Teams")||InfoAbout.equals("Players")||InfoAbout.equals("Coaches")||
+//                InfoAbout.equals("Leagues")||InfoAbout.equals("Seasons")))
+//            return "Wrong InfoAbout field";
+//        fanBusinessController.ShowInfo(InfoAbout);
+//        return "";
+//    }
+//
+//    public String Search(String criterion, String query){
+//        if(criterion.length()==0) return "Criterion field is empty";
+//        if(query.length()==0) return "Query length is empty";
+//        if(!(criterion.equals("Name")||criterion.equals("Category"))) return "Wrong criterion";
+//        if(criterion.equals("Category")){
+//            if(!(query.equals("Teams")||query.equals("Accounts")||query.equals("Leagues")||query.equals("Seasons")))
+//                return "Wrong query";
+//        }
+//        fanBusinessController.Search(criterion,query);
+//        return "";
+//    }
 
-    public String Search(String criterion, String query){
-        if(criterion.length()==0) return "Criterion field is empty";
-        if(query.length()==0) return "Query length is empty";
-        if(!(criterion.equals("Name")||criterion.equals("Category"))) return "Wrong criterion";
-        if(criterion.equals("Category")){
-            if(!(query.equals("Teams")||query.equals("Accounts")||query.equals("Leagues")||query.equals("Seasons")))
-                return "Wrong query";
-        }
-        fanBusinessController.Search(criterion,query);
-        return "";
-    }
-
-    public String Filter(String category, String roleFilter){
-        if(category.length()==0) return "Catergory field is empty";
-        if(!(category.equals("Role")||category.equals("Team")||category.equals("League")||category.equals("Season")))
-            return "Wrong category";
-        if(category.equals("Role")){
-            if(!(roleFilter.equals("Players")||roleFilter.equals("Coaches")||roleFilter.equals("TeamManagers")||
-                    roleFilter.equals("Owners")||roleFilter.equals("Referees")))
-                return "Wrong role filter";
-        }
-        fanBusinessController.Filter(category,roleFilter);
-        return "";
-    }
+//    public String Filter(String category, String roleFilter){
+//        if(category.length()==0) return "Catergory field is empty";
+//        if(!(category.equals("Role")||category.equals("Team")||category.equals("League")||category.equals("Season")))
+//            return "Wrong category";
+//        if(category.equals("Role")){
+//            if(!(roleFilter.equals("Players")||roleFilter.equals("Coaches")||roleFilter.equals("TeamManagers")||
+//                    roleFilter.equals("Owners")||roleFilter.equals("Referees")))
+//                return "Wrong role filter";
+//        }
+//        fanBusinessController.Filter(category,roleFilter);
+//        return "";
+//    }
 
 
 

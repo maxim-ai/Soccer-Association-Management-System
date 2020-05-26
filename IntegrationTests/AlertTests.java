@@ -2,7 +2,7 @@ import Server.BusinessLayer.DataController;
 import Server.BusinessLayer.OtherCrudOperations.Alert;
 import Server.BusinessLayer.RoleCrudOperations.Fan;
 import Server.BusinessLayer.RoleCrudOperations.Role;
-import Client.ServiceLayer.OurSystem;
+import Client.ServiceLayer.OurSystemClient;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ public class AlertTests {
     @Test
     public void notifyOtherRole() {
         Role coach=new Fan("maxim");
-        OurSystem.notifyOtherRole(alert.getDescription(),coach);
+        OurSystemClient.notifyOtherRole(alert.getDescription(),coach);
         assertEquals(coach.getAlertList().size(),1);
         assertEquals(coach.getAlertList().get(0).getDescription(),"aaa");
     }

@@ -23,7 +23,7 @@ public class OurSystemServer {
         System.out.println("Established connection to Accounty System");
         System.out.println("Established connection to Federal Tax System");
 
-        File[] loggers={new File("event log"), new File("errog log")};
+        File[] loggers={new File("event log"), new File("error log")};
         for(File file:loggers)
             if(file.exists())
                 file.delete();

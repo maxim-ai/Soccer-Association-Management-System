@@ -2,7 +2,7 @@ import Server.BusinessLayer.DataController;
 import Server.BusinessLayer.Logger.Logger;
 import Server.BusinessLayer.OtherCrudOperations.*;
 import Server.BusinessLayer.RoleCrudOperations.*;
-import Client.ServiceLayer.OurSystem;
+import Client.ServiceLayer.OurSystemClient;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ public class OwnerTests {
     public void setUp() throws Exception {
         DataController.getInstance().clearDataBase();
         Logger logger=Logger.getInstance();
-        OurSystem ourSystem=new OurSystem();
+        OurSystemClient ourSystem=new OurSystemClient();
         ourSystem.Initialize();
         ownerAccount=new Account("sean",20,"sean","sean");
         secondAccount=new Account("notSean",30,"sean","sean");

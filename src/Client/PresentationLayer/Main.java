@@ -13,6 +13,9 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 public class Main extends Application {
@@ -24,17 +27,16 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 677, 468));
         SetStageCloseEvent(primaryStage);
         primaryStage.show();
+
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         //connectToDB();
         //getTeamNames();
-        //(new OurSystemServer()).Initialize();
+        (new OurSystemServer()).Initialize();
         //Client.startListen();
         launch(args);
-
-
         int n=0;
     }
 
@@ -51,6 +53,14 @@ public class Main extends Application {
                 }
             }
         });
+    }
+
+    private static String encodeHex(byte[] digest) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < digest.length; i++) {
+            sb.append(Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
     }
 
 

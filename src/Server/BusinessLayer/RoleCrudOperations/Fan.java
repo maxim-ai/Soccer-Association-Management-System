@@ -153,20 +153,20 @@ public class Fan extends Role implements Serializable
 
 
   //region Other UC methods
-  public void ShowInfo(String InfoAbout){
-    new Guest().ShowInfo(InfoAbout);
-  }
-
-  public void Search(String criterion, String query){
-    new Guest().Search(criterion,query);
-    String[] savedSearch={criterion,query};
-    searchHistory.add(savedSearch);
-  }
-
-  public void Filter(String category,String roleFilter){
-    new Guest().Filter(category,roleFilter);
-  }
-
+//  public void ShowInfo(String InfoAbout){
+//    new Guest().ShowInfo(InfoAbout);
+//  }
+//
+//  public void Search(String criterion, String query){
+//    new Guest().Search(criterion,query);
+//    String[] savedSearch={criterion,query};
+//    searchHistory.add(savedSearch);
+//  }
+//
+//  public void Filter(String category,String roleFilter){
+//    new Guest().Filter(category,roleFilter);
+//  }
+//
 
 
   public void SubscribeTrackPersonalPages(){

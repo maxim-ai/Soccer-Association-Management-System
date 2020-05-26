@@ -34,8 +34,8 @@ public class Client extends Observable {
 
     static {
         try {
-//            serverIP =  InetAddress.getLocalHost();
-            serverIP =  InetAddress.getByName("132.72.65.41");
+            serverIP =  InetAddress.getLocalHost();
+//            serverIP =  InetAddress.getByName("132.72.65.41");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

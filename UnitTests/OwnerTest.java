@@ -2,7 +2,7 @@ import Server.BusinessLayer.DataController;
 import Server.BusinessLayer.Logger.Logger;
 import Server.BusinessLayer.OtherCrudOperations.*;
 import Server.BusinessLayer.RoleCrudOperations.*;
-import Client.ServiceLayer.OurSystem;
+import Client.ServiceLayer.OurSystemClient;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class OwnerTest {
     public void setUp() throws Exception {
         DataController.getInstance().clearDataBase();
         Logger logger=Logger.getInstance();
-        OurSystem ourSystem=new OurSystem();
+        OurSystemClient ourSystem=new OurSystemClient();
         ourSystem.Initialize();
         ownerAccount=new Account("sean",20,"sean","sean");
         secondAccount=new Account("notSean",30,"sean","sean");
@@ -630,11 +630,11 @@ public class OwnerTest {
     {
         String notification=ownerc.getName()+" has deactivated team: "+ownerc.getTeam().getName();
         for(Owner owner:ownerc.getTeam().getOwners())
-            OurSystem.notifyOtherRole(notification,owner);
+            OurSystemClient.notifyOtherRole(notification,owner);
         for(TeamManager teamManager:ownerc.getTeam().getTeamManagers())
-            OurSystem.notifyOtherRole(notification,teamManager);
+            OurSystemClient.notifyOtherRole(notification,teamManager);
         for(SystemManager systemManager: DataController.getInstance().getSystemManagersFromAccounts())
-            OurSystem.notifyOtherRole(notification,systemManager);
+            OurSystemClient.notifyOtherRole(notification,systemManager);
 
         loggerStub("");
         deleteStub(ownerc.getTeam());
@@ -668,7 +668,7 @@ public class OwnerTest {
         {
             for(AssociationRepresentative ar: DataController.getInstance().getAssiciationRepresentivesFromAccounts())
             {
-                OurSystem.notifyOtherRole(owner.getName()+" is requesting to create a new team, teamName: "+teamName,ar);
+                OurSystemClient.notifyOtherRole(owner.getName()+" is requesting to create a new team, teamName: "+teamName,ar);
                 addOpenTeamRequestStub(owner,teamName);
             }
             return "Request sent, waiting for approval";

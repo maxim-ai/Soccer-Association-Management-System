@@ -51,17 +51,17 @@ public class FanBusinessController {
     //endregion
 
     //region Transition methods for other UC
-    public void ShowInfo(String InfoAbout){
-        fan.ShowInfo(InfoAbout);
-    }
-
-    public void Search(String criterion, String query){
-        fan.Search(criterion,query);
-    }
-
-    public void  Filter(String category, String roleFilter){
-        fan.Filter(category,roleFilter);
-    }
+//    public void ShowInfo(String InfoAbout){
+//        fan.ShowInfo(InfoAbout);
+//    }
+//
+//    public void Search(String criterion, String query){
+//        fan.Search(criterion,query);
+//    }
+//
+//    public void  Filter(String category, String roleFilter){
+//        fan.Filter(category,roleFilter);
+//    }
 
 
 

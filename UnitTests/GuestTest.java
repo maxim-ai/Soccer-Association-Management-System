@@ -1,420 +1,193 @@
-//import BusinessLayer.DataController;
-//import BusinessLayer.OtherCrudOperations.*;
-//import BusinessLayer.RoleCrudOperations.*;
-//import org.junit.After;
-//import org.junit.Before;
-//import org.junit.Test;
-//
-//import java.io.*;
-//import java.sql.Time;
-//import java.util.Date;
-//import java.util.LinkedList;
-//import java.util.List;
-//
-//import static org.junit.Assert.*;
-//
-//public class GuestTest {
-//    Guest guest;
-//    Account account1;Account account2;League league;Stadium stadium;Season season;Team team;
-//    TeamManager teamManager; Owner owner; Match match;
-//    private final ByteArrayOutputStream OS=new ByteArrayOutputStream();
-//    private final PrintStream PS=System.out;
-//
-//
-//    @Before
-//    public void setUp() throws Exception {
-//        DataController.getInstance().clearDataBase();
-//        System.setOut(new PrintStream(OS));
-//        Guest.resetGuestIDCounter();
-//        guest = new Guest();
-//        account1=new Account("Maxim",26,"MaximX","1234");
-//        account1.addRole(new Player("Maxim",new Date(),PositionEnum.Goalkeeper, team,null));
-//        account2=new Account("Tzlil",26,"TzlilX","1234");
-//        account2.addRole(new Coach("Tzlil","aaa","bbb",null));
-//        league=new League("International");
-//        stadium=new Stadium("Teddy");
-//        season=new Season("Winter");
-//        team =new Team("Barcelona",league,stadium);
-//        teamManager=new TeamManager("Yossi", team,null);
-//        owner=new Owner("Haim", team,null);
-//        match=new Match(new Date(),new Time(22,0,0),3,2,stadium,season,team,new Team("Rome",league,stadium),null,null,null);
-//        team.addMatch(match,"home");
-//        team.addOwner(owner);
-//        team.addTeamManager(teamManager);
-//        ((Player)account1.getRole(0)).setTeam(team);
-//        ((Coach)account2.getRole(0)).addTeam(team);
-//        DataController.getInstance().clearDataBase();
-//        DataController.getInstance().addAccount(account1);
-//        DataController.getInstance().addAccount(account2);
-//        DataController.getInstance().addLeague(league);
-//        DataController.getInstance().addStadium(stadium);
-//        DataController.getInstance().addSeason(season);
-//        DataController.getInstance().addTeam(team);
-//
-//
-//        File loggerFile=new File("Logger");
-//        if(loggerFile.exists())
-//            loggerFile.delete();
-//    }
-//    @After
-//    public void restore(){
-//        System.setOut(PS);
-//    }
-//
-//    //region Getters&Setters Tests
-//    @Test
-//    public void getGuestIDCounter() {
-//        assertEquals(1, Guest.getGuestIDCounter());
-//    }
-//    @Test
-//    public void resetGuestIDCounter(){
-//        Guest.resetGuestIDCounter();
-//        assertEquals(0,Guest.getGuestIDCounter());
-//    }
-//    @Test
-//    public void getId() {
-//
-//        assertEquals(1,guest.getId());
-//    }
-//    @Test
-//    public void testToString() {
-//
-//        assertEquals("BusinessLayer.OtherCrudOperations.Guest ID: 1",guest.toString());
-//    }
-//    //endregion
-//
-//    //region UC and Technical Tests
-//    @Test
-//    public void logInAccistingAccount() throws Exception {
-//        assertEquals(account1,guest.LogIn("MaximX","1234"));
-//        assertTrue(CheckLoggerLines("BusinessLayer.OtherCrudOperations.Account MaximX logged in"));
-//    }
-//    @Test
-//    public void logInNotAccistingAccount() throws Exception {
-//        assertNull(guest.LogIn("MaximY","1234"));
-//    }
-//    @Test
-//    public void signInAccistingAccount() {
-//        assertFalse(guest.SignIn("Sean",24,"MaximX","4321"));
-//    }
-//    @Test
-//    public void signInNotAccistingAccount() throws IOException {
-//        assertTrue(guest.SignIn("Sean",24,"SeanX","4321"));
-//        assertEquals("SeanX", DataController.getInstance().getAccount(2).getUserName());
-//        assertTrue(CheckLoggerLines("New account SeanX created"));
-//    }
-//    //region Stubs Tests
-//    @Test
-//    public void showInfoAboutTeams() {
-//        ShowInfo("Teams");
-//        String s="BusinessLayer.OtherCrudOperations.Team\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void showInfoAboutPlayers(){
-//        ShowInfo("Players");
-//        String s="BusinessLayer.RoleCrudOperations.Player\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void showInfoAboutCoaches(){
-//        ShowInfo("Coaches");
-//        String s="BusinessLayer.RoleCrudOperations.Coach\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void showInfoAboutLeagues(){
-//        ShowInfo("Leagues");
-//        String s="BusinessLayer.OtherCrudOperations.League\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void showInfoAboutSeasons(){
-//        ShowInfo("Seasons");
-//        String s="BusinessLayer.OtherCrudOperations.Season\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void searchName() {
-//        Search("Name","Barcelona");
-//        String s="Teams with the name Barcelona\r\nBusinessLayer.OtherCrudOperations.Team\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void searchCategoryTeams() {
-//        Search("Category","Teams");
-//        String s="BusinessLayer.OtherCrudOperations.Team\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void searchCategoryAccounts() {
-//        Search("Category","Accounts");
-//        String s="BusinessLayer.OtherCrudOperations.Account\r\nBusinessLayer.OtherCrudOperations.Account\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void searchCategoryLeagues() {
-//        Search("Category","Leagues");
-//        String s="BusinessLayer.OtherCrudOperations.League\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void searchCategorySeasons() {
-//        Search("Category","Seasons");
-//        String s="BusinessLayer.OtherCrudOperations.Season\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void filterRolePlayers() {
-//        Filter("BusinessLayer.RoleCrudOperations.Role","Players");
-//        String s="BusinessLayer.RoleCrudOperations.Player\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void filterRoleCoaches() {
-//        Filter("BusinessLayer.RoleCrudOperations.Role","Coaches");
-//        String s="BusinessLayer.RoleCrudOperations.Coach\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void filterRoleTeamManagers() {
-//        Account checkAccount1=new Account("Tom",30,"TomX","1234");
-//        DataController.getInstance().addAccount(checkAccount1);
-//        checkAccount1.addRole(new Owner("Tom", team,null));
-//        Account checkAccount2=new Account("Tommy",30,"TommyX","1234");
-//        DataController.getInstance().addAccount(checkAccount2);
-//        checkAccount2.addRole(new TeamManager("Tommy", team,(Owner)checkAccount1.getRoles().get(0)));
-//        Filter("BusinessLayer.RoleCrudOperations.Role","TeamManagers");
-//        String s="BusinessLayer.RoleCrudOperations.TeamManager\r\n";
-//        assertEquals(s,OS.toString());
-//    }
-//    @Test
-//    public void filterRoleOwners() {
-//        Account checkAccount=new Account("Tom",30,"TomX","1234");
-//        DataController.getInstance().addAccount(checkAccount);
-//        checkAccount.addRole(new Owner("Tom", team,null));
-//        Filter("BusinessLayer.RoleCrudOperations.Role","Owners");
-//        String s="BusinessLayer.RoleCrudOperations.Owner\r\n";
-//        assertEquals(s,OS.toString());
-//    }
-//    @Test
-//    public void filterRoleReferees() {
-//        Account account3=new Account("Eitan",25,"EitanX","1234");
-//        account3.addRole(new Referee("Abroad","Eitan"));
-//        DataController.getInstance().addAccount(account3);
-//        Filter("BusinessLayer.RoleCrudOperations.Role","Referees");
-//        String s="BusinessLayer.RoleCrudOperations.Referee\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void filterTeams(){
-//        Filter("BusinessLayer.OtherCrudOperations.Team","");
-//        String s="BusinessLayer.OtherCrudOperations.Team\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void filterLeagues(){
-//        Filter("BusinessLayer.OtherCrudOperations.League","");
-//        String s="BusinessLayer.OtherCrudOperations.League\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    @Test
-//    public void filterSeasons(){
-//        Filter("BusinessLayer.OtherCrudOperations.Season","");
-//        String s="BusinessLayer.OtherCrudOperations.Season\r\n";
-//        assertEquals(OS.toString(),s);
-//    }
-//    //endregion
-//    //endregion
-//
-//
-//
-//
-//
-//
-//    //region Help Methods
-//    private boolean CheckLoggerLines(String s) {
-//        String line= null;
-//        try {
-//            BufferedReader BR=new BufferedReader(new FileReader(new File("Logger")));
-//            line = BR.readLine();
-//            BR.close();
-//            if(s.equals(line.substring(line.indexOf('-')+2)))
-//                return true;
-//            else
-//                return false;
-//        } catch (IOException e) { }
-//        return false;
-//    }
-//    private void ShowInfo(String InfoAbout){
-//        if(InfoAbout.equals("Teams")){
-//            for(Team team: DataController.getInstance().getTeams())
-//                ShowTeamStub();
-//        }
-//
-//        if(InfoAbout.equals("Players")){
-//            List<Player> players= DataController.getInstance().getPlayersFromAccounts();
-//            for(Player player:players){
-//                ShowPlayerStub();
-//            }
-//        }
-//        if(InfoAbout.equals("Coaches")){
-//            List<Coach> coaches= DataController.getInstance().getCoachesFromAccounts();
-//            for(Coach coach:coaches){
-//                ShowCoachStub();
-//            }
-//        }
-//
-//        if(InfoAbout.equals("Leagues")){
-//            for(League league: DataController.getInstance().getLeagues())
-//                ShowLeagueStub();
-//        }
-//
-//        if(InfoAbout.equals("Seasons")){
-//            for(Season season: DataController.getInstance().getSeasons())
-//                ShowSeasonStub();
-//        }
-//
-//    }
-//    private void Search(String criterion, String query){
-//        if(criterion.equals("Name")){
-//            List<Team> teams=new LinkedList<>();
-//            for(Team team: DataController.getInstance().getTeams()){
-//                if(team.getName().equals(query))
-//                    teams.add(team);
-//            }
-//            List<Account> accounts=new LinkedList<>();
-//            for(Account account: DataController.getInstance().getAccounts()){
-//                if(account.getName().equals(query))
-//                    accounts.add(account);
-//            }
-//            List<League> leagues=new LinkedList<>();
-//            for(League league: DataController.getInstance().getLeagues()){
-//                if(league.getName().equals(query))
-//                    leagues.add(league);
-//            }
-//            List<Season> seasons=new LinkedList<>();
-//            for(Season season: DataController.getInstance().getSeasons()){
-//                if(season.getName().equals(query))
-//                    seasons.add(season);
-//            }
-//
-//            if (!accounts.isEmpty()) {
-//                System.out.println("Accounts with the name "+query);
-//                for(Account account:accounts)
-//                    ShowAccountStub();
-//            }
-//            if (!teams.isEmpty()) {
-//                System.out.println("Teams with the name "+query);
-//                for(Team team:teams)
-//                    ShowTeamStub();
-//            }
-//            if (!leagues.isEmpty()) {
-//                System.out.println("Leagues with the name "+query);
-//                for(League league:leagues)
-//                    ShowLeagueStub();
-//            }
-//            if (!seasons.isEmpty()) {
-//                System.out.println("Seasons with the name "+query);
-//                for(Season season:seasons)
-//                    ShowSeasonStub();
-//            }
-//
-//        }
-//        if(criterion.equals("Category")){
-//            if(query.equals("Teams")){
-//                for(Team team: DataController.getInstance().getTeams())
-//                    ShowTeamStub();
-//            }
-//            if(query.equals("Accounts")){
-//                for(Account account: DataController.getInstance().getAccounts())
-//                    ShowAccountStub();
-//            }
-//            if(query.equals("Leagues")){
-//                for(League league: DataController.getInstance().getLeagues())
-//                    ShowLeagueStub();
-//            }
-//            if(query.equals("Seasons")){
-//                for(Season season: DataController.getInstance().getSeasons())
-//                    ShowSeasonStub();
-//            }
-//        }
-//    }
-//    public void Filter(String category,String roleFilter){
-//        if(category.equals("BusinessLayer.RoleCrudOperations.Role")){
-//            if(roleFilter.equals("Players")){
-//                List<Player> players= DataController.getInstance().getPlayersFromAccounts();
-//                for(Player player:players)
-//                    ShowPlayerStub();
-//            }
-//
-//            if(roleFilter.equals("Coaches")){
-//                List<Coach> coaches= DataController.getInstance().getCoachesFromAccounts();
-//                for(Coach coach:coaches)
-//                    ShowCoachStub();
-//            }
-//
-//            if(roleFilter.equals("TeamManagers")){
-//                List<TeamManager> tms= DataController.getInstance().getTeamManagersFromAccounts();
-//                for(TeamManager tm:tms)
-//                    ShowTeamManagerStub();
-//            }
-//
-//            if(roleFilter.equals("Owners")){
-//                List<Owner> owners= DataController.getInstance().getOwnersFromAccounts();
-//                for(Owner owner:owners)
-//                    ShowOwnerStub();
-//            }
-//
-//            if(roleFilter.equals("Referees")){//************************************
-//                List<Referee> refs= DataController.getInstance().getRefereesFromAccounts();
-//                for(Referee ref:refs)
-//                    ShowRefereeStub();
-//            }
-//
-//        }
-//        if(category.equals("BusinessLayer.OtherCrudOperations.Team")){
-//            for(Team team: DataController.getInstance().getTeams())
-//                ShowTeamStub();
-//        }
-//        if(category.equals("BusinessLayer.OtherCrudOperations.League")){
-//            for(League league: DataController.getInstance().getLeagues())
-//                ShowLeagueStub();
-//        }
-//        if(category.equals("BusinessLayer.OtherCrudOperations.Season")){
-//            for(Season season: DataController.getInstance().getSeasons())
-//                ShowSeasonStub();
-//        }
-//    }
-//    //endregion
-//
-//    //region ShowStubs
-//    private void ShowTeamStub(){
-//        System.out.println("BusinessLayer.OtherCrudOperations.Team");
-//    }
-//    private void ShowLeagueStub(){
-//        System.out.println("BusinessLayer.OtherCrudOperations.League");
-//    }
-//    private void ShowSeasonStub(){
-//        System.out.println("BusinessLayer.OtherCrudOperations.Season");
-//    }
-//    private void ShowRefereeStub(){
-//        System.out.println("BusinessLayer.RoleCrudOperations.Referee");
-//    }
-//    private void ShowAccountStub(){
-//        System.out.println("BusinessLayer.OtherCrudOperations.Account");
-//    }
-//    private void ShowPlayerStub(){
-//        System.out.println("BusinessLayer.RoleCrudOperations.Player");
-//    }
-//    private void ShowCoachStub(){
-//        System.out.println("BusinessLayer.RoleCrudOperations.Coach");
-//    }
-//    private void ShowOwnerStub(){
-//        System.out.println("BusinessLayer.RoleCrudOperations.Owner");
-//    }
-//    private void ShowTeamManagerStub(){
-//        System.out.println("BusinessLayer.RoleCrudOperations.TeamManager");
-//    }
-//    //endregion
-//}
+
+import Client.PresentationLayer.Main;
+import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.Logger.Logger;
+import Server.BusinessLayer.OtherCrudOperations.Account;
+import Server.BusinessLayer.OtherCrudOperations.Guest;
+import Server.BusinessLayer.RoleCrudOperations.Fan;
+import Server.BusinessLayer.RoleCrudOperations.Owner;
+import Server.BusinessLayer.RoleCrudOperations.Role;
+import Server.BusinessLayer.RoleCrudOperations.TeamManager;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+public class GuestTest {
+    Guest guest;
+    List<Account> accountList=new ArrayList<>();
+    private final ByteArrayOutputStream OS=new ByteArrayOutputStream();
+    private final PrintStream PS=System.out;
+
+
+    @Before
+    public void setUp() throws Exception {
+        System.setOut(new PrintStream(OS));
+        Guest.resetGuestIDCounter();
+        guest=new Guest();
+        accountList.add(new Account("A1",99,"A1X",hashPassword("Password")));
+        accountList.add(new Account("A2",99,"A2X",hashPassword("Password")));
+        accountList.add(new Account("A3",99,"A3X",hashPassword("Password")));
+        accountList.add(new Account("A4",99,"A4X",hashPassword("Password")));
+
+        File[] loggers={new File("event log"), new File("error log")};
+        for(File file:loggers){
+            if(file.exists())
+                file.delete();
+        }
+    }
+    @After
+    public void restore(){
+        System.setOut(PS);
+    }
+
+    //region Getters&Setters Tests
+    @Test
+    public void getGuestIDCounter() {
+        assertEquals(1, Guest.getGuestIDCounter());
+    }
+    @Test
+    public void resetGuestIDCounter(){
+        Guest.resetGuestIDCounter();
+        assertEquals(0,Guest.getGuestIDCounter());
+    }
+    @Test
+    public void getId() {
+        Guest.resetGuestIDCounter();
+        guest=new Guest();
+        assertEquals(1,guest.getId());
+    }
+    @Test
+    public void testToString() {
+
+        assertEquals("Guest ID: 1",guest.toString());
+    }
+    //endregion
+
+    //region UC and Technical Tests
+    @Test
+    public void logInNotExistingAccount(){
+        try {
+            LogIn("A1XX","Password");
+        }
+        catch (Exception e){
+            assertEquals(e.getMessage(),"Username does not exist");
+        }
+        assertTrue(checkLoggerLine("error log","Guest #1 tried to log in with wrong username"));
+    }
+
+    @Test
+    public void logInWrongPassword(){
+        try {
+            LogIn("A1X","Passwordd");
+        }
+        catch (Exception e){
+            assertEquals(e.getMessage(),"Wrong password");
+        }
+        assertTrue(checkLoggerLine("error log","Guest #1 tried to log in with wrong password"));
+    }
+
+    @Test
+    public void logIn(){
+        Account account=null;
+        try {
+            account=LogIn("A1X","Password");
+        } catch (Exception e) { e.printStackTrace(); }
+
+        assertEquals("A1X",account.getUserName());
+
+        assertTrue(account.getRole(0) instanceof Role);
+
+        assertTrue(checkLoggerLine("event log","Account A1X logged in"));
+    }
+
+
+    //endregion
+
+
+    public Account LogIn(String UserName, String Password) throws Exception {
+        String[] accountInfo= checkUserExistenceStub(UserName);
+        if(accountInfo==null){
+            (Logger.getInstanceError()).writeNewLineError("Guest #1 tried to log in with wrong username");
+            throw new Exception("Username does not exist");
+        }
+        else if(accountInfo[0].equals(UserName)&&!accountInfo[1].equals(hashPassword(Password))){
+            (Logger.getInstanceError()).writeNewLineError("Guest #1 tried to log in with wrong password");
+            throw new Exception("Wrong password");
+        }
+        else if(accountInfo[0].equals(UserName)&&accountInfo[1].equals(hashPassword(Password))){
+            Account account=new Account(accountInfo[2],Integer.parseInt(accountInfo[3]),accountInfo[0],accountInfo[1]);
+            account.setLoggedIn(true);
+            account=getUserRolesStub(account);
+            (Logger.getInstance()).writeNewLine("Account "+UserName+" logged in");
+            return account;
+        }
+        return null;
+    }
+    private String[] checkUserExistenceStub(String userName){
+        Account foundAccount=null;
+        for(Account account:accountList){
+            if(account.getUserName().equals(userName))
+                foundAccount=account;
+        }
+        if(foundAccount==null) return null;
+
+        String[] arr={foundAccount.getUserName(),foundAccount.getPassword(),foundAccount.getName(),foundAccount.getAge()+""};
+        return arr;
+    }
+
+    private Account getUserRolesStub(Account account){
+       account.addRole(new Fan("Fan1"));
+       return account;
+    }
+
+    private String hashPassword(String password){
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] buffer = password.getBytes("UTF-8");
+            md.update(buffer);
+            byte[] digest = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < digest.length; i++) {
+                sb.append(Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    private boolean checkLoggerLine(String loggerName, String line){
+        try {
+            File loggerFile=new File(loggerName);
+            BufferedReader BR=new BufferedReader(new FileReader(loggerFile));
+            String readLine="";
+            while((readLine=BR.readLine())!=null){
+                readLine=readLine.substring(readLine.indexOf("-")+2);
+                if(!readLine.equals(line))
+                    return false;
+            }
+
+            BR.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+
+
+
+
+}
