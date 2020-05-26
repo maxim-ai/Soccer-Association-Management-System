@@ -69,7 +69,6 @@ public class FanBusinessController {
         fan.SubscribeTrackPersonalPages();
     }
 
-    public void SubscribeGetMatchNotifications(){fan.SubscribeGetMatchNotifications();}
 
 //    public boolean Report(String report){
 //        if(report.length()==0)
@@ -90,6 +89,14 @@ public class FanBusinessController {
     public void ShowPersonalInfo(){
         fan.ShowPersonalInfo();
     }
+
+    public String SubscribeGetMatchNotifications(){
+        return fan.SubscribeGetMatchNotifications();
+    }
+
+    public String unSubscribeGetMatchNotifications(){
+        return fan.unSubscribeGetMatchNotifications();
+    }
 	
 	public List<String> getAlerts()
 	{
@@ -100,6 +107,11 @@ public class FanBusinessController {
             strings.add(alert.getDescription());
         }
         return strings;
+    }
+
+    public void logOff()
+    {
+        fan.logOff();
     }
 
 

@@ -94,6 +94,13 @@ public class RefereeController {
         return (List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("getEvantsByMatch",parameters)));
         //return refereeBusinessController.getEvantsByMatch(matchString);
     }
+    public String gameReport(String matchString)
+    {
+        List<String> parameters = new LinkedList<>();
+        parameters.add(matchString);
+        String sendToServer = "Referee@"+ Client.getUserName();
+        return (String) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("gameReport",parameters)));
+    }
     public List<String> getMatchList(){
         List<String> parameters = new LinkedList<>();
         String sendToServer = "Referee@"+ Client.getUserName();
@@ -134,6 +141,10 @@ public class RefereeController {
         showUserList.add("Event type@EventEnum");
         showUserList.add("Description");
         options.put("Edit an event after the mach",new Pair<>(this.getClass().getDeclaredMethod("editEventAfterGame",String.class,String.class,String.class,String.class),showUserList));
+
+        showUserList=new ArrayList<>();
+        showUserList.add("Match@Match");
+        options.put("Show a game report",new Pair<>(this.getClass().getDeclaredMethod("gameReport",String.class),showUserList));
 
         return options;
     }

@@ -763,5 +763,8 @@ public class DataController {
     return dbAdapter.getNotifiedFans();
   }
 
+  public void setGameNotificationSubscribtion(Fan fan, boolean b) {
+    dbAdapter.setGameNotificationSubscribtion(fan.getUsername(),String.valueOf(b));
+  }
 }
 

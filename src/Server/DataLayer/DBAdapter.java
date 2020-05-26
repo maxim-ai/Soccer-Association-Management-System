@@ -456,10 +456,51 @@ public class DBAdapter {
             ps.setString(6,awayTeamName);
             ps.setString(7,homeTeamName);
             ps.executeUpdate();
+            if(eventType.equals("goal"))
+            {
+                if(description.contains(homeTeamName))
+                    increaseMatchScore("home",date,awayTeamName,homeTeamName);
+                else if(description.contains(awayTeamName))
+                    increaseMatchScore("away",date,awayTeamName,homeTeamName);
+
+            }
             con.close();
         } catch (SQLException e) {
             if(!e.getMessage().contains("Violation of PRIMARY KEY"))
                 e.printStackTrace();
+        }
+    }
+
+    private void increaseMatchScore(String teamScored, String date, String awayTeamName, String homeTeamName1) {
+        int currScore=0;
+        String whoScored="";
+        if(teamScored.equals("home"))
+            whoScored="homeScore";
+        else if(teamScored.equals("away"))
+            whoScored="AwayScore";
+        try {
+            Connection con=connectToDB();
+            PreparedStatement st=con.prepareStatement("select * from MATCH where Date=? AND AwayTeam=? AND homeTeam=?");
+            st.setString(1,date);
+            st.setString(2,awayTeamName);
+            st.setString(3,homeTeamName1);
+            ResultSet RS=st.executeQuery();
+            while(RS.next()){
+                    currScore=RS.getInt(whoScored);
+            }
+            PreparedStatement st1;
+            if(whoScored.equals("homeScore"))
+                st1 =con.prepareStatement("update Match set homeScore=? where Date=? AND AwayTeam=? AND homeTeam=?");
+            else
+                st1 =con.prepareStatement("update Match set AwayScore=? where Date=? AND AwayTeam=? AND homeTeam=?");
+            st1.setInt(2,currScore+1);
+            st1.setString(2,date);
+            st1.setString(3,awayTeamName);
+            st1.setString(4,homeTeamName1);
+            st1.executeQuery();
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -829,7 +870,7 @@ public class DBAdapter {
     }
     public List<String> getMatch(String awayTeam,String homeTeam,String date)
     {
-        List<String> matches=new ArrayList<>();
+        List<String> match=new ArrayList<>();
         try {
             Connection con=connectToDB();
             PreparedStatement st=con.prepareStatement("select * from MATCH where Date=? AND AwayTeam=? AND homeTeam=?");
@@ -838,13 +879,23 @@ public class DBAdapter {
             st.setString(3,homeTeam);
             ResultSet RS=st.executeQuery();
             while(RS.next()){
-                matches.add(RS.getString(1));
+                match.add(RS.getString(1));
+                match.add(RS.getString(2));
+                match.add(RS.getString(3));
+                match.add(RS.getString(4));
+                match.add(RS.getString(5));
+                match.add(RS.getString(6));
+                match.add(RS.getString(7));
+                match.add(RS.getString(8));
+                match.add(RS.getString(9));
+                match.add(RS.getString(10));
+
             }
             con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return matches;
+        return match;
     }
     public String getMainRefereeInMatch(String awayTeam,String homeTeam,String date)
     {
@@ -960,5 +1011,18 @@ public class DBAdapter {
             e.printStackTrace();
         }
         return ans;
+    }
+
+    public void setGameNotificationSubscribtion(String username, String assignment) {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("UPDATE Fan SET GetMatchNotifications=(?) WHERE UserName=(?)");
+            ps.setString(1,assignment);
+            ps.setString(2,username);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
     }
 }

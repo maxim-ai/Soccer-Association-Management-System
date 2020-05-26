@@ -3,7 +3,6 @@ import Server.BusinessLayer.DataController;
 import Server.BusinessLayer.Logger.Logger;
 import Server.BusinessLayer.OtherCrudOperations.*;
 import Server.BusinessLayer.Pages.Page;
-import Client.ServiceLayer.OurSystemClient;
 
 import java.io.Serializable;
 import java.util.*;
@@ -173,8 +172,14 @@ public class Fan extends Role implements Serializable
     trackPersonalPages=true;
   }
 
-  public void SubscribeGetMatchNotifications(){
-    getMatchNotifications=true;
+  public String SubscribeGetMatchNotifications(){
+    DataController.getInstance().setGameNotificationSubscribtion(this,true);
+    return "Subscribed successfully!";
+  }
+  public String unSubscribeGetMatchNotifications()
+  {
+    DataController.getInstance().setGameNotificationSubscribtion(this,false);
+    return "Subscription removed successfully!";
   }
 
   public static void notifyFansAboutMatch(Match match){
@@ -237,8 +242,13 @@ public class Fan extends Role implements Serializable
     }
   }
 
+    @Override
+    public void logOff() {
+        super.logOff();
+        DataController.getInstance().setGameNotificationSubscribtion(this,false);
+    }
 
-  //endregion
+    //endregion
 
 
 

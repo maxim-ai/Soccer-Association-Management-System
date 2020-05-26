@@ -1,7 +1,13 @@
 package Client.ServiceLayer.RoleController;
+import Client.Client;
 import Server.BusinessLayer.Controllers.FanBusinessController;
 import Server.BusinessLayer.RoleCrudOperations.Fan;
+import javafx.util.Pair;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class FanController {
@@ -81,7 +87,16 @@ public class FanController {
         fanBusinessController.SubscribeTrackPersonalPages();
     }
 
-    public void SubscribeGetMatchNotifications(){fanBusinessController.SubscribeGetMatchNotifications();}
+    public String SubscribeGetMatchNotifications(){
+        List<String> parameters = new LinkedList<>();
+        String sendToServer = "Fan@"+Client.getUserName();
+        return (String) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("SubscribeGetMatchNotifications",parameters)));
+    }
+    public String unSubscribeGetMatchNotifications(){
+        List<String> parameters = new LinkedList<>();
+        String sendToServer = "Fan@"+Client.getUserName();
+        return (String) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("unSubscribeGetMatchNotifications",parameters)));
+    }
 
 //    public String Report(String report){
 //        if(report.length()==0)
@@ -98,9 +113,32 @@ public class FanController {
         fanBusinessController.ShowPersonalInfo();
     }
 
+
     public List<String> getAlerts()
     {
-        return fanBusinessController.getAlerts();
+        List<String> parameters = new LinkedList<>();
+        String sendToServer = "Fan@"+ Client.getUserName();
+        return ( List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("getAlerts",parameters)));
+    }
+    public void logOff()
+    {
+        List<String> parameters = new LinkedList<>();
+        String sendToServer = "Fan@"+Client.getUserName();
+        Client.connectToServer(new Pair<>(sendToServer,new Pair<>("logOff",parameters)));
+    }
+
+    public HashMap<String, Pair<Method,List<String>>> showUserMethods() throws NoSuchMethodException
+    {
+        HashMap<String, Pair<Method,List<String>>> options=new HashMap<>();
+        List<String> showUserList=new ArrayList<>();
+        options.put("Subscribe for game notifications",new Pair<>(this.getClass().getDeclaredMethod("SubscribeGetMatchNotifications"),showUserList));
+
+        showUserList=new ArrayList<>();
+        options.put("Remove subscription fo game notifications",new Pair<>(this.getClass().getDeclaredMethod("unSubscribeGetMatchNotifications"),showUserList));
+
+        return options;
+
+
     }
 
 

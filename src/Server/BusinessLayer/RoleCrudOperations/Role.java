@@ -97,4 +97,6 @@ public abstract class Role implements Serializable
       DataController.getInstance().removeAlertsFromAccount(new Account(name,0,getUsername(),""));
       DataController.getInstance().setAccountLogIn(new Account(name,0,getUsername(),""),false);
     }
+
+
 }
