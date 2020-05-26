@@ -298,7 +298,6 @@ public class AssociationRepresentative extends Role {
     return "Game schedule succeed";
   }
 
-  //new!!
   private void notifyFansForNewGames(League league, Season season){
     List<String> usersToNotify = DataController.getInstance().getNotifiedFans();
     for(String user : usersToNotify) {
@@ -306,7 +305,6 @@ public class AssociationRepresentative extends Role {
     }
   }
 
-  //new!!
   private List<List<String>> matchesToString(List<Match> matches) {
     List<List<String>> stringMatches = new LinkedList<>();
     for(Match match : matches){
@@ -327,17 +325,15 @@ public class AssociationRepresentative extends Role {
     return stringMatches;
   }
 
-  //new!!
   private List<Team> stringToTeams(List<List<String>> stringTeams){
     List<Team> teams = new LinkedList<>();
     for(List<String> stringTeam : stringTeams){
-      Team team = new Team(stringTeam.get(1),new League(stringTeam.get(2)),new Stadium(stringTeam.get(3)));
+      Team team = new Team(stringTeam.get(0),new League(stringTeam.get(1)),new Stadium(stringTeam.get(2)));
       teams.add(team);
     }
     return teams;
   }
 
-  //new!!
   private List<Referee> stringToReferees(List<String> stringReferees){
     List<Referee> referees = new LinkedList<>();
     for(String refereeUserName : stringReferees){
@@ -347,14 +343,12 @@ public class AssociationRepresentative extends Role {
     return referees;
   }
 
-  //new!!
   private Time getRandomTime() {
     Random random = new Random();
     return new Time(random.nextLong());
 
   }
 
-  //new!!
   public static String getRandomDate() {
     LocalDate currentDate= LocalDate.now();
     LocalDate nextYear = LocalDate.of(currentDate.getYear()+1, currentDate.getMonth(),currentDate.getDayOfMonth());

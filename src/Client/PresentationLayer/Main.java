@@ -31,11 +31,10 @@ public class Main extends Application {
     public static void main(String[] args) {
         //connectToDB();
         //getTeamNames();
-        //(new OurSystemServer()).Initialize();
+//        (new OurSystemServer()).Initialize();
         //Client.startListen();
 
         launch(args);
-
 
         int n=0;
     }

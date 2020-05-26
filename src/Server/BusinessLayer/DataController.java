@@ -4,7 +4,9 @@ import Server.BusinessLayer.OtherCrudOperations.*;
 import Server.BusinessLayer.Pages.Page;
 import Server.BusinessLayer.RoleCrudOperations.*;
 import Server.DataLayer.DBAdapter;
-
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.*;
@@ -596,7 +598,7 @@ public class DataController {
   public void addAccountDC(Account account){
     List<Role> roles=account.getRoles();
     List<String> alerts=new ArrayList<>();
-    dbAdapter.addAccount(account.getUserName(),account.getPassword(),account.getName(),account.getAge());
+    dbAdapter.addAccount(account.getUserName(),hashPassword(account.getPassword()),account.getName(),account.getAge());
 
     for(Role role: roles){
       for(Alert alert:role.getAlertList())
@@ -629,7 +631,7 @@ public class DataController {
                 ((TeamManager) role).getAppointer().getUsername(),permissions);
       }
       else if(role instanceof SystemManager)
-        dbAdapter.addSystemManagerRole(account.getUserName(),role.getName(),((SystemManager) role).getComplaintAndComments());
+        dbAdapter.addSystemManagerRole(account.getUserName(),account.getName(),((SystemManager) role).getComplaintAndComments());
       else if(role instanceof AssociationRepresentative)
         dbAdapter.addAssociationRepresentativeRole(account.getUserName(),role.getName());
       else if(role instanceof Coach){
@@ -639,6 +641,23 @@ public class DataController {
       }
 
     }
+  }
+
+  private String hashPassword(String password){
+    try {
+      MessageDigest md = MessageDigest.getInstance("SHA-256");
+      byte[] buffer = password.getBytes("UTF-8");
+      md.update(buffer);
+      byte[] digest = md.digest();
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < digest.length; i++) {
+        sb.append(Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1));
+      }
+      return sb.toString();
+    } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+      e.printStackTrace();
+    }
+    return "";
   }
 
   public void setTeamToOwner(Owner owner, Team team) {
@@ -763,21 +782,22 @@ public class DataController {
     return dbAdapter.getNotifiedFans();
   }
 
-  //new!!
   public void addMatches(List<List<String>> matches) {
     dbAdapter.addMatches(matches);
   }
-  //new!!
   public String getGameSchedulePolicy(String leagueName, String seasonName) {
     return dbAdapter.getGameSchedulePolicy(leagueName,seasonName);
   }
-  //new!!
   public List<List<String>> getTeamsInLeague(String leagueName) {
     return dbAdapter.getTeamsInLeague(leagueName);
   }
 
   public List<String> getRefereesInLeague(String leagueName, String seasonName) {
     return dbAdapter.getRefereesInLeague(leagueName,seasonName);
+  }
+
+  public void setGameNotificationSubscribtion(Fan fan, boolean b) {
+    dbAdapter.setGameNotificationSubscribtion(fan.getUsername(),String.valueOf(b));
   }
 }
 

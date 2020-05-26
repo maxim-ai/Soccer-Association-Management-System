@@ -51,17 +51,17 @@ public class FanBusinessController {
     //endregion
 
     //region Transition methods for other UC
-    public void ShowInfo(String InfoAbout){
-        fan.ShowInfo(InfoAbout);
-    }
-
-    public void Search(String criterion, String query){
-        fan.Search(criterion,query);
-    }
-
-    public void  Filter(String category, String roleFilter){
-        fan.Filter(category,roleFilter);
-    }
+//    public void ShowInfo(String InfoAbout){
+//        fan.ShowInfo(InfoAbout);
+//    }
+//
+//    public void Search(String criterion, String query){
+//        fan.Search(criterion,query);
+//    }
+//
+//    public void  Filter(String category, String roleFilter){
+//        fan.Filter(category,roleFilter);
+//    }
 
 
 
@@ -69,8 +69,13 @@ public class FanBusinessController {
         fan.SubscribeTrackPersonalPages();
     }
 
-    public void SubscribeGetMatchNotifications(){fan.SubscribeGetMatchNotifications();}
 
+    public String SubscribeGetMatchNotifications(){
+        return fan.SubscribeGetMatchNotifications();
+    }
+    public String unSubscribeGetMatchNotifications(){
+        return fan.unSubscribeGetMatchNotifications();
+    }
 //    public boolean Report(String report){
 //        if(report.length()==0)
 //            return false;
@@ -100,6 +105,11 @@ public class FanBusinessController {
             strings.add(alert.getDescription());
         }
         return strings;
+    }
+
+    public void logOff()
+    {
+        fan.logOff();
     }
 
 

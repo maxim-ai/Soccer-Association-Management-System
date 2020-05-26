@@ -73,18 +73,6 @@ public class GuestBusinessController {
     }
     //endregion
 
-    //region Transition methods for other UC
-    public void ShowInfo(String InfoAbout){
-        guest.ShowInfo(InfoAbout);
-    }
 
-    public void Search(String criterion, String query){
-        guest.Search(criterion,query);
-    }
-
-    public void  Filter(String category, String roleFilter){
-        guest.Filter(category,roleFilter);
-    }
-    //endregion
 
 }
