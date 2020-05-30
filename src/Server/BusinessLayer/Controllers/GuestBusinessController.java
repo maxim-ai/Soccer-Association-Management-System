@@ -14,7 +14,6 @@ public class GuestBusinessController {
         this.guest=new Guest();
     }
 
-    //region Getters&&Setters
     public Guest getGuest() {
         return guest;
     }
@@ -22,11 +21,9 @@ public class GuestBusinessController {
     public void setGuest(Guest guest) {
         this.guest = guest;
     }
-    //endregion
 
 
 
-    //region Transition methods for version 3
     public List<String> LogIn(String UserName, String Password) {
         List<String> list=new ArrayList<>();
         try {
@@ -71,7 +68,6 @@ public class GuestBusinessController {
         }
         return "";
     }
-    //endregion
 
 
 

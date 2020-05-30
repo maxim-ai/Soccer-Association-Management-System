@@ -24,7 +24,6 @@ public class FanController {
     }
 
 
-    //region Getters&&Setter
     public FanBusinessController getFanBusinessController() {
         return fanBusinessController;
     }
@@ -32,9 +31,7 @@ public class FanController {
     public void setFanBusinessController(FanBusinessController fanBusinessController) {
         this.fanBusinessController = fanBusinessController;
     }
-    //endregion
 
-    //region Transition methods for version 3
 //    public void LogOut(){
 //        fanBusinessController.LogOut();
 //    }
@@ -45,9 +42,7 @@ public class FanController {
         if(newPassword.length()==0) return "Password field is empty";
         return fanBusinessController.EditPersonalInfo(newName,newUserName,newPassword);
     }
-    //endregion
 
-    //region Transition methods for other UC
 //    public String ShowInfo(String InfoAbout){
 //        if(InfoAbout.length()==0) return "InfoAbout field is empty";
 //        if(!(InfoAbout.equals("Teams")||InfoAbout.equals("Players")||InfoAbout.equals("Coaches")||
@@ -135,5 +130,4 @@ public class FanController {
         return options;
     }
 
-    //endregion
 }

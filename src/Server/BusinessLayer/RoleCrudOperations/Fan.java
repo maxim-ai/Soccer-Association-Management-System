@@ -26,7 +26,6 @@ public class Fan extends Role implements Serializable
   }
 
 
-  //region Getters&&Setters
   public List<String[]> getSearchHistory() {
     return searchHistory;
   }
@@ -127,14 +126,12 @@ public class Fan extends Role implements Serializable
   public void setGetGameNotifications(boolean getGameNotifications) {
     this.getMatchNotifications = getGameNotifications;
   }
-  //endregion
 
 
 
-  //region Methods for version 3
   public void Logout(){
     System.out.println("Logged out");
-    (Logger.getInstance()).writeNewLine("BusinessLayer.RoleCrudOperations.Fan "+this.getName()+" logged out");
+    (Logger.getInstance()).writeNewLine("Fan "+this.getName()+" logged out");
   }
 
   public void  EditPersonalInfo(String newName, String newUserName, String newPassword) throws Exception {
@@ -148,11 +145,9 @@ public class Fan extends Role implements Serializable
     if(!(newPassword.length()==0)) account.setPassword((newPassword));
     (Logger.getInstance()).writeNewLine("Fan "+this.getName()+" eddited his personal infomation");
   }
-  //endregion
 
 
 
-  //region Other UC methods
 //  public void ShowInfo(String InfoAbout){
 //    new Guest().ShowInfo(InfoAbout);
 //  }
@@ -192,10 +187,6 @@ public class Fan extends Role implements Serializable
     }
   }
 
-//  public void Report(String report){
-//    OurSystemClient.getSM().addComplain(report);
-//    (Logger.getInstance()).writeNewLine("BusinessLayer.RoleCrudOperations.Fan "+this.getName()+" sent report to the system manager");
-//  }
 
 
   public void ShowSearchHistory() throws Exception {
@@ -249,7 +240,6 @@ public class Fan extends Role implements Serializable
     DataController.getInstance().setGameNotificationSubscribtion(this,false);
   }
 
-  //endregion
 
 
 

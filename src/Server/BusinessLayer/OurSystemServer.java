@@ -1,7 +1,5 @@
 package Server.BusinessLayer;
 
-import Client.ServiceLayer.GuestController.GuestController;
-import Client.ServiceLayer.RoleController.RefereeController;
 import Server.BusinessLayer.DataController;
 import Server.BusinessLayer.Logger.Logger;
 import Server.BusinessLayer.OtherCrudOperations.*;
@@ -23,13 +21,15 @@ public class OurSystemServer {
         System.out.println("Established connection to Accounty System");
         System.out.println("Established connection to Federal Tax System");
 
-        File[] loggers={new File("event log"), new File("error log")};
-        for(File file:loggers)
-            if(file.exists())
-                file.delete();
+
 
         File checkFile=new File("firstInitCheck");
         if(!checkFile.exists()){
+            File[] loggers={new File("event log"), new File("error log")};
+            for(File file:loggers){
+                if(file.exists())
+                    file.delete();
+            }
             try { checkFile.createNewFile(); } catch (IOException e) { e.printStackTrace(); }
             Account SMaccount=new Account("SM1",99,"SM1X","Password");
             SystemManager SM=new SystemManager(SMaccount.getName());
@@ -367,9 +367,7 @@ public class OurSystemServer {
         owner1.addAlert(new Alert("bla bla bla bla"));
         owner1.addAlert(new Alert("tralalalala"));
 
-        match1.getEventCalender().addGameEvent(new GameEvent(EventEnum.goal,new Date(),new Time(1,1,1),"aaa",80,match1.getEventCalender()));
-
-
+        match1.getEventCalender().addGameEvent(new GameEvent(EventEnum.goal,new Date(),new Time(1,1,1),"Team2 scored",80,match1.getEventCalender()));
 
 
         //region Datamanager adding
@@ -437,6 +435,9 @@ public class OurSystemServer {
         DataController.getInstance().addGameSchedualPolicy("Once in a season");
         DataController.getInstance().addGameSchedualPolicy("Twice in a season");
         DataController.getInstance().addPointCalcPolicy("Win=2 loose=0 draw=1");
+
+        System.out.println("Database initialized");
+
 
 
 

@@ -128,4 +128,9 @@ public class AssociationRepresentativeBusinessController {
         Season season = new Season(seasonName);
         return associationRepresentative.scheduleGamesInSeason(league,season);
     }
+
+    public void logOff()
+    {
+        associationRepresentative.logOff();
+    }
 }

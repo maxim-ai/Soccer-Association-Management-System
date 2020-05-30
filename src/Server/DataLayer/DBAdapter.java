@@ -7,9 +7,9 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-public class DBAdapter {
+public class DBAdapter implements IDatabase {
 
-    private Connection connectToDB(){
+    public Connection connectToDB(){
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String connectionUrl = "jdbc:sqlserver://localhost;databaseName=DB2020;integratedSecurity=true";
@@ -452,7 +452,8 @@ public class DBAdapter {
             Connection con=connectToDB();
             PreparedStatement ps=con.prepareStatement("insert into GameEvent values (?,?,?,?,?,?,?)");
             ps.setString(1,eventType);
-            ps.setTime(2,hour);
+            String strTime=hour.getHours()+":"+hour.getMinutes()+":"+hour.getSeconds();
+            ps.setString(2,strTime);
             ps.setString(3,description);
             ps.setInt(4,gameMinute);
             ps.setString(5,date);
@@ -474,7 +475,7 @@ public class DBAdapter {
         }
     }
 
-    private void increaseMatchScore(String teamScored, String date, String awayTeamName, String homeTeamName1) {
+    public void increaseMatchScore(String teamScored, String date, String awayTeamName, String homeTeamName1) {
         int currScore=0;
         String whoScored="";
         if(teamScored.equals("home"))
@@ -496,11 +497,11 @@ public class DBAdapter {
                 st1 =con.prepareStatement("update Match set homeScore=? where Date=? AND AwayTeam=? AND homeTeam=?");
             else
                 st1 =con.prepareStatement("update Match set AwayScore=? where Date=? AND AwayTeam=? AND homeTeam=?");
-            st1.setInt(2,currScore+1);
+            st1.setInt(1,++currScore);
             st1.setString(2,date);
             st1.setString(3,awayTeamName);
             st1.setString(4,homeTeamName1);
-            st1.executeQuery();
+            st1.executeUpdate();
             con.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -883,7 +884,8 @@ public class DBAdapter {
             ResultSet RS=st.executeQuery();
             while(RS.next()){
                 match.add(RS.getString(1));
-                match.add(RS.getString(2));
+                String s=RS.getString(2);
+                match.add(s.substring(0,s.indexOf(".")));
                 match.add(RS.getString(3));
                 match.add(RS.getString(4));
                 match.add(RS.getString(5));
@@ -1121,5 +1123,79 @@ public class DBAdapter {
                 e.printStackTrace();
         }
         return referees;
+    }
+
+    public void deleteTestTeam() {
+        try{
+            Connection con=connectToDB();
+            PreparedStatement ps = con.prepareStatement("update Owner set Team=? where UserName=?");
+            ps.setString(1,"Team1");
+            ps.setString(2,"Owner1X");
+            ps.execute();
+
+            PreparedStatement ps2=con.prepareStatement("delete from Team where Name=?");
+            ps2.setString(1,"Test team");
+            ps2.execute();
+            con.close();
+        }
+        catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+    }
+
+    public void addTestMatch(String date, String time, String awayScore, String homeScore, String awayTeamName, String homeTeamName,
+                             String mainRefUN, String lineRefUN1, String lineRefUN2, String stadiumName,String seasonName) {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("insert into Match values(?,?,?,?,?,?,?,?,?,?,?)");
+            ps.setString(1,date);
+            ps.setString(2,time);
+            ps.setString(3,awayScore);
+            ps.setString(4,homeScore);
+            ps.setString(5,awayTeamName);
+            ps.setString(6,homeTeamName);
+            ps.setString(7,mainRefUN);
+            ps.setString(8,lineRefUN1);
+            ps.setString(9,lineRefUN2);
+            ps.setString(10,stadiumName);
+            ps.setString(11,seasonName);
+            ps.executeUpdate();
+            con.close();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+    }
+    public void deleteTestMatch(String date,String awayTeamName, String homeTeamName)
+    {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("DELETE FROM Match WHERE Date=(?) AND AwayTeam=(?) AND homeTeam=(?)");
+            ps.setString(1,date);
+            ps.setString(2,awayTeamName);
+            ps.setString(3,homeTeamName);
+            ps.executeUpdate();
+            con.close();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
+    }
+    public void deleteTestEvent(String date,String awayTeamName, String homeTeamName,String Description)
+    {
+        try {
+            Connection con=connectToDB();
+            PreparedStatement ps=con.prepareStatement("DELETE FROM GameEvent WHERE Date=(?) AND AwayTeam=(?) AND homeTeam=(?) AND Description=(?)");
+            ps.setString(1,date);
+            ps.setString(2,awayTeamName);
+            ps.setString(3,homeTeamName);
+            ps.setString(4,Description);
+            ps.executeUpdate();
+            con.close();
+        } catch (SQLException e) {
+            if(!e.getMessage().contains("Violation of PRIMARY KEY"))
+                e.printStackTrace();
+        }
     }
 }

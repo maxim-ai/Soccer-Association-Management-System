@@ -43,6 +43,7 @@ public class Client extends Observable {
 
     private static int serverPort=5400;
     private static Socket theServer;
+    private static Socket theServerListener;
     private static ObjectInputStream objectInputStream;
     private static ObjectOutputStream objectOutputStream;
 
@@ -67,20 +68,20 @@ public class Client extends Observable {
     public static Object start(Pair<String, Pair<String, List<String>>> objectToServer) {
         try {
             //if (theServer==null) {
-                theServer = new Socket(serverIP, serverPort);
-                theServer.setKeepAlive(true);
-                objectOutputStream = new ObjectOutputStream(theServer.getOutputStream());//sends to server
-                objectInputStream = new ObjectInputStream(theServer.getInputStream());//receive from server
+            theServer = new Socket(serverIP, serverPort);
+            theServer.setKeepAlive(true);
+            objectOutputStream = new ObjectOutputStream(theServer.getOutputStream());//sends to server
+            objectInputStream = new ObjectInputStream(theServer.getInputStream());//receive from server
             //}
             objectOutputStream.flush();
             objectOutputStream.writeObject(objectToServer);
             return objectInputStream.readObject();
 
-                //LOG.info(String.format("Client is connected to server (IP: %s, port: %s)", serverIP, serverPort));
+            //LOG.info(String.format("Client is connected to server (IP: %s, port: %s)", serverIP, serverPort));
             //theServer.close();!!!
 
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return null;
     }
@@ -94,10 +95,10 @@ public class Client extends Observable {
     private void runListening(String UserName)
     {
         try {
-            Socket secondSocket = new Socket(serverIP, 5400);
-            secondSocket.setKeepAlive(true);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(secondSocket.getOutputStream());//sends to server
-            ObjectInputStream objectInputStream = new ObjectInputStream(secondSocket.getInputStream());
+            theServerListener = new Socket(serverIP, serverPort);
+            theServerListener.setKeepAlive(true);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(theServerListener.getOutputStream());//sends to server
+            ObjectInputStream objectInputStream = new ObjectInputStream(theServerListener.getInputStream());
             //}
             objectOutputStream.flush();
             objectOutputStream.writeObject(UserName);
@@ -108,8 +109,8 @@ public class Client extends Observable {
 //                    if(o !=null && o instanceof Pair &&((Pair<String,String>)o).getKey().equals(userName))
 //                    {
 //                        FXcontroller.realTime=o;
-                        setChanged();
-                        notifyObservers(o);
+                    setChanged();
+                    notifyObservers(o);
 //                    }
 //                    System.out.println((String)o);
                 } catch (IOException e) {
@@ -144,6 +145,15 @@ public class Client extends Observable {
 
             //clientSocket.close();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void closeSockets(){
+        try {
+            theServer.close();
+            theServerListener.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

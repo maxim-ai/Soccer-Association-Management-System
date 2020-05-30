@@ -49,8 +49,11 @@ public class RefereeController {
      * @param aDescription of the event
      */
     public String updateEventDuringMatch(String aMatch, String aType, String aDescription) throws Exception {
-
-        if(containsDigit(aType))
+        if (aMatch.equals(""))
+            return "Please select match";
+        else if (aType.equals(""))
+            return "Please select game event you wont to add";
+        else if(containsDigit(aType))
             return "The event type contains invalid characters";
         else if(aDescription.length()<5)
             return "Description must contain at least 5 characters";
@@ -60,8 +63,6 @@ public class RefereeController {
         parameters.add(aDescription);
         String sendToServer = "Referee@"+ Client.getUserName();
         return (String) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("updateEventDuringMatch",parameters)));
-        // return refereeBusinessController.updateEventDuringMatch(aMatch,aType,aDescription);
-
     }
 
     /**
@@ -73,7 +74,13 @@ public class RefereeController {
      * @return
      */
     public String editEventAfterGame(String aMatch, String aGameEvent, String aType, String aDescription) throws Exception {
-        if(containsDigit(aType))
+        if (aMatch.equals(""))
+            return "Please select match";
+        else if (aGameEvent.equals(""))
+            return "Please select game event you want to change";
+        else if (aType.equals(""))
+            return "Please select updated game event";
+        else if(containsDigit(aType))
             return "The event type contains invalid characters";
         else if(aDescription.length()<5)
             return "Description must contain at least 5 characters";
@@ -96,6 +103,8 @@ public class RefereeController {
     }
     public String gameReport(String matchString)
     {
+        if (matchString.equals(""))
+            return "Please select match";
         List<String> parameters = new LinkedList<>();
         parameters.add(matchString);
         String sendToServer = "Referee@"+ Client.getUserName();

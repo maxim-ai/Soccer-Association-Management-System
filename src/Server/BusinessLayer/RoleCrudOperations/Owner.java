@@ -92,14 +92,14 @@ public class Owner extends Role implements Serializable {
         else if (o instanceof Coach) {
             if (team.getCoachs()==null || team.indexOfCoach((Coach) o) == -1)
                 throw new Exception("The coach does no exist in the team");
-            Logger.getInstance().writeNewLine(this.getUsername()+" removed the BusinessLayer.RoleCrudOperations.Coach"+((Coach) o).getUsername() +" from the team:" + team.getName());
+            Logger.getInstance().writeNewLine(this.getUsername()+" removed the Coach"+((Coach) o).getUsername() +" from the team:" + team.getName());
             return team.removeCoach((Coach) o);
         }
         else if (o instanceof Player) {
             if (team.getPlayers()==null || team.indexOfPlayer((Player) o) == -1)
                 throw new Exception("The player does no exist in the team");
 
-            Logger.getInstance().writeNewLine(this.getUsername()+" removed the BusinessLayer.RoleCrudOperations.Player"+((Player) o).getUsername() +" from the team:" + team.getName());
+            Logger.getInstance().writeNewLine(this.getUsername()+" removed the Player"+((Player) o).getUsername() +" from the team:" + team.getName());
             return team.removePlayer((Player) o);
         }
         else if (o instanceof Stadium) {
@@ -463,7 +463,10 @@ public class Owner extends Role implements Serializable {
         }
 
         if(teamExists)
+        {
+            (Logger.getInstanceError()).writeNewLineError(this.getUsername()+" tried adding the team "+teamName+" ,but it already exists");
             return "Wrong input, team already exists";
+        }
 
         else if(!AssociationRepresentative.checkIfRequestExists(this,teamName))
         {

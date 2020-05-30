@@ -1,9 +1,6 @@
 package Client.PresentationLayer;
 
-import Client.Client;
 import Server.BusinessLayer.OurSystemServer;
-import Server.BusinessLayer.RoleCrudOperations.AssociationRepresentative;
-import Server.Server;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -14,12 +11,9 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.sql.*;
 import java.util.Optional;
 
-public class Main extends Application {
-
-
+public class SecondMain extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
@@ -49,9 +43,4 @@ public class Main extends Application {
             }
         });
     }
-
-
-
-
-
 }

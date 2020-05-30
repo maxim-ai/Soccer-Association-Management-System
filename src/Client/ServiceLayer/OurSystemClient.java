@@ -43,10 +43,8 @@ public class OurSystemClient {
 //        return strings;
 //    }
 
-    //region Initialize the System
     public void Initialize() {
     }
-    //endregion
 
 
 
@@ -94,25 +92,21 @@ public class OurSystemClient {
             list=((RefereeController)controllers.get(0)).getEvantsByMatch(arguments.get(0));
         }
         else if(string.equals("Referee")){
-//            List<String> refs=DataController.getInstance().getUserNames(string);
             List<String> refs=(List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("getUserNames",parameters)));
             for(String ref:refs)
                 list.add(ref);
         }
         else if(string.equals("Account")){
-//            List<String> accounts=DataController.getInstance().getUserNames(string);
             List<String> accounts=(List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("getUserNames",parameters)));
             for(String account:accounts)
                 list.add(account);
         }
         else if(string.equals("GameSchedual")){
-//            List<String> policies=DataController.getInstance().getPolicies(string);
             List<String> policies=(List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("getPolicies",parameters)));
             for(String policy:policies)
                 list.add(policy);
         }
         else if(string.equals("PointCalc")){
-//            List<String> policies=DataController.getInstance().getPolicies(string);
             List<String> policies=(List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("getPolicies",parameters)));
             for(String policy:policies)
                 list.add(policy);

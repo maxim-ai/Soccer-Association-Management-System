@@ -139,7 +139,7 @@ public class RefereeBusinessController {
         try {
             referee.editEventAfterGame(match, gameEvent, eventEnum, aDescription);
         } catch (Exception e) {
-            e.getMessage();
+            return e.getMessage();
         }
         return "Update successful";
     }
@@ -211,5 +211,9 @@ public class RefereeBusinessController {
     public String gameReport(String match){
         Match m=Match.convertStringToMatch(match);
         return referee.gameReport(m);
+    }
+    public void logOff()
+    {
+        referee.logOff();
     }
 }

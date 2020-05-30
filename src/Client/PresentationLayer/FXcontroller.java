@@ -16,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -40,7 +41,7 @@ public class FXcontroller implements Initializable,Observer {
 
     public TableView<String> options_table;
     public TextField username_input;
-    public TextField password_input;
+    public PasswordField password_input;
     public Button login_button;
     public Button submit_button;
     public TableColumn<String,String> col_options;
@@ -135,6 +136,7 @@ public class FXcontroller implements Initializable,Observer {
     {
         Alert a=new Alert(type);
         a.setContentText(context);
+        a.getDialogPane().setMinWidth(600);
         a.show();
     }
 

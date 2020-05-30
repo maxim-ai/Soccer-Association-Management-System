@@ -200,7 +200,7 @@ public class Coach extends Role implements Pageable, Serializable
   {
     setTraining(training);
     setTeamRole(teamRole);
-    Logger.getInstance().writeNewLine("BusinessLayer.RoleCrudOperations.Coach "+super.getName()+" update details to : "+training+","+teamRole);
+    Logger.getInstance().writeNewLine("Coach "+super.getName()+" update details to : "+training+","+teamRole);
   }
 
   public void ShowCoach() {

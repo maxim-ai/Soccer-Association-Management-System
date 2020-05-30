@@ -23,7 +23,6 @@ public class Guest implements Serializable {
 
 
 
-  //region Getters&&Setters
   public static int getGuestIDCounter() {
     return guestIDCounter;
   }
@@ -41,11 +40,9 @@ public class Guest implements Serializable {
   {
     return "Guest ID: "+id;
   }
-  //endregion
 
 
 
-  //region Methods for version 3+4
   public Account LogIn(String UserName, String Password) throws Exception {
     String[] accountInfo=DataController.getInstance().getUserNamePasswordDC(UserName);
     if(accountInfo==null){
@@ -78,7 +75,6 @@ public class Guest implements Serializable {
     DataController.getInstance().addAccount(newAccount);
     (Logger.getInstance()).writeNewLine("New account "+UserName+" created");
   }
-  //endregion
 
 
 

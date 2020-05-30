@@ -36,7 +36,6 @@ public class Logger {
             (new Exception()).printStackTrace();
             return;
         }
-
         toWrite(line,"error log");
     }
 
@@ -59,7 +58,7 @@ public class Logger {
             (new Exception()).printStackTrace();
             return "";
         }
-        return toRead("Logger");
+        return toRead("event log");
     }
 
     public String readLoggerFileError(){
@@ -67,7 +66,7 @@ public class Logger {
             (new Exception()).printStackTrace();
             return "";
         }
-        return toRead("errorLogger");
+        return toRead("error log");
     }
 
     private String toRead(String fileToRead) {

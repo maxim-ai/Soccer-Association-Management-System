@@ -450,7 +450,7 @@ public class DataController {
    *
    * @param referee
    */
-  private void sendInvitation(Referee referee) {
+  public void sendInvitation(Referee referee) {
 
   }
 
@@ -798,6 +798,30 @@ public class DataController {
 
   public void setGameNotificationSubscribtion(Fan fan, boolean b) {
     dbAdapter.setGameNotificationSubscribtion(fan.getUsername(),String.valueOf(b));
+  }
+
+  public void deleteTestTeam(){
+    dbAdapter.deleteTestTeam();
+  }
+
+  public void addTestMatch(String date, String time, String awayScore, String homeScore, String awayTeamName, String homeTeamName,
+                           String mainRefUN, String lineRefUN1, String lineRefUN2, String stadiumName, String seasonName) {
+    dbAdapter.addTestMatch( date,  time,  awayScore,  homeScore, awayTeamName, homeTeamName,
+            mainRefUN, lineRefUN1, lineRefUN2, stadiumName, seasonName);
+  }
+  public void deleteTestMatch(String date,String awayTeamName, String homeTeamName)
+  {
+    dbAdapter.deleteTestMatch(date,awayTeamName,homeTeamName);
+  }
+  public void deleteTestEvent(String date,String awayTeamName, String homeTeamName,String Description)
+  {
+    dbAdapter.deleteTestEvent(date,awayTeamName,homeTeamName,Description);
+  }
+
+  public void logOffAfterTests(String username){
+    Account account=new Account("account",99,username,"password");
+    setAccountLogIn(account,false);
+    clearAlertsForAccount(username);
   }
 }
 

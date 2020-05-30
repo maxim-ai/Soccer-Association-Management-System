@@ -168,7 +168,7 @@ public class AssociationRepresentative extends Role {
 //      season.addSLsettingsToLeague(league,sLsettings);
 //    }
     DataController.getInstance().updateLeaguePolicy(season,league,"GameSchedual",gameSchedule);
-    Logger.getInstance().writeNewLine(this.getUsername()+" set League Game schedule Policy: " +(gameSchedule));
+    Logger.getInstance().writeNewLine(this.getUsername()+" set League Game schedule Policy: " +(gameSchedule)+ " to: "+ league.getName()+ " in: "+ season.getName());
     return "Set league game schedule policy successfully";
   }
 
@@ -183,7 +183,7 @@ public class AssociationRepresentative extends Role {
     return ProxyTaxSystem.getInstance().getTaxRate(amount);
   }
 
-    public void addAmountToAssociationBudget(String teamName, String date, double amount){
+  public void addAmountToAssociationBudget(String teamName, String date, double amount){
     ProxyAssociationAccountingSystem.getInstance().addPayment(teamName,date,amount);
   }
 
@@ -205,8 +205,7 @@ public class AssociationRepresentative extends Role {
     {
       DataController.getInstance().approveTeam(owner,this,teamName);
       notifyAccount(owner.getUsername(),"You are approved to open team: "+teamName+" by "+getUsername());
-//      OurSystem.notifyOtherRole("You are approved to open team: "+teamName,owner);
-      Logger.getInstance().writeNewLine(getName()+" approved "+owner.getName()+" to open the team: "+teamName);
+      Logger.getInstance().writeNewLine(getUsername()+" approved "+owner.getUsername()+" to open the team: "+teamName);
 
       return "Team approved successfully";
     }
@@ -275,26 +274,27 @@ public class AssociationRepresentative extends Role {
     List<Referee> referees = stringToReferees(DataController.getInstance().getRefereesInLeague(league.getName(),season.getName()));
     List<Match> matches = new LinkedList<>();
     Random random = new Random();
-      for (int i = 0; i <teams.size() ; i++) {
-        Team team1 = teams.get(i);
-          for (int j = i+1; j <teams.size() ; j++){
-          Team team2 = teams.get(j);
-            String date = getRandomDate();
-            Time time = getRandomTime();
-            Match match = new Match(date, time, 0, 0, team1.getStadium(), season, team2, team1,
-                    referees.get(random.nextInt(referees.size())), referees.get(random.nextInt(referees.size())), referees.get(random.nextInt(referees.size())));
-            matches.add(match);
-            if (gameSchedulePolicy.equals("Twice in a season")) {
-              Match match2 = new Match(date, time, 0, 0, team2.getStadium(), season, team1, team2,
-                      referees.get(random.nextInt(referees.size())), referees.get(random.nextInt(referees.size())), referees.get(random.nextInt(referees.size())));
-              matches.add(match2);
-            }
+    for (int i = 0; i <teams.size() ; i++) {
+      Team team1 = teams.get(i);
+      for (int j = i+1; j <teams.size() ; j++){
+        Team team2 = teams.get(j);
+        String date = getRandomDate();
+        Time time = getRandomTime();
+        Match match = new Match(date, time, 0, 0, team1.getStadium(), season, team2, team1,
+                referees.get(random.nextInt(referees.size())), referees.get(random.nextInt(referees.size())), referees.get(random.nextInt(referees.size())));
+        matches.add(match);
+        if (gameSchedulePolicy.equals("Twice in a season")) {
+          Match match2 = new Match(date, time, 0, 0, team2.getStadium(), season, team1, team2,
+                  referees.get(random.nextInt(referees.size())), referees.get(random.nextInt(referees.size())), referees.get(random.nextInt(referees.size())));
+          matches.add(match2);
         }
+      }
     }
     //season.setMatchs(matches);
     List<List<String>> stringMatches = matchesToString(matches);
     DataController.getInstance().addMatches(stringMatches);
     notifyFansForNewGames(league,season);
+    Logger.getInstance().writeNewLine(getUsername()+" created game schedule to season "+season.getName());
     return "Game schedule succeed";
   }
 

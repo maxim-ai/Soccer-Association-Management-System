@@ -12,10 +12,14 @@ import static org.junit.Assert.*;
 
 public class LoggerTest {
     Logger logger;
+    Logger errorLogger;
 
     @Before
     public void setUp(){
-        DataController.getInstance().clearDataBase();
+        File[] loggers={new File("event log"),new File("error log")};
+        for(File f:loggers)
+            if(f.exists())
+                f.delete();
     }
 
 
@@ -31,46 +35,57 @@ public class LoggerTest {
         Logger logger2=Logger.getInstance();
         assertEquals(logger,logger2);
     }
-
     @Test
-    public void writeNewLineFileNotExists() throws IOException {
-        File loggerFile=new File("Logger");
-        if(loggerFile.exists())
-            loggerFile.delete();
-        logger=Logger.getInstance();
-        logger.writeNewLine("aaa");
-        assertTrue(CheckLoggerLines("aaa"));
+    public void getInstanceErrorOnePointer(){
+        errorLogger=Logger.getInstanceError();
+        assertNotNull(errorLogger);
+    }
+    @Test
+    public void getInstanceErrorTwoPointers() {
+        errorLogger= Logger.getInstanceError();
+        Logger errorLogger2=Logger.getInstanceError();
+        assertEquals(errorLogger,errorLogger2);
     }
 
     @Test
-    public void writeNewLineFileExists() throws IOException{
-        File loggerFile=new File("Logger");
-        if(!loggerFile.exists())
-            loggerFile.createNewFile();
+    public void writeLineLogger(){
         logger=Logger.getInstance();
         logger.writeNewLine("aaa");
-        assertTrue(CheckLoggerLines("aaa"));
+        assertTrue(CheckLoggerLines("aaa","event log"));
     }
+
+    @Test
+    public void writeLineErrorLogger(){
+        errorLogger=Logger.getInstanceError();
+        errorLogger.writeNewLineError("aaa");
+        assertTrue(CheckLoggerLines("aaa","error log"));
+    }
+
 
     @Test
     public void readLoggerFile() {
-        File loggerFile=new File("Logger");
-        if(loggerFile.exists())
-            loggerFile.delete();
         logger=Logger.getInstance();
         logger.writeNewLine("aaa");
         String s=logger.readLoggerFile();
         assertEquals("aaa\n",s.substring(s.indexOf('-')+2));
     }
+
+    @Test
+    public void readErrorLoggerFile() {
+        errorLogger=Logger.getInstanceError();
+        errorLogger.writeNewLineError("aaa");
+        String s=errorLogger.readLoggerFileError();
+        assertEquals("aaa\n",s.substring(s.indexOf('-')+2));
+    }
     //endregion
 
-    private boolean CheckLoggerLines(String s) {
+    private boolean CheckLoggerLines(String string,String loggerFile) {
         String line= null;
         try {
-            BufferedReader BR=new BufferedReader(new FileReader(new File("Logger")));
+            BufferedReader BR=new BufferedReader(new FileReader(new File(loggerFile)));
             line = BR.readLine();
             BR.close();
-            if(s.equals(line.substring(line.indexOf('-')+2)))
+            if(string.equals(line.substring(line.indexOf('-')+2)))
                 return true;
             else
                 return false;

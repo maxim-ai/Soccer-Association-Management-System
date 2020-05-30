@@ -1,235 +1,247 @@
+import Server.BusinessLayer.DataController;
+import Server.BusinessLayer.Logger.Logger;
+import Server.BusinessLayer.OtherCrudOperations.EventEnum;
+import Server.BusinessLayer.OtherCrudOperations.GameEvent;
+import Server.BusinessLayer.OtherCrudOperations.Match;
+import Server.BusinessLayer.OtherCrudOperations.Team;
+import Server.BusinessLayer.RoleCrudOperations.Referee;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.xml.crypto.Data;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class RefereeTest {
-//
-//    Referee referee=new Referee("Football Association","adi lioz");
 //    private final ByteArrayOutputStream OS=new ByteArrayOutputStream();
 //    private final PrintStream PS=System.out;
-//    Date date=new Date();
-//    Time time=new Time(System.currentTimeMillis());
-//    Stadium stadium1=new Stadium("B7");
-//    Stadium stadium2=new Stadium("Ofakim");
-//    Season season=new Season("winter");
-//    League league=new League("super league");
-//    Team awayTeam=new Team("B7",league,stadium1);
-//    Page page1=new Page(awayTeam);
-//    Team homeTeam=new Team("Ofakim",league,stadium2);
-//    Page page2=new Page(homeTeam);
-//    Referee lineRefereeOne=new Referee("Football Association","zviali bar");
-//    Referee lineRefereeTwo=new Referee("Football Association","karapti roy");
-//    Fan fan=new Fan("tzlil");
-//    Match matchTest=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,lineRefereeOne,lineRefereeTwo);
-//    List<Match>matchs=new LinkedList<>();
-//     HashMap<League,Season> leagues=new HashMap<>();
-//     Policy policy=new Policy("Top10","month");
-//     SLsettings sLsettings=new SLsettings(policy);
 //    @Before
 //    public void init(){
-//        DataController.getInstance().clearDataBase();
 //        System.setOut(new PrintStream(OS));
 //    }
-//
-//    @After
-//    public void restore(){
-//        System.setOut(PS);
-//    }
-//    @Test
-//    public void getsLsettings() {
-//        Policy policy=new Policy("max points","every month");
-//        SLsettings sLsettings=new SLsettings(policy);
-//        referee.setsLsettings(sLsettings);
-//        assertEquals(referee.getsLsettings(),sLsettings);
-//    }
-//
-//    @Test
-//    public void setsLsettings() {
-//        assertNull(referee.getsLsettings());
-//        Policy policy=new Policy("max points","every month");
-//        SLsettings sLsettings=new SLsettings(policy);
-//        referee.setsLsettings(sLsettings);
-//        assertNotNull(referee.getsLsettings());
-//    }
-//
-//    @Test
-//    public void setTraining() {
-//        assertTrue(referee.getTraining().equals("Football Association"));
-//        referee.setTraining("IL Football Association");
-//        assertTrue(referee.getTraining().equals("IL Football Association"));
-//    }
-//
-//    @Test
-//    public void getTraining() {
-//        assertTrue(referee.getTraining().equals("Football Association"));
-//    }
-//
-//    @Test
-//    public void setMatchs() {
-//        Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,lineRefereeOne,lineRefereeTwo);
-//        List<Match>matches=new ArrayList<Match>();
-//        matches.add(match);
-//        referee.setMatchs(matches);
-//        assertEquals(matches,referee.getMatchs());
-//    }
-//
-//    @Test
-//    public void getMatchs() {
-//        Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,lineRefereeOne,lineRefereeTwo);
-//        List<Match>matches=new ArrayList<Match>();
-//        matches.add(match);
-//        referee.setMatchs(matches);
-//        assertEquals(matches,referee.getMatchs());
-//    }
-//
-//    @Test
-//    public void getLeagues() {
-//        HashMap<League,Season> leagueSeasonHashMap=new HashMap<>();
-//        leagueSeasonHashMap.put(league,season);
-//        referee.setLeagues(leagueSeasonHashMap);
-//        assertEquals(leagueSeasonHashMap,referee.getLeagues());
-//    }
-//
-//    @Test
-//    public void setLeagues() {
-//        HashMap<League, Season> leagueSeasonHashMap1=new HashMap<>();
-//        HashMap<League,Season> leagueSeasonHashMap2=new HashMap<>();
-//        leagueSeasonHashMap1.put(league,season);
-//        leagueSeasonHashMap2.put(league,season);
-//        referee.setLeagues(leagueSeasonHashMap1);
-//        assertEquals(leagueSeasonHashMap1,referee.getLeagues());
-//        referee.setLeagues(leagueSeasonHashMap2);
-//        assertEquals(leagueSeasonHashMap2,referee.getLeagues());
-//    }
-//
-//
-//    @Test
-//    public void addMatch() {
-//        Referee line1Referee=new Referee("Football Association","yoni zlion");
-//        Referee line2Rreferee=new Referee("Football Association","avi choh");
-//
-//        Match match1=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,null,lineRefereeOne,lineRefereeTwo);
-//        assertTrue(referee.addMatch(match1,"main"));
-//        assertFalse(referee.addMatch(match1,"main"));
-//
-//        Match match2=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,null,lineRefereeTwo);
-//        assertTrue(line1Referee.addMatch(match2,"line"));
-//        assertFalse(line2Rreferee.addMatch(match2,"line"));
-//
-//        Match match3=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,null,null);
-//        assertTrue(line1Referee.addMatch(match3,"line"));
-//        assertTrue(line2Rreferee.addMatch(match3,"line"));
-//        assertFalse(referee.addMatch(match3,"line"));
-//
-//        Match match4=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,null,null,null);
-//        assertTrue(referee.addMatch(match4,"main"));
-//        assertTrue(line1Referee.addMatch(match4,"line"));
-//        assertTrue(line2Rreferee.addMatch(match4,"line"));
-//
-//    }
-//
-//    @Test
-//    public void removeMatch() {
-//        Match match=new Match(date,time,1,0,stadium1,season,awayTeam,homeTeam,referee,lineRefereeOne,lineRefereeTwo);
-//        referee.addMatch(match,"main");
-//        referee.removeMatch(match);
-//        assertEquals(referee.getMatchs().size(),0);
-//    }
-//
-//    @Test
-//    public void delete() {
-//        referee.delete();
-//        assertEquals(referee.getMatchs().size(),0);
-//    }
-//
-//    @Test
-//    public void updateDetails() {
-//        referee.updateDetails("zviali bar");
-//        assertEquals(referee.getName(),"zviali bar");
-//    }
-//
-//
-//
-//    @Test
-//    public void showReferee() {
-//        ShowRefereeTest();
-//        assertEquals("Name:\r\n" +
-//                "adi lioz\r\n" +
-//                "\r\n" +
-//                "Training:\r\n" +
-//                "Football Association\r\n" +
-//                "\r\n" +
-//                "Matches judged:\r\n" +
-//                "match\r\n",OS.toString());
-//    }
-//    //Test func
-//    public void ShowRefereeTest() {
-//        System.out.println("Name:");
-//        System.out.println(this.getNameStub());
-//        System.out.println();
-//        System.out.println("Training:");
-//        System.out.println(this.getTrainingStub());
-//        System.out.println();
-//        System.out.println("Matches judged:");
-//        for(Match match:this.getMatchsStub())
-//            ShowMatchStub(match);
-//    }
-//
-//    //stubs
-//
-//    public String getNameStub(){
-//        return "adi lioz";
-//    }
-//    public String getTrainingStub(){
-//        return "Football Association";
-//    }
-//    public List<Match>  getMatchsStub(){
-//        matchs.add(matchTest);
-//        return  matchs;
-//    }
-//    public void ShowMatchStub(Match match){
-//        System.out.println("match");
-//
-//    }
-//    @Test
-//    public void displayAllMatches() {
-//        matchs.add(matchTest);
-//        displayAllMatchesTest();
-//        assertEquals("match\r\n\r\n",OS.toString());
-//    }
-//    //func
-//    public void displayAllMatchesTest() {
-//        if (!isEmptyStub(matchTest)) {
-//            for (Match m:matchs
-//            ) {
-//                ShowMatchStub(m);
-//                System.out.println();
-//            }
-//            Logger.getInstance().writeNewLine("BusinessLayer.RoleCrudOperations.Referee "+getNameStub()+" watch all his Matches");
-//        } else System.out.println("No matches!");
-//    }
-//    //stubs
-//    public boolean isEmptyStub(Match match)
-//    {
-//        return false;
-//    }
-//
-//    @Test
-//    public void addLeague() {
-//
-//        assertTrue(addLeagueTest(league,season));
-//    }
-//    //func
-//    public boolean addLeagueTest(League aLeague,Season aSeason)
-//    {
-//        leagues.put(aLeague,aSeason);
-//        if(!hasLeagueStub(season,aLeague)){
-//            addSLsettingsToLeagueStub(season,aLeague, sLsettings);
-//        }
-//        return true;
-//    }
-//    //stubs
-//    public boolean hasLeagueStub(Season season, League league){
-//        return false;
-//    }
-//    public boolean addSLsettingsToLeagueStub(Season season, League aLeague, SLsettings asLsettings)
-//    {
-//        return true;
-//    }
+
+    @Test
+    public void gameReportTest(){
+
+        Match match=Match.convertStringToMatch("Teams: Team1 against Team2, Date: 29/05/2020");
+        assertTrue(gameReport(match).equals("\tMatch Location:  Stadium1           Date:  29/05/2020           Start Time:  12:00:00\n"+
+                "\tHome Team : Team2                     Score:  0\n"+
+                "\tAway  Team : Team1                     Score:  0\n"+
+                "\tMain Referee :  Referee1X\n"+"" +
+                "\tLine Referee 1:  Referee1X         Line Referee 2:  Referee1X\n"+
+                "\tGame Events:\n"+
+                "\tEventType: Red card, Description: Messei got, Minute: 89\n"));
+    }
+    public String gameReport(Match match){
+        List<String> matchList=getMatchListStub(match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate());
+        String report= "\tMatch Location:  "+matchList.get(9)+"           Date:  "+matchList.get(0)+"           Start Time:  "+matchList.get(1)+"\n"+
+                "\tHome Team : "+matchList.get(5)+"                     Score:  "+matchList.get(3)+"\n"+
+                "\tAway  Team : "+matchList.get(4)+"                     Score:  "+matchList.get(2)+"\n"+
+                "\tMain Referee :  "+matchList.get(6)+"\n"+"" +
+                "\tLine Referee 1:  "+matchList.get(7)+"         Line Referee 2:  "+matchList.get(8)+"\n"+
+                "\tGame Events:\n";
+        List<String> events=getEventList(match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate());
+        for (String event:events) {
+            report+= "\t"+event+"\n";
+        }
+        return report;
+    }
+    @Test
+    public void updateEventDuringMatchTest(){
+        Match match=convertStringToMatchStub("Teams: Team1 against Team2, Date: 29/05/2020");
+        try {
+            assertTrue(updateEventDuringMatch(match,EventEnum.redCard,"Messei got"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public boolean updateEventDuringMatch(Match match, EventEnum aType, String aDescription) throws Exception {
+        boolean wasUpdate=false;
+        if(!getMatchStub(match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate()).isEmpty()){
+            Date currDate=new Date(System.currentTimeMillis());
+            Date gameDate=new SimpleDateFormat("dd/MM/yyyy").parse(match.getDate());
+            Time time =getMatchTimeStub(match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate());
+            gameDate.setHours(time.getHours());
+            gameDate.setMinutes(time.getMinutes());
+            gameDate.setSeconds(time.getSeconds());
+            if (getDateDiffStub(gameDate,currDate, TimeUnit.MINUTES)<90)
+            {
+                Time currTime=new Time(Calendar.getInstance().getTimeInMillis());
+                GameEvent event=new GameEvent(aType,currDate,currTime,aDescription,(int)(getDateDiffStub(gameDate,currDate,TimeUnit.MINUTES)),match.getEventCalender());
+                addGameEventStub(aType.toString(),currTime,aDescription,(int)(getDateDiffStub(gameDate,currDate,TimeUnit.MINUTES)),convertDateToStringStub(gameDate),match.getAwayTeam().getName(),match.getHomeTeam().getName());
+                List<String> fans=getNotifiedFansStub();
+                for (String fan:fans
+                ) {
+                    if (isAccountloggedInStub(fan))
+                        notifyAccount(fan,"During Match between "
+                                +match.getAwayTeam().getName()+" and "+match.getHomeTeam().getName()+" occur event : "+aType.toString()+" at minute : "+event.getGameMinute()+"\nDescription : "+aDescription);
+                }
+                wasUpdate=true;
+                writeNewLine("BusinessLayer.RoleCrudOperations.Referee "+getNameStub()+" update event during the match between: "+match.getHomeTeam().getName()+","+match.getAwayTeam().getName()+" to "+event.getType());
+            }
+            else {
+                writeNewLineError("Referee tried to add event not during the match");
+                throw new Exception("Referee tried to add event not during the match");
+            }
+        }
+        else{
+            writeNewLineError("Referee didnt take part in this match");
+            throw new Exception("Referee didnt take part in this match");
+        }
+        return wasUpdate;
+    }
+    @Test
+    public void editEventAfterGameTest(){
+        Match match=convertStringToMatchStub("Teams: Team1 against Team2, Date: 29/05/2020");
+        GameEvent gameEvent=convertStringToGameEventStub("EventType: Red card, Description: Messei got, Minute: 89");
+        try {
+            assertTrue(editEventAfterGame(match,gameEvent,EventEnum.foul,"Messei got fuol"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public boolean editEventAfterGame(Match match, GameEvent gameEvent, EventEnum aType, String aDescription) throws Exception {
+        boolean wasEdit = false;
+        if(!getMatchStub(match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate()).isEmpty())
+        {
+            if(getMainRefereeInMatchStub(match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate()).equals(getNameStub()))
+            {
+                Date currDate=new Date(System.currentTimeMillis());
+                Date gameDate=new SimpleDateFormat("dd/MM/yyyy").parse(match.getDate());
+                Time time =getMatchTimeStub(match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate());
+                gameDate.setHours(time.getHours());
+                gameDate.setMinutes(time.getMinutes());
+                gameDate.setSeconds(time.getSeconds());
+                if (getDateDiffStub2(gameDate, currDate, TimeUnit.MINUTES) > 390) {
+                    if (!getGameEventsStub(gameEvent.getType().toString(),gameEvent.getGameMinute()+"",gameEvent.getDescription()).isEmpty()) {
+                        updateGameEventStub(aType.toString(),aDescription,match.getAwayTeam().getName(),match.getHomeTeam().getName(),match.getDate());
+                        wasEdit = true;
+                        writeNewLine("Referee " + getNameStub() + " edit event after the match between: " + match.getHomeTeam().getName() + "," + match.getAwayTeam().getName() + " to " + aType);
+
+                    }
+                    else{
+                        writeNewLineError("This match don't contain given game event");
+                        throw new Exception("This match don't contain given game event");
+                    }
+                }
+                else{
+                    writeNewLineError("Referee can edit event only after 5 hours");
+                    throw new Exception("Referee can edit event only after 5 hours");
+                }
+            }
+            else{
+                writeNewLineError("Referee is not a main referee");
+                throw new Exception("Referee is not the main referee in this match");
+            }
+        }
+        else{
+            writeNewLineError("Referee didnt take part in this match");
+            throw new Exception("Referee didnt take part in this match");
+        }
+        return wasEdit;
+    }
+    //*----------------------------------------------stubs--------------------------------------------------------------------*/
+    public List<String> getMatchListStub(String awayTeam,String homeTeam,String date){
+        List<String> matchList=new LinkedList<>();
+        matchList.add("29/05/2020");
+        matchList.add("12:00:00");
+        matchList.add("0");
+        matchList.add("0");
+        matchList.add("Team1");
+        matchList.add("Team2");
+        matchList.add("Referee1X");
+        matchList.add("Referee1X");
+        matchList.add("Referee1X");
+        matchList.add("Stadium1");
+        return matchList;
+    }
+    public List<String> getEventList(String homeTeam,String awayTeam,String date){
+        List<String> eventList=new LinkedList<>();
+        eventList.add("EventType: Red card, Description: Messei got, Minute: 89");
+        return eventList;
+    }
+    public List<String>getMatchStub(String awayTeam,String homeTeam,String date){
+        List <String> match=new LinkedList<>();
+        match.add("Teams: Team1 against Team2, Date: 29/05/2020");
+        return match;
+    }
+    public  long getDateDiffStub(Date date1, Date date2, TimeUnit timeUnit) {
+        return 20;
+    }
+    public  long getDateDiffStub2(Date date1, Date date2, TimeUnit timeUnit) {
+        return 500;
+    }
+    public Time getMatchTimeStub(String awayTeam,String homeTeam,String date)
+    {
+        return new Time(System.currentTimeMillis());
+    }
+
+    public String getNameStub()
+    {
+        return "Referee1X";
+    }
+    public String convertDateToStringStub(Date date)
+    {
+        return "29/05/2020";
+    }
+    public boolean isAccountloggedInStub(String account)
+    {
+        return true;
+    }
+    public void notifyAccount(String fan,String message)
+    {
+
+    }
+    public void addGameEventStub(String eventType, Time hour, String description, int gameMinute, String date, String awayTeamName, String homeTeamName)
+    {
+
+    }
+    public List<String> getNotifiedFansStub()
+    {
+        return new LinkedList<>();
+    }
+    public void writeNewLine(String message){
+
+    }
+    public void writeNewLineError(String message){
+
+    }
+    public String getMainRefereeInMatchStub(String awayTeam,String homeTeam,String date){
+        return "Referee1X";
+    }
+    public List<String> getGameEventsStub(String event,String minute,String description)
+    {
+        List<String> events=new LinkedList<>();
+        events.add("Red card, Description: Messei got, Minute: 89");
+        return  events;
+    }
+    public void updateGameEventStub(String event,String description,String awayTeam,String homeTeam,String date) {
+    }
+    public  GameEvent convertStringToGameEventStub(String gameEvent){
+        String [] splitArr=gameEvent.split(",");
+        String eventType=splitArr[0].substring(new String("EventType: ").length());
+        String description=splitArr[1].substring(new String(" Description: ").length());
+        String minute=splitArr[2].substring(new String(" Minute: ").length());
+        GameEvent event=new GameEvent(EventEnum.redCard,new Date(),new Time(System.currentTimeMillis()),description,Integer.parseInt(minute),null);
+        return event;
+    }
+    public  Match convertStringToMatchStub(String match){
+        String [] splitArr=match.split(",");
+        String homeTeam=splitArr[0].substring(new String("Teams: ").length(),splitArr[0].indexOf(" against"));
+        String awayTeam=splitArr[0].substring(splitArr[0].indexOf("against")+new String("against ").length());
+        String date=splitArr[1].substring(splitArr[1].indexOf("Date:")+new String("Date: ").length());
+        Team homeTeamObj=new Team(homeTeam,null,null);
+        Team awayTeamObj=new Team(awayTeam,null,null);
+        return new Match(date,null,0,0,null,null,awayTeamObj,homeTeamObj,null,null,null);
+    }
 }

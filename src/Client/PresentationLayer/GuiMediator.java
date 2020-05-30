@@ -1,5 +1,6 @@
 package Client.PresentationLayer;
 
+import Client.Client;
 import Client.ServiceLayer.GuestController.GuestController;
 import Client.ServiceLayer.OurSystemClient;
 import javafx.util.Pair;
@@ -135,7 +136,12 @@ public class GuiMediator {
 
     public void logOff() {
         try {
-            controllers.get(0).getClass().getDeclaredMethod("logOff").invoke( controllers.get(0));
+            if(controllers.size()>0)
+            {
+                controllers.get(0).getClass().getDeclaredMethod("logOff").invoke( controllers.get(0));
+                controllers=new ArrayList();
+                Client.getInstance().closeSockets();
+            }
         } catch (NoSuchMethodException e) {
         } catch (IllegalAccessException e) {
             e.printStackTrace();

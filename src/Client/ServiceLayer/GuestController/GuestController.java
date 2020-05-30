@@ -19,41 +19,37 @@ public class GuestController {
         //guestBusinessController=new GuestBusinessController();
     }
 
-    //region Getters&&Setters
-//    public GuestBusinessController getGuestBusinessController() {
-//        return guestBusinessController;
-//    }
 
-//    public void setGuestBusinessController(GuestBusinessController guestBusinessController) {
-//        this.guestBusinessController = guestBusinessController;
-//    }
-    //endregion
-
-    //region Transition methods for version 3
     public List<Object> LogIn(String UserName, String Password) {
-        List<Object> list=new ArrayList<>();
-        if(UserName.length()==0||Password.length()==0){
-            if(UserName.length()==0&&Password.length()!=0)
-                list.add("Username length is 0");
-            else if(UserName.length()!=0&&Password.length()==0)
-                list.add("Password length is 0");
-            else if(UserName.length()==0&&Password.length()==0)
-                list.add("Username and password length is 0");
-            return list;
-        }
-        List<String> parameters = new LinkedList<>();
-        parameters.add(UserName);
-        parameters.add(Password);
-        Client.getInstance().setUserName(UserName);
-        String sendToServer = "Guest@"+Client.getUserName();
-        List<String> stringControllers = (List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("LogIn",parameters)));
-        if(stringControllers.get(0).contains("?")){
-            list.add(stringControllers.get(0).substring(1));
-            return list;
-        }
-        else{
-            Client.getInstance().startListen(UserName);
-            return getControllersList(stringControllers);
+        try {
+            List<Object> list=new ArrayList<>();
+            if(UserName.length()==0||Password.length()==0){
+                if(UserName.length()==0&&Password.length()!=0)
+                    list.add("Username length is 0");
+                else if(UserName.length()!=0&&Password.length()==0)
+                    list.add("Password length is 0");
+                else if(UserName.length()==0&&Password.length()==0)
+                    list.add("Username and password length is 0");
+                return list;
+            }
+            List<String> parameters = new LinkedList<>();
+            parameters.add(UserName);
+            parameters.add(Password);
+            Client.getInstance().setUserName(UserName);
+            String sendToServer = "Guest@"+Client.getUserName();
+            List<String> stringControllers = (List<String>) Client.connectToServer(new Pair<>(sendToServer,new Pair<>("LogIn",parameters)));
+            if(stringControllers.get(0).contains("?")){
+                list.add(stringControllers.get(0).substring(1));
+                return list;
+            }
+            else{
+                Client.getInstance().startListen(UserName);
+                return getControllersList(stringControllers);
+            }
+        } catch (Exception e) {
+            List<Object> ret=new ArrayList<>();
+            ret.add("Please Check your connection to the server!");
+            return ret;
         }
 
 //        return guestBusinessController.LogIn(UserName,Password);
@@ -95,7 +91,6 @@ public class GuestController {
             return "Age has to be postive";
         return guestBusinessController.SignIn(name,age,UserName,Password);
     }
-    //endregion
 
 
 

@@ -17,7 +17,6 @@ public class FanBusinessController {
         this.fan=fan;
     }
 
-    //region Getters&&Setters
     public Fan getFan() {
         return fan;
     }
@@ -25,9 +24,7 @@ public class FanBusinessController {
     public void setFan(Fan fan) {
         this.fan = fan;
     }
-    //endregion
 
-    //region Transition methods for version 3
 //    public void LogOut(){
 //        fan.Logout();
 //        for(Account account: OurSystemClient.getCurrAccounts()){
@@ -48,9 +45,7 @@ public class FanBusinessController {
         }
         return "";
     }
-    //endregion
 
-    //region Transition methods for other UC
 //    public void ShowInfo(String InfoAbout){
 //        fan.ShowInfo(InfoAbout);
 //    }
@@ -113,5 +108,4 @@ public class FanBusinessController {
     }
 
 
-    //endregion
 }
